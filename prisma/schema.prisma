@@ -1,0 +1,410 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  BANNED
+}
+
+enum ServiceStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum ComboStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum ConversationStatus {
+  OPEN
+  RESOLVED
+  CLOSED
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  SYSTEM
+}
+
+enum SenderType {
+  CUSTOMER
+  STAFF
+  SYSTEM
+}
+
+enum NotificationType {
+  APPOINTMENT
+  PAYMENT
+  SYSTEM
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+enum MaterialUnit {
+  ML
+  GRAM
+  PIECE
+}
+
+model User {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  password    String
+  fullName    String?
+  phone       String?
+  status      UserStatus @default(ACTIVE)
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  roles       UserRole[]
+
+  staffServices StaffService[]
+
+  appointments Appointment[] @relation("CustomerAppointments")
+  staffAppointments Appointment[] @relation("StaffAppointments")
+
+  telegramAccount TelegramAccount?
+
+  notifications Notification[]
+
+  customerConversations Conversation[] @relation("CustomerConversations")
+  staffConversations    Conversation[] @relation("StaffConversations")
+
+  staffSchedules StaffSchedule[]
+  staffDaysOff   StaffDayOff[]
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+
+  permissions RolePermission[]
+  users       UserRole[]
+}
+
+model Permission {
+  id          String   @id @default(uuid())
+  code        String   @unique
+  description String?
+
+  roles       RolePermission[]
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+}
+
+model UserRole {
+  userId String
+  roleId String
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+
+  services    Service[]
+  combos      Combo[]
+}
+
+model Service {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  duration    Int
+  price       Float
+  costPrice   Float?
+  status      ServiceStatus @default(ACTIVE)
+  categoryId  String?
+
+  category      Category? @relation(fields: [categoryId], references: [id])
+
+  staffServices StaffService[]
+  appointments  Appointment[]
+  comboServices ComboService[]
+
+  materials     ServiceMaterial[]
+}
+
+model Combo {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  price       Float
+  duration    Int?
+  status      ComboStatus @default(ACTIVE)
+  categoryId  String?
+
+  category     Category? @relation(fields: [categoryId], references: [id])
+
+  services     ComboService[]
+  appointments Appointment[]
+}
+
+model ComboService {
+  comboId   String
+  serviceId String
+  quantity  Int      @default(1)
+  order     Int?
+
+  combo     Combo   @relation(fields: [comboId], references: [id], onDelete: Cascade)
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@id([comboId, serviceId])
+}
+
+model StaffService {
+  staffId   String
+  serviceId String
+
+  staff     User    @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@id([staffId, serviceId])
+}
+
+model Appointment {
+  id          String   @id @default(uuid())
+
+  serviceId   String?
+  comboId     String?
+
+  staffId     String
+  customerId  String
+
+  startTime   DateTime
+  endTime     DateTime
+
+  status      AppointmentStatus @default(PENDING)
+
+  totalPrice  Float?
+  note        String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  service     Service? @relation(fields: [serviceId], references: [id])
+  combo       Combo?   @relation(fields: [comboId], references: [id])
+
+  staff       User @relation("StaffAppointments", fields: [staffId], references: [id])
+  customer    User @relation("CustomerAppointments", fields: [customerId], references: [id])
+
+  review       Review?
+  payment      Payment?
+  conversation Conversation?
+
+  @@index([staffId, startTime])
+  @@index([customerId, startTime])
+}
+
+model Payment {
+  id             String   @id @default(uuid())
+  appointmentId  String   @unique
+
+  method         String?
+  amount         Float
+
+  status         PaymentStatus
+  paidAt         DateTime?
+
+  appointment    Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id             String   @id @default(uuid())
+  appointmentId  String   @unique
+
+  rating         Int
+  comment        String?
+
+  createdAt      DateTime @default(now())
+
+  appointment    Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+}
+
+model Conversation {
+  id            String   @id @default(uuid())
+
+  customerId    String
+  staffId       String?
+  appointmentId String?  @unique
+
+  status        ConversationStatus @default(OPEN)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  customer      User         @relation("CustomerConversations", fields: [customerId], references: [id])
+  staff         User?        @relation("StaffConversations", fields: [staffId], references: [id])
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+
+  messages      Message[]
+}
+
+model Message {
+  id             String   @id @default(uuid())
+
+  conversationId String
+
+  senderType     SenderType
+  senderId       String?
+
+  content        String
+
+  messageType    MessageType @default(TEXT)
+
+  telegramMsgId  BigInt?
+
+  createdAt      DateTime @default(now())
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+}
+
+model TelegramAccount {
+  staffId        String   @id
+  telegramUserId BigInt   @unique
+  username       String?
+
+  staff          User @relation(fields: [staffId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id         String   @id @default(uuid())
+
+  userId     String
+
+  type       NotificationType
+
+  title      String
+  content    String
+
+  isRead     Boolean  @default(false)
+
+  createdAt  DateTime @default(now())
+
+  user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead, createdAt])
+}
+
+model WorkingHour {
+  id         String    @id @default(uuid())
+
+  dayOfWeek  DayOfWeek
+
+  openTime   DateTime
+  closeTime  DateTime
+
+  isClosed   Boolean   @default(false)
+}
+
+model StaffSchedule {
+  id         String    @id @default(uuid())
+
+  staffId    String
+  dayOfWeek  DayOfWeek
+
+  startTime  DateTime
+  endTime    DateTime
+
+  isActive   Boolean   @default(true)
+
+  staff      User      @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  @@index([staffId, dayOfWeek])
+}
+
+model StaffDayOff {
+  id         String   @id @default(uuid())
+
+  staffId    String
+  date       DateTime
+
+  reason     String?
+
+  staff      User     @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  @@index([staffId, date])
+}
+
+model Material {
+  id          String   @id @default(uuid())
+
+  name        String
+  description String?
+
+  unit        MaterialUnit
+
+  costPrice   Float
+
+  stockQuantity Float?
+
+  serviceMaterials ServiceMaterial[]
+}
+
+model ServiceMaterial {
+  id          String   @id @default(uuid())
+
+  serviceId   String
+  materialId  String
+
+  quantity    Float
+
+  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  material    Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  @@unique([serviceId, materialId])
+}
