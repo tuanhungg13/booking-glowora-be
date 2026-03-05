@@ -1,11 +1,15 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { PermissionCacheService } from '../../../redis/permission-cache.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 
 @Injectable()
 export class RolesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly permissionCache: PermissionCacheService,
+  ) {}
 
   async create(dto: CreateRoleDto) {
     const existing = await this.prisma.role.findUnique({
@@ -58,16 +62,23 @@ export class RolesService {
         ...(dto.permissionIds.length ? { create: dto.permissionIds.map((permissionId) => ({ permissionId })) } : {}),
       };
     }
-    return this.prisma.role.update({
+    const result = this.prisma.role.update({
       where: { id },
       data,
       include: { permissions: { include: { permission: true } } },
     });
+
+    if (dto.permissionIds !== undefined) {
+      await this.permissionCache.invalidateAll();
+    }
+
+    return result;
   }
 
   async remove(id: string) {
     await this.findOne(id);
     await this.prisma.role.delete({ where: { id } });
+    await this.permissionCache.invalidateAll();
     return { deleted: true };
   }
 }

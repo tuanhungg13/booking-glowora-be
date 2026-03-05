@@ -124,6 +124,7 @@ model Role {
 model Permission {
   id          String   @id @default(uuid())
   code        String   @unique
+  name        String   @unique
   description String?
 
   roles       RolePermission[]

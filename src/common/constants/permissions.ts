@@ -1,0 +1,115 @@
+export const Permissions = {
+  // ─── Identity ───
+  USER: {
+    CREATE: 'CREATE_USER',
+    VIEW: 'VIEW_USER',
+    UPDATE: 'UPDATE_USER',
+    DELETE: 'DELETE_USER',
+  },
+  ROLE: {
+    CREATE: 'CREATE_ROLE',
+    VIEW: 'VIEW_ROLE',
+    UPDATE: 'UPDATE_ROLE',
+    DELETE: 'DELETE_ROLE',
+  },
+  PERMISSION: {
+    CREATE: 'CREATE_PERMISSION',
+    VIEW: 'VIEW_PERMISSION',
+    UPDATE: 'UPDATE_PERMISSION',
+    DELETE: 'DELETE_PERMISSION',
+  },
+
+  // ─── Catalog ───
+  SERVICE: {
+    CREATE: 'CREATE_SERVICE',
+    VIEW: 'VIEW_SERVICE',
+    UPDATE: 'UPDATE_SERVICE',
+    DELETE: 'DELETE_SERVICE',
+  },
+  CATEGORY: {
+    CREATE: 'CREATE_CATEGORY',
+    VIEW: 'VIEW_CATEGORY',
+    UPDATE: 'UPDATE_CATEGORY',
+    DELETE: 'DELETE_CATEGORY',
+  },
+  COMBO: {
+    CREATE: 'CREATE_COMBO',
+    VIEW: 'VIEW_COMBO',
+    UPDATE: 'UPDATE_COMBO',
+    DELETE: 'DELETE_COMBO',
+  },
+  MATERIAL: {
+    CREATE: 'CREATE_MATERIAL',
+    VIEW: 'VIEW_MATERIAL',
+    UPDATE: 'UPDATE_MATERIAL',
+    DELETE: 'DELETE_MATERIAL',
+  },
+
+  // ─── Booking ───
+  APPOINTMENT: {
+    CREATE: 'CREATE_APPOINTMENT',
+    VIEW: 'VIEW_APPOINTMENT',
+    UPDATE: 'UPDATE_APPOINTMENT',
+    DELETE: 'DELETE_APPOINTMENT',
+  },
+  PAYMENT: {
+    CREATE: 'CREATE_PAYMENT',
+    VIEW: 'VIEW_PAYMENT',
+    UPDATE: 'UPDATE_PAYMENT',
+    DELETE: 'DELETE_PAYMENT',
+  },
+  REVIEW: {
+    CREATE: 'CREATE_REVIEW',
+    VIEW: 'VIEW_REVIEW',
+    UPDATE: 'UPDATE_REVIEW',
+    DELETE: 'DELETE_REVIEW',
+  },
+
+  // ─── Messaging ───
+  CONVERSATION: {
+    CREATE: 'CREATE_CONVERSATION',
+    VIEW: 'VIEW_CONVERSATION',
+    UPDATE: 'UPDATE_CONVERSATION',
+    DELETE: 'DELETE_CONVERSATION',
+  },
+  MESSAGE: {
+    CREATE: 'CREATE_MESSAGE',
+    VIEW: 'VIEW_MESSAGE',
+    UPDATE: 'UPDATE_MESSAGE',
+    DELETE: 'DELETE_MESSAGE',
+  },
+
+  // ─── Staff ───
+  STAFF_SCHEDULE: {
+    CREATE: 'CREATE_STAFF_SCHEDULE',
+    VIEW: 'VIEW_STAFF_SCHEDULE',
+    UPDATE: 'UPDATE_STAFF_SCHEDULE',
+    DELETE: 'DELETE_STAFF_SCHEDULE',
+  },
+  STAFF_DAY_OFF: {
+    CREATE: 'CREATE_STAFF_DAY_OFF',
+    VIEW: 'VIEW_STAFF_DAY_OFF',
+    UPDATE: 'UPDATE_STAFF_DAY_OFF',
+    DELETE: 'DELETE_STAFF_DAY_OFF',
+  },
+  WORKING_HOUR: {
+    CREATE: 'CREATE_WORKING_HOUR',
+    VIEW: 'VIEW_WORKING_HOUR',
+    UPDATE: 'UPDATE_WORKING_HOUR',
+    DELETE: 'DELETE_WORKING_HOUR',
+  },
+
+  // ─── Notifications ───
+  NOTIFICATION: {
+    CREATE: 'CREATE_NOTIFICATION',
+    VIEW: 'VIEW_NOTIFICATION',
+    UPDATE: 'UPDATE_NOTIFICATION',
+    DELETE: 'DELETE_NOTIFICATION',
+  },
+} as const;
+
+export type PermissionCode = (typeof Permissions)[keyof typeof Permissions][keyof (typeof Permissions)[keyof typeof Permissions]];
+
+export const ALL_PERMISSION_CODES: PermissionCode[] = Object.values(Permissions).flatMap(
+  (group) => Object.values(group),
+);

@@ -4,8 +4,9 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
+import { RedisModule } from './redis/redis.module';
 import { JwtAuthGuard } from './features/identity/auth/guards/jwt-auth.guard';
-import { PermissionsGuard } from './auth/guards/permissions.guard';
+import { PermissionsGuard } from './features/identity/auth/guards/permissions.guard';
 import { IdentityModule } from './features/identity.module';
 import { CatalogModule } from './features/catalog.module';
 import { BookingModule } from './features/booking.module';
@@ -17,6 +18,7 @@ import { NotificationsModule } from './features/notifications/notifications/noti
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
+    RedisModule,
     IdentityModule,
     CatalogModule,
     BookingModule,

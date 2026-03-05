@@ -7,28 +7,26 @@ import {
   Patch,
   Post,
   Query,
-  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
+import { Permissions } from '../../../common/constants/permissions';
 import { UserStatus } from '@prisma/client';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @RequirePermissions('user:write')
+  @RequirePermissions(Permissions.USER.CREATE)
   create(@Body() dto: CreateUserDto) {
     return this.usersService.create(dto);
   }
 
   @Get()
-  @RequirePermissions('user:read')
+  @RequirePermissions(Permissions.USER.VIEW)
   findAll(
     @Query('status') status?: UserStatus,
     @Query('skip') skip?: string,
@@ -42,19 +40,19 @@ export class UsersController {
   }
 
   @Get(':id')
-  @RequirePermissions('user:read')
+  @RequirePermissions(Permissions.USER.VIEW)
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
 
   @Patch(':id')
-  @RequirePermissions('user:write')
+  @RequirePermissions(Permissions.USER.UPDATE)
   update(@Param('id') id: string, @Body() dto: UpdateUserDto) {
     return this.usersService.update(id, dto);
   }
 
   @Delete(':id')
-  @RequirePermissions('user:write')
+  @RequirePermissions(Permissions.USER.DELETE)
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
   }

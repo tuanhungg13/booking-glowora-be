@@ -1,0 +1,59 @@
+version: '3.9'
+
+# Development configuration - Ports exposed to localhost for development tools
+# Sử dụng: docker-compose -f docker-compose.dev.yml --env-file .env.local up -d
+# Hoặc: docker-compose -f docker-compose.dev.yml up -d (sẽ tự động load .env.local nếu có)
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: glowora_postgres
+    restart: unless-stopped
+    env_file:
+      - .env.local
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-glowora_business}
+      TZ: ${TZ:-Asia/Ho_Chi_Minh}
+    # Ports exposed to localhost only (for IDE, development tools)
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - glowora_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: glowora_redis
+    restart: unless-stopped
+    env_file:
+      - .env.local
+    command: redis-server --requirepass ${REDIS_PASSWORD:-redis123} --appendonly yes
+    # Ports exposed to localhost only (for redis-cli, development tools)
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-redis123}", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - glowora_network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  glowora_network:
+    driver: bridge
+
