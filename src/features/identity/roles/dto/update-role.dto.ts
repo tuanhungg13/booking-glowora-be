@@ -7,7 +7,15 @@ export class UpdateRoleDto {
 
   @IsOptional()
   @IsString()
+  code?: string;
+
+  @IsOptional()
+  @IsString()
   description?: string;
+
+  @IsOptional()
+  @IsUUID()
+  shopId?: string;
 
   @IsOptional()
   @IsArray()

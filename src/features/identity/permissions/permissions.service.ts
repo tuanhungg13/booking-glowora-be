@@ -17,7 +17,11 @@ export class PermissionsService {
     });
     if (existing) throw new ConflictException('Permission code already exists');
     return this.prisma.permission.create({
-      data: { code: dto.code, description: dto.description },
+      data: {
+        code: dto.code,
+        name: dto.name ?? dto.code,
+        description: dto.description,
+      },
     });
   }
 

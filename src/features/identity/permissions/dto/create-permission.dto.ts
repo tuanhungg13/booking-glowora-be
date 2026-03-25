@@ -6,5 +6,9 @@ export class CreatePermissionDto {
 
   @IsOptional()
   @IsString()
+  name?: string;
+
+  @IsOptional()
+  @IsString()
   description?: string;
 }

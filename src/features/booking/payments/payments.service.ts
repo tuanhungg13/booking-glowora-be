@@ -1,8 +1,28 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { PaymentStatus } from '@prisma/client';
+import { PaymentStatus, Prisma } from '@prisma/client';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+
+const paymentInclude = {
+  appointment: {
+    include: {
+      customer: true,
+      items: {
+        include: {
+          service: true,
+          combo: true,
+          staff: { select: { id: true, fullName: true, email: true } },
+        },
+      },
+    },
+  },
+  transactions: true,
+} as const;
 
 @Injectable()
 export class PaymentsService {
@@ -16,7 +36,19 @@ export class PaymentsService {
     const existing = await this.prisma.payment.findUnique({
       where: { appointmentId: dto.appointmentId },
     });
-    if (existing) throw new NotFoundException('Appointment already has a payment');
+    if (existing) {
+      throw new ConflictException('Appointment already has a payment');
+    }
+
+    const transactions =
+      dto.transactions?.map((t) => ({
+        type: t.type,
+        status: t.status,
+        amount: t.amount,
+        providerTxnId: t.providerTxnId,
+        rawResponse: t.rawResponse as Prisma.InputJsonValue | undefined,
+      })) ?? [];
+
     return this.prisma.payment.create({
       data: {
         appointmentId: dto.appointmentId,
@@ -24,8 +56,12 @@ export class PaymentsService {
         amount: dto.amount,
         status: dto.status ?? PaymentStatus.PENDING,
         paidAt: dto.paidAt ? new Date(dto.paidAt) : undefined,
+        transactions:
+          transactions.length > 0
+            ? { create: transactions }
+            : undefined,
       },
-      include: { appointment: true },
+      include: paymentInclude,
     });
   }
 
@@ -37,20 +73,7 @@ export class PaymentsService {
         skip: params?.skip,
         take: params?.take ?? 20,
         orderBy: { id: 'desc' },
-        include: {
-          appointment: {
-            include: {
-              customer: true,
-              items: {
-                include: {
-                  service: true,
-                  combo: true,
-                  staff: { select: { id: true, fullName: true, email: true } },
-                },
-              },
-            },
-          },
-        },
+        include: paymentInclude,
       }),
       this.prisma.payment.count({ where }),
     ]);
@@ -60,20 +83,7 @@ export class PaymentsService {
   async findOne(id: string) {
     const pay = await this.prisma.payment.findUnique({
       where: { id },
-      include: {
-        appointment: {
-          include: {
-            customer: true,
-            items: {
-              include: {
-                service: true,
-                combo: true,
-                staff: { select: { id: true, fullName: true, email: true } },
-              },
-            },
-          },
-        },
-      },
+      include: paymentInclude,
     });
     if (!pay) throw new NotFoundException('Payment not found');
     return pay;
@@ -89,7 +99,7 @@ export class PaymentsService {
         status: dto.status,
         paidAt: dto.paidAt ? new Date(dto.paidAt) : undefined,
       },
-      include: { appointment: true },
+      include: paymentInclude,
     });
   }
 

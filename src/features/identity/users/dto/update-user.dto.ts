@@ -1,5 +1,15 @@
-import { IsEmail, IsEnum, IsOptional, IsString, IsArray, IsUUID, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  IsArray,
+  MinLength,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 import { UserStatus } from '@prisma/client';
+import { UserRoleAssignmentDto } from './create-user.dto';
 
 export class UpdateUserDto {
   @IsOptional()
@@ -25,6 +35,7 @@ export class UpdateUserDto {
 
   @IsOptional()
   @IsArray()
-  @IsUUID('4', { each: true })
-  roleIds?: string[];
+  @ValidateNested({ each: true })
+  @Type(() => UserRoleAssignmentDto)
+  roleAssignments?: UserRoleAssignmentDto[];
 }

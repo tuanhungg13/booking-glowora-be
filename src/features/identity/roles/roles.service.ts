@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { PermissionCacheService } from '../../../redis/permission-cache.service';
 import { CreateRoleDto } from './dto/create-role.dto';
@@ -12,14 +13,18 @@ export class RolesService {
   ) {}
 
   async create(dto: CreateRoleDto) {
-    const existing = await this.prisma.role.findUnique({
-      where: { name: dto.name },
+    const existing = await this.prisma.role.findFirst({
+      where: { code: dto.code, shopId: dto.shopId ?? null },
     });
-    if (existing) throw new ConflictException('Role name already exists');
+    if (existing) {
+      throw new ConflictException('Role code already exists for this shop');
+    }
     return this.prisma.role.create({
       data: {
         name: dto.name,
+        code: dto.code,
         description: dto.description,
+        shopId: dto.shopId,
         permissions: dto.permissionIds?.length
           ? { create: dto.permissionIds.map((id) => ({ permissionId: id })) }
           : undefined,
@@ -45,16 +50,24 @@ export class RolesService {
   }
 
   async update(id: string, dto: UpdateRoleDto) {
-    await this.findOne(id);
-    if (dto.name) {
+    const current = await this.findOne(id);
+    if (dto.code) {
+      const shopId = dto.shopId !== undefined ? dto.shopId : current.shopId;
       const existing = await this.prisma.role.findFirst({
-        where: { name: dto.name, NOT: { id } },
+        where: { code: dto.code, shopId: shopId ?? null, NOT: { id } },
       });
-      if (existing) throw new ConflictException('Role name already exists');
+      if (existing) throw new ConflictException('Role code already exists for this shop');
     }
-    const data: { name?: string; description?: string; permissions?: { deleteMany: object; create?: { permissionId: string }[] } } = {
+    const data: Prisma.RoleUpdateInput = {
       name: dto.name,
+      code: dto.code,
       description: dto.description,
+      shop:
+        dto.shopId === undefined
+          ? undefined
+          : dto.shopId === null
+            ? { disconnect: true }
+            : { connect: { id: dto.shopId } },
     };
     if (dto.permissionIds !== undefined) {
       data.permissions = {

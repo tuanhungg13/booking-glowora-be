@@ -2,6 +2,8 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { User } from '@prisma/client';
 
 export type CurrentUserPayload = Pick<User, 'id' | 'email' | 'status'> & {
+  /** Role names từ UserRole → Role (theo shop) */
+  roles?: string[];
   /**
    * System-wide role, e.g. SUPER_ADMIN, CUSTOMER, SHOP_OWNER, SHOP_STAFF.
    * This comes from the JWT payload, not directly from Prisma.

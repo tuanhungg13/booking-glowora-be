@@ -17,6 +17,9 @@ class ComboServiceItemDto {
 }
 
 export class CreateComboDto {
+  @IsUUID()
+  shopId!: string;
+
   @IsString()
   name!: string;
 
@@ -31,7 +34,7 @@ export class CreateComboDto {
   @IsOptional()
   @IsInt()
   @Min(0)
-  duration?: number;
+  estimatedDurationMinutes?: number;
 
   @IsOptional()
   @IsEnum(ComboStatus)

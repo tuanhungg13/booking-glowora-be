@@ -11,11 +11,12 @@ export class MaterialsService {
   async create(dto: CreateMaterialDto) {
     return this.prisma.material.create({
       data: {
+        shopId: dto.shopId,
         name: dto.name,
         description: dto.description,
         unit: dto.unit,
         costPrice: dto.costPrice,
-        stockQuantity: dto.stockQuantity,
+        stockQuantity: dto.stockQuantity ?? 0,
       },
     });
   }

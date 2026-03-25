@@ -2,11 +2,18 @@ import { IsOptional, IsString, IsArray, IsUUID } from 'class-validator';
 
 export class CreateRoleDto {
   @IsString()
-  name: string;
+  name!: string;
+
+  @IsString()
+  code!: string;
 
   @IsOptional()
   @IsString()
   description?: string;
+
+  @IsOptional()
+  @IsUUID()
+  shopId?: string;
 
   @IsOptional()
   @IsArray()

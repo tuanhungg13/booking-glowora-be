@@ -1,10 +1,12 @@
-import { IsEnum, IsOptional, IsUUID } from 'class-validator';
+import { IsEnum, IsOptional, IsUUID, ValidateIf } from 'class-validator';
 import { ConversationStatus } from '@prisma/client';
 
 export class UpdateConversationDto {
+  /** Gửi null để gỡ staff; không gửi field để giữ nguyên */
   @IsOptional()
+  @ValidateIf((_, v) => v !== null)
   @IsUUID()
-  staffId?: string;
+  staffId?: string | null;
 
   @IsOptional()
   @IsUUID()

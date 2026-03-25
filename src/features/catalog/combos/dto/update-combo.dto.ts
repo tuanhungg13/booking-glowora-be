@@ -33,7 +33,7 @@ export class UpdateComboDto {
   @IsOptional()
   @IsInt()
   @Min(0)
-  duration?: number;
+  estimatedDurationMinutes?: number;
 
   @IsOptional()
   @IsEnum(ComboStatus)

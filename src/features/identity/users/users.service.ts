@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { UserStatus } from '@prisma/client';
+import { Prisma, UserStatus } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -26,8 +26,13 @@ export class UsersService {
         fullName: dto.fullName,
         phone: dto.phone,
         status: dto.status ?? UserStatus.ACTIVE,
-        roles: dto.roleIds?.length
-          ? { create: dto.roleIds.map((roleId) => ({ roleId })) }
+        userRoles: dto.roleAssignments?.length
+          ? {
+              create: dto.roleAssignments.map((a) => ({
+                shopId: a.shopId,
+                roleId: a.roleId,
+              })),
+            }
           : undefined,
       },
       select: this.selectSafe(),
@@ -56,7 +61,12 @@ export class UsersService {
       where: { id },
       select: {
         ...this.selectSafe(),
-        roles: { include: { role: { select: { id: true, name: true } } } },
+        userRoles: {
+          include: {
+            role: { select: { id: true, name: true, code: true } },
+            shop: { select: { id: true, name: true } },
+          },
+        },
         staffServices: { include: { service: { select: { id: true, name: true } } } },
       },
     });
@@ -72,24 +82,24 @@ export class UsersService {
       });
       if (existing) throw new ConflictException('Email already exists');
     }
-    const data: {
-      email?: string;
-      fullName?: string;
-      phone?: string;
-      status?: UserStatus;
-      password?: string;
-      roles?: { deleteMany: object; create?: { roleId: string }[] };
-    } = {
+    const data: Prisma.UserUpdateInput = {
       email: dto.email,
       fullName: dto.fullName,
       phone: dto.phone,
       status: dto.status,
     };
     if (dto.password) data.password = await bcrypt.hash(dto.password, 10);
-    if (dto.roleIds !== undefined) {
-      data.roles = {
+    if (dto.roleAssignments !== undefined) {
+      data.userRoles = {
         deleteMany: {},
-        ...(dto.roleIds.length ? { create: dto.roleIds.map((roleId) => ({ roleId })) } : {}),
+        ...(dto.roleAssignments.length
+          ? {
+              create: dto.roleAssignments.map((a) => ({
+                shopId: a.shopId,
+                roleId: a.roleId,
+              })),
+            }
+          : {}),
       };
     }
     return this.prisma.user.update({

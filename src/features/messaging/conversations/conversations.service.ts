@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { ConversationStatus } from '@prisma/client';
+import { ConversationStatus, Prisma } from '@prisma/client';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 
@@ -9,12 +9,14 @@ export class ConversationsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateConversationDto) {
+    const hasStaff = Boolean(dto.staffId);
     return this.prisma.conversation.create({
       data: {
         customerId: dto.customerId,
         staffId: dto.staffId,
         appointmentId: dto.appointmentId,
         status: dto.status ?? ConversationStatus.OPEN,
+        assignedAt: hasStaff ? new Date() : null,
       },
       include: {
         customer: { select: { id: true, fullName: true, email: true } },
@@ -67,10 +69,34 @@ export class ConversationsService {
   }
 
   async update(id: string, dto: UpdateConversationDto) {
-    await this.findOne(id);
+    const existing = await this.prisma.conversation.findUnique({ where: { id } });
+    if (!existing) throw new NotFoundException('Conversation not found');
+
+    const data: Prisma.ConversationUpdateInput = {};
+    if (dto.appointmentId !== undefined) {
+      data.appointment = dto.appointmentId
+        ? { connect: { id: dto.appointmentId } }
+        : { disconnect: true };
+    }
+    if (dto.status !== undefined) {
+      data.status = dto.status;
+    }
+
+    if (dto.staffId !== undefined) {
+      if (dto.staffId === null) {
+        data.staff = { disconnect: true };
+        data.assignedAt = null;
+      } else {
+        data.staff = { connect: { id: dto.staffId } };
+        if (dto.staffId !== existing.staffId || !existing.assignedAt) {
+          data.assignedAt = new Date();
+        }
+      }
+    }
+
     return this.prisma.conversation.update({
       where: { id },
-      data: { staffId: dto.staffId, appointmentId: dto.appointmentId, status: dto.status },
+      data,
       include: {
         customer: { select: { id: true, fullName: true, email: true } },
         staff: { select: { id: true, fullName: true, email: true } },

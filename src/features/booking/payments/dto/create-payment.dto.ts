@@ -1,5 +1,17 @@
-import { IsEnum, IsNumber, IsOptional, IsString, IsUUID, IsDateString, Min } from 'class-validator';
+import {
+  IsArray,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  IsDateString,
+  Min,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 import { PaymentStatus } from '@prisma/client';
+import { CreatePaymentTransactionDto } from './create-payment-transaction.dto';
 
 export class CreatePaymentDto {
   @IsUUID()
@@ -20,4 +32,11 @@ export class CreatePaymentDto {
   @IsOptional()
   @IsDateString()
   paidAt?: string;
+
+  /** Optional audit rows (charge / refund attempts) */
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreatePaymentTransactionDto)
+  transactions?: CreatePaymentTransactionDto[];
 }

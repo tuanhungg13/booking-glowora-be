@@ -22,10 +22,12 @@ export class ReviewsService {
     return this.prisma.review.create({
       data: {
         appointmentId: dto.appointmentId,
+        userId: apt.customerId,
         rating: dto.rating,
         comment: dto.comment,
       },
       include: {
+        user: { select: { id: true, fullName: true, email: true } },
         appointment: {
           include: {
             customer: true,
@@ -42,13 +44,16 @@ export class ReviewsService {
     });
   }
 
-  async findAll(params?: { skip?: number; take?: number }) {
+  async findAll(params?: { userId?: string; skip?: number; take?: number }) {
+    const where = params?.userId ? { userId: params.userId } : undefined;
     const [items, total] = await Promise.all([
       this.prisma.review.findMany({
+        where,
         skip: params?.skip,
         take: params?.take ?? 20,
         orderBy: { createdAt: 'desc' },
         include: {
+          user: { select: { id: true, fullName: true, email: true } },
           appointment: {
             include: {
               customer: true,
@@ -59,7 +64,7 @@ export class ReviewsService {
           },
         },
       }),
-      this.prisma.review.count(),
+      this.prisma.review.count({ where }),
     ]);
     return { items, total };
   }
@@ -68,6 +73,7 @@ export class ReviewsService {
     const review = await this.prisma.review.findUnique({
       where: { id },
       include: {
+        user: { select: { id: true, fullName: true, email: true } },
         appointment: {
           include: {
             customer: true,

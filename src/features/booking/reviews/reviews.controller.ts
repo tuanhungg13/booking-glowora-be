@@ -26,8 +26,13 @@ export class ReviewsController {
 
   @Get()
   @RequirePermissions(Permissions.REVIEW.VIEW)
-  findAll(@Query('skip') skip?: string, @Query('take') take?: string) {
+  findAll(
+    @Query('userId') userId?: string,
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
+  ) {
     return this.reviewsService.findAll({
+      userId,
       skip: skip ? Number(skip) : undefined,
       take: take ? Number(take) : undefined,
     });

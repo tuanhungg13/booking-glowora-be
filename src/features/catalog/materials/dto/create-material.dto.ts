@@ -1,7 +1,10 @@
-import { IsEnum, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString, IsUUID, Min } from 'class-validator';
 import { MaterialUnit } from '@prisma/client';
 
 export class CreateMaterialDto {
+  @IsUUID()
+  shopId!: string;
+
   @IsString()
   name!: string;
 

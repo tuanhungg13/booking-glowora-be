@@ -1,6 +1,7 @@
 import {
   IsArray,
   IsEnum,
+  IsIn,
   IsInt,
   IsNumber,
   IsOptional,
@@ -12,9 +13,16 @@ import {
 import { Type } from 'class-transformer';
 import { AppointmentItemType, AppointmentStatus } from '@prisma/client';
 
+/** API chỉ nhận SERVICE | COMBO | CUSTOM; COMBO_CHILD do hệ thống tạo khi expand combo */
+const BOOKABLE_ITEM_TYPES = [
+  AppointmentItemType.SERVICE,
+  AppointmentItemType.COMBO,
+  AppointmentItemType.CUSTOM,
+] as const;
+
 export class CreateAppointmentItemDto {
-  @IsEnum(AppointmentItemType)
-  type!: AppointmentItemType;
+  @IsIn(BOOKABLE_ITEM_TYPES)
+  type!: (typeof BOOKABLE_ITEM_TYPES)[number];
 
   @IsOptional()
   @IsUUID()

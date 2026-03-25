@@ -11,10 +11,11 @@ export class CombosService {
   async create(dto: CreateComboDto) {
     return this.prisma.combo.create({
       data: {
+        shopId: dto.shopId,
         name: dto.name,
         description: dto.description,
         price: dto.price,
-        duration: dto.duration,
+        estimatedDurationMinutes: dto.estimatedDurationMinutes,
         status: dto.status ?? ComboStatus.ACTIVE,
         categoryId: dto.categoryId,
         services: dto.serviceIds?.length
@@ -60,7 +61,7 @@ export class CombosService {
       name: dto.name,
       description: dto.description,
       price: dto.price,
-      duration: dto.duration,
+      estimatedDurationMinutes: dto.estimatedDurationMinutes,
       status: dto.status,
       categoryId: dto.categoryId,
     };

@@ -5,9 +5,29 @@ import {
   AppointmentItemType,
   AppointmentStatus,
   Prisma,
+  StaffBookingStatus,
 } from '@prisma/client';
 import { CreateAppointmentDto, CreateAppointmentItemDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+
+const itemInclude = {
+  service: true,
+  combo: true,
+  staff: { select: { id: true, fullName: true, email: true } },
+  parentItem: { select: { id: true, type: true, nameSnapshot: true } },
+  childItems: {
+    include: {
+      service: true,
+      staff: { select: { id: true, fullName: true, email: true } },
+    },
+  },
+} as const;
+
+type ComboExpansionMeta = {
+  sortOrder: number;
+  comboId: string;
+  staffId?: string | null;
+};
 
 @Injectable()
 export class AppointmentsService {
@@ -23,7 +43,8 @@ export class AppointmentsService {
         subtotal,
         totalDurationMinutes,
         itemsData,
-      } = await this.buildAppointmentItemsAndPricing(tx, dto.items, dto.shopId);
+        comboMetas,
+      } = await this.buildAppointmentItemsAndPricing(tx, dto.items!, dto.shopId);
 
       const discount = dto.discount ?? 0;
       const total = subtotal - discount;
@@ -51,24 +72,74 @@ export class AppointmentsService {
           },
         },
         include: {
-          items: {
-            include: {
-              service: true,
-              combo: true,
-              staff: { select: { id: true, fullName: true, email: true } },
-            },
-          },
+          items: { include: itemInclude },
           customer: { select: { id: true, fullName: true, email: true } },
           shop: true,
         },
       });
 
-      // Create staff bookings if staffId present on items
+      for (const meta of comboMetas) {
+        const parent = await tx.appointmentItem.findFirst({
+          where: {
+            appointmentId: appointment.id,
+            type: AppointmentItemType.COMBO,
+            comboId: meta.comboId,
+            sortOrder: meta.sortOrder,
+          },
+        });
+        if (!parent) continue;
+
+        const comboServices = await tx.comboService.findMany({
+          where: { comboId: meta.comboId },
+          include: { service: true },
+          orderBy: [{ order: 'asc' }, { serviceId: 'asc' }],
+        });
+
+        let nextSort =
+          (await tx.appointmentItem.aggregate({
+            where: { appointmentId: appointment.id },
+            _max: { sortOrder: true },
+          }))._max.sortOrder ?? 0;
+
+        for (const cs of comboServices) {
+          const svc = cs.service;
+          const lineQty = cs.quantity ?? 1;
+          for (let q = 0; q < lineQty; q++) {
+            nextSort += 1;
+            await tx.appointmentItem.create({
+              data: {
+                appointmentId: appointment.id,
+                parentItemId: parent.id,
+                type: AppointmentItemType.COMBO_CHILD,
+                status: AppointmentItemStatus.PENDING,
+                staffId: meta.staffId ?? undefined,
+                serviceId: svc.id,
+                nameSnapshot: svc.name,
+                durationSnapshot: svc.duration,
+                bufferBeforeSnapshot: svc.bufferBeforeMinutes,
+                bufferAfterSnapshot: svc.bufferAfterMinutes,
+                unitPriceSnapshot: svc.price,
+                quantity: 1,
+                sortOrder: nextSort,
+              },
+            });
+          }
+        }
+      }
+
+      const allItems = await tx.appointmentItem.findMany({
+        where: { appointmentId: appointment.id },
+        orderBy: { sortOrder: 'asc' },
+      });
+
       const bookingsData: Prisma.StaffBookingCreateManyInput[] = [];
       let cursorTime = startTime.getTime();
-      for (const item of appointment.items) {
-        const itemStart = new Date(cursorTime);
+      for (const item of allItems) {
+        if (item.type === AppointmentItemType.COMBO) {
+          continue;
+        }
         const itemDurationMs = item.durationSnapshot * 60 * 1000;
+        const itemStart = new Date(cursorTime);
         const itemEnd = new Date(cursorTime + itemDurationMs);
         cursorTime += itemDurationMs;
 
@@ -80,7 +151,7 @@ export class AppointmentsService {
             appointmentItemId: item.id,
             startTime: itemStart,
             endTime: itemEnd,
-            isActive: true,
+            status: StaffBookingStatus.ACTIVE,
           });
         }
       }
@@ -89,7 +160,14 @@ export class AppointmentsService {
         await tx.staffBooking.createMany({ data: bookingsData });
       }
 
-      return appointment;
+      return tx.appointment.findUniqueOrThrow({
+        where: { id: appointment.id },
+        include: {
+          items: { include: itemInclude },
+          customer: { select: { id: true, fullName: true, email: true } },
+          shop: true,
+        },
+      });
     });
   }
 
@@ -118,13 +196,7 @@ export class AppointmentsService {
         take: params?.take ?? 20,
         orderBy: { startTime: 'desc' },
         include: {
-          items: {
-            include: {
-              service: true,
-              combo: true,
-              staff: { select: { id: true, fullName: true, email: true } },
-            },
-          },
+          items: { include: itemInclude },
           customer: { select: { id: true, fullName: true, email: true } },
           shop: true,
         },
@@ -138,16 +210,10 @@ export class AppointmentsService {
     const apt = await this.prisma.appointment.findUnique({
       where: { id },
       include: {
-        items: {
-          include: {
-            service: true,
-            combo: true,
-            staff: { select: { id: true, fullName: true, email: true, phone: true } },
-          },
-        },
+        items: { include: itemInclude },
         customer: { select: { id: true, fullName: true, email: true, phone: true } },
         shop: true,
-        payment: true,
+        payment: { include: { transactions: true } },
         review: true,
       },
     });
@@ -167,13 +233,7 @@ export class AppointmentsService {
         note: dto.note,
       },
       include: {
-        items: {
-          include: {
-            service: true,
-            combo: true,
-            staff: { select: { id: true, fullName: true, email: true } },
-          },
-        },
+        items: { include: itemInclude },
         customer: { select: { id: true, fullName: true, email: true } },
       },
     });
@@ -189,11 +249,17 @@ export class AppointmentsService {
     tx: Prisma.TransactionClient,
     items: CreateAppointmentItemDto[],
     shopId: string,
-  ) {
+  ): Promise<{
+    subtotal: number;
+    totalDurationMinutes: number;
+    itemsData: Prisma.AppointmentItemUncheckedCreateWithoutAppointmentInput[];
+    comboMetas: ComboExpansionMeta[];
+  }> {
     let subtotal = 0;
     let totalDurationMinutes = 0;
 
-    const itemsData: Prisma.AppointmentItemCreateWithoutAppointmentInput[] = [];
+    const itemsData: Prisma.AppointmentItemUncheckedCreateWithoutAppointmentInput[] = [];
+    const comboMetas: ComboExpansionMeta[] = [];
 
     for (const [index, item] of items.entries()) {
       const quantity = item.quantity ?? 1;
@@ -236,30 +302,46 @@ export class AppointmentsService {
         }
         const combo = await tx.combo.findFirst({
           where: { id: item.comboId, shopId },
+          include: {
+            services: { include: { service: true } },
+          },
         });
         if (!combo) {
           throw new NotFoundException('Combo not found for this shop');
         }
 
+        const comboDurationMinutes = combo.services.reduce(
+          (sum, cs) => sum + cs.service.duration * (cs.quantity ?? 1),
+          0,
+        );
+        const effectiveDuration =
+          comboDurationMinutes > 0
+            ? comboDurationMinutes
+            : combo.estimatedDurationMinutes ?? 0;
+
         const unitPrice = combo.price;
-        const duration = combo.estimatedDurationMinutes ?? 0;
 
         subtotal += Number(unitPrice) * quantity;
-        totalDurationMinutes += duration * quantity;
+        totalDurationMinutes += effectiveDuration * quantity;
 
         itemsData.push({
           type: AppointmentItemType.COMBO,
           status: AppointmentItemStatus.PENDING,
-          staffId: item.staffId,
+          staffId: null,
           serviceId: null,
           comboId: combo.id,
           nameSnapshot: combo.name,
-          durationSnapshot: duration,
+          durationSnapshot: effectiveDuration,
           bufferBeforeSnapshot: 0,
           bufferAfterSnapshot: 0,
           unitPriceSnapshot: unitPrice,
           quantity,
           sortOrder,
+        });
+        comboMetas.push({
+          sortOrder,
+          comboId: combo.id,
+          staffId: item.staffId,
         });
       } else if (item.type === AppointmentItemType.CUSTOM) {
         if (!item.name) {
@@ -268,6 +350,9 @@ export class AppointmentsService {
 
         const duration = 0;
         const unitPrice = 0;
+
+        subtotal += Number(unitPrice) * quantity;
+        totalDurationMinutes += duration * quantity;
 
         itemsData.push({
           type: AppointmentItemType.CUSTOM,
@@ -286,6 +371,6 @@ export class AppointmentsService {
       }
     }
 
-    return { subtotal, totalDurationMinutes, itemsData };
+    return { subtotal, totalDurationMinutes, itemsData, comboMetas };
   }
 }

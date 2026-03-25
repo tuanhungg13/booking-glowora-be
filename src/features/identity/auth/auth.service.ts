@@ -20,14 +20,14 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({
       where: { email },
       include: {
-        roles: { include: { role: { select: { name: true } } } },
+        userRoles: { include: { role: { select: { name: true } } } },
       },
     });
     if (!user || user.status !== UserStatus.ACTIVE) return null;
     const ok = await bcrypt.compare(password, user.password);
     if (!ok) return null;
     const { password: _, ...rest } = user;
-    return { ...rest, roles: user.roles.map((r) => r.role.name) };
+    return { ...rest, roles: user.userRoles.map((ur) => ur.role.name) };
   }
 
   async login(user: { id: string; email: string; roles: string[] }) {
