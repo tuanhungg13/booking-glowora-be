@@ -1,7 +1,10 @@
-import { IsBoolean, IsEnum, IsOptional, IsDateString } from 'class-validator';
+import { IsBoolean, IsEnum, IsOptional, IsDateString, IsUUID } from 'class-validator';
 import { DayOfWeek } from '@prisma/client';
 
 export class CreateWorkingHourDto {
+  @IsUUID()
+  shopId!: string;
+
   @IsEnum(DayOfWeek)
   dayOfWeek!: DayOfWeek;
 

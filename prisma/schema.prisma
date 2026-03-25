@@ -36,6 +36,14 @@ enum AppointmentStatus {
   NO_SHOW
 }
 
+enum AppointmentItemStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
 enum PaymentStatus {
   PENDING
   PAID
@@ -83,23 +91,33 @@ enum MaterialUnit {
   PIECE
 }
 
+enum ShopStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum AppointmentItemType {
+  SERVICE
+  COMBO
+  CUSTOM
+}
+
 model User {
-  id          String   @id @default(uuid())
-  email       String   @unique
-  password    String
-  fullName    String?
-  phone       String?
-  status      UserStatus @default(ACTIVE)
+  id       String     @id @default(uuid())
+  email    String     @unique
+  password String
+  fullName String?
+  phone    String?
+  status   UserStatus @default(ACTIVE)
 
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-
-  roles       UserRole[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   staffServices StaffService[]
 
-  appointments Appointment[] @relation("CustomerAppointments")
-  staffAppointments Appointment[] @relation("StaffAppointments")
+  appointments          Appointment[]     @relation("CustomerAppointments")
+  staffAppointmentItems AppointmentItem[] @relation("StaffForAppointmentItem")
+  staffBookings         StaffBooking[]
 
   telegramAccount TelegramAccount?
 
@@ -110,97 +128,145 @@ model User {
 
   staffSchedules StaffSchedule[]
   staffDaysOff   StaffDayOff[]
+
+  ownedShops Shop[]
+  userRoles  UserRole[]
+}
+
+model Shop {
+  id      String     @id @default(uuid())
+  name    String
+  address String?
+  phone   String?
+  status  ShopStatus @default(ACTIVE)
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id])
+
+  categories     Category[]
+  services       Service[]
+  combos         Combo[]
+  materials      Material[]
+  workingHours   WorkingHour[]
+  appointments   Appointment[]
+  roles          Role[]
+  userRoles      UserRole[]
+  staffBookings  StaffBooking[]
+  staffSchedules StaffSchedule[]
+  staffDaysOff   StaffDayOff[]
 }
 
 model Role {
-  id          String   @id @default(uuid())
-  name        String   @unique
+  id          String  @id @default(uuid())
+  name        String
+  code        String
   description String?
 
+  isSystem Boolean @default(false)
+
+  shopId String?
+  shop   Shop?   @relation(fields: [shopId], references: [id])
+
   permissions RolePermission[]
-  users       UserRole[]
+  userRoles   UserRole[]
+
+  @@unique([code, shopId])
+  @@index([code])
+  @@index([shopId])
 }
 
 model Permission {
-  id          String   @id @default(uuid())
-  code        String   @unique
-  name        String   @unique
+  id          String  @id @default(uuid())
+  code        String  @unique
+  name        String  @unique
   description String?
 
-  roles       RolePermission[]
+  roles RolePermission[]
 }
 
 model RolePermission {
   roleId       String
   permissionId String
 
-  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
-  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
 
   @@id([roleId, permissionId])
 }
 
 model UserRole {
   userId String
+  shopId String
   roleId String
 
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
 
-  @@id([userId, roleId])
+  @@id([userId, shopId, roleId])
+  @@index([shopId, userId])
 }
 
 model Category {
-  id          String   @id @default(uuid())
+  id          String  @id @default(uuid())
   name        String
   description String?
 
-  services    Service[]
-  combos      Combo[]
+  shopId String
+  shop   Shop   @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  services Service[]
+  combos   Combo[]
 }
 
 model Service {
-  id          String   @id @default(uuid())
-  name        String
-  description String?
-  duration    Int
-  price       Float
-  costPrice   Float?
-  status      ServiceStatus @default(ACTIVE)
-  categoryId  String?
+  id                  String        @id @default(uuid())
+  name                String
+  description         String?
+  duration            Int
+  bufferBeforeMinutes Int           @default(0)
+  bufferAfterMinutes  Int           @default(0)
+  price               Decimal
+  costPrice           Decimal?
+  status              ServiceStatus @default(ACTIVE)
+  shopId              String
+  categoryId          String?
 
-  category      Category? @relation(fields: [categoryId], references: [id])
+  shop     Shop      @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  category Category? @relation(fields: [categoryId], references: [id])
 
-  staffServices StaffService[]
-  appointments  Appointment[]
-  comboServices ComboService[]
+  staffServices    StaffService[]
+  appointmentItems AppointmentItem[]
+  comboServices    ComboService[]
 
-  materials     ServiceMaterial[]
+  materials ServiceMaterial[]
 }
 
 model Combo {
-  id          String   @id @default(uuid())
-  name        String
-  description String?
-  price       Float
-  duration    Int?
-  status      ComboStatus @default(ACTIVE)
-  categoryId  String?
+  id                       String      @id @default(uuid())
+  name                     String
+  description              String?
+  price                    Decimal
+  estimatedDurationMinutes Int?
+  status                   ComboStatus @default(ACTIVE)
+  shopId                   String
+  categoryId               String?
 
-  category     Category? @relation(fields: [categoryId], references: [id])
+  shop     Shop      @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  category Category? @relation(fields: [categoryId], references: [id])
 
-  services     ComboService[]
-  appointments Appointment[]
+  services         ComboService[]
+  appointmentItems AppointmentItem[]
 }
 
 model ComboService {
   comboId   String
   serviceId String
-  quantity  Int      @default(1)
+  quantity  Int    @default(1)
   order     Int?
 
-  combo     Combo   @relation(fields: [comboId], references: [id], onDelete: Cascade)
-  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  combo   Combo   @relation(fields: [comboId], references: [id], onDelete: Cascade)
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
   @@id([comboId, serviceId])
 }
@@ -209,203 +275,293 @@ model StaffService {
   staffId   String
   serviceId String
 
-  staff     User    @relation(fields: [staffId], references: [id], onDelete: Cascade)
-  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  staff   User    @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
   @@id([staffId, serviceId])
 }
 
 model Appointment {
-  id          String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  serviceId   String?
-  comboId     String?
+  shopId String
 
-  staffId     String
-  customerId  String
+  customerId String
 
-  startTime   DateTime
-  endTime     DateTime
+  startTime DateTime @db.Timestamptz(3)
+  endTime   DateTime @db.Timestamptz(3)
 
-  status      AppointmentStatus @default(PENDING)
+  status AppointmentStatus @default(PENDING)
 
-  totalPrice  Float?
-  note        String?
+  durationMinutes     Int
+  bufferBeforeMinutes Int @default(0)
+  bufferAfterMinutes  Int @default(0)
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  currency String @default("VND")
 
-  service     Service? @relation(fields: [serviceId], references: [id])
-  combo       Combo?   @relation(fields: [comboId], references: [id])
+  subtotal Decimal
+  discount Decimal @default(0)
+  total    Decimal
 
-  staff       User @relation("StaffAppointments", fields: [staffId], references: [id])
-  customer    User @relation("CustomerAppointments", fields: [customerId], references: [id])
+  note String?
 
-  review       Review?
-  payment      Payment?
-  conversation Conversation?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@index([staffId, startTime])
-  @@index([customerId, startTime])
+  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  customer User @relation("CustomerAppointments", fields: [customerId], references: [id])
+
+  items         AppointmentItem[]
+  staffBookings StaffBooking[]
+  review        Review?
+  payment       Payment?
+  conversation  Conversation?
+
+  @@index([shopId, customerId, startTime])
+}
+
+model AppointmentItem {
+  id String @id @default(uuid())
+
+  appointmentId String
+  appointment   Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+
+  type AppointmentItemType
+
+  status AppointmentItemStatus @default(PENDING)
+
+  staffId String?
+  staff   User?   @relation("StaffForAppointmentItem", fields: [staffId], references: [id])
+
+  serviceId String?
+  service   Service? @relation(fields: [serviceId], references: [id])
+
+  comboId String?
+  combo   Combo?  @relation(fields: [comboId], references: [id])
+
+  nameSnapshot         String
+  durationSnapshot     Int
+  bufferBeforeSnapshot Int     @default(0)
+  bufferAfterSnapshot  Int     @default(0)
+  unitPriceSnapshot    Decimal
+  quantity             Int     @default(1)
+
+  sortOrder Int?
+
+  createdAt DateTime @default(now())
+
+  staffBookings StaffBooking[]
+
+  @@unique([appointmentId, sortOrder])
+  @@index([appointmentId])
+  @@index([status])
+  @@index([staffId])
+  @@index([serviceId])
+  @@index([comboId])
+}
+
+model StaffBooking {
+  id String @id @default(uuid())
+
+  shopId  String
+  staffId String
+
+  appointmentId String
+  appointment   Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+
+  appointmentItemId String?
+  appointmentItem   AppointmentItem? @relation(fields: [appointmentItemId], references: [id], onDelete: Cascade)
+
+  startTime DateTime @db.Timestamptz(3)
+  endTime   DateTime @db.Timestamptz(3)
+
+  isActive Boolean @default(true)
+
+  staff User @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  shop  Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([shopId, staffId, startTime])
+  @@index([shopId, staffId, isActive])
+  @@index([appointmentId])
+  @@index([appointmentItemId])
+  @@index([staffId, startTime, endTime])
 }
 
 model Payment {
-  id             String   @id @default(uuid())
-  appointmentId  String   @unique
+  id            String @id @default(uuid())
+  appointmentId String @unique
 
-  method         String?
-  amount         Float
+  method String?
+  amount Decimal
 
-  status         PaymentStatus
-  paidAt         DateTime?
+  status PaymentStatus
+  paidAt DateTime?
 
-  appointment    Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
 }
 
 model Review {
-  id             String   @id @default(uuid())
-  appointmentId  String   @unique
+  id            String @id @default(uuid())
+  appointmentId String @unique
 
-  rating         Int
-  comment        String?
+  rating  Int
+  comment String?
 
-  createdAt      DateTime @default(now())
+  createdAt DateTime @default(now())
 
-  appointment    Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
 }
 
 model Conversation {
-  id            String   @id @default(uuid())
+  id String @id @default(uuid())
 
   customerId    String
   staffId       String?
-  appointmentId String?  @unique
+  appointmentId String? @unique
 
-  status        ConversationStatus @default(OPEN)
+  status ConversationStatus @default(OPEN)
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  customer      User         @relation("CustomerConversations", fields: [customerId], references: [id])
-  staff         User?        @relation("StaffConversations", fields: [staffId], references: [id])
-  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+  customer    User         @relation("CustomerConversations", fields: [customerId], references: [id])
+  staff       User?        @relation("StaffConversations", fields: [staffId], references: [id])
+  appointment Appointment? @relation(fields: [appointmentId], references: [id])
 
-  messages      Message[]
+  messages Message[]
 }
 
 model Message {
-  id             String   @id @default(uuid())
+  id String @id @default(uuid())
 
   conversationId String
 
-  senderType     SenderType
-  senderId       String?
+  senderType SenderType
+  senderId   String?
 
-  content        String
+  content String
 
-  messageType    MessageType @default(TEXT)
+  messageType MessageType @default(TEXT)
 
-  telegramMsgId  BigInt?
+  telegramMsgId BigInt?
 
-  createdAt      DateTime @default(now())
+  createdAt DateTime @default(now())
 
-  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
   @@index([conversationId, createdAt])
 }
 
 model TelegramAccount {
-  staffId        String   @id
-  telegramUserId BigInt   @unique
+  staffId        String  @id
+  telegramUserId BigInt  @unique
   username       String?
 
-  staff          User @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  staff User @relation(fields: [staffId], references: [id], onDelete: Cascade)
 }
 
 model Notification {
-  id         String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  userId     String
+  userId String
 
-  type       NotificationType
+  type NotificationType
 
-  title      String
-  content    String
+  title   String
+  content String
 
-  isRead     Boolean  @default(false)
+  isRead Boolean @default(false)
 
-  createdAt  DateTime @default(now())
+  createdAt DateTime @default(now())
 
-  user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, isRead, createdAt])
 }
 
 model WorkingHour {
-  id         String    @id @default(uuid())
+  id String @id @default(uuid())
 
-  dayOfWeek  DayOfWeek
+  shopId String
+  shop   Shop   @relation(fields: [shopId], references: [id], onDelete: Cascade)
 
-  openTime   DateTime
-  closeTime  DateTime
+  dayOfWeek DayOfWeek
 
-  isClosed   Boolean   @default(false)
+  openTime  DateTime @db.Time(0)
+  closeTime DateTime @db.Time(0)
+
+  isClosed Boolean @default(false)
+
+  @@index([shopId, dayOfWeek])
 }
 
 model StaffSchedule {
-  id         String    @id @default(uuid())
+  id String @id @default(uuid())
 
-  staffId    String
-  dayOfWeek  DayOfWeek
+  staffId   String
+  shopId    String
+  dayOfWeek DayOfWeek
 
-  startTime  DateTime
-  endTime    DateTime
+  startTime DateTime @db.Time(0)
+  endTime   DateTime @db.Time(0)
 
-  isActive   Boolean   @default(true)
+  isActive Boolean @default(true)
 
-  staff      User      @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  staff User @relation(fields: [staffId], references: [id], onDelete: Cascade)
 
-  @@index([staffId, dayOfWeek])
+  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  @@unique([shopId, staffId, dayOfWeek, startTime, endTime])
+  @@index([shopId, staffId, dayOfWeek])
 }
 
 model StaffDayOff {
-  id         String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  staffId    String
-  date       DateTime
+  staffId String
+  shopId  String
+  date    DateTime @db.Date
 
-  reason     String?
+  reason String?
 
-  staff      User     @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  staff User @relation(fields: [staffId], references: [id], onDelete: Cascade)
 
-  @@index([staffId, date])
+  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  @@index([shopId, staffId, date])
 }
 
 model Material {
-  id          String   @id @default(uuid())
+  id String @id @default(uuid())
 
   name        String
   description String?
 
-  unit        MaterialUnit
+  unit MaterialUnit
 
-  costPrice   Float
+  costPrice Decimal
 
   stockQuantity Float?
+
+  shopId String
+  shop   Shop   @relation(fields: [shopId], references: [id], onDelete: Cascade)
 
   serviceMaterials ServiceMaterial[]
 }
 
 model ServiceMaterial {
-  id          String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  serviceId   String
-  materialId  String
+  serviceId  String
+  materialId String
 
-  quantity    Float
+  quantity Float
 
-  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  material    Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  service  Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  material Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
 
   @@unique([serviceId, materialId])
 }

@@ -11,6 +11,7 @@ export class ServicesService {
   async create(dto: CreateServiceDto) {
     return this.prisma.service.create({
       data: {
+        shopId: dto.shopId,
         name: dto.name,
         description: dto.description,
         duration: dto.duration,

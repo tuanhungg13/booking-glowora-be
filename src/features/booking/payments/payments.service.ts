@@ -37,7 +37,20 @@ export class PaymentsService {
         skip: params?.skip,
         take: params?.take ?? 20,
         orderBy: { id: 'desc' },
-        include: { appointment: { include: { customer: true, staff: true } } },
+        include: {
+          appointment: {
+            include: {
+              customer: true,
+              items: {
+                include: {
+                  service: true,
+                  combo: true,
+                  staff: { select: { id: true, fullName: true, email: true } },
+                },
+              },
+            },
+          },
+        },
       }),
       this.prisma.payment.count({ where }),
     ]);
@@ -47,7 +60,20 @@ export class PaymentsService {
   async findOne(id: string) {
     const pay = await this.prisma.payment.findUnique({
       where: { id },
-      include: { appointment: { include: { customer: true, staff: true, service: true, combo: true } } },
+      include: {
+        appointment: {
+          include: {
+            customer: true,
+            items: {
+              include: {
+                service: true,
+                combo: true,
+                staff: { select: { id: true, fullName: true, email: true } },
+              },
+            },
+          },
+        },
+      },
     });
     if (!pay) throw new NotFoundException('Payment not found');
     return pay;

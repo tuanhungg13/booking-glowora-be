@@ -12,6 +12,9 @@ class MaterialQuantityDto {
 }
 
 export class CreateServiceDto {
+  @IsUUID()
+  shopId!: string;
+
   @IsString()
   name!: string;
 

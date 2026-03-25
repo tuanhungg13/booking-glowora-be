@@ -28,8 +28,8 @@ export class AppointmentsController {
   @Get()
   @RequirePermissions(Permissions.APPOINTMENT.VIEW)
   findAll(
+    @Query('shopId') shopId?: string,
     @Query('status') status?: AppointmentStatus,
-    @Query('staffId') staffId?: string,
     @Query('customerId') customerId?: string,
     @Query('from') from?: string,
     @Query('to') to?: string,
@@ -37,8 +37,8 @@ export class AppointmentsController {
     @Query('take') take?: string,
   ) {
     return this.appointmentsService.findAll({
+      shopId,
       status,
-      staffId,
       customerId,
       from: from ? new Date(from) : undefined,
       to: to ? new Date(to) : undefined,

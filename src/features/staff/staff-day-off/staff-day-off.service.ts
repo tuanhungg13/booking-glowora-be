@@ -10,6 +10,7 @@ export class StaffDayOffService {
   async create(dto: CreateStaffDayOffDto) {
     return this.prisma.staffDayOff.create({
       data: {
+        shopId: dto.shopId,
         staffId: dto.staffId,
         date: new Date(dto.date),
         reason: dto.reason,
@@ -18,8 +19,9 @@ export class StaffDayOffService {
     });
   }
 
-  async findAll(params?: { staffId?: string; from?: Date; to?: Date }) {
+  async findAll(params?: { shopId?: string; staffId?: string; from?: Date; to?: Date }) {
     const where: Record<string, unknown> = {};
+    if (params?.shopId) where.shopId = params.shopId;
     if (params?.staffId) where.staffId = params.staffId;
     if (params?.from || params?.to) {
       where.date = {};

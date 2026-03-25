@@ -11,6 +11,7 @@ export class StaffScheduleService {
   async create(dto: CreateStaffScheduleDto) {
     return this.prisma.staffSchedule.create({
       data: {
+        shopId: dto.shopId,
         staffId: dto.staffId,
         dayOfWeek: dto.dayOfWeek,
         startTime: new Date(dto.startTime),
@@ -21,9 +22,10 @@ export class StaffScheduleService {
     });
   }
 
-  async findAll(params?: { staffId?: string; dayOfWeek?: DayOfWeek }) {
+  async findAll(params?: { shopId?: string; staffId?: string; dayOfWeek?: DayOfWeek }) {
     return this.prisma.staffSchedule.findMany({
       where: {
+        ...(params?.shopId && { shopId: params.shopId }),
         ...(params?.staffId && { staffId: params.staffId }),
         ...(params?.dayOfWeek && { dayOfWeek: params.dayOfWeek }),
       },

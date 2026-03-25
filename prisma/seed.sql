@@ -8,13 +8,16 @@ BEGIN;
 -- ─────────────────────────────────────────────────────────────
 -- 1. ROLES
 -- ─────────────────────────────────────────────────────────────
-INSERT INTO "Role" (id, name, description) VALUES
-  ('a0000000-0000-0000-0000-000000000001', 'ADMIN',           'Quan tri vien he thong, toan quyen'),
-  ('a0000000-0000-0000-0000-000000000002', 'SHOP_OWNER',      'Chu cua hang, quan ly toan bo hoat dong'),
-  ('a0000000-0000-0000-0000-000000000003', 'TECHNICAL',       'Ky thuat vien, thuc hien dich vu'),
-  ('a0000000-0000-0000-0000-000000000004', 'USER',            'Khach hang dat lich'),
-  ('a0000000-0000-0000-0000-000000000005', 'WAREHOUSE_STAFF', 'Nhan vien kho, quan ly vat tu')
-ON CONFLICT (name) DO NOTHING;
+-- System roles: shopId NULL, isSystem = true
+-- NOTE: "Role" unique is (code, shopId). With shopId NULL, ON CONFLICT cannot target that constraint reliably.
+-- We make the seed idempotent by using fixed IDs and conflict on (id).
+INSERT INTO "Role" (id, code, name, description, "isSystem", "shopId") VALUES
+  ('a0000000-0000-0000-0000-000000000001', 'SUPER_ADMIN',     'Super Admin',  'Quan tri vien he thong, toan quyen', true, NULL),
+  ('a0000000-0000-0000-0000-000000000002', 'SHOP_OWNER',      'Shop Owner',   'Chu cua hang, quan ly toan bo hoat dong', true, NULL),
+  ('a0000000-0000-0000-0000-000000000003', 'STAFF',           'Staff',        'Nhan vien cua hang (thuc hien dich vu)', true, NULL),
+  ('a0000000-0000-0000-0000-000000000004', 'CUSTOMER',        'Customer',     'Khach hang dat lich', true, NULL),
+  ('a0000000-0000-0000-0000-000000000005', 'WAREHOUSE_STAFF', 'Warehouse',    'Nhan vien kho, quan ly vat tu', true, NULL)
+ON CONFLICT (id) DO NOTHING;
 
 -- ─────────────────────────────────────────────────────────────
 -- 2. PERMISSIONS (60 permissions)
@@ -114,7 +117,7 @@ ON CONFLICT (code) DO NOTHING;
 -- ─────────────────────────────────────────────────────────────
 
 -- ========================
--- ADMIN → ALL 60 permissions
+-- SUPER_ADMIN → ALL permissions
 -- ========================
 INSERT INTO "RolePermission" ("roleId", "permissionId")
 SELECT 'a0000000-0000-0000-0000-000000000001', id FROM "Permission"
@@ -152,7 +155,7 @@ WHERE code IN (
 ON CONFLICT DO NOTHING;
 
 -- ========================
--- TECHNICAL (Ky thuat vien)
+-- STAFF
 -- ========================
 INSERT INTO "RolePermission" ("roleId", "permissionId")
 SELECT 'a0000000-0000-0000-0000-000000000003', id FROM "Permission"
@@ -175,7 +178,7 @@ WHERE code IN (
 ON CONFLICT DO NOTHING;
 
 -- ========================
--- USER (Khach hang)
+-- CUSTOMER
 -- ========================
 INSERT INTO "RolePermission" ("roleId", "permissionId")
 SELECT 'a0000000-0000-0000-0000-000000000004', id FROM "Permission"

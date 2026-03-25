@@ -3,6 +3,9 @@ import { DayOfWeek } from '@prisma/client';
 
 export class CreateStaffScheduleDto {
   @IsUUID()
+  shopId!: string;
+
+  @IsUUID()
   staffId!: string;
 
   @IsEnum(DayOfWeek)

@@ -1,7 +1,21 @@
-import { IsEnum, IsNumber, IsOptional, IsString, IsUUID, IsDateString } from 'class-validator';
-import { AppointmentStatus } from '@prisma/client';
+import {
+  IsArray,
+  IsEnum,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  IsDateString,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+import { AppointmentItemType, AppointmentStatus } from '@prisma/client';
 
-export class CreateAppointmentDto {
+export class CreateAppointmentItemDto {
+  @IsEnum(AppointmentItemType)
+  type!: AppointmentItemType;
+
   @IsOptional()
   @IsUUID()
   serviceId?: string;
@@ -10,8 +24,26 @@ export class CreateAppointmentDto {
   @IsUUID()
   comboId?: string;
 
+  @IsOptional()
   @IsUUID()
-  staffId!: string;
+  staffId?: string;
+
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @IsOptional()
+  @IsInt()
+  quantity?: number;
+
+  @IsOptional()
+  @IsInt()
+  sortOrder?: number;
+}
+
+export class CreateAppointmentDto {
+  @IsUUID()
+  shopId!: string;
 
   @IsUUID()
   customerId!: string;
@@ -19,18 +51,21 @@ export class CreateAppointmentDto {
   @IsDateString()
   startTime!: string;
 
-  @IsDateString()
-  endTime!: string;
-
   @IsOptional()
   @IsEnum(AppointmentStatus)
   status?: AppointmentStatus;
 
   @IsOptional()
   @IsNumber()
-  totalPrice?: number;
+  discount?: number;
 
   @IsOptional()
   @IsString()
   note?: string;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateAppointmentItemDto)
+  items?: CreateAppointmentItemDto[];
 }

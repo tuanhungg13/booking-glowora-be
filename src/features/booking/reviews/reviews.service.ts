@@ -25,7 +25,20 @@ export class ReviewsService {
         rating: dto.rating,
         comment: dto.comment,
       },
-      include: { appointment: { include: { service: true, combo: true, staff: true } } },
+      include: {
+        appointment: {
+          include: {
+            customer: true,
+            items: {
+              include: {
+                service: true,
+                combo: true,
+                staff: { select: { id: true, fullName: true, email: true } },
+              },
+            },
+          },
+        },
+      },
     });
   }
 
@@ -35,7 +48,16 @@ export class ReviewsService {
         skip: params?.skip,
         take: params?.take ?? 20,
         orderBy: { createdAt: 'desc' },
-        include: { appointment: { include: { customer: true, service: true, combo: true } } },
+        include: {
+          appointment: {
+            include: {
+              customer: true,
+              items: {
+                include: { service: true, combo: true },
+              },
+            },
+          },
+        },
       }),
       this.prisma.review.count(),
     ]);
@@ -45,7 +67,20 @@ export class ReviewsService {
   async findOne(id: string) {
     const review = await this.prisma.review.findUnique({
       where: { id },
-      include: { appointment: { include: { customer: true, staff: true, service: true, combo: true } } },
+      include: {
+        appointment: {
+          include: {
+            customer: true,
+            items: {
+              include: {
+                service: true,
+                combo: true,
+                staff: { select: { id: true, fullName: true, email: true } },
+              },
+            },
+          },
+        },
+      },
     });
     if (!review) throw new NotFoundException('Review not found');
     return review;
