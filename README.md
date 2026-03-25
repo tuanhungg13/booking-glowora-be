@@ -1,98 +1,154 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Booking Business — Hướng dẫn làm quen dự án
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend **NestJS** cho nền tảng đặt lịch (spa/salon/shop): quản lý shop, catalog dịch vụ, lịch hẹn, nhân sự, thanh toán, chat và thông báo. Dữ liệu lưu **PostgreSQL** qua **Prisma**; **Redis** dùng cache quyền người dùng.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Bắt đầu từ đâu (thứ tự đọc code)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+1. **`src/main.ts`** — Khởi động app, `ValidationPipe` toàn cục.
+2. **`src/app.module.ts`** — Cây module: import feature nào, guard nào chạy global.
+3. **`prisma/schema.prisma`** — “Bản đồ” domain: User, Shop, Appointment, Payment… Đọc schema trước khi đi sâu service giúp bạn không bị lạc quan hệ.
+4. **`src/features/*`** — Theo từng nghiệp vụ; mỗi thư mục có **`README.md`** riêng (xem bên dưới).
+5. **`src/common/`** — Decorator (`@Public()`, `@CurrentUser()`, `@RequirePermissions()`), pipe dùng chung.
 
-## Project setup
+**Gợi ý theo vai trò:**
 
-```bash
-$ pnpm install
+| Mục tiêu | Đọc trước |
+|----------|-----------|
+| Đăng nhập / JWT / phân quyền | [Identity](src/features/identity/README.md), `jwt-auth.guard.ts`, `permissions.guard.ts` |
+| Đặt lịch, thanh toán, review | [Booking](src/features/booking/README.md) |
+| Dịch vụ, combo, nguyên liệu | [Catalog](src/features/catalog/README.md) |
+| Ca làm, giờ mở cửa, nghỉ | [Staff](src/features/staff/README.md) |
+| Chat | [Messaging](src/features/messaging/README.md) |
+
+---
+
+## Luồng tổng quan (request → domain)
+
+```mermaid
+flowchart TB
+  subgraph entry["Lớp vào"]
+    HTTP[HTTP Request]
+    Main[main.ts + ValidationPipe]
+    App[AppModule]
+  end
+
+  subgraph guards["Bảo vệ global"]
+    JWT[JwtAuthGuard]
+    PERM[PermissionsGuard]
+  end
+
+  subgraph infra["Hạ tầng"]
+    Prisma[(Prisma → PostgreSQL)]
+    Redis[(Redis cache quyền)]
+  end
+
+  subgraph features["Features"]
+    ID[Identity]
+    CAT[Catalog]
+    BK[Booking]
+    ST[Staff]
+    MSG[Messaging]
+    NOT[Notifications]
+  end
+
+  HTTP --> Main --> App
+  App --> JWT
+  JWT --> PERM
+  PERM --> features
+  features --> Prisma
+  PERM --> Redis
 ```
 
-## Compile and run the project
+**Luồng nghiệp vụ điển hình (đặt lịch):**
 
-```bash
-# development
-$ pnpm run start
+```mermaid
+sequenceDiagram
+  participant C as Client
+  participant API as Nest Controllers
+  participant CAT as Catalog
+  participant ST as Staff / Schedule
+  participant AP as Appointments
+  participant PAY as Payments
 
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+  C->>API: Đăng nhập (JWT)
+  C->>API: Xem dịch vụ / combo (Catalog)
+  C->>API: Kiểm tra slot (Staff + Appointment rules)
+  C->>API: Tạo Appointment + StaffBooking
+  C->>API: Thanh toán (Payment + Transaction)
 ```
 
-## Run tests
+---
+
+## Công nghệ
+
+| Thành phần | Vai trò |
+|------------|---------|
+| NestJS 11 | Framework HTTP, module, DI |
+| Prisma 7 | ORM, migration, schema |
+| Passport (JWT + Local) | Login, bearer token |
+| bcrypt | Hash mật khẩu |
+| class-validator / class-transformer | DTO validation |
+| ioredis | Cache permission codes |
+| Socket.IO (trong dependency) | Có thể dùng cho realtime (kiểm tra gateway nếu có) |
+
+---
+
+## Chạy dự án
+
+Cần file **`.env`** (xem `prisma`/Config): thường gồm `DATABASE_URL`, `JWT_SECRET`, Redis, `PORT`.
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+npm install
+npx prisma generate
+npx prisma migrate dev   # hoặc deploy tùy môi trường
+npm run start:dev
 ```
 
-## Deployment
+Mặc định app lắng nghe cổng **`3000`** (hoặc `process.env.PORT`).
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+---
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Cấu trúc thư mục (rút gọn)
 
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+```
+booking-business/
+├── prisma/
+│   ├── schema.prisma      # Model & quan hệ — đọc sớm
+│   └── README.md          # Giải thích domain dữ liệu
+├── src/
+│   ├── main.ts
+│   ├── app.module.ts
+│   ├── common/            # Decorators, pipes, guards dùng chung
+│   ├── prisma/            # PrismaModule global
+│   ├── redis/             # RedisModule
+│   └── features/          # README.md tổng quan + README từng nhóm
+└── README.md              # File này
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+---
 
-## Resources
+## Tài liệu chi tiết theo mục
 
-Check out a few resources that may come in handy when working with NestJS:
+| Thư mục | Nội dung |
+|---------|----------|
+| [src/README.md](src/README.md) | Cấu trúc `src`, luồng module |
+| [src/features/README.md](src/features/README.md) | Bản đồ các feature |
+| [prisma/README.md](prisma/README.md) | Khái niệm model & migration |
+| [src/features/identity/README.md](src/features/identity/README.md) | Auth, user, role, permission |
+| [src/features/catalog/README.md](src/features/catalog/README.md) | Category, service, combo, material |
+| [src/features/booking/README.md](src/features/booking/README.md) | Appointment, payment, review |
+| [src/features/staff/README.md](src/features/staff/README.md) | Lịch nhân viên, giờ làm, nghỉ |
+| [src/features/messaging/README.md](src/features/messaging/README.md) | Conversation, message |
+| [src/features/notifications/README.md](src/features/notifications/README.md) | Notification |
+| [src/common/README.md](src/common/README.md) | Decorators & guards dùng chung |
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Các README trong **`src/features/*/`** có thêm **sơ đồ Mermaid** (sequence/flowchart), **bước xử lý trong service** và **bảng permission/route** bám sát code hiện tại.
 
-## Support
+---
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Ghi chú bảo mật
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- Hầu hết route yêu cầu **JWT** (`JwtAuthGuard` global). Route công khai gắn **`@Public()`** (ví dụ `POST /auth/login`, `POST /auth/register`).
+- Phân quyền chi tiết dùng **`@RequirePermissions({ codes: [...] })`**; `PermissionsGuard` gộp quyền từ mọi role của user và cache **5 phút** trên Redis.

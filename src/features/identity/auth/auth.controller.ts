@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -26,5 +26,15 @@ export class AuthController {
   @Post('register')
   async register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
+  }
+
+  /**
+   * Permission matrix for current user.
+   * Note: This endpoint is not protected by @RequirePermissions (no permission codes needed),
+   * but still requires JWT because the global JwtAuthGuard is enabled and route is not @Public().
+   */
+  @Get('getMatrix')
+  async getMatrix(@CurrentUser() user: CurrentUserPayload) {
+    return this.authService.getPermissionMatrix(user.id);
   }
 }
