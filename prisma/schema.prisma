@@ -16,7 +16,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
 }
 
 // ─── Enums ───────────────────────────────────────────────────
@@ -327,8 +327,8 @@ model Appointment {
   shopId     String
   customerId String
 
-  startTime DateTime @db.Timestamptz(3)
-  endTime   DateTime @db.Timestamptz(3)
+  startTime DateTime @db.DateTime(3)
+  endTime   DateTime @db.DateTime(3)
 
   status AppointmentStatus @default(PENDING)
 
@@ -414,22 +414,10 @@ model AppointmentItem {
 // [FIX 1] isActive boolean → status enum StaffBookingStatus
 // Đồng thời thêm index trên status để query slot trống nhanh hơn.
 //
-// [IMPORTANT — Migration SQL cần thêm thủ công]
-// Prisma không support EXCLUDE constraint. Sau khi chạy prisma migrate,
-// thêm vào file migration SQL:
-//
-//   CREATE EXTENSION IF NOT EXISTS btree_gist;
-//
-//   ALTER TABLE "StaffBooking"
-//   ADD CONSTRAINT no_overlap_staff_booking
-//   EXCLUDE USING gist (
-//     "staffId" WITH =,
-//     tstzrange("startTime", "endTime", '[)') WITH &&
-//   )
-//   WHERE (status = 'ACTIVE');
-//
-// Constraint này đảm bảo DB-level: không có 2 StaffBooking ACTIVE nào
-// của cùng 1 staff mà thời gian chồng nhau — safety net khi Redis lock miss.
+// [MySQL Limitation]
+// MySQL does not support EXCLUDE constraints with gist indexes.
+// This constraint should be handled at the application service layer
+// or through MySQL triggers.
 model StaffBooking {
   id     String @id @default(uuid())
   shopId String
@@ -441,8 +429,8 @@ model StaffBooking {
   appointmentItemId String?
   appointmentItem   AppointmentItem? @relation(fields: [appointmentItemId], references: [id], onDelete: Cascade)
 
-  startTime DateTime @db.Timestamptz(3)
-  endTime   DateTime @db.Timestamptz(3)
+  startTime DateTime @db.DateTime(3)
+  endTime   DateTime @db.DateTime(3)
 
   status StaffBookingStatus @default(ACTIVE)
 

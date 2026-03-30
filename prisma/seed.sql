@@ -1,30 +1,27 @@
 -- ============================================================
 -- SEED: Roles, Permissions & Role-Permission mapping
--- Idempotent - safe to run multiple times (ON CONFLICT DO NOTHING)
+-- Idempotent - safe to run multiple times (INSERT IGNORE)
+-- MySQL version
 -- ============================================================
 
-BEGIN;
+START TRANSACTION;
 
 -- ─────────────────────────────────────────────────────────────
 -- 1. ROLES
 -- ─────────────────────────────────────────────────────────────
--- System roles: shopId NULL, isSystem = true
--- NOTE: "Role" unique is (code, shopId). With shopId NULL, ON CONFLICT cannot target that constraint reliably.
--- We make the seed idempotent by using fixed IDs and conflict on (id).
-INSERT INTO "Role" (id, code, name, description, "isSystem", "shopId") VALUES
-  ('a0000000-0000-0000-0000-000000000001', 'SUPER_ADMIN',     'Super Admin',  'Quan tri vien he thong, toan quyen', true, NULL),
-  ('a0000000-0000-0000-0000-000000000002', 'SHOP_OWNER',      'Shop Owner',   'Chu cua hang, quan ly toan bo hoat dong', true, NULL),
-  ('a0000000-0000-0000-0000-000000000003', 'STAFF',           'Staff',        'Nhan vien cua hang (thuc hien dich vu)', true, NULL),
-  ('a0000000-0000-0000-0000-000000000004', 'CUSTOMER',        'Customer',     'Khach hang dat lich', true, NULL),
-  ('a0000000-0000-0000-0000-000000000005', 'WAREHOUSE_STAFF', 'Warehouse',    'Nhan vien kho, quan ly vat tu', true, NULL)
-ON CONFLICT (id) DO NOTHING;
+INSERT IGNORE INTO `Role` (id, code, name, description, isSystem, shopId) VALUES
+  ('a0000000-0000-0000-0000-000000000001', 'SUPER_ADMIN',     'Super Admin',  'Quan tri vien he thong, toan quyen', TRUE, NULL),
+  ('a0000000-0000-0000-0000-000000000002', 'SHOP_OWNER',      'Shop Owner',   'Chu cua hang, quan ly toan bo hoat dong', TRUE, NULL),
+  ('a0000000-0000-0000-0000-000000000003', 'STAFF',           'Staff',        'Nhan vien cua hang (thuc hien dich vu)', TRUE, NULL),
+  ('a0000000-0000-0000-0000-000000000004', 'CUSTOMER',        'Customer',     'Khach hang dat lich', TRUE, NULL),
+  ('a0000000-0000-0000-0000-000000000005', 'WAREHOUSE_STAFF', 'Warehouse',    'Nhan vien kho, quan ly vat tu', TRUE, NULL);
 
 -- ─────────────────────────────────────────────────────────────
 -- 2. PERMISSIONS (60 permissions)
 -- ─────────────────────────────────────────────────────────────
 
 -- Identity
-INSERT INTO "Permission" (id, code, name, description) VALUES
+INSERT IGNORE INTO `Permission` (id, code, name, description) VALUES
   ('b0000000-0000-0000-0001-000000000001', 'CREATE_USER',       'Tao nguoi dung',        'Tao tai khoan nguoi dung moi'),
   ('b0000000-0000-0000-0001-000000000002', 'VIEW_USER',         'Xem nguoi dung',        'Xem danh sach va chi tiet nguoi dung'),
   ('b0000000-0000-0000-0001-000000000003', 'UPDATE_USER',       'Cap nhat nguoi dung',   'Chinh sua thong tin nguoi dung'),
@@ -108,8 +105,7 @@ INSERT INTO "Permission" (id, code, name, description) VALUES
   ('b0000000-0000-0000-0010-000000000001', 'CREATE_NOTIFICATION','Tao thong bao',        'Tao thong bao moi'),
   ('b0000000-0000-0000-0010-000000000002', 'VIEW_NOTIFICATION',  'Xem thong bao',        'Xem danh sach thong bao'),
   ('b0000000-0000-0000-0010-000000000003', 'UPDATE_NOTIFICATION','Cap nhat thong bao',   'Chinh sua thong bao'),
-  ('b0000000-0000-0000-0010-000000000004', 'DELETE_NOTIFICATION','Xoa thong bao',        'Xoa thong bao')
-ON CONFLICT (code) DO NOTHING;
+  ('b0000000-0000-0000-0010-000000000004', 'DELETE_NOTIFICATION','Xoa thong bao',        'Xoa thong bao');
 
 
 -- ─────────────────────────────────────────────────────────────
@@ -119,15 +115,14 @@ ON CONFLICT (code) DO NOTHING;
 -- ========================
 -- SUPER_ADMIN → ALL permissions
 -- ========================
-INSERT INTO "RolePermission" ("roleId", "permissionId")
-SELECT 'a0000000-0000-0000-0000-000000000001', id FROM "Permission"
-ON CONFLICT DO NOTHING;
+INSERT IGNORE INTO `RolePermission` (roleId, permissionId)
+SELECT 'a0000000-0000-0000-0000-000000000001', id FROM `Permission`;
 
 -- ========================
 -- SHOP_OWNER → Full business management (no system-level permission/role CRUD)
 -- ========================
-INSERT INTO "RolePermission" ("roleId", "permissionId")
-SELECT 'a0000000-0000-0000-0000-000000000002', id FROM "Permission"
+INSERT IGNORE INTO `RolePermission` (roleId, permissionId)
+SELECT 'a0000000-0000-0000-0000-000000000002', id FROM `Permission`
 WHERE code IN (
   -- User management
   'CREATE_USER', 'VIEW_USER', 'UPDATE_USER', 'DELETE_USER',
@@ -151,14 +146,13 @@ WHERE code IN (
   'CREATE_WORKING_HOUR',   'VIEW_WORKING_HOUR',   'UPDATE_WORKING_HOUR',   'DELETE_WORKING_HOUR',
   -- Notifications
   'CREATE_NOTIFICATION', 'VIEW_NOTIFICATION', 'UPDATE_NOTIFICATION', 'DELETE_NOTIFICATION'
-)
-ON CONFLICT DO NOTHING;
+);
 
 -- ========================
 -- STAFF
 -- ========================
-INSERT INTO "RolePermission" ("roleId", "permissionId")
-SELECT 'a0000000-0000-0000-0000-000000000003', id FROM "Permission"
+INSERT IGNORE INTO `RolePermission` (roleId, permissionId)
+SELECT 'a0000000-0000-0000-0000-000000000003', id FROM `Permission`
 WHERE code IN (
   -- View catalog (read-only)
   'VIEW_SERVICE', 'VIEW_CATEGORY', 'VIEW_COMBO', 'VIEW_MATERIAL',
@@ -174,14 +168,13 @@ WHERE code IN (
   'CREATE_STAFF_DAY_OFF',
   -- Notifications
   'VIEW_NOTIFICATION'
-)
-ON CONFLICT DO NOTHING;
+);
 
 -- ========================
 -- CUSTOMER
 -- ========================
-INSERT INTO "RolePermission" ("roleId", "permissionId")
-SELECT 'a0000000-0000-0000-0000-000000000004', id FROM "Permission"
+INSERT IGNORE INTO `RolePermission` (roleId, permissionId)
+SELECT 'a0000000-0000-0000-0000-000000000004', id FROM `Permission`
 WHERE code IN (
   -- Browse catalog
   'VIEW_SERVICE', 'VIEW_CATEGORY', 'VIEW_COMBO',
@@ -198,14 +191,13 @@ WHERE code IN (
   'VIEW_NOTIFICATION',
   -- View working hours (de biet gio mo cua)
   'VIEW_WORKING_HOUR'
-)
-ON CONFLICT DO NOTHING;
+);
 
 -- ========================
 -- WAREHOUSE_STAFF (Nhan vien kho)
 -- ========================
-INSERT INTO "RolePermission" ("roleId", "permissionId")
-SELECT 'a0000000-0000-0000-0000-000000000005', id FROM "Permission"
+INSERT IGNORE INTO `RolePermission` (roleId, permissionId)
+SELECT 'a0000000-0000-0000-0000-000000000005', id FROM `Permission`
 WHERE code IN (
   -- Full material management
   'CREATE_MATERIAL', 'VIEW_MATERIAL', 'UPDATE_MATERIAL', 'DELETE_MATERIAL',
@@ -213,7 +205,6 @@ WHERE code IN (
   'VIEW_SERVICE', 'VIEW_COMBO',
   -- Notifications
   'VIEW_NOTIFICATION'
-)
-ON CONFLICT DO NOTHING;
+);
 
 COMMIT;
