@@ -8,7 +8,7 @@ File **`schema.prisma`** mô tả toàn bộ model PostgreSQL: user, shop, lịc
 
 1. **Enums** — Trạng thái appointment, payment, conversation, v.v. Giúp code không dùng “magic string”.
 2. **User & Shop** — Multi-tenant: mỗi shop có owner, roles gắn `shopId`, catalog gắn `shopId`.
-3. **Catalog** — `Category` → `Service`, `Combo` + `ComboService`, `Material` + `ServiceMaterial` (định mức nguyên liệu theo dịch vụ).
+3. **Catalog** — `Category` → `Service`, `Combo` + `ComboItem`; không quản lý nguyên vật liệu/kho.
 4. **Booking** — `Appointment` 1-n `AppointmentItem`; combo mở rộng parent/child (`COMBO` + `COMBO_CHILD`). `StaffBooking` khóa slot nhân viên theo thời gian.
 5. **Payment** — `Payment` 1-1 với appointment; `PaymentTransaction` ghi từng lần charge/refund.
 6. **Messaging** — `Conversation`, `Message`; có thể liên kết `appointmentId`.

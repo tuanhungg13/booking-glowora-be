@@ -17,4 +17,9 @@ export class UpdateCategoryDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @ApiPropertyOptional({ example: 'https://cdn.example.com/icons/massage.png' })
+  @IsOptional()
+  @IsString()
+  iconUrl?: string;
 }

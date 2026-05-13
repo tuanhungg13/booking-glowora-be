@@ -1,14 +1,5 @@
 // ============================================================
-// BOOKING PLATFORM — PRISMA SCHEMA
-// Updated with fixes:
-//   1. StaffBookingStatus enum thay cho isActive boolean
-//   2. AppointmentItem hỗ trợ parent-child cho combo expansion
-//   3. Payment tách thành Payment (summary) + PaymentTransaction (audit trail)
-//   4. Review thêm userId explicit
-//   5. Conversation thêm assignedAt
-//   6. Shop thêm timezone
-//   7. Material.stockQuantity không nullable
-//   8. Exclusion constraint comment hướng dẫn migration SQL
+// GLOWORA BOOKING PLATFORM — COMPLETE SCHEMA (All Phases)
 // ============================================================
 
 generator client {
@@ -19,20 +10,25 @@ datasource db {
   provider = "mysql"
 }
 
-// ─── Enums ───────────────────────────────────────────────────
+// =============================================================================
+// ENUMS
+// =============================================================================
 
 enum UserStatus {
   ACTIVE
   INACTIVE
   BANNED
+  SUSPENDED
 }
 
-enum ServiceStatus {
+enum StoreStatus {
+  PENDING
   ACTIVE
   INACTIVE
+  BANNED
 }
 
-enum ComboStatus {
+enum StaffStatus {
   ACTIVE
   INACTIVE
 }
@@ -40,31 +36,15 @@ enum ComboStatus {
 enum AppointmentStatus {
   PENDING
   CONFIRMED
-  IN_PROGRESS
   COMPLETED
+  REJECTED
   CANCELLED
-  NO_SHOW
 }
 
-enum AppointmentItemStatus {
-  PENDING
-  CONFIRMED
-  IN_PROGRESS
-  COMPLETED
-  CANCELLED
-  NO_SHOW
-}
-
-// [FIX 1] Tách rõ trạng thái StaffBooking thay vì dùng isActive boolean
-// - ACTIVE    : staff đang giữ slot này
-// - RELEASED  : staff được giải phóng nhưng appointment vẫn còn (vd: reassign)
-// - CANCELLED : theo appointment bị cancel
-// Lý do: isActive boolean làm mờ semantic — không biết false là soft-delete
-// hay released. Enum buộc code phải explicit khi thay đổi trạng thái.
-enum StaffBookingStatus {
-  ACTIVE
-  RELEASED
-  CANCELLED
+enum PaymentMethod {
+  VNPAY
+  STRIPE
+  CASH
 }
 
 enum PaymentStatus {
@@ -72,40 +52,19 @@ enum PaymentStatus {
   PAID
   FAILED
   REFUNDED
-  PARTIALLY_REFUNDED
-}
-
-// [FIX 2] Thêm type cho từng transaction (charge, refund...)
-// Lý do: Payment thực tế có nhiều lần thử, refund một phần —
-// cần phân biệt từng transaction riêng biệt.
-enum PaymentTransactionType {
-  CHARGE
-  REFUND
-  PARTIAL_REFUND
-}
-
-enum ConversationStatus {
-  OPEN
-  RESOLVED
-  CLOSED
-}
-
-enum MessageType {
-  TEXT
-  IMAGE
-  SYSTEM
-}
-
-enum SenderType {
-  CUSTOMER
-  STAFF
-  SYSTEM
 }
 
 enum NotificationType {
-  APPOINTMENT
-  PAYMENT
-  SYSTEM
+  APPOINTMENT_CREATED
+  APPOINTMENT_CONFIRMED
+  APPOINTMENT_REJECTED
+  APPOINTMENT_COMPLETED
+  APPOINTMENT_CANCELLED
+  STORE_APPROVED
+  STORE_REJECTED
+  STORE_LOCKED
+  STAFF_INVITED
+  PAYMENT_SUCCESS
 }
 
 enum DayOfWeek {
@@ -118,522 +77,602 @@ enum DayOfWeek {
   SUNDAY
 }
 
-enum MaterialUnit {
-  ML
-  GRAM
-  PIECE
-}
-
-enum ShopStatus {
+enum ServiceStatus {
   ACTIVE
   INACTIVE
 }
 
-enum AppointmentItemType {
-  SERVICE
-  COMBO
-  COMBO_CHILD // [FIX 3] Item con được expand từ một COMBO parent
-  CUSTOM
+enum ComboStatus {
+  ACTIVE
+  INACTIVE
 }
 
-// ─── Models ──────────────────────────────────────────────────
-
-model User {
-  id       String     @id @default(uuid())
-  email    String     @unique
-  password String
-  fullName String?
-  phone    String?
-  status   UserStatus @default(ACTIVE)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  staffServices StaffService[]
-
-  appointments          Appointment[]     @relation("CustomerAppointments")
-  staffAppointmentItems AppointmentItem[] @relation("StaffForAppointmentItem")
-  staffBookings         StaffBooking[]
-
-  telegramAccount TelegramAccount?
-  notifications   Notification[]
-
-  customerConversations Conversation[] @relation("CustomerConversations")
-  staffConversations    Conversation[] @relation("StaffConversations")
-
-  staffSchedules StaffSchedule[]
-  staffDaysOff   StaffDayOff[]
-
-  ownedShops Shop[]
-  userRoles  UserRole[]
-
-  reviews Review[] // [FIX 4] Relation ngược từ Review
+enum StaffInviteStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+  CANCELLED
 }
 
-model Shop {
-  id      String     @id @default(uuid())
-  name    String
-  address String?
-  phone   String?
-  status  ShopStatus @default(ACTIVE)
-
-  // [FIX 5] Thêm timezone để xử lý WorkingHour và StaffSchedule đúng múi giờ
-  // Lý do: @db.Time không lưu timezone — nếu server deploy ở UTC mà không
-  // có field này thì openTime "08:00" sẽ bị hiểu nhầm múi giờ.
-  // Dùng IANA timezone string, vd: "Asia/Ho_Chi_Minh"
-  timezone String @default("Asia/Ho_Chi_Minh")
-
-  ownerId String
-  owner   User   @relation(fields: [ownerId], references: [id])
-
-  categories     Category[]
-  services       Service[]
-  combos         Combo[]
-  materials      Material[]
-  workingHours   WorkingHour[]
-  appointments   Appointment[]
-  roles          Role[]
-  userRoles      UserRole[]
-  staffBookings  StaffBooking[]
-  staffSchedules StaffSchedule[]
-  staffDaysOff   StaffDayOff[]
+enum LogType {
+  AUTH_REGISTER
+  AUTH_LOGIN
+  AUTH_LOGOUT
+  STORE_CREATED
+  STORE_APPROVED
+  STORE_REJECTED
+  STORE_BANNED
+  STORE_UNLOCKED
+  USER_BANNED
+  USER_UNBANNED
+  PAYMENT_COMPLETED
+  PAYMENT_FAILED
+  REVIEW_HIDDEN
+  REVIEW_SHOWN
+  APPOINTMENT_CREATED
+  APPOINTMENT_CONFIRMED
+  APPOINTMENT_REJECTED
+  APPOINTMENT_COMPLETED
+  APPOINTMENT_CANCELLED
 }
+
+// =============================================================================
+// RBAC: Role, Permission, RolePermission, UserRole
+// =============================================================================
 
 model Role {
-  id          String  @id @default(uuid())
-  name        String
-  code        String
+  id          String  @id @default(uuid()) @db.Char(36)
+  name        String  @db.VarChar(100)
+  code        String  @db.VarChar(50)
   description String?
-  isSystem    Boolean @default(false)
+  isSystem    Boolean @default(false) @map("is_system")
+  shopId      String? @map("shop_id") @db.Char(36)
 
-  shopId String?
-  shop   Shop?   @relation(fields: [shopId], references: [id])
-
+  shop        Store?           @relation("ShopRoles", fields: [shopId], references: [id])
   permissions RolePermission[]
   userRoles   UserRole[]
 
   @@unique([code, shopId])
-  @@index([code])
   @@index([shopId])
+  @@map("roles")
 }
 
 model Permission {
-  id          String  @id @default(uuid())
-  code        String  @unique
-  name        String  @unique
+  id          String  @id @default(uuid()) @db.Char(36)
+  code        String  @unique @db.VarChar(100)
+  name        String  @db.VarChar(150)
   description String?
 
   roles RolePermission[]
+
+  @@map("permissions")
 }
 
 model RolePermission {
-  roleId       String
-  permissionId String
+  roleId       String @map("role_id") @db.Char(36)
+  permissionId String @map("permission_id") @db.Char(36)
 
   role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
   permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
 
   @@id([roleId, permissionId])
+  @@map("role_permissions")
 }
 
 model UserRole {
-  userId String
-  shopId String
-  roleId String
+  id        String   @id @default(uuid()) @db.Char(36)
+  userId    String   @map("user_id") @db.Char(36)
+  roleId    String   @map("role_id") @db.Char(36)
+  shopId    String?  @map("shop_id") @db.Char(36)
+  createdAt DateTime @default(now()) @map("created_at")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  shop Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
-  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  user User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role   @relation(fields: [roleId], references: [id])
+  shop Store? @relation("UserShopRoles", fields: [shopId], references: [id])
 
-  @@id([userId, shopId, roleId])
-  @@index([shopId, userId])
+  // Note: MySQL treats NULL != NULL so unique on nullable shopId is enforced in code for system roles
+  @@unique([userId, roleId, shopId])
+  @@index([userId])
+  @@index([shopId])
+  @@map("user_roles")
 }
 
-model Category {
-  id          String  @id @default(uuid())
-  name        String
-  description String?
+// =============================================================================
+// MODEL: User
+// =============================================================================
 
-  shopId String
-  shop   Shop   @relation(fields: [shopId], references: [id], onDelete: Cascade)
+model User {
+  id           String     @id @default(uuid()) @db.Char(36)
+  fullName     String     @map("full_name") @db.VarChar(100)
+  email        String     @unique @db.VarChar(150)
+  password     String
+  phone        String?    @db.VarChar(20)
+  avatarUrl    String?    @map("avatar_url")
+  status       UserStatus @default(ACTIVE)
+  refreshToken String?    @map("refresh_token")
+  bannedAt     DateTime?  @map("banned_at")
+  banReason    String?    @map("ban_reason") @db.Text
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+
+  userRoles      UserRole[]
+  ownedStores    Store[]        @relation("StoreOwner")
+  approvedStores Store[]        @relation("StoreApprover")
+  staffProfile   Staff?
+  appointments   Appointment[]  @relation("CustomerAppointments")
+  payments       Payment[]
+  reviews        Review[]       @relation("CustomerReviews")
+  notifications  Notification[]
+  conversations  Conversation[] @relation("CustomerConversations")
+  sentMessages   Message[]      @relation("SentMessages")
+  systemLogs     SystemLog[]    @relation("ActorLogs")
+
+  @@map("users")
+}
+
+// =============================================================================
+// MODEL: Store
+// =============================================================================
+
+model Store {
+  id                String      @id @default(uuid()) @db.Char(36)
+  slug              String?     @unique @db.VarChar(200)
+  ownerId           String      @map("owner_id") @db.Char(36)
+  name              String      @db.VarChar(150)
+  phone             String      @db.VarChar(20)
+  email             String?     @db.VarChar(150)
+  website           String?     @db.VarChar(200)
+  description       String?     @db.Text
+  address           String      @db.VarChar(300)
+  city              String      @db.VarChar(100)
+  district          String?     @db.VarChar(100)
+  latitude          Float?
+  longitude         Float?
+  logoUrl           String?     @map("logo_url")
+  bannerUrl         String?     @map("banner_url")
+  status            StoreStatus @default(PENDING)
+  approvedById      String?     @map("approved_by_id") @db.Char(36)
+  approvedAt        DateTime?   @map("approved_at")
+  rejectionReason   String?     @map("rejection_reason") @db.Text
+  timezone          String      @default("Asia/Ho_Chi_Minh") @db.VarChar(50)
+  slotIntervalMins  Int         @default(30) @map("slot_interval_mins")
+  cancelBeforeHours Int         @default(2) @map("cancel_before_hours")
+  maxAdvanceDays    Int         @default(30) @map("max_advance_days")
+  autoConfirm       Boolean     @default(false) @map("auto_confirm")
+  avgRating         Decimal     @default(0.00) @map("avg_rating") @db.Decimal(3, 2)
+  totalReviews      Int         @default(0) @map("total_reviews")
+  createdAt         DateTime    @default(now()) @map("created_at")
+  updatedAt         DateTime    @updatedAt @map("updated_at")
+
+  owner          User            @relation("StoreOwner", fields: [ownerId], references: [id])
+  approvedBy     User?           @relation("StoreApprover", fields: [approvedById], references: [id])
+  workingHours   WorkingHour[]
+  staff          Staff[]
+  services       Service[]
+  appointments   Appointment[]
+  reviews        Review[]
+  roles          Role[]          @relation("ShopRoles")
+  userRoles      UserRole[]      @relation("UserShopRoles")
+  combos         Combo[]
+  staffInvites   StaffInvite[]
+  staffSchedules StaffSchedule[]
+  staffDayOffs   StaffDayOff[]
+  conversations  Conversation[]
+
+  @@index([ownerId])
+  @@index([status])
+  @@index([city, status])
+  @@map("stores")
+}
+
+// =============================================================================
+// MODEL: WorkingHour (store open hours by day-of-week)
+// Renamed from StoreHour; uses String "HH:mm" — avoids @db.Time() returning 1970 Date
+// =============================================================================
+
+model WorkingHour {
+  id        String    @id @default(uuid()) @db.Char(36)
+  storeId   String    @map("store_id") @db.Char(36)
+  dayOfWeek DayOfWeek @map("day_of_week")
+  openTime  String    @map("open_time") @db.VarChar(5)  // "08:00"
+  closeTime String    @map("close_time") @db.VarChar(5) // "20:00"
+  isClosed  Boolean   @default(false) @map("is_closed")
+
+  store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  @@unique([storeId, dayOfWeek])
+  @@index([storeId])
+  @@map("working_hours")
+}
+
+// =============================================================================
+// MODEL: Staff
+// =============================================================================
+
+model Staff {
+  id           String      @id @default(uuid()) @db.Char(36)
+  userId       String      @unique @map("user_id") @db.Char(36)
+  storeId      String      @map("store_id") @db.Char(36)
+  specialty    String?     @db.VarChar(200)
+  bio          String?     @db.Text
+  rating       Decimal     @default(0.00) @db.Decimal(3, 2)
+  totalReviews Int         @default(0) @map("total_reviews")
+  status       StaffStatus @default(ACTIVE)
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+
+  user         User            @relation(fields: [userId], references: [id])
+  store        Store           @relation(fields: [storeId], references: [id])
+  appointments Appointment[]
+  reviews      Review[]        @relation("StaffReviews")
+  schedules    StaffSchedule[]
+  dayOffs      StaffDayOff[]
+  services     StaffService[]
+  invites      StaffInvite[]
+
+  @@index([storeId, status])
+  @@map("staff")
+}
+
+// =============================================================================
+// MODEL: ServiceCategory
+// =============================================================================
+
+model ServiceCategory {
+  id          String   @id @default(uuid()) @db.Char(36)
+  name        String   @unique @db.VarChar(100)
+  slug        String?  @unique @db.VarChar(120)
+  description String?
+  iconUrl     String?  @map("icon_url")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   services Service[]
   combos   Combo[]
+
+  @@map("service_categories")
 }
+
+// =============================================================================
+// MODEL: Service
+// =============================================================================
 
 model Service {
-  id                  String        @id @default(uuid())
-  name                String
-  description         String?
-  duration            Int
-  bufferBeforeMinutes Int           @default(0)
-  bufferAfterMinutes  Int           @default(0)
-  price               Decimal
-  costPrice           Decimal?
-  status              ServiceStatus @default(ACTIVE)
-  shopId              String
-  categoryId          String?
+  id          String        @id @default(uuid()) @db.Char(36)
+  shopId      String        @map("shop_id") @db.Char(36)
+  categoryId  String?       @map("category_id") @db.Char(36)
+  name        String        @db.VarChar(150)
+  description String?       @db.Text
+  duration    Int           // minutes
+  price       Decimal       @db.Decimal(12, 2)
+  costPrice   Decimal?      @map("cost_price") @db.Decimal(12, 2)
+  imageUrl    String?       @map("image_url")
+  status      ServiceStatus @default(ACTIVE)
+  avgRating   Decimal       @default(0.00) @map("avg_rating") @db.Decimal(3, 2)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
 
-  shop     Shop      @relation(fields: [shopId], references: [id], onDelete: Cascade)
-  category Category? @relation(fields: [categoryId], references: [id])
+  store        Store             @relation(fields: [shopId], references: [id])
+  category     ServiceCategory?  @relation(fields: [categoryId], references: [id])
+  appointments Appointment[]
+  reviews      Review[]
+  staffs       StaffService[]
+  comboItems   ComboItem[]
 
-  staffServices    StaffService[]
-  appointmentItems AppointmentItem[]
-  comboServices    ComboService[]
-  materials        ServiceMaterial[]
+  @@index([shopId, status])
+  @@index([categoryId])
+  @@map("services")
 }
 
-model Combo {
-  id                       String      @id @default(uuid())
-  name                     String
-  description              String?
-  price                    Decimal
-  estimatedDurationMinutes Int?
-  status                   ComboStatus @default(ACTIVE)
-  shopId                   String
-  categoryId               String?
-
-  shop     Shop      @relation(fields: [shopId], references: [id], onDelete: Cascade)
-  category Category? @relation(fields: [categoryId], references: [id])
-
-  services         ComboService[]
-  appointmentItems AppointmentItem[]
-}
-
-model ComboService {
-  comboId   String
-  serviceId String
-  quantity  Int    @default(1)
-  order     Int?
-
-  combo   Combo   @relation(fields: [comboId], references: [id], onDelete: Cascade)
-  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-
-  @@id([comboId, serviceId])
-}
+// MODEL: StaffService (join — which staff can perform which service)
+// =============================================================================
 
 model StaffService {
-  staffId   String
-  serviceId String
+  staffId   String @map("staff_id") @db.Char(36)
+  serviceId String @map("service_id") @db.Char(36)
 
-  staff   User    @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  staff   Staff   @relation(fields: [staffId], references: [id], onDelete: Cascade)
   service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
   @@id([staffId, serviceId])
+  @@map("staff_services")
 }
 
-model Appointment {
-  id         String @id @default(uuid())
-  shopId     String
-  customerId String
+// =============================================================================
+// MODEL: Combo
+// =============================================================================
 
-  startTime DateTime @db.DateTime(3)
-  endTime   DateTime @db.DateTime(3)
+model Combo {
+  id                       String      @id @default(uuid()) @db.Char(36)
+  shopId                   String      @map("shop_id") @db.Char(36)
+  categoryId               String?     @map("category_id") @db.Char(36)
+  name                     String      @db.VarChar(150)
+  description              String?     @db.Text
+  price                    Decimal     @db.Decimal(12, 2)
+  estimatedDurationMinutes Int?        @map("estimated_duration_minutes")
+  // null = computed from sum(service.duration * item.quantity)
+  imageUrl                 String?     @map("image_url")
+  status                   ComboStatus @default(ACTIVE)
+  createdAt                DateTime    @default(now()) @map("created_at")
+  updatedAt                DateTime    @updatedAt @map("updated_at")
 
-  status AppointmentStatus @default(PENDING)
+  shop     Store            @relation(fields: [shopId], references: [id])
+  category ServiceCategory? @relation(fields: [categoryId], references: [id])
+  items    ComboItem[]
 
-  durationMinutes     Int
-  bufferBeforeMinutes Int @default(0)
-  bufferAfterMinutes  Int @default(0)
-
-  currency String  @default("VND")
-  subtotal Decimal
-  discount Decimal @default(0)
-  total    Decimal
-
-  note String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  shop     Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
-  customer User @relation("CustomerAppointments", fields: [customerId], references: [id])
-
-  items         AppointmentItem[]
-  staffBookings StaffBooking[]
-  review        Review?
-  payment       Payment?
-  conversation  Conversation?
-
-  @@index([shopId, customerId, startTime])
+  @@index([shopId, status])
+  @@map("combos")
 }
 
-// [FIX 3] Thêm parentItemId để model quan hệ parent-child khi expand combo
-// Khi user đặt 1 COMBO, hệ thống tạo:
-//   - 1 item type=COMBO (parent, lưu comboId + price snapshot của cả combo)
-//   - N item type=COMBO_CHILD (con, mỗi cái = 1 service trong combo,
-//     có staffId + durationSnapshot riêng, parentItemId trỏ về COMBO parent)
-// Lý do: COMBO thường gồm nhiều service do nhiều staff khác nhau thực hiện.
-// Nếu gộp tất cả vào 1 item thì không thể assign staff riêng, track
-// tiến độ từng service, hay tính buffer time chính xác.
-model AppointmentItem {
-  id            String      @id @default(uuid())
-  appointmentId String
-  appointment   Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+// =============================================================================
+// MODEL: ComboItem
+// =============================================================================
 
-  type   AppointmentItemType
-  status AppointmentItemStatus @default(PENDING)
+model ComboItem {
+  id        String @id @default(uuid()) @db.Char(36)
+  comboId   String @map("combo_id") @db.Char(36)
+  serviceId String @map("service_id") @db.Char(36)
+  quantity  Int    @default(1)
+  sortOrder Int    @default(0) @map("sort_order")
 
-  // Parent-child cho combo expansion
-  parentItemId String?
-  parentItem   AppointmentItem?  @relation("ItemChildren", fields: [parentItemId], references: [id])
-  childItems   AppointmentItem[] @relation("ItemChildren")
+  combo   Combo   @relation(fields: [comboId], references: [id], onDelete: Cascade)
+  service Service @relation(fields: [serviceId], references: [id])
 
-  staffId String?
-  staff   User?   @relation("StaffForAppointmentItem", fields: [staffId], references: [id])
-
-  serviceId String?
-  service   Service? @relation(fields: [serviceId], references: [id])
-
-  comboId String?
-  combo   Combo?  @relation(fields: [comboId], references: [id])
-
-  // Snapshot tại thời điểm đặt — không đổi dù shop cập nhật giá/tên sau này
-  nameSnapshot         String
-  durationSnapshot     Int
-  bufferBeforeSnapshot Int     @default(0)
-  bufferAfterSnapshot  Int     @default(0)
-  unitPriceSnapshot    Decimal
-  quantity             Int     @default(1)
-
-  sortOrder Int?
-
-  createdAt DateTime @default(now())
-
-  staffBookings StaffBooking[]
-
-  @@unique([appointmentId, sortOrder])
-  @@index([appointmentId])
-  @@index([status])
-  @@index([staffId])
-  @@index([serviceId])
+  @@unique([comboId, serviceId])
   @@index([comboId])
-  @@index([parentItemId])
+  @@map("combo_items")
 }
 
-// [FIX 1] isActive boolean → status enum StaffBookingStatus
-// Đồng thời thêm index trên status để query slot trống nhanh hơn.
-//
-// [MySQL Limitation]
-// MySQL does not support EXCLUDE constraints with gist indexes.
-// This constraint should be handled at the application service layer
-// or through MySQL triggers.
-model StaffBooking {
-  id     String @id @default(uuid())
-  shopId String
-  staffId String
-
-  appointmentId     String
-  appointment       Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
-
-  appointmentItemId String?
-  appointmentItem   AppointmentItem? @relation(fields: [appointmentItemId], references: [id], onDelete: Cascade)
-
-  startTime DateTime @db.DateTime(3)
-  endTime   DateTime @db.DateTime(3)
-
-  status StaffBookingStatus @default(ACTIVE)
-
-  staff User @relation(fields: [staffId], references: [id], onDelete: Cascade)
-  shop  Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-
-  @@index([shopId, staffId, startTime])
-  @@index([shopId, staffId, status])
-  @@index([appointmentId])
-  @@index([appointmentItemId])
-  @@index([staffId, startTime, endTime])
-}
-
-// [FIX 2] Tách Payment thành 2 tầng:
-// - Payment     : summary record, 1-1 với Appointment
-// - PaymentTransaction : mỗi lần charge/refund là 1 row riêng
-// Lý do: payment thực tế có thể fail rồi retry, refund một phần,
-// có nhiều providerTxnId khác nhau từ VNPay/Stripe. Chỉ có 1 row
-// thì không audit trail được.
-model Payment {
-  id            String @id @default(uuid())
-  appointmentId String @unique
-
-  method String?
-  amount Decimal
-
-  status PaymentStatus @default(PENDING)
-  paidAt DateTime?
-
-  appointment  Appointment          @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
-  transactions PaymentTransaction[]
-}
-
-model PaymentTransaction {
-  id        String @id @default(uuid())
-  paymentId String
-
-  type   PaymentTransactionType
-  status PaymentStatus
-
-  amount        Decimal
-  providerTxnId String? // Transaction ID từ VNPay / Stripe / MoMo
-  rawResponse   Json?   // Lưu raw webhook payload để debug / reconcile
-
-  createdAt DateTime @default(now())
-
-  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
-
-  @@index([paymentId])
-  @@index([providerTxnId])
-}
-
-// [FIX 4] Thêm userId explicit thay vì chỉ derive qua appointment.customerId
-// Lý do: query "tất cả review của user X" sẽ phải JOIN qua Appointment
-// nếu không có field này — chậm và verbose không cần thiết.
-model Review {
-  id            String @id @default(uuid())
-  appointmentId String @unique
-  userId        String
-
-  rating  Int
-  comment String?
-
-  createdAt DateTime @default(now())
-
-  appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
-  user        User        @relation(fields: [userId], references: [id])
-
-  @@index([userId])
-}
-
-// [FIX 6] Thêm assignedAt để track thời điểm staff tiếp nhận conversation
-// Lý do: cần đo SLA (thời gian phản hồi lần đầu). Nếu staffId có mà
-// không có assignedAt thì không biết staff nhận từ lúc nào.
-model Conversation {
-  id String @id @default(uuid())
-
-  customerId    String
-  staffId       String?
-  appointmentId String? @unique
-
-  status     ConversationStatus @default(OPEN)
-  assignedAt DateTime? // null = chưa có staff tiếp nhận
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  customer    User         @relation("CustomerConversations", fields: [customerId], references: [id])
-  staff       User?        @relation("StaffConversations", fields: [staffId], references: [id])
-  appointment Appointment? @relation(fields: [appointmentId], references: [id])
-
-  messages Message[]
-}
-
-model Message {
-  id             String      @id @default(uuid())
-  conversationId String
-  senderType     SenderType
-  senderId       String?
-  content        String
-  messageType    MessageType @default(TEXT)
-  telegramMsgId  BigInt?
-  createdAt      DateTime    @default(now())
-
-  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-
-  @@index([conversationId, createdAt])
-}
-
-model TelegramAccount {
-  staffId        String  @id
-  telegramUserId BigInt  @unique
-  username       String?
-
-  staff User @relation(fields: [staffId], references: [id], onDelete: Cascade)
-}
-
-model Notification {
-  id      String           @id @default(uuid())
-  userId  String
-  type    NotificationType
-  title   String
-  content String
-  isRead  Boolean          @default(false)
-
-  createdAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId, isRead, createdAt])
-}
-
-model WorkingHour {
-  id     String @id @default(uuid())
-  shopId String
-  shop   Shop   @relation(fields: [shopId], references: [id], onDelete: Cascade)
-
-  dayOfWeek DayOfWeek
-  openTime  DateTime  @db.Time(0)
-  closeTime DateTime  @db.Time(0)
-  isClosed  Boolean   @default(false)
-
-  @@index([shopId, dayOfWeek])
-}
+// =============================================================================
+// MODEL: StaffSchedule (weekly recurring template — used by available-slots algorithm)
+// Uses String "HH:mm" — avoids @db.Time() returning Date 1970-01-01
+// =============================================================================
 
 model StaffSchedule {
-  id        String @id @default(uuid())
-  staffId   String
-  shopId    String
-  dayOfWeek DayOfWeek
+  id        String    @id @default(uuid()) @db.Char(36)
+  shopId    String    @map("shop_id") @db.Char(36)
+  staffId   String    @map("staff_id") @db.Char(36)
+  dayOfWeek DayOfWeek @map("day_of_week")
+  startTime String    @map("start_time") @db.VarChar(5) // "09:00"
+  endTime   String    @map("end_time") @db.VarChar(5)   // "18:00"
+  isActive  Boolean   @default(true) @map("is_active")
 
-  startTime DateTime @db.Time(0)
-  endTime   DateTime @db.Time(0)
+  shop  Store @relation(fields: [shopId], references: [id])
+  staff Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
 
-  isActive Boolean @default(true)
-
-  staff User @relation(fields: [staffId], references: [id], onDelete: Cascade)
-  shop  Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
-
-  @@unique([shopId, staffId, dayOfWeek, startTime, endTime])
-  @@index([shopId, staffId, dayOfWeek])
+  @@unique([staffId, dayOfWeek])
+  @@index([shopId, dayOfWeek])
+  @@map("staff_schedules")
 }
+
+// =============================================================================
+// MODEL: StaffDayOff (specific date overrides StaffSchedule)
+// =============================================================================
 
 model StaffDayOff {
-  id      String @id @default(uuid())
-  staffId String
-  shopId  String
-  date    DateTime @db.Date
+  id      String   @id @default(uuid()) @db.Char(36)
+  shopId  String   @map("shop_id") @db.Char(36)
+  staffId String   @map("staff_id") @db.Char(36)
+  date    DateTime @map("date") @db.Date
   reason  String?
 
-  staff User @relation(fields: [staffId], references: [id], onDelete: Cascade)
-  shop  Shop @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  shop  Store @relation(fields: [shopId], references: [id])
+  staff Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
 
-  @@index([shopId, staffId, date])
+  @@unique([staffId, date])
+  @@index([shopId, date])
+  @@map("staff_day_offs")
 }
 
-// [FIX 7] stockQuantity đổi sang Float @default(0) — không nullable
-// Lý do: nullable Float buộc mọi chỗ dùng phải xử lý null trước khi
-// tính toán tồn kho. Giá trị mặc định 0 rõ ràng hơn về mặt business:
-// "chưa có hàng" khác với "không biết có hàng không".
-model Material {
-  id          String      @id @default(uuid())
-  name        String
-  description String?
-  unit        MaterialUnit
-  costPrice   Decimal
-  stockQuantity Float    @default(0)
-  shopId      String
-  shop        Shop        @relation(fields: [shopId], references: [id], onDelete: Cascade)
+// =============================================================================
+// MODEL: StaffInvite
+// =============================================================================
 
-  serviceMaterials ServiceMaterial[]
+model StaffInvite {
+  id        String            @id @default(uuid()) @db.Char(36)
+  storeId   String            @map("store_id") @db.Char(36)
+  staffId   String?           @map("staff_id") @db.Char(36)
+  // Filled when invite is accepted and Staff record is created
+  email     String            @db.VarChar(150)
+  token     String            @unique @db.VarChar(200)
+  status    StaffInviteStatus @default(PENDING)
+  expiresAt DateTime          @map("expires_at")
+  createdAt DateTime          @default(now()) @map("created_at")
+
+  store Store  @relation(fields: [storeId], references: [id])
+  staff Staff? @relation(fields: [staffId], references: [id])
+
+  @@index([email])
+  @@index([storeId])
+  @@map("staff_invites")
 }
 
-model ServiceMaterial {
-  id         String @id @default(uuid())
-  serviceId  String
-  materialId String
-  quantity   Float
+// =============================================================================
+// MODEL: Appointment
+// duration + price are snapshots taken at booking time (immutable after creation)
+// =============================================================================
 
-  service  Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  material Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
+model Appointment {
+  id                 String            @id @default(uuid()) @db.Char(36)
+  customerId         String            @map("customer_id") @db.Char(36)
+  storeId            String            @map("store_id") @db.Char(36)
+  serviceId          String            @map("service_id") @db.Char(36)
+  staffId            String?           @map("staff_id") @db.Char(36)
+  scheduledAt        DateTime          @map("scheduled_at")
+  duration           Int               // snapshot of service.duration at booking time
+  price              Decimal           @db.Decimal(12, 2) // snapshot of service.price at booking time
+  status             AppointmentStatus @default(PENDING)
+  notes              String?           @db.Text
+  cancellationReason String?           @map("cancellation_reason") @db.Text
+  confirmedAt        DateTime?         @map("confirmed_at")
+  completedAt        DateTime?         @map("completed_at")
+  cancelledAt        DateTime?         @map("cancelled_at")
+  createdAt          DateTime          @default(now()) @map("created_at")
+  updatedAt          DateTime          @updatedAt @map("updated_at")
 
-  @@unique([serviceId, materialId])
+  customer      User           @relation("CustomerAppointments", fields: [customerId], references: [id])
+  store         Store          @relation(fields: [storeId], references: [id])
+  service       Service        @relation(fields: [serviceId], references: [id])
+  staff         Staff?         @relation(fields: [staffId], references: [id])
+  payments      Payment[]
+  review        Review?
+  notifications Notification[]
+
+  @@index([customerId, status])
+  @@index([storeId, status, scheduledAt])
+  @@index([staffId, scheduledAt])
+  @@map("appointments")
+}
+
+// =============================================================================
+// MODEL: Payment
+// appointmentId is NOT unique — allows retry (FAILED → new PENDING Payment record)
+// vnpTxnRef format: "{appointmentId}-{timestamp}" — unique per payment attempt
+// =============================================================================
+
+model Payment {
+  id               String        @id @default(uuid()) @db.Char(36)
+  appointmentId    String        @map("appointment_id") @db.Char(36)
+  customerId       String        @map("customer_id") @db.Char(36)
+  amount           Decimal       @db.Decimal(12, 2)
+  method           PaymentMethod @default(VNPAY)
+  status           PaymentStatus @default(PENDING)
+  vnpTxnRef        String?       @unique @map("vnp_txn_ref") @db.VarChar(100)
+  vnpTransactionNo String?       @map("vnp_transaction_no") @db.VarChar(100)
+  vnpBankCode      String?       @map("vnp_bank_code") @db.VarChar(20)
+  vnpCardType      String?       @map("vnp_card_type") @db.VarChar(20)
+  vnpPayDate       String?       @map("vnp_pay_date") @db.VarChar(20) // "20251220093045"
+  vnpResponseCode  String?       @map("vnp_response_code") @db.VarChar(10)
+  paidAt           DateTime?     @map("paid_at")
+  failedReason     String?       @map("failed_reason") @db.VarChar(500)
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  customer    User        @relation(fields: [customerId], references: [id])
+
+  @@index([appointmentId])
+  @@index([customerId, status])
+  @@map("payments")
+}
+
+// =============================================================================
+// MODEL: Review
+// =============================================================================
+
+model Review {
+  id            String   @id @default(uuid()) @db.Char(36)
+  appointmentId String   @unique @map("appointment_id") @db.Char(36)
+  customerId    String   @map("customer_id") @db.Char(36)
+  storeId       String   @map("store_id") @db.Char(36)
+  serviceId     String   @map("service_id") @db.Char(36)
+  staffId       String?  @map("staff_id") @db.Char(36)
+  rating        Int      // 1–5
+  comment       String?  @db.Text
+  isVisible     Boolean  @default(true) @map("is_visible")
+  imageUrls     Json?    @map("image_urls") // ["https://...", ...]
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  customer    User        @relation("CustomerReviews", fields: [customerId], references: [id])
+  store       Store       @relation(fields: [storeId], references: [id])
+  service     Service     @relation(fields: [serviceId], references: [id])
+  staff       Staff?      @relation("StaffReviews", fields: [staffId], references: [id])
+
+  @@index([storeId, isVisible, createdAt])
+  @@index([serviceId, isVisible])
+  @@index([staffId, isVisible])
+  @@map("reviews")
+}
+
+// =============================================================================
+// MODEL: Notification (in-app inbox)
+// metadata VD: { "appointmentId": "uuid", "storeId": "uuid", "storeName": "Glowora" }
+// =============================================================================
+
+model Notification {
+  id            String           @id @default(uuid()) @db.Char(36)
+  userId        String           @map("user_id") @db.Char(36)
+  appointmentId String?          @map("appointment_id") @db.Char(36)
+  type          NotificationType
+  title         String           @db.VarChar(200)
+  body          String           @db.Text
+  isRead        Boolean          @default(false) @map("is_read")
+  metadata      Json?
+  createdAt     DateTime         @default(now()) @map("created_at")
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  appointment Appointment? @relation(fields: [appointmentId], references: [id])
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
+  @@map("notifications")
+}
+
+// =============================================================================
+// MODEL: Conversation (one per customer-store pair — findOrCreate via @@unique)
+// =============================================================================
+
+model Conversation {
+  id              String    @id @default(uuid()) @db.Char(36)
+  customerId      String    @map("customer_id") @db.Char(36)
+  storeId         String    @map("store_id") @db.Char(36)
+  lastMessageAt   DateTime? @map("last_message_at")
+  lastMessageBody String?   @map("last_message_body") @db.VarChar(200)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  customer User      @relation("CustomerConversations", fields: [customerId], references: [id])
+  store    Store     @relation(fields: [storeId], references: [id])
+  messages Message[]
+
+  @@unique([customerId, storeId])
+  @@index([customerId, lastMessageAt])
+  @@index([storeId, lastMessageAt])
+  @@map("conversations")
+}
+
+// =============================================================================
+// MODEL: Message
+// =============================================================================
+
+model Message {
+  id             String    @id @default(uuid()) @db.Char(36)
+  conversationId String    @map("conversation_id") @db.Char(36)
+  senderId       String    @map("sender_id") @db.Char(36)
+  content        String    @db.Text
+  isRead         Boolean   @default(false) @map("is_read")
+  readAt         DateTime? @map("read_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User         @relation("SentMessages", fields: [senderId], references: [id])
+
+  @@index([conversationId, createdAt])
+  @@index([senderId])
+  @@map("messages")
+}
+
+// =============================================================================
+// MODEL: SystemLog (audit trail for Super Admin dashboard)
+// actorId null = system action (cronjob, auto-process)
+// =============================================================================
+
+model SystemLog {
+  id         String   @id @default(uuid()) @db.Char(36)
+  type       LogType
+  actorId    String?  @map("actor_id") @db.Char(36)
+  targetId   String?  @map("target_id") @db.Char(36)
+  targetType String?  @map("target_type") @db.VarChar(50) // "USER"|"STORE"|"APPOINTMENT"|"REVIEW"|"PAYMENT"
+  metadata   Json?
+  ipAddress  String?  @map("ip_address") @db.VarChar(45)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  actor User? @relation("ActorLogs", fields: [actorId], references: [id])
+
+  @@index([actorId])
+  @@index([type, createdAt])
+  @@index([targetId, targetType])
+  @@map("system_logs")
 }

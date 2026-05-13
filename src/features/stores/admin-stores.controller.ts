@@ -1,0 +1,56 @@
+import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Permissions } from '../../common/constants/permissions';
+import { CurrentUser, type CurrentUserPayload } from '../../common/decorators/current-user.decorator';
+import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
+import { AdminStoreActionDto } from './dto/admin-store-action.dto';
+import { AdminStoreFilterDto } from './dto/store-filter.dto';
+import { AdminStoresService } from './admin-stores.service';
+
+@ApiTags('admin/stores')
+@ApiBearerAuth()
+@Controller('admin/stores')
+@RequirePermissions(Permissions.STORE.VIEW)
+export class AdminStoresController {
+  constructor(private readonly adminStoresService: AdminStoresService) {}
+
+  @ApiOperation({ summary: 'Admin listing for all stores' })
+  @Get()
+  findAll(@Query() filter: AdminStoreFilterDto) {
+    return this.adminStoresService.findAll(filter);
+  }
+
+  @ApiOperation({ summary: 'Admin store detail' })
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.adminStoresService.findOne(id);
+  }
+
+  @ApiOperation({ summary: 'Approve a pending or inactive store' })
+  @RequirePermissions(Permissions.STORE.APPROVE)
+  @Patch(':id/approve')
+  approve(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
+    return this.adminStoresService.approve(id, user.id);
+  }
+
+  @ApiOperation({ summary: 'Reject a pending or inactive store' })
+  @RequirePermissions(Permissions.STORE.APPROVE)
+  @Patch(':id/reject')
+  reject(@Param('id') id: string, @Body() dto: AdminStoreActionDto) {
+    return this.adminStoresService.reject(id, dto);
+  }
+
+  @ApiOperation({ summary: 'Lock an active store' })
+  @RequirePermissions(Permissions.STORE.APPROVE)
+  @Patch(':id/lock')
+  lock(@Param('id') id: string, @Body() dto: AdminStoreActionDto) {
+    return this.adminStoresService.lock(id, dto);
+  }
+
+  @ApiOperation({ summary: 'Unlock a banned store' })
+  @RequirePermissions(Permissions.STORE.APPROVE)
+  @Patch(':id/unlock')
+  unlock(@Param('id') id: string) {
+    return this.adminStoresService.unlock(id);
+  }
+}

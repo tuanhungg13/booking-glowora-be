@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { MessageType, SenderType } from '@prisma/client';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 
@@ -9,34 +8,44 @@ export class MessagesService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateMessageDto) {
-    const conv = await this.prisma.conversation.findUnique({
+    const conversation = await this.prisma.conversation.findUnique({
       where: { id: dto.conversationId },
     });
-    if (!conv) throw new NotFoundException('Conversation not found');
-    return this.prisma.message.create({
-      data: {
-        conversationId: dto.conversationId,
-        senderType: dto.senderType,
-        senderId: dto.senderId,
-        content: dto.content,
-        messageType: dto.messageType ?? MessageType.TEXT,
-        telegramMsgId: dto.telegramMsgId,
-      },
-      include: { conversation: true },
+    if (!conversation) throw new NotFoundException('Conversation not found');
+
+    return this.prisma.$transaction(async (tx) => {
+      const message = await tx.message.create({
+        data: {
+          conversationId: dto.conversationId,
+          senderId: dto.senderId,
+          content: dto.content,
+          isRead: dto.isRead ?? false,
+        },
+        include: { sender: { select: { id: true, fullName: true, email: true, avatarUrl: true } } },
+      });
+      await tx.conversation.update({
+        where: { id: dto.conversationId },
+        data: {
+          lastMessageAt: message.createdAt,
+          lastMessageBody: dto.content.slice(0, 200),
+        },
+      });
+      return message;
     });
   }
 
   async findAll(conversationId: string, params?: { skip?: number; take?: number }) {
-    const conv = await this.prisma.conversation.findUnique({
+    const conversation = await this.prisma.conversation.findUnique({
       where: { id: conversationId },
     });
-    if (!conv) throw new NotFoundException('Conversation not found');
+    if (!conversation) throw new NotFoundException('Conversation not found');
     const [items, total] = await Promise.all([
       this.prisma.message.findMany({
         where: { conversationId },
         skip: params?.skip,
         take: params?.take ?? 50,
         orderBy: { createdAt: 'desc' },
+        include: { sender: { select: { id: true, fullName: true, email: true, avatarUrl: true } } },
       }),
       this.prisma.message.count({ where: { conversationId } }),
     ]);
@@ -44,12 +53,12 @@ export class MessagesService {
   }
 
   async findOne(id: string) {
-    const msg = await this.prisma.message.findUnique({
+    const message = await this.prisma.message.findUnique({
       where: { id },
-      include: { conversation: true },
+      include: { conversation: true, sender: { select: { id: true, fullName: true, email: true } } },
     });
-    if (!msg) throw new NotFoundException('Message not found');
-    return msg;
+    if (!message) throw new NotFoundException('Message not found');
+    return message;
   }
 
   async update(id: string, dto: UpdateMessageDto) {
@@ -58,7 +67,8 @@ export class MessagesService {
       where: { id },
       data: {
         content: dto.content,
-        messageType: dto.messageType,
+        isRead: dto.isRead,
+        readAt: dto.isRead ? new Date() : undefined,
       },
       include: { conversation: true },
     });

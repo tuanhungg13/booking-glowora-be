@@ -13,7 +13,6 @@ import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
-import { ConversationStatus } from '@prisma/client';
 
 @Controller('conversations')
 export class ConversationsController {
@@ -28,16 +27,14 @@ export class ConversationsController {
   @Get()
   @RequirePermissions(Permissions.CONVERSATION.VIEW)
   findAll(
-    @Query('status') status?: ConversationStatus,
     @Query('customerId') customerId?: string,
-    @Query('staffId') staffId?: string,
+    @Query('storeId') storeId?: string,
     @Query('skip') skip?: string,
     @Query('take') take?: string,
   ) {
     return this.conversationsService.findAll({
-      status,
       customerId,
-      staffId,
+      storeId,
       skip: skip ? Number(skip) : undefined,
       take: take ? Number(take) : undefined,
     });

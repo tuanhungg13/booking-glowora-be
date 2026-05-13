@@ -1,8 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../../../prisma/prisma.service';
 import { ComboStatus } from '@prisma/client';
+import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateComboDto } from './dto/create-combo.dto';
 import { UpdateComboDto } from './dto/update-combo.dto';
+
+const comboInclude = {
+  category: true,
+  items: { include: { service: true }, orderBy: { sortOrder: 'asc' as const } },
+} as const;
 
 @Injectable()
 export class CombosService {
@@ -18,38 +23,36 @@ export class CombosService {
         estimatedDurationMinutes: dto.estimatedDurationMinutes,
         status: dto.status ?? ComboStatus.ACTIVE,
         categoryId: dto.categoryId,
-        services: dto.serviceIds?.length
+        items: dto.serviceIds?.length
           ? {
-              create: dto.serviceIds.map((s, i) => ({
-                serviceId: s.serviceId,
-                quantity: s.quantity ?? 1,
-                order: s.order ?? i,
+              create: dto.serviceIds.map((service, index) => ({
+                serviceId: service.serviceId,
+                quantity: service.quantity ?? 1,
+                sortOrder: service.order ?? index,
               })),
             }
           : undefined,
       },
-      include: { category: true, services: { include: { service: true } } },
+      include: comboInclude,
     });
   }
 
-  async findAll(params?: { status?: ComboStatus; categoryId?: string }) {
+  async findAll(params?: { shopId?: string; status?: ComboStatus; categoryId?: string }) {
     return this.prisma.combo.findMany({
       where: {
+        ...(params?.shopId && { shopId: params.shopId }),
         ...(params?.status && { status: params.status }),
         ...(params?.categoryId && { categoryId: params.categoryId }),
       },
       orderBy: { name: 'asc' },
-      include: { category: true, services: { include: { service: true } } },
+      include: comboInclude,
     });
   }
 
   async findOne(id: string) {
     const combo = await this.prisma.combo.findUnique({
       where: { id },
-      include: {
-        category: true,
-        services: { include: { service: true }, orderBy: { order: 'asc' } },
-      },
+      include: comboInclude,
     });
     if (!combo) throw new NotFoundException('Combo not found');
     return combo;
@@ -57,37 +60,44 @@ export class CombosService {
 
   async update(id: string, dto: UpdateComboDto) {
     await this.findOne(id);
-    const data: Record<string, unknown> = {
-      name: dto.name,
-      description: dto.description,
-      price: dto.price,
-      estimatedDurationMinutes: dto.estimatedDurationMinutes,
-      status: dto.status,
-      categoryId: dto.categoryId,
-    };
-    if (dto.serviceIds !== undefined) {
-      await this.prisma.comboService.deleteMany({ where: { comboId: id } });
-      if (dto.serviceIds.length) {
-        await this.prisma.comboService.createMany({
-          data: dto.serviceIds.map((s, i) => ({
-            comboId: id,
-            serviceId: s.serviceId,
-            quantity: s.quantity ?? 1,
-            order: s.order ?? i,
-          })),
-        });
+
+    await this.prisma.$transaction(async (tx) => {
+      if (dto.serviceIds !== undefined) {
+        await tx.comboItem.deleteMany({ where: { comboId: id } });
+        if (dto.serviceIds.length) {
+          await tx.comboItem.createMany({
+            data: dto.serviceIds.map((service, index) => ({
+              comboId: id,
+              serviceId: service.serviceId,
+              quantity: service.quantity ?? 1,
+              sortOrder: service.order ?? index,
+            })),
+          });
+        }
       }
-    }
-    return this.prisma.combo.update({
-      where: { id },
-      data,
-      include: { category: true, services: { include: { service: true } } },
+
+      await tx.combo.update({
+        where: { id },
+        data: {
+          name: dto.name,
+          description: dto.description,
+          price: dto.price,
+          estimatedDurationMinutes: dto.estimatedDurationMinutes,
+          status: dto.status,
+          categoryId: dto.categoryId,
+        },
+      });
     });
+
+    return this.findOne(id);
   }
 
   async remove(id: string) {
     await this.findOne(id);
-    await this.prisma.combo.delete({ where: { id } });
+    await this.prisma.combo.update({
+      where: { id },
+      data: { status: ComboStatus.INACTIVE },
+    });
     return { deleted: true };
   }
 }

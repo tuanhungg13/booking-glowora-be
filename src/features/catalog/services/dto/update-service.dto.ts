@@ -1,25 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsNumber, IsOptional, IsString, IsArray, IsUUID, Min } from 'class-validator';
+import { IsEnum, IsInt, IsNumber, IsOptional, IsString, IsUUID, Min } from 'class-validator';
 import { ServiceStatus } from '@prisma/client';
-
-class MaterialQuantityDto {
-  @ApiPropertyOptional({
-    example: '550e8400-e29b-41d4-a716-446655440001',
-    description: 'The UUID of the material',
-  })
-  @IsUUID()
-  materialId!: string;
-
-  @ApiPropertyOptional({
-    example: 60,
-    description: 'The updated quantity of the material used in the service',
-    minimum: 0.001,
-  })
-  @IsOptional()
-  @IsNumber()
-  @Min(0.001)
-  quantity?: number;
-}
 
 export class UpdateServiceDto {
   @ApiPropertyOptional({
@@ -84,12 +65,4 @@ export class UpdateServiceDto {
   @IsOptional()
   @IsUUID()
   categoryId?: string;
-
-  @ApiPropertyOptional({
-    type: [MaterialQuantityDto],
-    description: 'The updated list of materials and their quantities',
-  })
-  @IsOptional()
-  @IsArray()
-  materialIds?: MaterialQuantityDto[];
 }

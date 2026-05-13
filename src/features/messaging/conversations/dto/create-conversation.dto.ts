@@ -1,19 +1,9 @@
-import { IsEnum, IsOptional, IsUUID } from 'class-validator';
-import { ConversationStatus } from '@prisma/client';
+import { IsUUID } from 'class-validator';
 
 export class CreateConversationDto {
   @IsUUID()
   customerId!: string;
 
-  @IsOptional()
   @IsUUID()
-  staffId?: string;
-
-  @IsOptional()
-  @IsUUID()
-  appointmentId?: string;
-
-  @IsOptional()
-  @IsEnum(ConversationStatus)
-  status?: ConversationStatus;
+  storeId!: string;
 }

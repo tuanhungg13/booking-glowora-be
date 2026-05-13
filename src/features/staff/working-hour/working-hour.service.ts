@@ -11,10 +11,10 @@ export class WorkingHourService {
   async create(dto: CreateWorkingHourDto) {
     return this.prisma.workingHour.create({
       data: {
-        shopId: dto.shopId,
+        storeId: dto.shopId,
         dayOfWeek: dto.dayOfWeek,
-        openTime: new Date(dto.openTime),
-        closeTime: new Date(dto.closeTime),
+        openTime: dto.openTime,
+        closeTime: dto.closeTime,
         isClosed: dto.isClosed ?? false,
       },
     });
@@ -23,7 +23,7 @@ export class WorkingHourService {
   async findAll(params?: { shopId?: string; dayOfWeek?: DayOfWeek }) {
     return this.prisma.workingHour.findMany({
       where: {
-        ...(params?.shopId && { shopId: params.shopId }),
+        ...(params?.shopId && { storeId: params.shopId }),
         ...(params?.dayOfWeek && { dayOfWeek: params.dayOfWeek }),
       },
       orderBy: { dayOfWeek: 'asc' },
@@ -44,8 +44,8 @@ export class WorkingHourService {
       where: { id },
       data: {
         dayOfWeek: dto.dayOfWeek,
-        openTime: dto.openTime ? new Date(dto.openTime) : undefined,
-        closeTime: dto.closeTime ? new Date(dto.closeTime) : undefined,
+        openTime: dto.openTime,
+        closeTime: dto.closeTime,
         isClosed: dto.isClosed,
       },
     });

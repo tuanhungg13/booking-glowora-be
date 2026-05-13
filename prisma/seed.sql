@@ -13,8 +13,7 @@ INSERT IGNORE INTO `Role` (id, code, name, description, isSystem, shopId) VALUES
   ('a0000000-0000-0000-0000-000000000001', 'SUPER_ADMIN',     'Super Admin',  'Quan tri vien he thong, toan quyen', TRUE, NULL),
   ('a0000000-0000-0000-0000-000000000002', 'SHOP_OWNER',      'Shop Owner',   'Chu cua hang, quan ly toan bo hoat dong', TRUE, NULL),
   ('a0000000-0000-0000-0000-000000000003', 'STAFF',           'Staff',        'Nhan vien cua hang (thuc hien dich vu)', TRUE, NULL),
-  ('a0000000-0000-0000-0000-000000000004', 'CUSTOMER',        'Customer',     'Khach hang dat lich', TRUE, NULL),
-  ('a0000000-0000-0000-0000-000000000005', 'WAREHOUSE_STAFF', 'Warehouse',    'Nhan vien kho, quan ly vat tu', TRUE, NULL);
+  ('a0000000-0000-0000-0000-000000000004', 'CUSTOMER',        'Customer',     'Khach hang dat lich', TRUE, NULL);
 
 -- ─────────────────────────────────────────────────────────────
 -- 2. PERMISSIONS (60 permissions)
@@ -52,11 +51,6 @@ INSERT IGNORE INTO `Permission` (id, code, name, description) VALUES
   ('b0000000-0000-0000-0006-000000000002', 'VIEW_COMBO',        'Xem combo',             'Xem danh sach combo'),
   ('b0000000-0000-0000-0006-000000000003', 'UPDATE_COMBO',      'Cap nhat combo',        'Chinh sua combo'),
   ('b0000000-0000-0000-0006-000000000004', 'DELETE_COMBO',      'Xoa combo',             'Xoa combo'),
-
-  ('b0000000-0000-0000-0007-000000000001', 'CREATE_MATERIAL',   'Tao vat tu',            'Tao vat tu moi'),
-  ('b0000000-0000-0000-0007-000000000002', 'VIEW_MATERIAL',     'Xem vat tu',            'Xem danh sach vat tu'),
-  ('b0000000-0000-0000-0007-000000000003', 'UPDATE_MATERIAL',   'Cap nhat vat tu',       'Chinh sua vat tu'),
-  ('b0000000-0000-0000-0007-000000000004', 'DELETE_MATERIAL',   'Xoa vat tu',            'Xoa vat tu'),
 
 -- Booking
   ('b0000000-0000-0000-0008-000000000001', 'CREATE_APPOINTMENT','Tao lich hen',          'Tao lich hen moi'),
@@ -132,7 +126,6 @@ WHERE code IN (
   'CREATE_SERVICE',  'VIEW_SERVICE',  'UPDATE_SERVICE',  'DELETE_SERVICE',
   'CREATE_CATEGORY', 'VIEW_CATEGORY', 'UPDATE_CATEGORY', 'DELETE_CATEGORY',
   'CREATE_COMBO',    'VIEW_COMBO',    'UPDATE_COMBO',    'DELETE_COMBO',
-  'CREATE_MATERIAL', 'VIEW_MATERIAL', 'UPDATE_MATERIAL', 'DELETE_MATERIAL',
   -- Full booking
   'CREATE_APPOINTMENT', 'VIEW_APPOINTMENT', 'UPDATE_APPOINTMENT', 'DELETE_APPOINTMENT',
   'CREATE_PAYMENT',     'VIEW_PAYMENT',     'UPDATE_PAYMENT',     'DELETE_PAYMENT',
@@ -145,7 +138,9 @@ WHERE code IN (
   'CREATE_STAFF_DAY_OFF',  'VIEW_STAFF_DAY_OFF',  'UPDATE_STAFF_DAY_OFF',  'DELETE_STAFF_DAY_OFF',
   'CREATE_WORKING_HOUR',   'VIEW_WORKING_HOUR',   'UPDATE_WORKING_HOUR',   'DELETE_WORKING_HOUR',
   -- Notifications
-  'CREATE_NOTIFICATION', 'VIEW_NOTIFICATION', 'UPDATE_NOTIFICATION', 'DELETE_NOTIFICATION'
+  'CREATE_NOTIFICATION', 'VIEW_NOTIFICATION', 'UPDATE_NOTIFICATION', 'DELETE_NOTIFICATION',
+  -- Store management
+  'CREATE_STORE', 'UPDATE_STORE'
 );
 
 -- ========================
@@ -155,7 +150,7 @@ INSERT IGNORE INTO `RolePermission` (roleId, permissionId)
 SELECT 'a0000000-0000-0000-0000-000000000003', id FROM `Permission`
 WHERE code IN (
   -- View catalog (read-only)
-  'VIEW_SERVICE', 'VIEW_CATEGORY', 'VIEW_COMBO', 'VIEW_MATERIAL',
+  'VIEW_SERVICE', 'VIEW_CATEGORY', 'VIEW_COMBO',
   -- Appointments: view + update status
   'VIEW_APPOINTMENT', 'UPDATE_APPOINTMENT',
   -- View payments & reviews
@@ -190,21 +185,9 @@ WHERE code IN (
   -- Notifications
   'VIEW_NOTIFICATION',
   -- View working hours (de biet gio mo cua)
-  'VIEW_WORKING_HOUR'
-);
-
--- ========================
--- WAREHOUSE_STAFF (Nhan vien kho)
--- ========================
-INSERT IGNORE INTO `RolePermission` (roleId, permissionId)
-SELECT 'a0000000-0000-0000-0000-000000000005', id FROM `Permission`
-WHERE code IN (
-  -- Full material management
-  'CREATE_MATERIAL', 'VIEW_MATERIAL', 'UPDATE_MATERIAL', 'DELETE_MATERIAL',
-  -- View catalog (reference)
-  'VIEW_SERVICE', 'VIEW_COMBO',
-  -- Notifications
-  'VIEW_NOTIFICATION'
+  'VIEW_WORKING_HOUR',
+  -- Become owner flow
+  'CREATE_STORE'
 );
 
 COMMIT;

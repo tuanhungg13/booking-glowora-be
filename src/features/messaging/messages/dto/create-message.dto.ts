@@ -1,24 +1,16 @@
-import { IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
-import { MessageType, SenderType } from '@prisma/client';
+import { IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
 
 export class CreateMessageDto {
   @IsUUID()
   conversationId!: string;
 
-  @IsEnum(SenderType)
-  senderType!: SenderType;
-
-  @IsOptional()
-  @IsString()
-  senderId?: string;
+  @IsUUID()
+  senderId!: string;
 
   @IsString()
+  @MaxLength(2000)
   content!: string;
 
   @IsOptional()
-  @IsEnum(MessageType)
-  messageType?: MessageType;
-
-  @IsOptional()
-  telegramMsgId?: bigint;
+  isRead?: boolean;
 }

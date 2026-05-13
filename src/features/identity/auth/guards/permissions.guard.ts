@@ -88,21 +88,10 @@ export class PermissionsGuard implements CanActivate {
   }
 
   private async loadPermissionsFromDb(userId: string): Promise<Set<string>> {
-    type UserWithRolePerms = {
-      roles: { role: { permissions: { permission: { code: string } }[] } }[];
-    };
-
-    const user = await (this.prisma as unknown as {
-      user: {
-        findUnique: (args: {
-          where: { id: string };
-          select: object;
-        }) => Promise<UserWithRolePerms | null>;
-      };
-    }).user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: {
-        roles: {
+        userRoles: {
           select: {
             role: {
               select: {
@@ -116,7 +105,7 @@ export class PermissionsGuard implements CanActivate {
 
     const codes = new Set<string>();
     if (!user) return codes;
-    for (const { role } of user.roles) {
+    for (const { role } of user.userRoles) {
       for (const { permission } of role.permissions) {
         codes.add(permission.code);
       }

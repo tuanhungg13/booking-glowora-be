@@ -13,6 +13,7 @@ import { BookingModule } from './features/booking.module';
 import { MessagingModule } from './features/messaging.module';
 import { StaffModule } from './features/staff.module';
 import { NotificationsModule } from './features/notifications/notifications/notifications.module';
+import { StoresModule } from './features/stores/stores.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { NotificationsModule } from './features/notifications/notifications/noti
     BookingModule,
     MessagingModule,
     StaffModule,
+    StoresModule,
     NotificationsModule,
   ],
   controllers: [AppController],

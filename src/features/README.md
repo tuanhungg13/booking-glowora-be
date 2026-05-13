@@ -7,7 +7,7 @@ Mỗi **feature** là một vùng domain: `*.module.ts`, controller, service, `d
 | Module Nest | File gom | Nội dung |
 |-------------|-----------|----------|
 | **IdentityModule** | `identity.module.ts` | Auth, Users, Roles, Permissions |
-| **CatalogModule** | `catalog.module.ts` | Categories, Services, Combos, Materials |
+| **CatalogModule** | `catalog.module.ts` | Categories, Services, Combos |
 | **BookingModule** | `booking.module.ts` | Appointments, Payments, Reviews |
 | **MessagingModule** | `messaging.module.ts` | Conversations, Messages |
 | **StaffModule** | `staff.module.ts` | StaffSchedule, StaffDayOff, WorkingHour |

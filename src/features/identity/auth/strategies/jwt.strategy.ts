@@ -16,7 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: config.get<string>('JWT_SECRET') || 'change-me-in-production',
+      secretOrKey: config.get<string>('JWT_ACCESS_SECRET') || 'change-me-in-production',
     });
   }
 
@@ -24,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     const user = await this.prisma.user.findUnique({
       where: { id: payload.sub },
       include: {
-        userRoles: { include: { role: { select: { name: true } } } },
+        userRoles: { include: { role: { select: { name: true, code: true } } } },
       },
     });
     if (!user || user.status !== UserStatus.ACTIVE) {

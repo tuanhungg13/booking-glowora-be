@@ -38,12 +38,6 @@ export const Permissions = {
     UPDATE: 'UPDATE_COMBO',
     DELETE: 'DELETE_COMBO',
   },
-  MATERIAL: {
-    CREATE: 'CREATE_MATERIAL',
-    VIEW: 'VIEW_MATERIAL',
-    UPDATE: 'UPDATE_MATERIAL',
-    DELETE: 'DELETE_MATERIAL',
-  },
 
   // ─── Booking ───
   APPOINTMENT: {
@@ -106,10 +100,20 @@ export const Permissions = {
     UPDATE: 'UPDATE_NOTIFICATION',
     DELETE: 'DELETE_NOTIFICATION',
   },
+
+  // ─── Store ───
+  STORE: {
+    CREATE: 'CREATE_STORE',
+    VIEW: 'VIEW_STORE',
+    UPDATE: 'UPDATE_STORE',
+    DELETE: 'DELETE_STORE',
+    APPROVE: 'APPROVE_STORE',
+  },
 } as const;
 
-export type PermissionCode = (typeof Permissions)[keyof typeof Permissions][keyof (typeof Permissions)[keyof typeof Permissions]];
+type PermissionGroup = (typeof Permissions)[keyof typeof Permissions];
+export type PermissionCode = PermissionGroup[keyof PermissionGroup];
 
-export const ALL_PERMISSION_CODES: PermissionCode[] = Object.values(Permissions).flatMap(
-  (group) => Object.values(group),
-);
+export const ALL_PERMISSION_CODES = Object.values(Permissions).flatMap((group) =>
+  Object.values(group),
+) as PermissionCode[];

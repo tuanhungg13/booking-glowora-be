@@ -14,11 +14,11 @@ export class StaffScheduleService {
         shopId: dto.shopId,
         staffId: dto.staffId,
         dayOfWeek: dto.dayOfWeek,
-        startTime: new Date(dto.startTime),
-        endTime: new Date(dto.endTime),
+        startTime: dto.startTime,
+        endTime: dto.endTime,
         isActive: dto.isActive ?? true,
       },
-      include: { staff: { select: { id: true, fullName: true, email: true } } },
+      include: { staff: { include: { user: { select: { id: true, fullName: true, email: true } } } } },
     });
   }
 
@@ -30,14 +30,14 @@ export class StaffScheduleService {
         ...(params?.dayOfWeek && { dayOfWeek: params.dayOfWeek }),
       },
       orderBy: [{ staffId: 'asc' }, { dayOfWeek: 'asc' }],
-      include: { staff: { select: { id: true, fullName: true, email: true } } },
+      include: { staff: { include: { user: { select: { id: true, fullName: true, email: true } } } } },
     });
   }
 
   async findOne(id: string) {
     const schedule = await this.prisma.staffSchedule.findUnique({
       where: { id },
-      include: { staff: { select: { id: true, fullName: true, email: true, phone: true } } },
+      include: { staff: { include: { user: { select: { id: true, fullName: true, email: true, phone: true } } } } },
     });
     if (!schedule) throw new NotFoundException('Staff schedule not found');
     return schedule;
@@ -49,11 +49,11 @@ export class StaffScheduleService {
       where: { id },
       data: {
         dayOfWeek: dto.dayOfWeek,
-        startTime: dto.startTime ? new Date(dto.startTime) : undefined,
-        endTime: dto.endTime ? new Date(dto.endTime) : undefined,
+        startTime: dto.startTime,
+        endTime: dto.endTime,
         isActive: dto.isActive,
       },
-      include: { staff: { select: { id: true, fullName: true, email: true } } },
+      include: { staff: { include: { user: { select: { id: true, fullName: true, email: true } } } } },
     });
   }
 

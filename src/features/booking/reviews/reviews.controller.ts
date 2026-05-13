@@ -13,6 +13,8 @@ import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
+import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 
 @Controller('reviews')
 export class ReviewsController {
@@ -20,19 +22,23 @@ export class ReviewsController {
 
   @Post()
   @RequirePermissions(Permissions.REVIEW.CREATE)
-  create(@Body() dto: CreateReviewDto) {
-    return this.reviewsService.create(dto);
+  create(@Body() dto: CreateReviewDto, @CurrentUser() user: CurrentUserPayload) {
+    return this.reviewsService.create(dto, user.id);
   }
 
   @Get()
   @RequirePermissions(Permissions.REVIEW.VIEW)
   findAll(
-    @Query('userId') userId?: string,
+    @Query('customerId') customerId?: string,
+    @Query('storeId') storeId?: string,
+    @Query('serviceId') serviceId?: string,
     @Query('skip') skip?: string,
     @Query('take') take?: string,
   ) {
     return this.reviewsService.findAll({
-      userId,
+      customerId,
+      storeId,
+      serviceId,
       skip: skip ? Number(skip) : undefined,
       take: take ? Number(take) : undefined,
     });

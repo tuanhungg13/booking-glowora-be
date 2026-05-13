@@ -1,7 +1,10 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { UserStatus } from '@prisma/client';
 
-export type CurrentUserPayload = Pick<User, 'id' | 'email' | 'status'> & {
+export type CurrentUserPayload = {
+  id: string;
+  email: string;
+  status?: UserStatus;
   /** Role names từ UserRole → Role (theo shop) */
   roles?: string[];
   /**

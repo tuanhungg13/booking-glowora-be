@@ -2,21 +2,26 @@ import {
   Injectable,
   ConflictException,
   UnauthorizedException,
+  NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import type { JwtSignOptions } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { UserStatus } from '@prisma/client';
 import { RegisterDto } from './dto/register.dto';
 import { RedisService } from '../../../redis/redis.service';
 import { ALL_PERMISSION_CODES } from '../../../common/constants/permissions';
-import { NotFoundException } from '@nestjs/common';
+
+const CUSTOMER_ROLE_CODE = 'CUSTOMER';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
+    private readonly config: ConfigService,
     private readonly redis: RedisService,
   ) {}
 
@@ -24,7 +29,7 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({
       where: { email },
       include: {
-        userRoles: { include: { role: { select: { name: true } } } },
+        userRoles: { include: { role: { select: { name: true, code: true } } } },
       },
     });
     if (!user || user.status !== UserStatus.ACTIVE) return null;
@@ -35,37 +40,125 @@ export class AuthService {
   }
 
   async login(user: { id: string; email: string; roles: string[] }) {
+    const accessToken = this._signAccess(user.id, user.email);
+    const refreshToken = this._signRefresh(user.id, user.email);
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { refreshToken },
+    });
+
     return {
-      access_token: this.jwtService.sign({
-        sub: user.id,
-        email: user.email,
-      }),
-      user: {
-        id: user.id,
-        email: user.email,
-        roles: user.roles,
-      },
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      user: { id: user.id, email: user.email, roles: user.roles },
     };
   }
 
   async register(dto: RegisterDto) {
-    const existing = await this.prisma.user.findUnique({
-      where: { email: dto.email },
-    });
-    if (existing) {
-      throw new ConflictException('Email already registered');
-    }
+    const existing = await this.prisma.user.findUnique({ where: { email: dto.email } });
+    if (existing) throw new ConflictException('Email already registered');
+
     const hashed = await bcrypt.hash(dto.password, 10);
+
+    const customerRole = await this.prisma.role.findFirst({
+      where: { code: CUSTOMER_ROLE_CODE, shopId: null },
+    });
+
     const user = await this.prisma.user.create({
       data: {
         email: dto.email,
         password: hashed,
-        fullName: dto.fullName,
+        fullName: dto.fullName ?? '',
         phone: dto.phone,
+        ...(customerRole
+          ? { userRoles: { create: { roleId: customerRole.id, shopId: null } } }
+          : {}),
       },
-      select: { id: true, email: true, fullName: true, phone: true },
+      select: { id: true, email: true, fullName: true, phone: true, createdAt: true },
     });
+
     return user;
+  }
+
+  async refresh(refreshToken: string) {
+    const blacklistKey = `blacklist:refresh:${refreshToken}`;
+    const isBlacklisted = await this.redis.exists(blacklistKey);
+    if (isBlacklisted) throw new UnauthorizedException('Refresh token has been revoked');
+
+    let payload: { sub: string; email: string };
+    try {
+      payload = await this.jwtService.verifyAsync(refreshToken, {
+        secret:
+          this.config.get<string>('JWT_REFRESH_SECRET') || 'refresh-secret',
+      });
+    } catch {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: payload.sub },
+      include: { userRoles: { include: { role: { select: { name: true } } } } },
+    });
+    if (!user || user.status !== UserStatus.ACTIVE) {
+      throw new UnauthorizedException('User not found or inactive');
+    }
+    if (user.refreshToken !== refreshToken) {
+      throw new UnauthorizedException('Refresh token mismatch');
+    }
+
+    const newAccess = this._signAccess(user.id, user.email);
+    const newRefresh = this._signRefresh(user.id, user.email);
+
+    // Blacklist cũ, lưu mới
+    const decoded = this.jwtService.decode(refreshToken) as { exp?: number } | null;
+    const ttl = decoded?.exp ? decoded.exp - Math.floor(Date.now() / 1000) : 604800;
+    if (ttl > 0) await this.redis.set(blacklistKey, '1', ttl);
+
+    await this.prisma.user.update({ where: { id: user.id }, data: { refreshToken: newRefresh } });
+
+    return { access_token: newAccess, refresh_token: newRefresh };
+  }
+
+  async logout(userId: string, refreshToken: string) {
+    const decoded = this.jwtService.decode(refreshToken) as { exp?: number } | null;
+    const ttl = decoded?.exp ? decoded.exp - Math.floor(Date.now() / 1000) : 604800;
+    if (ttl > 0) {
+      await this.redis.set(`blacklist:refresh:${refreshToken}`, '1', ttl);
+    }
+    await this.prisma.user.update({ where: { id: userId }, data: { refreshToken: null } });
+    return { success: true };
+  }
+
+  async getMe(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        fullName: true,
+        phone: true,
+        avatarUrl: true,
+        status: true,
+        createdAt: true,
+        userRoles: {
+          select: {
+            shopId: true,
+            role: { select: { id: true, code: true, name: true } },
+          },
+        },
+      },
+    });
+    if (!user) throw new NotFoundException('User not found');
+    return {
+      ...user,
+      roles: user.userRoles.map((ur) => ({
+        code: ur.role.code,
+        name: ur.role.name,
+        shopId: ur.shopId,
+      })),
+      userRoles: undefined,
+    };
   }
 
   async getPermissionMatrix(userId: string) {
@@ -73,30 +166,20 @@ export class AuthService {
     const cached = await this.redis.get(cacheKey);
     const grantedCodes = new Set<string>(cached ? JSON.parse(cached) : []);
 
-    // Luôn lấy role info để trả về cho UI (nhẹ hơn so với join permission codes mỗi lần).
     const userRoles = await this.prisma.user.findUnique({
       where: { id: userId },
       select: {
         userRoles: {
           select: {
             shopId: true,
-            role: {
-              select: {
-                id: true,
-                name: true,
-                code: true,
-              },
-            },
+            role: { select: { id: true, name: true, code: true } },
           },
         },
       },
     });
 
-    if (!userRoles) {
-      throw new NotFoundException('User not found');
-    }
+    if (!userRoles) throw new NotFoundException('User not found');
 
-    // Cache miss: load permission codes từ DB theo RolePermission mapping.
     if (cached === null) {
       const userWithPerms = await this.prisma.user.findUnique({
         where: { id: userId },
@@ -105,13 +188,7 @@ export class AuthService {
             select: {
               role: {
                 select: {
-                  permissions: {
-                    select: {
-                      permission: {
-                        select: { code: true },
-                      },
-                    },
-                  },
+                  permissions: { select: { permission: { select: { code: true } } } },
                 },
               },
             },
@@ -126,7 +203,6 @@ export class AuthService {
           }
         }
       }
-
       await this.redis.set(cacheKey, JSON.stringify([...grantedCodes]), 300);
     }
 
@@ -146,5 +222,22 @@ export class AuthService {
       grantedPermissionCodes: [...grantedCodes],
       permissionMatrix,
     };
+  }
+
+  private _signAccess(userId: string, email: string): string {
+    return this.jwtService.sign({ sub: userId, email });
+  }
+
+  private _signRefresh(userId: string, email: string): string {
+    const options: JwtSignOptions = {
+      secret:
+        this.config.get<string>('JWT_REFRESH_SECRET') || 'refresh-secret',
+      expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d',
+    } as JwtSignOptions;
+
+    return this.jwtService.sign(
+      { sub: userId, email },
+      options,
+    );
   }
 }

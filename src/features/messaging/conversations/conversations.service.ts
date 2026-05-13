@@ -1,53 +1,39 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { ConversationStatus, Prisma } from '@prisma/client';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
+
+const conversationInclude = {
+  customer: { select: { id: true, fullName: true, email: true, avatarUrl: true } },
+  store: true,
+  _count: { select: { messages: true } },
+} as const;
 
 @Injectable()
 export class ConversationsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateConversationDto) {
-    const hasStaff = Boolean(dto.staffId);
-    return this.prisma.conversation.create({
-      data: {
-        customerId: dto.customerId,
-        staffId: dto.staffId,
-        appointmentId: dto.appointmentId,
-        status: dto.status ?? ConversationStatus.OPEN,
-        assignedAt: hasStaff ? new Date() : null,
-      },
-      include: {
-        customer: { select: { id: true, fullName: true, email: true } },
-        staff: { select: { id: true, fullName: true, email: true } },
-        appointment: true,
-      },
+    return this.prisma.conversation.upsert({
+      where: { customerId_storeId: { customerId: dto.customerId, storeId: dto.storeId } },
+      update: {},
+      create: { customerId: dto.customerId, storeId: dto.storeId },
+      include: conversationInclude,
     });
   }
 
-  async findAll(params?: {
-    status?: ConversationStatus;
-    customerId?: string;
-    staffId?: string;
-    skip?: number;
-    take?: number;
-  }) {
-    const where: Record<string, unknown> = {};
-    if (params?.status) where.status = params.status;
-    if (params?.customerId) where.customerId = params.customerId;
-    if (params?.staffId) where.staffId = params.staffId;
+  async findAll(params?: { customerId?: string; storeId?: string; skip?: number; take?: number }) {
+    const where = {
+      ...(params?.customerId && { customerId: params.customerId }),
+      ...(params?.storeId && { storeId: params.storeId }),
+    };
     const [items, total] = await Promise.all([
       this.prisma.conversation.findMany({
         where,
         skip: params?.skip,
         take: params?.take ?? 20,
         orderBy: { updatedAt: 'desc' },
-        include: {
-          customer: { select: { id: true, fullName: true, email: true } },
-          staff: { select: { id: true, fullName: true, email: true } },
-          _count: { select: { messages: true } },
-        },
+        include: conversationInclude,
       }),
       this.prisma.conversation.count({ where }),
     ]);
@@ -55,53 +41,29 @@ export class ConversationsService {
   }
 
   async findOne(id: string) {
-    const conv = await this.prisma.conversation.findUnique({
+    const conversation = await this.prisma.conversation.findUnique({
       where: { id },
       include: {
-        customer: { select: { id: true, fullName: true, email: true, phone: true } },
-        staff: { select: { id: true, fullName: true, email: true } },
-        appointment: true,
-        messages: { orderBy: { createdAt: 'asc' } },
+        ...conversationInclude,
+        messages: {
+          orderBy: { createdAt: 'asc' },
+          include: { sender: { select: { id: true, fullName: true, email: true, avatarUrl: true } } },
+        },
       },
     });
-    if (!conv) throw new NotFoundException('Conversation not found');
-    return conv;
+    if (!conversation) throw new NotFoundException('Conversation not found');
+    return conversation;
   }
 
   async update(id: string, dto: UpdateConversationDto) {
-    const existing = await this.prisma.conversation.findUnique({ where: { id } });
-    if (!existing) throw new NotFoundException('Conversation not found');
-
-    const data: Prisma.ConversationUpdateInput = {};
-    if (dto.appointmentId !== undefined) {
-      data.appointment = dto.appointmentId
-        ? { connect: { id: dto.appointmentId } }
-        : { disconnect: true };
-    }
-    if (dto.status !== undefined) {
-      data.status = dto.status;
-    }
-
-    if (dto.staffId !== undefined) {
-      if (dto.staffId === null) {
-        data.staff = { disconnect: true };
-        data.assignedAt = null;
-      } else {
-        data.staff = { connect: { id: dto.staffId } };
-        if (dto.staffId !== existing.staffId || !existing.assignedAt) {
-          data.assignedAt = new Date();
-        }
-      }
-    }
-
+    await this.findOne(id);
     return this.prisma.conversation.update({
       where: { id },
-      data,
-      include: {
-        customer: { select: { id: true, fullName: true, email: true } },
-        staff: { select: { id: true, fullName: true, email: true } },
-        appointment: true,
+      data: {
+        lastMessageBody: dto.lastMessageBody,
+        lastMessageAt: dto.lastMessageBody ? new Date() : undefined,
       },
+      include: conversationInclude,
     });
   }
 

@@ -1,24 +1,24 @@
-import { IsEnum, IsNumber, IsOptional, IsString, IsDateString } from 'class-validator';
+import { IsDateString, IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
 import { AppointmentStatus } from '@prisma/client';
 
 export class UpdateAppointmentDto {
   @IsOptional()
-  @IsDateString()
-  startTime?: string;
+  @IsUUID()
+  staffId?: string;
 
   @IsOptional()
   @IsDateString()
-  endTime?: string;
+  scheduledAt?: string;
 
   @IsOptional()
   @IsEnum(AppointmentStatus)
   status?: AppointmentStatus;
 
   @IsOptional()
-  @IsNumber()
-  discount?: number;
+  @IsString()
+  notes?: string;
 
   @IsOptional()
   @IsString()
-  note?: string;
+  cancellationReason?: string;
 }

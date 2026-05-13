@@ -1,79 +1,21 @@
-import {
-  IsArray,
-  IsEnum,
-  IsIn,
-  IsInt,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsUUID,
-  IsDateString,
-  ValidateNested,
-} from 'class-validator';
-import { Type } from 'class-transformer';
-import { AppointmentItemType, AppointmentStatus } from '@prisma/client';
+import { IsDateString, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
 
-/** API chỉ nhận SERVICE | COMBO | CUSTOM; COMBO_CHILD do hệ thống tạo khi expand combo */
-const BOOKABLE_ITEM_TYPES = [
-  AppointmentItemType.SERVICE,
-  AppointmentItemType.COMBO,
-  AppointmentItemType.CUSTOM,
-] as const;
-
-export class CreateAppointmentItemDto {
-  @IsIn(BOOKABLE_ITEM_TYPES)
-  type!: (typeof BOOKABLE_ITEM_TYPES)[number];
-
-  @IsOptional()
+export class CreateAppointmentDto {
   @IsUUID()
-  serviceId?: string;
+  storeId!: string;
 
-  @IsOptional()
   @IsUUID()
-  comboId?: string;
+  serviceId!: string;
 
   @IsOptional()
   @IsUUID()
   staffId?: string;
 
-  @IsOptional()
-  @IsString()
-  name?: string;
-
-  @IsOptional()
-  @IsInt()
-  quantity?: number;
-
-  @IsOptional()
-  @IsInt()
-  sortOrder?: number;
-}
-
-export class CreateAppointmentDto {
-  @IsUUID()
-  shopId!: string;
-
-  @IsUUID()
-  customerId!: string;
-
   @IsDateString()
-  startTime!: string;
-
-  @IsOptional()
-  @IsEnum(AppointmentStatus)
-  status?: AppointmentStatus;
-
-  @IsOptional()
-  @IsNumber()
-  discount?: number;
+  scheduledAt!: string;
 
   @IsOptional()
   @IsString()
-  note?: string;
-
-  @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CreateAppointmentItemDto)
-  items?: CreateAppointmentItemDto[];
+  @MaxLength(1000)
+  notes?: string;
 }

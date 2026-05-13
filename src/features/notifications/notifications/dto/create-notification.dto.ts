@@ -12,7 +12,11 @@ export class CreateNotificationDto {
   title!: string;
 
   @IsString()
-  content!: string;
+  body!: string;
+
+  @IsOptional()
+  @IsUUID()
+  appointmentId?: string;
 
   @IsOptional()
   @IsBoolean()

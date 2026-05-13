@@ -1,8 +1,8 @@
-# Feature: Catalog — Danh mục dịch vụ & kho
+# Feature: Catalog — Danh mục dịch vụ
 
 ## Vai trò
 
-Chuẩn bị dữ liệu bán hàng cho **Shop**: nhóm (**Category**), **Service** (thời lượng, buffer, giá), **Combo** (gói nhiều service), **Material** (tồn kho, định mức gắn service).  
+Chuẩn bị dữ liệu bán hàng cho **Shop**: nhóm (**Category**), **Service** (thời lượng, giá), **Combo** (gói nhiều service).  
 **Appointment** khi tạo sẽ **snapshot** giá/tên/thời lượng từ catalog tại thời điểm đặt — thay đổi catalog sau đó không làm sai lịch cũ.
 
 ---
@@ -13,22 +13,19 @@ Chuẩn bị dữ liệu bán hàng cho **Shop**: nhóm (**Category**), **Servic
 flowchart TB
   subgraph shop["Theo shopId"]
     CAT[Category]
-    SVC[Service + ServiceMaterial]
-    MAT[Material]
-    CMB[Combo + ComboService]
+    SVC[Service]
+    CMB[Combo + ComboItem]
   end
 
-  MAT --> SVC
   CAT --> SVC
   CAT --> CMB
   SVC --> CMB
 ```
 
-1. Tạo **Material** (nếu cần theo dõi tồn / cost).
-2. Tạo **Category** (phân nhóm UI).
-3. Tạo **Service** (`shopId`, optional `categoryId`, có thể gắn `materialIds` → `ServiceMaterial`).
-4. (Tùy) Gán staff làm được service qua bảng `StaffService` (thường quản lý từ phía user/service — schema có quan hệ).
-5. Tạo **Combo** + các dòng **ComboService** (service + quantity + order).
+1. Tạo **Category** (phân nhóm UI).
+2. Tạo **Service** (`shopId`, optional `categoryId`).
+3. (Tùy) Gán staff làm được service qua bảng `StaffService`.
+4. Tạo **Combo** + các dòng **ComboItem** (service + quantity + order).
 
 ---
 
@@ -51,7 +48,6 @@ Mỗi resource dùng pattern giống nhau:
 | Category | `/categories` | (xem controller) |
 | Service | `/services` | `status`, `categoryId` |
 | Combo | `/combos` | (xem controller) |
-| Material | `/materials` | (xem controller) |
 
 Tất cả đều có `@RequirePermissions` tương ứng (`CREATE_SERVICE`, `VIEW_CATEGORY`, …).
 
@@ -61,8 +57,7 @@ Tất cả đều có `@RequirePermissions` tương ứng (`CREATE_SERVICE`, `VI
 
 1. Client gửi `CreateServiceDto` (có `shopId`, `name`, `duration`, `price`, …).
 2. `service.create` với `categoryId` optional.
-3. Nếu có `materialIds`: tạo luôn các bản ghi **ServiceMaterial** (định mức vật tư theo dịch vụ).
-4. Trả về include `category`, `materials`.
+3. Trả về include `category`, `staffs`.
 
 **Đọc list:** `findAll` lọc theo `status`, `categoryId` — **không** bắt buộc truyền `shopId` trong đoạn code hiện tại; khi triển khai production thường cần ràng buộc theo shop (middleware hoặc bắt buộc query).
 
@@ -102,7 +97,6 @@ sequenceDiagram
 | Category | `CREATE_CATEGORY`, `VIEW_CATEGORY`, `UPDATE_CATEGORY`, `DELETE_CATEGORY` |
 | Service | `CREATE_SERVICE`, … |
 | Combo | `CREATE_COMBO`, … |
-| Material | `CREATE_MATERIAL`, … |
 
 ---
 
@@ -110,4 +104,4 @@ sequenceDiagram
 
 1. `dto/create-*.dto.ts` — field bắt buộc / optional.
 2. `services/services.service.ts`, `combos/combos.service.ts` — logic tạo + include quan hệ.
-3. `../catalog.module.ts` — gom 4 module.
+3. `../catalog.module.ts` — gom 3 module.

@@ -18,7 +18,7 @@ Backend **NestJS** cho nền tảng đặt lịch (spa/salon/shop): quản lý s
 |----------|-----------|
 | Đăng nhập / JWT / phân quyền | [Identity](src/features/identity/README.md), `jwt-auth.guard.ts`, `permissions.guard.ts` |
 | Đặt lịch, thanh toán, review | [Booking](src/features/booking/README.md) |
-| Dịch vụ, combo, nguyên liệu | [Catalog](src/features/catalog/README.md) |
+| Dịch vụ, combo | [Catalog](src/features/catalog/README.md) |
 | Ca làm, giờ mở cửa, nghỉ | [Staff](src/features/staff/README.md) |
 | Chat | [Messaging](src/features/messaging/README.md) |
 
@@ -137,7 +137,7 @@ booking-business/
 | [src/features/README.md](src/features/README.md) | Bản đồ các feature |
 | [prisma/README.md](prisma/README.md) | Khái niệm model & migration |
 | [src/features/identity/README.md](src/features/identity/README.md) | Auth, user, role, permission |
-| [src/features/catalog/README.md](src/features/catalog/README.md) | Category, service, combo, material |
+| [src/features/catalog/README.md](src/features/catalog/README.md) | Category, service, combo |
 | [src/features/booking/README.md](src/features/booking/README.md) | Appointment, payment, review |
 | [src/features/staff/README.md](src/features/staff/README.md) | Lịch nhân viên, giờ làm, nghỉ |
 | [src/features/messaging/README.md](src/features/messaging/README.md) | Conversation, message |

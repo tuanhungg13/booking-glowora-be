@@ -12,9 +12,10 @@ export class NotificationsService {
     return this.prisma.notification.create({
       data: {
         userId: dto.userId,
+        appointmentId: dto.appointmentId,
         type: dto.type,
         title: dto.title,
-        content: dto.content,
+        body: dto.body,
         isRead: dto.isRead ?? false,
       },
       include: { user: { select: { id: true, email: true, fullName: true } } },

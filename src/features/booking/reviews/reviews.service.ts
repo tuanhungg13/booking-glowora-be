@@ -1,68 +1,67 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { AppointmentStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
+
+const reviewInclude = {
+  customer: { select: { id: true, fullName: true, email: true, avatarUrl: true } },
+  store: true,
+  service: true,
+  staff: { include: { user: { select: { id: true, fullName: true, email: true, avatarUrl: true } } } },
+  appointment: true,
+} as const;
 
 @Injectable()
 export class ReviewsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dto: CreateReviewDto) {
-    const apt = await this.prisma.appointment.findUnique({
+  async create(dto: CreateReviewDto, customerId?: string) {
+    const appointment = await this.prisma.appointment.findUnique({
       where: { id: dto.appointmentId },
     });
-    if (!apt) throw new NotFoundException('Appointment not found');
+    if (!appointment) throw new NotFoundException('Appointment not found');
+    if (customerId && appointment.customerId !== customerId) {
+      throw new BadRequestException('Cannot review another customer appointment');
+    }
+    if (appointment.status !== AppointmentStatus.COMPLETED) {
+      throw new BadRequestException('Only completed appointments can be reviewed');
+    }
     const existing = await this.prisma.review.findUnique({
       where: { appointmentId: dto.appointmentId },
     });
     if (existing) throw new ConflictException('Appointment already reviewed');
-    if (dto.rating < 1 || dto.rating > 5) {
-      throw new ConflictException('Rating must be between 1 and 5');
-    }
-    return this.prisma.review.create({
+
+    const review = await this.prisma.review.create({
       data: {
-        appointmentId: dto.appointmentId,
-        userId: apt.customerId,
+        appointmentId: appointment.id,
+        customerId: appointment.customerId,
+        storeId: appointment.storeId,
+        serviceId: appointment.serviceId,
+        staffId: appointment.staffId,
         rating: dto.rating,
         comment: dto.comment,
       },
-      include: {
-        user: { select: { id: true, fullName: true, email: true } },
-        appointment: {
-          include: {
-            customer: true,
-            items: {
-              include: {
-                service: true,
-                combo: true,
-                staff: { select: { id: true, fullName: true, email: true } },
-              },
-            },
-          },
-        },
-      },
+      include: reviewInclude,
     });
+
+    await this.recalculateRatings(appointment.storeId, appointment.serviceId, appointment.staffId);
+    return review;
   }
 
-  async findAll(params?: { userId?: string; skip?: number; take?: number }) {
-    const where = params?.userId ? { userId: params.userId } : undefined;
+  async findAll(params?: { customerId?: string; storeId?: string; serviceId?: string; skip?: number; take?: number }) {
+    const where: Prisma.ReviewWhereInput = {
+      ...(params?.customerId && { customerId: params.customerId }),
+      ...(params?.storeId && { storeId: params.storeId }),
+      ...(params?.serviceId && { serviceId: params.serviceId }),
+    };
     const [items, total] = await Promise.all([
       this.prisma.review.findMany({
         where,
         skip: params?.skip,
         take: params?.take ?? 20,
         orderBy: { createdAt: 'desc' },
-        include: {
-          user: { select: { id: true, fullName: true, email: true } },
-          appointment: {
-            include: {
-              customer: true,
-              items: {
-                include: { service: true, combo: true },
-              },
-            },
-          },
-        },
+        include: reviewInclude,
       }),
       this.prisma.review.count({ where }),
     ]);
@@ -72,41 +71,71 @@ export class ReviewsService {
   async findOne(id: string) {
     const review = await this.prisma.review.findUnique({
       where: { id },
-      include: {
-        user: { select: { id: true, fullName: true, email: true } },
-        appointment: {
-          include: {
-            customer: true,
-            items: {
-              include: {
-                service: true,
-                combo: true,
-                staff: { select: { id: true, fullName: true, email: true } },
-              },
-            },
-          },
-        },
-      },
+      include: reviewInclude,
     });
     if (!review) throw new NotFoundException('Review not found');
     return review;
   }
 
   async update(id: string, dto: UpdateReviewDto) {
-    await this.findOne(id);
-    if (dto.rating !== undefined && (dto.rating < 1 || dto.rating > 5)) {
-      throw new ConflictException('Rating must be between 1 and 5');
-    }
-    return this.prisma.review.update({
+    const existing = await this.findOne(id);
+    const review = await this.prisma.review.update({
       where: { id },
-      data: { rating: dto.rating, comment: dto.comment },
-      include: { appointment: true },
+      data: { rating: dto.rating, comment: dto.comment, isVisible: dto.isVisible },
+      include: reviewInclude,
     });
+    await this.recalculateRatings(existing.storeId, existing.serviceId, existing.staffId);
+    return review;
   }
 
   async remove(id: string) {
-    await this.findOne(id);
+    const existing = await this.findOne(id);
     await this.prisma.review.delete({ where: { id } });
+    await this.recalculateRatings(existing.storeId, existing.serviceId, existing.staffId);
     return { deleted: true };
+  }
+
+  private async recalculateRatings(storeId: string, serviceId: string, staffId?: string | null) {
+    const [storeAggregate, serviceAggregate] = await Promise.all([
+      this.prisma.review.aggregate({
+        where: { storeId, isVisible: true },
+        _avg: { rating: true },
+        _count: { rating: true },
+      }),
+      this.prisma.review.aggregate({
+        where: { serviceId, isVisible: true },
+        _avg: { rating: true },
+        _count: { rating: true },
+      }),
+    ]);
+
+    await Promise.all([
+      this.prisma.store.update({
+        where: { id: storeId },
+        data: {
+          avgRating: storeAggregate._avg.rating ?? 0,
+          totalReviews: storeAggregate._count.rating,
+        },
+      }),
+      this.prisma.service.update({
+        where: { id: serviceId },
+        data: { avgRating: serviceAggregate._avg.rating ?? 0 },
+      }),
+    ]);
+
+    if (staffId) {
+      const staffAggregate = await this.prisma.review.aggregate({
+        where: { staffId, isVisible: true },
+        _avg: { rating: true },
+        _count: { rating: true },
+      });
+      await this.prisma.staff.update({
+        where: { id: staffId },
+        data: {
+          rating: staffAggregate._avg.rating ?? 0,
+          totalReviews: staffAggregate._count.rating,
+        },
+      });
+    }
   }
 }

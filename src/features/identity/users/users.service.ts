@@ -23,7 +23,7 @@ export class UsersService {
       data: {
         email: dto.email,
         password: hashed,
-        fullName: dto.fullName,
+        fullName: dto.fullName ?? '',
         phone: dto.phone,
         status: dto.status ?? UserStatus.ACTIVE,
         userRoles: dto.roleAssignments?.length
@@ -67,7 +67,6 @@ export class UsersService {
             shop: { select: { id: true, name: true } },
           },
         },
-        staffServices: { include: { service: { select: { id: true, name: true } } } },
       },
     });
     if (!user) throw new NotFoundException('User not found');
