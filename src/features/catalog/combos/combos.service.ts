@@ -13,10 +13,10 @@ const comboInclude = {
 export class CombosService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dto: CreateComboDto) {
+  async create(storeId: string, dto: CreateComboDto) {
     return this.prisma.combo.create({
       data: {
-        shopId: dto.shopId,
+        shopId: storeId,
         name: dto.name,
         description: dto.description,
         price: dto.price,
@@ -37,10 +37,10 @@ export class CombosService {
     });
   }
 
-  async findAll(params?: { shopId?: string; status?: ComboStatus; categoryId?: string }) {
+  async findAll(params?: { storeId?: string; status?: ComboStatus; categoryId?: string }) {
     return this.prisma.combo.findMany({
       where: {
-        ...(params?.shopId && { shopId: params.shopId }),
+        ...(params?.storeId && { shopId: params.storeId }),
         ...(params?.status && { status: params.status }),
         ...(params?.categoryId && { categoryId: params.categoryId }),
       },
@@ -49,17 +49,17 @@ export class CombosService {
     });
   }
 
-  async findOne(id: string) {
-    const combo = await this.prisma.combo.findUnique({
-      where: { id },
+  async findOne(id: string, storeId?: string) {
+    const combo = await this.prisma.combo.findFirst({
+      where: { id, ...(storeId && { shopId: storeId }) },
       include: comboInclude,
     });
     if (!combo) throw new NotFoundException('Combo not found');
     return combo;
   }
 
-  async update(id: string, dto: UpdateComboDto) {
-    await this.findOne(id);
+  async update(id: string, storeId: string, dto: UpdateComboDto) {
+    await this.findOne(id, storeId);
 
     await this.prisma.$transaction(async (tx) => {
       if (dto.serviceIds !== undefined) {
@@ -89,11 +89,11 @@ export class CombosService {
       });
     });
 
-    return this.findOne(id);
+    return this.findOne(id, storeId);
   }
 
-  async remove(id: string) {
-    await this.findOne(id);
+  async remove(id: string, storeId: string) {
+    await this.findOne(id, storeId);
     await this.prisma.combo.update({
       where: { id },
       data: { status: ComboStatus.INACTIVE },

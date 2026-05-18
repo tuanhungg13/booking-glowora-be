@@ -4,33 +4,60 @@ import { DayOfWeek } from '@prisma/client';
 import { CreateStaffScheduleDto } from './dto/create-staff-schedule.dto';
 import { UpdateStaffScheduleDto } from './dto/update-staff-schedule.dto';
 
+const scheduleInclude = {
+  staff: { include: { user: { select: { id: true, fullName: true, email: true } } } },
+} as const;
+
 @Injectable()
 export class StaffScheduleService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dto: CreateStaffScheduleDto) {
+  async create(storeId: string, staffId: string, dto: CreateStaffScheduleDto) {
     return this.prisma.staffSchedule.create({
       data: {
-        shopId: dto.shopId,
-        staffId: dto.staffId,
+        shopId: storeId,
+        staffId,
         dayOfWeek: dto.dayOfWeek,
         startTime: dto.startTime,
         endTime: dto.endTime,
         isActive: dto.isActive ?? true,
       },
-      include: { staff: { include: { user: { select: { id: true, fullName: true, email: true } } } } },
+      include: scheduleInclude,
     });
   }
 
-  async findAll(params?: { shopId?: string; staffId?: string; dayOfWeek?: DayOfWeek }) {
+  async bulkUpsert(storeId: string, staffId: string, schedules: CreateStaffScheduleDto[]) {
+    await this.prisma.$transaction(async (tx) => {
+      await tx.staffSchedule.deleteMany({ where: { shopId: storeId, staffId } });
+      if (schedules.length) {
+        await tx.staffSchedule.createMany({
+          data: schedules.map((s) => ({
+            shopId: storeId,
+            staffId,
+            dayOfWeek: s.dayOfWeek,
+            startTime: s.startTime,
+            endTime: s.endTime,
+            isActive: s.isActive ?? true,
+          })),
+        });
+      }
+    });
+    return this.prisma.staffSchedule.findMany({
+      where: { shopId: storeId, staffId },
+      orderBy: { dayOfWeek: 'asc' },
+      include: scheduleInclude,
+    });
+  }
+
+  async findAll(storeId: string, staffId: string, dayOfWeek?: DayOfWeek) {
     return this.prisma.staffSchedule.findMany({
       where: {
-        ...(params?.shopId && { shopId: params.shopId }),
-        ...(params?.staffId && { staffId: params.staffId }),
-        ...(params?.dayOfWeek && { dayOfWeek: params.dayOfWeek }),
+        shopId: storeId,
+        staffId,
+        ...(dayOfWeek && { dayOfWeek }),
       },
-      orderBy: [{ staffId: 'asc' }, { dayOfWeek: 'asc' }],
-      include: { staff: { include: { user: { select: { id: true, fullName: true, email: true } } } } },
+      orderBy: { dayOfWeek: 'asc' },
+      include: scheduleInclude,
     });
   }
 
@@ -53,7 +80,7 @@ export class StaffScheduleService {
         endTime: dto.endTime,
         isActive: dto.isActive,
       },
-      include: { staff: { include: { user: { select: { id: true, fullName: true, email: true } } } } },
+      include: scheduleInclude,
     });
   }
 

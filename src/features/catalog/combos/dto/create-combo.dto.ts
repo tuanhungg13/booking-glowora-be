@@ -33,13 +33,6 @@ class ComboServiceItemDto {
 
 export class CreateComboDto {
   @ApiProperty({
-    example: '550e8400-e29b-41d4-a716-446655440000',
-    description: 'The UUID of the shop this combo belongs to',
-  })
-  @IsUUID()
-  shopId!: string;
-
-  @ApiProperty({
     example: 'Total Grooming Package',
     description: 'The name of the combo package',
   })

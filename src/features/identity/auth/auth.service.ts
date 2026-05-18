@@ -45,7 +45,7 @@ export class AuthService {
 
     await this.prisma.user.update({
       where: { id: user.id },
-      data: { refreshToken },
+      data: { refreshToken: await bcrypt.hash(refreshToken, 10) },
     });
 
     return {
@@ -103,19 +103,22 @@ export class AuthService {
     if (!user || user.status !== UserStatus.ACTIVE) {
       throw new UnauthorizedException('User not found or inactive');
     }
-    if (user.refreshToken !== refreshToken) {
+    if (!user.refreshToken || !(await bcrypt.compare(refreshToken, user.refreshToken))) {
       throw new UnauthorizedException('Refresh token mismatch');
     }
 
     const newAccess = this._signAccess(user.id, user.email);
     const newRefresh = this._signRefresh(user.id, user.email);
 
-    // Blacklist cũ, lưu mới
+    // Blacklist cũ, lưu hash mới
     const decoded = this.jwtService.decode(refreshToken) as { exp?: number } | null;
     const ttl = decoded?.exp ? decoded.exp - Math.floor(Date.now() / 1000) : 604800;
     if (ttl > 0) await this.redis.set(blacklistKey, '1', ttl);
 
-    await this.prisma.user.update({ where: { id: user.id }, data: { refreshToken: newRefresh } });
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { refreshToken: await bcrypt.hash(newRefresh, 10) },
+    });
 
     return { access_token: newAccess, refresh_token: newRefresh };
   }

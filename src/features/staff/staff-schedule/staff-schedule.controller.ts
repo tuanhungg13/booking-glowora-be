@@ -6,38 +6,49 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { StaffScheduleService } from './staff-schedule.service';
 import { CreateStaffScheduleDto } from './dto/create-staff-schedule.dto';
 import { UpdateStaffScheduleDto } from './dto/update-staff-schedule.dto';
+import { BulkUpsertScheduleDto } from './dto/bulk-upsert-schedule.dto';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
 import { DayOfWeek } from '@prisma/client';
 
-@Controller('staff-schedules')
+@Controller('stores/:storeId/staff/:staffId/schedules')
 export class StaffScheduleController {
   constructor(private readonly staffScheduleService: StaffScheduleService) {}
 
   @Post()
   @RequirePermissions(Permissions.STAFF_SCHEDULE.CREATE)
-  create(@Body() dto: CreateStaffScheduleDto) {
-    return this.staffScheduleService.create(dto);
+  create(
+    @Param('storeId') storeId: string,
+    @Param('staffId') staffId: string,
+    @Body() dto: CreateStaffScheduleDto,
+  ) {
+    return this.staffScheduleService.create(storeId, staffId, dto);
+  }
+
+  @Put()
+  @RequirePermissions(Permissions.STAFF_SCHEDULE.UPDATE)
+  bulkUpsert(
+    @Param('storeId') storeId: string,
+    @Param('staffId') staffId: string,
+    @Body() dto: BulkUpsertScheduleDto,
+  ) {
+    return this.staffScheduleService.bulkUpsert(storeId, staffId, dto.schedules);
   }
 
   @Get()
   @RequirePermissions(Permissions.STAFF_SCHEDULE.VIEW)
   findAll(
-    @Query('staffId') staffId?: string,
+    @Param('storeId') storeId: string,
+    @Param('staffId') staffId: string,
     @Query('dayOfWeek') dayOfWeek?: DayOfWeek,
   ) {
-    return this.staffScheduleService.findAll({ staffId, dayOfWeek });
-  }
-
-  @Get(':id')
-  @RequirePermissions(Permissions.STAFF_SCHEDULE.VIEW)
-  findOne(@Param('id') id: string) {
-    return this.staffScheduleService.findOne(id);
+    return this.staffScheduleService.findAll(storeId, staffId, dayOfWeek);
   }
 
   @Patch(':id')

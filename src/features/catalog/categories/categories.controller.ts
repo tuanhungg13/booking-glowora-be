@@ -10,6 +10,7 @@ import {
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { Public } from '../../../common/decorators/public.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
 
@@ -23,14 +24,14 @@ export class CategoriesController {
     return this.categoriesService.create(dto);
   }
 
+  @Public()
   @Get()
-  @RequirePermissions(Permissions.CATEGORY.VIEW)
   findAll() {
     return this.categoriesService.findAll();
   }
 
+  @Public()
   @Get(':id')
-  @RequirePermissions(Permissions.CATEGORY.VIEW)
   findOne(@Param('id') id: string) {
     return this.categoriesService.findOne(id);
   }

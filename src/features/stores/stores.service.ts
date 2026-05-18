@@ -237,6 +237,24 @@ export class StoresService {
     });
   }
 
+  async uploadLogo(id: string, ownerId: string, filePath: string) {
+    await this.checkOwnership(id, ownerId);
+    return this.prisma.store.update({
+      where: { id },
+      data: { logoUrl: filePath },
+      select: { id: true, logoUrl: true },
+    });
+  }
+
+  async uploadBanner(id: string, ownerId: string, filePath: string) {
+    await this.checkOwnership(id, ownerId);
+    return this.prisma.store.update({
+      where: { id },
+      data: { bannerUrl: filePath },
+      select: { id: true, bannerUrl: true },
+    });
+  }
+
   async checkOwnership(storeId: string, userId: string) {
     const store = await this.prisma.store.findUnique({ where: { id: storeId } });
     if (!store) throw new NotFoundException('Store not found');

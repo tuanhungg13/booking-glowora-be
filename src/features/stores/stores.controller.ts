@@ -1,5 +1,20 @@
-import { Body, Controller, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
+  Query,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 import { CurrentUser, type CurrentUserPayload } from '../../common/decorators/current-user.decorator';
 import { Public } from '../../common/decorators/public.decorator';
 import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
@@ -9,6 +24,15 @@ import { StoreFilterDto } from './dto/store-filter.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { UpdateWorkingHoursDto } from './dto/update-working-hours.dto';
 import { StoresService } from './stores.service';
+
+const imageStorage = (folder: string) =>
+  diskStorage({
+    destination: `./uploads/${folder}`,
+    filename: (_req, file, cb) => {
+      const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}${extname(file.originalname)}`;
+      cb(null, uniqueName);
+    },
+  });
 
 @ApiTags('stores')
 @Controller('stores')
@@ -54,6 +78,36 @@ export class StoresController {
     @CurrentUser() user: CurrentUserPayload,
   ) {
     return this.storesService.update(id, user.id, dto);
+  }
+
+  @ApiOperation({ summary: 'Upload store logo' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBearerAuth()
+  @RequirePermissions(Permissions.STORE.UPDATE)
+  @Post(':id/logo')
+  @UseInterceptors(FileInterceptor('file', { storage: imageStorage('logos') }))
+  uploadLogo(
+    @Param('id') id: string,
+    @UploadedFile() file: any,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    if (!file) throw new BadRequestException('No file uploaded');
+    return this.storesService.uploadLogo(id, user.id, `/uploads/logos/${file.filename}`);
+  }
+
+  @ApiOperation({ summary: 'Upload store banner' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBearerAuth()
+  @RequirePermissions(Permissions.STORE.UPDATE)
+  @Post(':id/banner')
+  @UseInterceptors(FileInterceptor('file', { storage: imageStorage('banners') }))
+  uploadBanner(
+    @Param('id') id: string,
+    @UploadedFile() file: any,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    if (!file) throw new BadRequestException('No file uploaded');
+    return this.storesService.uploadBanner(id, user.id, `/uploads/banners/${file.filename}`);
   }
 
   @ApiOperation({ summary: 'Replace working hours for current owner store' })

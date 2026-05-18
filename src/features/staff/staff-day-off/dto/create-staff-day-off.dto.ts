@@ -1,12 +1,6 @@
-import { IsDateString, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class CreateStaffDayOffDto {
-  @IsUUID()
-  shopId!: string;
-
-  @IsUUID()
-  staffId!: string;
-
   @IsDateString()
   date!: string;
 

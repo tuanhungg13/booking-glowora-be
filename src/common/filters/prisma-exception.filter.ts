@@ -14,49 +14,33 @@ export class PrismaExceptionFilter implements ExceptionFilter {
   ) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
-    const request = ctx.getRequest();
 
     let status = HttpStatus.BAD_REQUEST;
-    let error = 'PrismaError';
-    let message: string = 'Database error';
+    let message = 'Lỗi cơ sở dữ liệu';
 
     if (exception instanceof Prisma.PrismaClientKnownRequestError) {
       switch (exception.code) {
         case 'P2002':
           status = HttpStatus.CONFLICT;
-          error = 'UniqueConstraintViolation';
-          message = 'Resource with given unique field already exists';
+          message = 'Dữ liệu đã tồn tại (vi phạm ràng buộc unique)';
           break;
         case 'P2003':
           status = HttpStatus.BAD_REQUEST;
-          error = 'ForeignKeyViolation';
-          message = 'Invalid relation reference';
+          message = 'Tham chiếu quan hệ không hợp lệ';
           break;
         case 'P2025':
           status = HttpStatus.NOT_FOUND;
-          error = 'RecordNotFound';
-          message = 'Requested record was not found';
+          message = 'Không tìm thấy bản ghi';
           break;
         default:
-          status = HttpStatus.BAD_REQUEST;
-          error = `PrismaError_${exception.code}`;
-          message = exception.message;
+          message = 'Lỗi cơ sở dữ liệu';
       }
-    } else {
-      // Validation error
-      status = HttpStatus.BAD_REQUEST;
-      error = 'PrismaValidationError';
-      message = exception.message;
     }
 
     response.status(status).json({
       success: false,
-      statusCode: status,
-      error,
       message,
-      path: request.url,
-      timestamp: new Date().toISOString(),
+      data: null,
     });
   }
 }
-

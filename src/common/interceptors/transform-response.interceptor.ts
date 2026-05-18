@@ -7,34 +7,42 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-interface ResponseEnvelope<T = unknown> {
-  success: boolean;
-  data: T;
-  message?: string;
-  meta?: {
-    total?: number;
-    page?: number;
-    limit?: number;
-    [key: string]: unknown;
-  };
-}
-
 @Injectable()
 export class TransformResponseInterceptor implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<ResponseEnvelope> {
+  intercept(_context: ExecutionContext, next: CallHandler): Observable<unknown> {
     return next.handle().pipe(
       map((data: any) => {
-        // Avoid double-wrapping if controller already returns the envelope
         if (data && typeof data === 'object' && 'success' in data && 'data' in data) {
-          return data as ResponseEnvelope;
+          return data;
+        }
+
+        // Tách pagination ra meta nếu service trả { items, total, page, limit }
+        if (
+          data &&
+          typeof data === 'object' &&
+          Array.isArray(data.items) &&
+          typeof data.total === 'number'
+        ) {
+          const { items, total, page, limit } = data;
+          return {
+            success: true,
+            message: 'Thành công',
+            data: items,
+            meta: {
+              total,
+              page: page ?? 1,
+              limit: limit ?? items.length,
+              totalPages: limit ? Math.ceil(total / limit) : 1,
+            },
+          };
         }
 
         return {
           success: true,
+          message: 'Thành công',
           data,
-        } as ResponseEnvelope;
+        };
       }),
     );
   }
 }
-

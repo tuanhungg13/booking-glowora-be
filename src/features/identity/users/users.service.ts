@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   ConflictException,
@@ -8,6 +9,7 @@ import { PrismaService } from '../../../prisma/prisma.service';
 import { Prisma, UserStatus } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Injectable()
 export class UsersService {
@@ -89,6 +91,10 @@ export class UsersService {
     };
     if (dto.password) data.password = await bcrypt.hash(dto.password, 10);
     if (dto.roleAssignments !== undefined) {
+      const shopRolesCount = dto.roleAssignments.filter((a) => a.shopId).length;
+      if (shopRolesCount > 3) {
+        throw new BadRequestException('Tài khoản không thể có quá 3 vai trò cơ sở');
+      }
       data.userRoles = {
         deleteMany: {},
         ...(dto.roleAssignments.length
@@ -105,6 +111,15 @@ export class UsersService {
       where: { id },
       data,
       select: this.selectSafe(),
+    });
+  }
+
+  async updateProfile(userId: string, dto: UpdateProfileDto) {
+    await this.findOne(userId);
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: { fullName: dto.fullName, phone: dto.phone, avatarUrl: dto.avatarUrl },
+      select: { id: true, email: true, fullName: true, phone: true, avatarUrl: true, updatedAt: true },
     });
   }
 

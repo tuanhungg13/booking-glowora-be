@@ -67,6 +67,11 @@ const PERMISSIONS = [
   { code: 'VIEW_WORKING_HOUR', name: 'Xem giờ làm việc' },
   { code: 'UPDATE_WORKING_HOUR', name: 'Cập nhật giờ làm việc' },
   { code: 'DELETE_WORKING_HOUR', name: 'Xóa giờ làm việc' },
+  // Staff management
+  { code: 'INVITE_STAFF', name: 'Mời nhân viên' },
+  { code: 'VIEW_STAFF',   name: 'Xem nhân viên' },
+  { code: 'UPDATE_STAFF', name: 'Cập nhật nhân viên' },
+  { code: 'REMOVE_STAFF', name: 'Xóa nhân viên' },
   // Notifications
   { code: 'CREATE_NOTIFICATION', name: 'Tạo thông báo' },
   { code: 'VIEW_NOTIFICATION', name: 'Xem thông báo' },
@@ -102,6 +107,7 @@ const STAFF_PERMISSIONS = [
   'VIEW_STAFF_SCHEDULE', 'VIEW_STAFF_DAY_OFF', 'CREATE_STAFF_DAY_OFF',
   'VIEW_NOTIFICATION',
   'VIEW_ROLE',
+  'VIEW_STAFF',
 ];
 
 const SHOP_OWNER_PERMISSIONS = [
@@ -121,6 +127,7 @@ const SHOP_OWNER_PERMISSIONS = [
   'CREATE_WORKING_HOUR', 'VIEW_WORKING_HOUR', 'UPDATE_WORKING_HOUR', 'DELETE_WORKING_HOUR',
   'VIEW_NOTIFICATION', 'CREATE_NOTIFICATION',
   'CREATE_STORE', 'UPDATE_STORE',
+  'INVITE_STAFF', 'VIEW_STAFF', 'UPDATE_STAFF', 'REMOVE_STAFF',
 ];
 
 async function main() {

@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma, StoreStatus } from '@prisma/client';
+import { NotificationType, Prisma, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AdminStoreActionDto } from './dto/admin-store-action.dto';
 import { AdminStoreFilterDto } from './dto/store-filter.dto';
@@ -63,7 +63,7 @@ export class AdminStoresService {
       throw new BadRequestException('Admin cannot approve their own store');
     }
 
-    return this.prisma.store.update({
+    const updated = await this.prisma.store.update({
       where: { id },
       data: {
         status: StoreStatus.ACTIVE,
@@ -73,6 +73,18 @@ export class AdminStoresService {
       },
       include: adminStoreInclude,
     });
+
+    await this.prisma.notification.create({
+      data: {
+        userId: store.ownerId,
+        type: NotificationType.STORE_APPROVED,
+        title: 'Cơ sở được duyệt',
+        body: `Cơ sở "${store.name}" của bạn đã được duyệt và hiện đang hoạt động.`,
+        metadata: { storeId: id },
+      },
+    });
+
+    return updated;
   }
 
   async reject(id: string, dto: AdminStoreActionDto) {
@@ -85,7 +97,7 @@ export class AdminStoresService {
       throw new BadRequestException('Only pending or inactive stores can be rejected');
     }
 
-    return this.prisma.store.update({
+    const updated = await this.prisma.store.update({
       where: { id },
       data: {
         status: StoreStatus.INACTIVE,
@@ -93,6 +105,18 @@ export class AdminStoresService {
       },
       include: adminStoreInclude,
     });
+
+    await this.prisma.notification.create({
+      data: {
+        userId: store.ownerId,
+        type: NotificationType.STORE_REJECTED,
+        title: 'Cơ sở bị từ chối',
+        body: `Cơ sở "${store.name}" bị từ chối. Lý do: ${dto.reason.trim()}`,
+        metadata: { storeId: id },
+      },
+    });
+
+    return updated;
   }
 
   async lock(id: string, dto: AdminStoreActionDto) {
@@ -105,7 +129,7 @@ export class AdminStoresService {
       throw new BadRequestException('Only active stores can be locked');
     }
 
-    return this.prisma.store.update({
+    const updated = await this.prisma.store.update({
       where: { id },
       data: {
         status: StoreStatus.BANNED,
@@ -113,6 +137,18 @@ export class AdminStoresService {
       },
       include: adminStoreInclude,
     });
+
+    await this.prisma.notification.create({
+      data: {
+        userId: store.ownerId,
+        type: NotificationType.STORE_LOCKED,
+        title: 'Cơ sở bị khoá',
+        body: `Cơ sở "${store.name}" đã bị khoá. Lý do: ${dto.reason.trim()}`,
+        metadata: { storeId: id },
+      },
+    });
+
+    return updated;
   }
 
   async unlock(id: string) {

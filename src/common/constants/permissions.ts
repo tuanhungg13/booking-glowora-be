@@ -101,6 +101,14 @@ export const Permissions = {
     DELETE: 'DELETE_NOTIFICATION',
   },
 
+  // ─── Staff management ───
+  STAFF: {
+    INVITE: 'INVITE_STAFF',
+    VIEW:   'VIEW_STAFF',
+    UPDATE: 'UPDATE_STAFF',
+    REMOVE: 'REMOVE_STAFF',
+  },
+
   // ─── Store ───
   STORE: {
     CREATE: 'CREATE_STORE',

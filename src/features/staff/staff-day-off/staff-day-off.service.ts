@@ -1,37 +1,53 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateStaffDayOffDto } from './dto/create-staff-day-off.dto';
 import { UpdateStaffDayOffDto } from './dto/update-staff-day-off.dto';
+
+const dayOffInclude = {
+  staff: { include: { user: { select: { id: true, fullName: true, email: true } } } },
+} as const;
 
 @Injectable()
 export class StaffDayOffService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dto: CreateStaffDayOffDto) {
+  async create(storeId: string, staffId: string, dto: CreateStaffDayOffDto) {
+    const date = new Date(dto.date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (date < today) {
+      throw new BadRequestException('Day off date must be today or in the future');
+    }
+
+    const existing = await this.prisma.staffDayOff.findFirst({
+      where: { shopId: storeId, staffId, date },
+    });
+    if (existing) {
+      throw new BadRequestException('Day off already registered for this date');
+    }
+
     return this.prisma.staffDayOff.create({
-      data: {
-        shopId: dto.shopId,
-        staffId: dto.staffId,
-        date: new Date(dto.date),
-        reason: dto.reason,
-      },
-      include: { staff: { include: { user: { select: { id: true, fullName: true, email: true } } } } },
+      data: { shopId: storeId, staffId, date, reason: dto.reason },
+      include: dayOffInclude,
     });
   }
 
-  async findAll(params?: { shopId?: string; staffId?: string; from?: Date; to?: Date }) {
-    const where: Record<string, unknown> = {};
-    if (params?.shopId) where.shopId = params.shopId;
-    if (params?.staffId) where.staffId = params.staffId;
-    if (params?.from || params?.to) {
-      where.date = {};
-      if (params.from) (where.date as Record<string, Date>).gte = params.from;
-      if (params.to) (where.date as Record<string, Date>).lte = params.to;
-    }
+  async findAll(storeId: string, staffId: string, params?: { from?: Date; to?: Date }) {
     return this.prisma.staffDayOff.findMany({
-      where,
+      where: {
+        shopId: storeId,
+        staffId,
+        ...(params?.from || params?.to
+          ? {
+              date: {
+                ...(params.from && { gte: params.from }),
+                ...(params.to && { lte: params.to }),
+              },
+            }
+          : {}),
+      },
       orderBy: { date: 'asc' },
-      include: { staff: { include: { user: { select: { id: true, fullName: true, email: true } } } } },
+      include: dayOffInclude,
     });
   }
 
@@ -46,13 +62,21 @@ export class StaffDayOffService {
 
   async update(id: string, dto: UpdateStaffDayOffDto) {
     await this.findOne(id);
+    if (dto.date) {
+      const date = new Date(dto.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (date < today) {
+        throw new BadRequestException('Day off date must be today or in the future');
+      }
+    }
     return this.prisma.staffDayOff.update({
       where: { id },
       data: {
         date: dto.date ? new Date(dto.date) : undefined,
         reason: dto.reason,
       },
-      include: { staff: { include: { user: { select: { id: true, fullName: true, email: true } } } } },
+      include: dayOffInclude,
     });
   }
 

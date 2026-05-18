@@ -14,6 +14,7 @@ import { MessagingModule } from './features/messaging.module';
 import { StaffModule } from './features/staff.module';
 import { NotificationsModule } from './features/notifications/notifications/notifications.module';
 import { StoresModule } from './features/stores/stores.module';
+import { StoreStaffModule } from './features/stores/staff/store-staff.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { StoresModule } from './features/stores/stores.module';
     MessagingModule,
     StaffModule,
     StoresModule,
+    StoreStaffModule,
     NotificationsModule,
   ],
   controllers: [AppController],
