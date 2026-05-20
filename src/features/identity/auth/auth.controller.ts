@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Post, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -61,10 +61,13 @@ export class AuthController {
     return this.authService.getMe(user.id);
   }
 
-  @ApiOperation({ summary: 'Ma trận permissions của user hiện tại' })
+  @ApiOperation({ summary: 'Permissions của user trong context shop (bỏ qua x-shop-id nếu là SUPER_ADMIN)' })
   @ApiBearerAuth()
   @Get('getMatrix')
-  async getMatrix(@CurrentUser() user: CurrentUserPayload) {
-    return this.authService.getPermissionMatrix(user.id);
+  async getMatrix(
+    @CurrentUser() user: CurrentUserPayload,
+    @Headers('x-shop-id') shopId?: string,
+  ) {
+    return this.authService.getPermissionMatrix(user.id, shopId);
   }
 }

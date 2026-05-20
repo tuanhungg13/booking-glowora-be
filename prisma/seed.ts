@@ -1,8 +1,22 @@
 import 'dotenv/config';
-import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
-const prisma = new PrismaClient();
+import { PrismaClient } from '@prisma/client'
+import { PrismaMariaDb } from '@prisma/adapter-mariadb'
+
+const adapter = new PrismaMariaDb({
+  host: 'localhost',
+  port: 3306,
+  user: 'root',
+  password: 'gloworadev',
+  database: 'glowora_business',
+})
+
+const prisma = new PrismaClient({
+  adapter,
+})
+
+export default prisma
 
 // ─── Permission codes ─────────────────────────────────────────────────────────
 const PERMISSIONS = [
@@ -45,6 +59,7 @@ const PERMISSIONS = [
   { code: 'VIEW_REVIEW', name: 'Xem đánh giá' },
   { code: 'UPDATE_REVIEW', name: 'Cập nhật đánh giá' },
   { code: 'DELETE_REVIEW', name: 'Xóa đánh giá' },
+  { code: 'MANAGE_REVIEW', name: 'Quản lý đánh giá (ẩn/hiện)' },
   // Messaging
   { code: 'CREATE_CONVERSATION', name: 'Tạo hội thoại' },
   { code: 'VIEW_CONVERSATION', name: 'Xem hội thoại' },
@@ -69,7 +84,7 @@ const PERMISSIONS = [
   { code: 'DELETE_WORKING_HOUR', name: 'Xóa giờ làm việc' },
   // Staff management
   { code: 'INVITE_STAFF', name: 'Mời nhân viên' },
-  { code: 'VIEW_STAFF',   name: 'Xem nhân viên' },
+  { code: 'VIEW_STAFF', name: 'Xem nhân viên' },
   { code: 'UPDATE_STAFF', name: 'Cập nhật nhân viên' },
   { code: 'REMOVE_STAFF', name: 'Xóa nhân viên' },
   // Notifications
@@ -159,18 +174,18 @@ async function main() {
     });
     const role = existingRole
       ? await prisma.role.update({
-          where: { id: existingRole.id },
-          data: { name: r.name, description: r.description, isSystem: true },
-        })
+        where: { id: existingRole.id },
+        data: { name: r.name, description: r.description, isSystem: true },
+      })
       : await prisma.role.create({
-          data: {
-            code: r.code,
-            name: r.name,
-            description: r.description,
-            isSystem: true,
-            shopId: null,
-          },
-        });
+        data: {
+          code: r.code,
+          name: r.name,
+          description: r.description,
+          isSystem: true,
+          shopId: null,
+        },
+      });
     roles[r.code] = role.id;
   }
   console.log('✅ System roles seeded');

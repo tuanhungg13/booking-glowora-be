@@ -7,8 +7,9 @@ import {
 } from '@nestjs/common';
 import { AppointmentStatus, Prisma, ServiceStatus, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { NotificationsService } from '../../notifications/notifications/notifications.service';
+import { AppointmentFilterDto } from './dto/appointment-filter.dto';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
-import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 
 const appointmentInclude = {
   customer: { select: { id: true, fullName: true, email: true, phone: true } },
@@ -21,7 +22,10 @@ const appointmentInclude = {
 
 @Injectable()
 export class AppointmentsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   async create(dto: CreateAppointmentDto, customerId: string) {
     const isShopMember = await this.prisma.userRole.findFirst({
@@ -31,7 +35,7 @@ export class AppointmentsService {
       throw new ForbiddenException('Không thể đặt lịch tại cơ sở bạn đang làm việc');
     }
 
-    return this.prisma.$transaction(async (tx) => {
+    const appointment = await this.prisma.$transaction(async (tx) => {
       const store = await tx.store.findUnique({ where: { id: dto.storeId } });
       if (!store || store.status !== StoreStatus.ACTIVE) {
         throw new NotFoundException('Store not found or inactive');
@@ -46,9 +50,7 @@ export class AppointmentsService {
         const staffService = await tx.staffService.findFirst({
           where: { staffId: dto.staffId, serviceId: dto.serviceId },
         });
-        if (!staffService) {
-          throw new BadRequestException('Staff cannot perform this service');
-        }
+        if (!staffService) throw new BadRequestException('Staff cannot perform this service');
       }
 
       const scheduledAt = new Date(dto.scheduledAt);
@@ -73,6 +75,25 @@ export class AppointmentsService {
         include: appointmentInclude,
       });
     });
+
+    // Fire-and-forget notifications
+    const customer = appointment.customer;
+    const store = appointment.store;
+    const service = appointment.service;
+    this.notifications
+      .notifyAppointmentCreated({
+        appointmentId: appointment.id,
+        storeId: store.id,
+        storeName: store.name,
+        customerId: customer.id,
+        customerName: customer.fullName,
+        customerEmail: customer.email,
+        serviceName: service.name,
+        scheduledAt: appointment.scheduledAt,
+      })
+      .catch(() => undefined);
+
+    return appointment;
   }
 
   async findAll(params?: {
@@ -113,6 +134,56 @@ export class AppointmentsService {
     return this.findAll({ customerId, status });
   }
 
+  async findStoreAppointments(storeId: string, filter: AppointmentFilterDto) {
+    const page = filter.page ?? 1;
+    const limit = filter.limit ?? 20;
+    const skip = (page - 1) * limit;
+
+    const where: Prisma.AppointmentWhereInput = {
+      storeId,
+      ...(filter.status && { status: filter.status }),
+      ...(filter.staffId && { staffId: filter.staffId }),
+      ...((filter.from || filter.to) && {
+        scheduledAt: {
+          ...(filter.from && { gte: new Date(filter.from) }),
+          ...(filter.to && { lte: new Date(filter.to) }),
+        },
+      }),
+      ...(filter.search && {
+        customer: { fullName: { contains: filter.search } },
+      }),
+    };
+
+    const [items, total] = await Promise.all([
+      this.prisma.appointment.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { scheduledAt: 'desc' },
+        include: appointmentInclude,
+      }),
+      this.prisma.appointment.count({ where }),
+    ]);
+
+    return { items, total, page, limit };
+  }
+
+  async findCalendar(storeId: string, month: string) {
+    // month = "YYYY-MM"
+    const [y, m] = month.split('-').map(Number);
+    const start = new Date(Date.UTC(y, m - 1, 1));
+    const end = new Date(Date.UTC(y, m, 1)); // exclusive start of next month
+
+    return this.prisma.appointment.findMany({
+      where: {
+        storeId,
+        scheduledAt: { gte: start, lt: end },
+      },
+      orderBy: { scheduledAt: 'asc' },
+      include: appointmentInclude,
+    });
+  }
+
   async findOne(id: string) {
     const appointment = await this.prisma.appointment.findUnique({
       where: { id },
@@ -122,70 +193,105 @@ export class AppointmentsService {
     return appointment;
   }
 
-  async update(id: string, dto: UpdateAppointmentDto) {
-    await this.findOne(id);
-    return this.prisma.appointment.update({
-      where: { id },
-      data: {
-        staffId: dto.staffId,
-        scheduledAt: dto.scheduledAt ? new Date(dto.scheduledAt) : undefined,
-        status: dto.status,
-        notes: dto.notes,
-        cancellationReason: dto.cancellationReason,
-      },
-      include: appointmentInclude,
-    });
-  }
-
-  async confirm(id: string) {
+  async confirm(id: string, userId: string) {
     const appointment = await this.findOne(id);
     if (appointment.status !== AppointmentStatus.PENDING) {
       throw new BadRequestException('Only pending appointments can be confirmed');
     }
-    return this.prisma.appointment.update({
+    await this.assertShopMember(userId, appointment.storeId);
+
+    const updated = await this.prisma.appointment.update({
       where: { id },
       data: { status: AppointmentStatus.CONFIRMED, confirmedAt: new Date() },
       include: appointmentInclude,
     });
+
+    this.notifications
+      .notifyAppointmentConfirmed({
+        appointmentId: id,
+        customerId: updated.customer.id,
+        customerEmail: updated.customer.email,
+        storeName: updated.store.name,
+        serviceName: updated.service.name,
+        scheduledAt: updated.scheduledAt,
+      })
+      .catch(() => undefined);
+
+    return updated;
   }
 
-  async reject(id: string, reason?: string) {
+  async reject(id: string, userId: string, reason: string) {
     const appointment = await this.findOne(id);
     if (appointment.status !== AppointmentStatus.PENDING) {
       throw new BadRequestException('Only pending appointments can be rejected');
     }
-    return this.prisma.appointment.update({
+    await this.assertShopMember(userId, appointment.storeId);
+
+    const updated = await this.prisma.appointment.update({
       where: { id },
       data: { status: AppointmentStatus.REJECTED, cancellationReason: reason },
       include: appointmentInclude,
     });
+
+    this.notifications
+      .notifyAppointmentRejected({
+        appointmentId: id,
+        customerId: updated.customer.id,
+        customerEmail: updated.customer.email,
+        storeName: updated.store.name,
+        serviceName: updated.service.name,
+        reason,
+      })
+      .catch(() => undefined);
+
+    return updated;
   }
 
-  async complete(id: string) {
+  async complete(id: string, userId: string) {
     const appointment = await this.findOne(id);
     if (appointment.status !== AppointmentStatus.CONFIRMED) {
       throw new BadRequestException('Only confirmed appointments can be completed');
     }
-    return this.prisma.appointment.update({
+    await this.assertShopMember(userId, appointment.storeId);
+
+    const updated = await this.prisma.appointment.update({
       where: { id },
       data: { status: AppointmentStatus.COMPLETED, completedAt: new Date() },
       include: appointmentInclude,
     });
+
+    this.notifications
+      .notifyAppointmentCompleted({
+        appointmentId: id,
+        customerId: updated.customer.id,
+        customerEmail: updated.customer.email,
+        storeName: updated.store.name,
+        serviceName: updated.service.name,
+      })
+      .catch(() => undefined);
+
+    return updated;
   }
 
-  async cancel(id: string, reason?: string) {
+  async cancel(id: string, userId: string, reason?: string) {
     const appointment = await this.findOne(id);
+
+    if (appointment.customerId !== userId) {
+      throw new ForbiddenException('Bạn không phải chủ lịch hẹn này');
+    }
     if (
       appointment.status !== AppointmentStatus.PENDING &&
       appointment.status !== AppointmentStatus.CONFIRMED
     ) {
       throw new BadRequestException('Only pending or confirmed appointments can be cancelled');
     }
+
     const deadline = appointment.scheduledAt.getTime() - appointment.store.cancelBeforeHours * 60 * 60 * 1000;
     if (Date.now() > deadline) {
       throw new BadRequestException(`Chỉ được hủy trước ${appointment.store.cancelBeforeHours} giờ`);
     }
-    return this.prisma.appointment.update({
+
+    const updated = await this.prisma.appointment.update({
       where: { id },
       data: {
         status: AppointmentStatus.CANCELLED,
@@ -194,12 +300,34 @@ export class AppointmentsService {
       },
       include: appointmentInclude,
     });
+
+    this.notifications
+      .notifyAppointmentCancelled({
+        appointmentId: id,
+        storeId: updated.store.id,
+        storeName: updated.store.name,
+        customerId: updated.customer.id,
+        customerName: updated.customer.fullName,
+        customerEmail: updated.customer.email,
+        serviceName: updated.service.name,
+        reason,
+      })
+      .catch(() => undefined);
+
+    return updated;
   }
 
   async remove(id: string) {
     await this.findOne(id);
     await this.prisma.appointment.delete({ where: { id } });
     return { deleted: true };
+  }
+
+  private async assertShopMember(userId: string, storeId: string) {
+    const userRole = await this.prisma.userRole.findFirst({
+      where: { userId, shopId: storeId },
+    });
+    if (!userRole) throw new ForbiddenException('Bạn không phải nhân viên của cơ sở này');
   }
 
   private async pickAvailableStaff(
@@ -251,9 +379,9 @@ export class AppointmentsService {
       select: { scheduledAt: true, duration: true },
     });
 
-    return appointments.find((appointment) => {
-      const existingEnd = new Date(appointment.scheduledAt.getTime() + appointment.duration * 60 * 1000);
-      return scheduledAt < existingEnd && appointment.scheduledAt < candidateEnd;
+    return appointments.find((apt) => {
+      const aptEnd = new Date(apt.scheduledAt.getTime() + apt.duration * 60 * 1000);
+      return scheduledAt < aptEnd && apt.scheduledAt < candidateEnd;
     });
   }
 }

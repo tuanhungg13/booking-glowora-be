@@ -1,59 +1,69 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
-  Patch,
   Post,
   Query,
+  Req,
+  Res,
 } from '@nestjs/common';
-import { PaymentsService } from './payments.service';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import type { Request, Response } from 'express';
+import { Public } from '../../../common/decorators/public.decorator';
+import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
-import { PaymentStatus } from '@prisma/client';
+import { PaymentsService } from './payments.service';
+import { CreateVnpayPaymentDto } from './dto/create-vnpay-payment.dto';
 
-@Controller('payments')
+@ApiTags('payments')
+@Controller('')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  @Post()
+  @ApiOperation({ summary: 'Tạo URL thanh toán VNPAY' })
+  @ApiBearerAuth()
+  @Post('payments/vnpay/create')
   @RequirePermissions(Permissions.PAYMENT.CREATE)
-  create(@Body() dto: CreatePaymentDto) {
-    return this.paymentsService.create(dto);
-  }
-
-  @Get()
-  @RequirePermissions(Permissions.PAYMENT.VIEW)
-  findAll(
-    @Query('status') status?: PaymentStatus,
-    @Query('skip') skip?: string,
-    @Query('take') take?: string,
+  createVnpay(
+    @Body() dto: CreateVnpayPaymentDto,
+    @CurrentUser() user: CurrentUserPayload,
+    @Req() req: Request,
   ) {
-    return this.paymentsService.findAll({
-      status,
-      skip: skip ? Number(skip) : undefined,
-      take: take ? Number(take) : undefined,
-    });
+    return this.paymentsService.createVnpayPayment(dto.appointmentId, user.id, req);
   }
 
-  @Get(':id')
-  @RequirePermissions(Permissions.PAYMENT.VIEW)
-  findOne(@Param('id') id: string) {
-    return this.paymentsService.findOne(id);
+  @ApiOperation({ summary: 'VNPAY return URL — browser redirect sau thanh toán' })
+  @Public()
+  @Get('payments/vnpay/return')
+  async vnpayReturn(@Query() query: Record<string, string>, @Res() res: Response) {
+    const redirectUrl = await this.paymentsService.handleReturn(query);
+    return res.redirect(redirectUrl);
   }
 
-  @Patch(':id')
-  @RequirePermissions(Permissions.PAYMENT.UPDATE)
-  update(@Param('id') id: string, @Body() dto: UpdatePaymentDto) {
-    return this.paymentsService.update(id, dto);
+  @ApiOperation({ summary: 'VNPAY IPN — webhook server-to-server' })
+  @Public()
+  @Post('payments/vnpay/ipn')
+  vnpayIpn(@Query() query: Record<string, string>, @Body() body: Record<string, string>) {
+    return this.paymentsService.handleIpn({ ...query, ...body });
   }
 
-  @Delete(':id')
-  @RequirePermissions(Permissions.PAYMENT.DELETE)
-  remove(@Param('id') id: string) {
-    return this.paymentsService.remove(id);
+  @ApiOperation({ summary: 'Lịch sử thanh toán của tôi' })
+  @ApiBearerAuth()
+  @Get('payments/my')
+  findMy(@CurrentUser() user: CurrentUserPayload) {
+    return this.paymentsService.findMyPayments(user.id);
+  }
+
+  @ApiOperation({ summary: 'Trạng thái thanh toán của một lịch hẹn' })
+  @ApiBearerAuth()
+  @Get('appointments/:id/payment')
+  findByAppointment(
+    @Param('id') id: string,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return this.paymentsService.findPaymentByAppointment(id, user.id);
   }
 }

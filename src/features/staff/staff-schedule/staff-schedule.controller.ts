@@ -15,16 +15,17 @@ import { UpdateStaffScheduleDto } from './dto/update-staff-schedule.dto';
 import { BulkUpsertScheduleDto } from './dto/bulk-upsert-schedule.dto';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
+import { ShopId } from '../../../common/decorators/shop-id.decorator';
 import { DayOfWeek } from '@prisma/client';
 
-@Controller('stores/:storeId/staff/:staffId/schedules')
+@Controller('staff/:staffId/schedules')
 export class StaffScheduleController {
   constructor(private readonly staffScheduleService: StaffScheduleService) {}
 
   @Post()
   @RequirePermissions(Permissions.STAFF_SCHEDULE.CREATE)
   create(
-    @Param('storeId') storeId: string,
+    @ShopId() storeId: string,
     @Param('staffId') staffId: string,
     @Body() dto: CreateStaffScheduleDto,
   ) {
@@ -34,7 +35,7 @@ export class StaffScheduleController {
   @Put()
   @RequirePermissions(Permissions.STAFF_SCHEDULE.UPDATE)
   bulkUpsert(
-    @Param('storeId') storeId: string,
+    @ShopId() storeId: string,
     @Param('staffId') staffId: string,
     @Body() dto: BulkUpsertScheduleDto,
   ) {
@@ -44,7 +45,7 @@ export class StaffScheduleController {
   @Get()
   @RequirePermissions(Permissions.STAFF_SCHEDULE.VIEW)
   findAll(
-    @Param('storeId') storeId: string,
+    @ShopId() storeId: string,
     @Param('staffId') staffId: string,
     @Query('dayOfWeek') dayOfWeek?: DayOfWeek,
   ) {

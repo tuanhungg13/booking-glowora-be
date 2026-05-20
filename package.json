@@ -16,6 +16,7 @@
     "test": "jest",
     "test:phase1": "jest features/identity/auth",
     "test:phase2": "jest features/stores",
+    "test:phase5": "jest features/booking/payments features/booking/reviews",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
@@ -28,6 +29,7 @@
     "seed": "ts-node -r tsconfig-paths/register prisma/seed.ts"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.3",
     "@nestjs/core": "^11.0.1",
@@ -47,6 +49,7 @@
     "ioredis": "^5.10.0",
     "mariadb": "^3.5.2",
     "multer": "^2.1.1",
+    "node-telegram-bot-api": "^0.67.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
@@ -67,6 +70,7 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.10.7",
+    "@types/node-telegram-bot-api": "^0.64.14",
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
     "@types/supertest": "^6.0.2",

@@ -116,6 +116,17 @@ enum LogType {
   APPOINTMENT_CANCELLED
 }
 
+enum ConversationMode {
+  BOT
+  HUMAN
+}
+
+enum SenderType {
+  CUSTOMER
+  STAFF
+  BOT
+}
+
 // =============================================================================
 // RBAC: Role, Permission, RolePermission, UserRole
 // =============================================================================
@@ -297,18 +308,21 @@ model Staff {
   bio          String?     @db.Text
   rating       Decimal     @default(0.00) @db.Decimal(3, 2)
   totalReviews Int         @default(0) @map("total_reviews")
-  status       StaffStatus @default(ACTIVE)
-  createdAt    DateTime    @default(now()) @map("created_at")
-  updatedAt    DateTime    @updatedAt @map("updated_at")
+  status            StaffStatus @default(ACTIVE)
+  telegramChatId    String?     @map("telegram_chat_id") @db.VarChar(50)
+  telegramLinkToken String?     @map("telegram_link_token") @db.VarChar(100)
+  createdAt         DateTime    @default(now()) @map("created_at")
+  updatedAt         DateTime    @updatedAt @map("updated_at")
 
-  user         User            @relation(fields: [userId], references: [id])
-  store        Store           @relation(fields: [storeId], references: [id])
-  appointments Appointment[]
-  reviews      Review[]        @relation("StaffReviews")
-  schedules    StaffSchedule[]
-  dayOffs      StaffDayOff[]
-  services     StaffService[]
-  invites      StaffInvite[]
+  user                  User             @relation(fields: [userId], references: [id])
+  store                 Store            @relation(fields: [storeId], references: [id])
+  appointments          Appointment[]
+  reviews               Review[]         @relation("StaffReviews")
+  schedules             StaffSchedule[]
+  dayOffs               StaffDayOff[]
+  services              StaffService[]
+  invites               StaffInvite[]
+  assignedConversations Conversation[]   @relation("AssignedConversations")
 
   @@index([storeId, status])
   @@map("staff")
@@ -615,17 +629,20 @@ model Notification {
 // =============================================================================
 
 model Conversation {
-  id              String    @id @default(uuid()) @db.Char(36)
-  customerId      String    @map("customer_id") @db.Char(36)
-  storeId         String    @map("store_id") @db.Char(36)
-  lastMessageAt   DateTime? @map("last_message_at")
-  lastMessageBody String?   @map("last_message_body") @db.VarChar(200)
-  createdAt       DateTime  @default(now()) @map("created_at")
-  updatedAt       DateTime  @updatedAt @map("updated_at")
+  id              String           @id @default(uuid()) @db.Char(36)
+  customerId      String           @map("customer_id") @db.Char(36)
+  storeId         String           @map("store_id") @db.Char(36)
+  mode            ConversationMode @default(BOT)
+  assignedStaffId String?          @map("assigned_staff_id") @db.Char(36)
+  lastMessageAt   DateTime?        @map("last_message_at")
+  lastMessageBody String?          @map("last_message_body") @db.VarChar(200)
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
 
-  customer User      @relation("CustomerConversations", fields: [customerId], references: [id])
-  store    Store     @relation(fields: [storeId], references: [id])
-  messages Message[]
+  customer       User      @relation("CustomerConversations", fields: [customerId], references: [id])
+  store          Store     @relation(fields: [storeId], references: [id])
+  assignedStaff  Staff?    @relation("AssignedConversations", fields: [assignedStaffId], references: [id])
+  messages       Message[]
 
   @@unique([customerId, storeId])
   @@index([customerId, lastMessageAt])
@@ -638,13 +655,14 @@ model Conversation {
 // =============================================================================
 
 model Message {
-  id             String    @id @default(uuid()) @db.Char(36)
-  conversationId String    @map("conversation_id") @db.Char(36)
-  senderId       String    @map("sender_id") @db.Char(36)
-  content        String    @db.Text
-  isRead         Boolean   @default(false) @map("is_read")
-  readAt         DateTime? @map("read_at")
-  createdAt      DateTime  @default(now()) @map("created_at")
+  id             String     @id @default(uuid()) @db.Char(36)
+  conversationId String     @map("conversation_id") @db.Char(36)
+  senderId       String     @map("sender_id") @db.Char(36)
+  senderType     SenderType @default(CUSTOMER) @map("sender_type")
+  content        String     @db.Text
+  isRead         Boolean    @default(false) @map("is_read")
+  readAt         DateTime?  @map("read_at")
+  createdAt      DateTime   @default(now()) @map("created_at")
 
   conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   sender       User         @relation("SentMessages", fields: [senderId], references: [id])

@@ -10,7 +10,7 @@ services:
     container_name: glowora_mysql
     restart: unless-stopped
     env_file:
-      - .env.local
+      - .env
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-gloworadev}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-glowora_business}
@@ -35,7 +35,7 @@ services:
     container_name: glowora_redis
     restart: unless-stopped
     env_file:
-      - .env.local
+      - .env
     command: redis-server --requirepass ${REDIS_PASSWORD:-redis123} --appendonly yes
     # Ports exposed to localhost only (for redis-cli, development tools)
     ports:

@@ -4,27 +4,28 @@ import { CurrentUser, type CurrentUserPayload } from '../../../common/decorators
 import { Public } from '../../../common/decorators/public.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
+import { ShopId } from '../../../common/decorators/shop-id.decorator';
 import { StoreStaffService } from './store-staff.service';
 import { InviteStaffDto } from './dto/invite-staff.dto';
 import { AcceptInviteDto } from './dto/accept-invite.dto';
 import { UpdateStaffDto } from './dto/update-staff.dto';
 
 @ApiTags('stores/staff')
-@Controller('stores/:storeId/staff')
+@Controller('store-staff')
 export class StoreStaffController {
   constructor(private readonly storeStaffService: StoreStaffService) {}
 
   @ApiOperation({ summary: 'List all staff of a store' })
   @Public()
   @Get()
-  findAll(@Param('storeId') storeId: string) {
+  findAll(@ShopId() storeId: string) {
     return this.storeStaffService.findAll(storeId);
   }
 
   @ApiOperation({ summary: 'Get staff detail' })
   @Public()
   @Get(':staffId')
-  findOne(@Param('storeId') storeId: string, @Param('staffId') staffId: string) {
+  findOne(@ShopId() storeId: string, @Param('staffId') staffId: string) {
     return this.storeStaffService.findOne(storeId, staffId);
   }
 
@@ -33,7 +34,7 @@ export class StoreStaffController {
   @RequirePermissions(Permissions.STAFF.INVITE)
   @Post('invite')
   invite(
-    @Param('storeId') storeId: string,
+    @ShopId() storeId: string,
     @Body() dto: InviteStaffDto,
     @CurrentUser() user: CurrentUserPayload,
   ) {
@@ -45,7 +46,7 @@ export class StoreStaffController {
   @RequirePermissions(Permissions.STAFF.UPDATE)
   @Patch(':staffId')
   update(
-    @Param('storeId') storeId: string,
+    @ShopId() storeId: string,
     @Param('staffId') staffId: string,
     @Body() dto: UpdateStaffDto,
     @CurrentUser() user: CurrentUserPayload,
@@ -58,11 +59,21 @@ export class StoreStaffController {
   @RequirePermissions(Permissions.STAFF.REMOVE)
   @Delete(':staffId')
   remove(
-    @Param('storeId') storeId: string,
+    @ShopId() storeId: string,
     @Param('staffId') staffId: string,
     @CurrentUser() user: CurrentUserPayload,
   ) {
     return this.storeStaffService.remove(storeId, user.id, staffId);
+  }
+
+  @ApiOperation({ summary: 'Generate Telegram deep link to link staff account' })
+  @ApiBearerAuth()
+  @Post('me/telegram-token')
+  generateTelegramToken(
+    @ShopId() storeId: string,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return this.storeStaffService.generateTelegramToken(storeId, user.id);
   }
 }
 

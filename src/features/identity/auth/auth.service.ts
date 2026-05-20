@@ -164,65 +164,36 @@ export class AuthService {
     };
   }
 
-  async getPermissionMatrix(userId: string) {
-    const cacheKey = `user:permissions:${userId}`;
-    const cached = await this.redis.get(cacheKey);
-    const grantedCodes = new Set<string>(cached ? JSON.parse(cached) : []);
-
-    const userRoles = await this.prisma.user.findUnique({
-      where: { id: userId },
+  async getPermissionMatrix(userId: string, shopId?: string) {
+    // shopId=undefined → tìm system role (shopId IS NULL)
+    // shopId có giá trị → tìm shop-specific role
+    const userRole = await this.prisma.userRole.findFirst({
+      where: { userId, shopId: shopId ?? null },
       select: {
-        userRoles: {
+        roleId: true,
+        shopId: true,
+        role: {
           select: {
-            shopId: true,
-            role: { select: { id: true, name: true, code: true } },
+            permissions: { select: { permission: { select: { code: true } } } },
           },
         },
       },
     });
 
-    if (!userRoles) throw new NotFoundException('User not found');
-
-    if (cached === null) {
-      const userWithPerms = await this.prisma.user.findUnique({
-        where: { id: userId },
-        select: {
-          userRoles: {
-            select: {
-              role: {
-                select: {
-                  permissions: { select: { permission: { select: { code: true } } } },
-                },
-              },
-            },
-          },
-        },
-      });
-
-      if (userWithPerms) {
-        for (const { role } of userWithPerms.userRoles) {
-          for (const { permission } of role.permissions) {
-            grantedCodes.add(permission.code);
-          }
-        }
-      }
-      await this.redis.set(cacheKey, JSON.stringify([...grantedCodes]), 300);
+    if (!userRole) {
+      return { roleId: null, shopId: shopId ?? null, grantedPermissionCodes: [] };
     }
 
+    const granted = new Set(userRole.role.permissions.map((rp) => rp.permission.code));
+
     const permissionMatrix = ALL_PERMISSION_CODES.reduce<Record<string, boolean>>((acc, code) => {
-      acc[code] = grantedCodes.has(code);
+      acc[code] = granted.has(code);
       return acc;
     }, {});
 
-    const roles = userRoles.userRoles.map((ur) => ({
-      userRole: { shopId: ur.shopId, roleId: ur.role.id },
-      role: { code: ur.role.code, name: ur.role.name },
-    }));
-
     return {
-      userId,
-      roles,
-      grantedPermissionCodes: [...grantedCodes],
+      roleId: userRole.roleId,
+      shopId: userRole.shopId,
       permissionMatrix,
     };
   }

@@ -1,8 +1,19 @@
-import { IsInt, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
+import {
+  IsArray,
+  IsInt,
+  IsOptional,
+  IsString,
+  IsUrl,
+  IsUUID,
+  Max,
+  MaxLength,
+  Min,
+} from 'class-validator';
 
 export class CreateReviewDto {
+  @IsOptional()
   @IsUUID()
-  appointmentId!: string;
+  appointmentId?: string;
 
   @IsInt()
   @Min(1)
@@ -11,5 +22,11 @@ export class CreateReviewDto {
 
   @IsOptional()
   @IsString()
+  @MaxLength(1000)
   comment?: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsUrl({}, { each: true })
+  imageUrls?: string[];
 }

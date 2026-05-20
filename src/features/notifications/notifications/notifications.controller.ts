@@ -60,9 +60,19 @@ export class NotificationsController {
     });
   }
 
+  @Get('me/unread-count')
+  getUnreadCount(@CurrentUser() user: CurrentUserPayload) {
+    return this.notificationsService.getUnreadCount(user.id);
+  }
+
   @Patch('me/read-all')
   markAllAsRead(@CurrentUser() user: CurrentUserPayload) {
     return this.notificationsService.markAllAsRead(user.id);
+  }
+
+  @Patch(':id/read')
+  markOneAsRead(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
+    return this.notificationsService.markOneAsRead(id, user.id);
   }
 
   @Get(':id')

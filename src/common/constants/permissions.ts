@@ -57,6 +57,7 @@ export const Permissions = {
     VIEW: 'VIEW_REVIEW',
     UPDATE: 'UPDATE_REVIEW',
     DELETE: 'DELETE_REVIEW',
+    MANAGE: 'MANAGE_REVIEW',
   },
 
   // ─── Messaging ───

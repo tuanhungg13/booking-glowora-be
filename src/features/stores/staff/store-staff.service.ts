@@ -195,4 +195,20 @@ export class StoreStaffService {
     await this.permissionCache.invalidateUser(staff.userId);
     return { removed: true };
   }
+
+  async generateTelegramToken(storeId: string, userId: string) {
+    const staff = await this.prisma.staff.findFirst({
+      where: { userId, storeId, status: StaffStatus.ACTIVE },
+    });
+    if (!staff) throw new NotFoundException('Bạn không phải nhân viên của cơ sở này');
+
+    const token = randomBytes(16).toString('hex');
+    await this.prisma.staff.update({
+      where: { id: staff.id },
+      data: { telegramLinkToken: token },
+    });
+
+    const botName = process.env.TELEGRAM_BOT_NAME ?? 'GloworaBot';
+    return { linkUrl: `https://t.me/${botName}?start=${token}`, token };
+  }
 }

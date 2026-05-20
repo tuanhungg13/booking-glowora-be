@@ -15,6 +15,9 @@ import { StaffModule } from './features/staff.module';
 import { NotificationsModule } from './features/notifications/notifications/notifications.module';
 import { StoresModule } from './features/stores/stores.module';
 import { StoreStaffModule } from './features/stores/staff/store-staff.module';
+import { AiModule } from './ai/ai.module';
+import { TelegramModule } from './telegram/telegram.module';
+import { GatewaysModule } from './gateways/gateways.module';
 
 @Module({
   imports: [
@@ -29,6 +32,9 @@ import { StoreStaffModule } from './features/stores/staff/store-staff.module';
     StoresModule,
     StoreStaffModule,
     NotificationsModule,
+    AiModule,
+    TelegramModule,
+    GatewaysModule,
   ],
   controllers: [AppController],
   providers: [

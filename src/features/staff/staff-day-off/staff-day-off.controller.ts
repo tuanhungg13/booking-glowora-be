@@ -13,15 +13,16 @@ import { CreateStaffDayOffDto } from './dto/create-staff-day-off.dto';
 import { UpdateStaffDayOffDto } from './dto/update-staff-day-off.dto';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
+import { ShopId } from '../../../common/decorators/shop-id.decorator';
 
-@Controller('stores/:storeId/staff/:staffId/day-off')
+@Controller('staff/:staffId/day-off')
 export class StaffDayOffController {
   constructor(private readonly staffDayOffService: StaffDayOffService) {}
 
   @Post()
   @RequirePermissions(Permissions.STAFF_DAY_OFF.CREATE)
   create(
-    @Param('storeId') storeId: string,
+    @ShopId() storeId: string,
     @Param('staffId') staffId: string,
     @Body() dto: CreateStaffDayOffDto,
   ) {
@@ -31,7 +32,7 @@ export class StaffDayOffController {
   @Get()
   @RequirePermissions(Permissions.STAFF_DAY_OFF.VIEW)
   findAll(
-    @Param('storeId') storeId: string,
+    @ShopId() storeId: string,
     @Param('staffId') staffId: string,
     @Query('from') from?: string,
     @Query('to') to?: string,
