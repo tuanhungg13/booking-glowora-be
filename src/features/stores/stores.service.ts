@@ -255,6 +255,15 @@ export class StoresService {
     });
   }
 
+  async linkTelegramGroup(storeId: string, ownerId: string, telegramGroupId: string | null) {
+    await this.checkOwnership(storeId, ownerId);
+    return this.prisma.store.update({
+      where: { id: storeId },
+      data: { telegramGroupId },
+      select: { id: true, name: true, telegramGroupId: true },
+    });
+  }
+
   async checkOwnership(storeId: string, userId: string) {
     const store = await this.prisma.store.findUnique({ where: { id: storeId } });
     if (!store) throw new NotFoundException('Store not found');

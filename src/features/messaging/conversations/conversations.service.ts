@@ -14,6 +14,8 @@ import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 
 const TELEGRAM_ACTIVE_TTL = 7200; // 2 hours
+const TOPIC_KEY = (groupId: string, topicId: number) =>
+  `telegram:topic:${groupId}:${topicId}`;
 const HISTORY_LIMIT = 10;
 
 const conversationInclude = {
@@ -104,6 +106,7 @@ export class ConversationsService {
       where: { id: conversationId },
       include: {
         customer: { select: { id: true, fullName: true } },
+        store: { select: { telegramGroupId: true } },
         assignedStaff: { select: { telegramChatId: true } },
       },
     });
@@ -127,10 +130,7 @@ export class ConversationsService {
     if (conversation.mode === ConversationMode.BOT) {
       await this.handleBotReply(conversation, content, emitFn);
     } else {
-      const chatId = conversation.assignedStaff?.telegramChatId;
-      if (chatId) {
-        await this.telegram.sendNewMessage(chatId, conversation.customer.fullName, content);
-      }
+      await this.forwardToStaff(conversation, content);
     }
   }
 
@@ -164,7 +164,7 @@ export class ConversationsService {
       where: { id: conversationId },
       include: {
         customer: { select: { id: true, fullName: true } },
-        store: { select: { id: true } },
+        store: { select: { id: true, telegramGroupId: true } },
         messages: {
           orderBy: { createdAt: 'desc' },
           take: 3,
@@ -174,6 +174,39 @@ export class ConversationsService {
     });
     if (!conversation || conversation.mode === ConversationMode.HUMAN) return null;
 
+    const lastMessages = [...conversation.messages].reverse();
+    const groupId = conversation.store.telegramGroupId;
+
+    if (groupId) {
+      // Group mode: tạo topic mới cho conversation này
+      const topicName = `${conversation.customer.fullName} — ${new Date().toLocaleDateString('vi-VN')}`;
+      const topicId = await this.telegram.createGroupTopic(groupId, topicName);
+
+      const updated = await this.prisma.conversation.update({
+        where: { id: conversationId },
+        data: {
+          mode: ConversationMode.HUMAN,
+          telegramTopicId: topicId,
+        },
+      });
+
+      if (topicId) {
+        const preview = lastMessages
+          .map((m) => `${m.senderType === 'BOT' ? '🤖' : '👤'} ${m.content}`)
+          .join('\n');
+        const alertText =
+          `🔔 *Khách hàng cần tư vấn trực tiếp*\n\n` +
+          `👤 Khách: *${conversation.customer.fullName}*\n\n` +
+          (preview ? `📋 Lịch sử:\n${preview}\n\n` : '') +
+          `💬 Reply trong topic này để trả lời khách.`;
+        await this.telegram.sendToGroupTopic(groupId, topicId, alertText);
+        await this.redis.set(TOPIC_KEY(groupId, topicId), conversationId, TELEGRAM_ACTIVE_TTL);
+      }
+
+      return updated;
+    }
+
+    // Fallback: DM tới staff cá nhân
     const ownerStaff = await this.prisma.staff.findFirst({
       where: { storeId: conversation.store.id, status: 'ACTIVE', telegramChatId: { not: null } },
       select: { id: true, telegramChatId: true },
@@ -185,7 +218,6 @@ export class ConversationsService {
     });
 
     if (ownerStaff?.telegramChatId) {
-      const lastMessages = [...conversation.messages].reverse();
       await this.telegram.sendEscalationAlert(
         ownerStaff.telegramChatId,
         conversation.customer.fullName,
@@ -210,6 +242,30 @@ export class ConversationsService {
   }
 
   // ─── Private helpers ───────────────────────────────────────────────────────
+
+  private async forwardToStaff(
+    conversation: {
+      id: string;
+      telegramTopicId?: number | null;
+      store: { telegramGroupId: string | null };
+      assignedStaff: { telegramChatId: string | null } | null;
+      customer: { fullName: string };
+    },
+    content: string,
+  ) {
+    const groupId = conversation.store.telegramGroupId;
+    const topicId = conversation.telegramTopicId;
+
+    if (groupId && topicId) {
+      const text = `💬 *${conversation.customer.fullName}*:\n${content}`;
+      await this.telegram.sendToGroupTopic(groupId, topicId, text);
+    } else {
+      const chatId = conversation.assignedStaff?.telegramChatId;
+      if (chatId) {
+        await this.telegram.sendNewMessage(chatId, conversation.customer.fullName, content);
+      }
+    }
+  }
 
   private async handleBotReply(
     conversation: { id: string; storeId: string; customerId: string },

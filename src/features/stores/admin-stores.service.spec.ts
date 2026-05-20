@@ -14,6 +14,9 @@ describe('AdminStoresService - Phase 2 approval flow', () => {
         findUnique: jest.fn(),
         update: jest.fn(),
       },
+      notification: {
+        create: jest.fn().mockResolvedValue({}),
+      },
       $transaction: jest.fn(async (input: any) => Promise.all(input)),
     };
 

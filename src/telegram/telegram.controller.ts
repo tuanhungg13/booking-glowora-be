@@ -28,22 +28,57 @@ export class TelegramController {
     const message = update?.message;
     if (!message?.text) return { ok: true };
 
-    const chatId = String(message.chat.id);
     const text: string = message.text;
+    const threadId: number | undefined = message.message_thread_id;
 
+    // /start <token> — link staff Telegram account (chỉ xảy ra trong DM)
     if (text.startsWith('/start ')) {
       const token = text.split(' ')[1]?.trim();
-      if (token) await this.handleLinkToken(chatId, token);
+      if (token) await this.handleLinkToken(String(message.chat.id), token);
       return { ok: true };
     }
 
+    if (threadId) {
+      // Reply trong group topic
+      await this.handleGroupTopicReply(message, threadId, text);
+    } else {
+      // DM từ staff (fallback mode)
+      await this.handleDmReply(message, text);
+    }
+
+    return { ok: true };
+  }
+
+  // ─── Group topic reply ─────────────────────────────────────────────────────
+
+  private async handleGroupTopicReply(message: any, threadId: number, text: string) {
+    const groupId = String(message.chat.id);
+    const senderChatId = String(message.from.id); // trong group, from.id == chatId của DM
+
+    const conversationId = await this.redis.get(`telegram:topic:${groupId}:${threadId}`);
+    if (!conversationId) return;
+
+    try {
+      const msg = await this.conversations.handleStaffReply(conversationId, senderChatId, text);
+      if (msg) {
+        this.chatGateway.emitToConversation(conversationId, 'message_received', msg);
+      }
+    } catch (err) {
+      this.logger.error('Failed to handle group topic reply', err);
+    }
+  }
+
+  // ─── DM reply (fallback) ───────────────────────────────────────────────────
+
+  private async handleDmReply(message: any, text: string) {
+    const chatId = String(message.chat.id);
     const conversationId = await this.redis.get(`telegram:active:${chatId}`);
     if (!conversationId) {
       await this.telegram.sendConfirmation(
         chatId,
         '⚠️ Không có cuộc hội thoại nào đang hoạt động. Vui lòng chờ khách hàng nhắn tin trước.',
       );
-      return { ok: true };
+      return;
     }
 
     try {
@@ -52,11 +87,11 @@ export class TelegramController {
         this.chatGateway.emitToConversation(conversationId, 'message_received', msg);
       }
     } catch (err) {
-      this.logger.error('Failed to handle staff reply', err);
+      this.logger.error('Failed to handle DM reply', err);
     }
-
-    return { ok: true };
   }
+
+  // ─── Link token ────────────────────────────────────────────────────────────
 
   private async handleLinkToken(chatId: string, token: string) {
     const staff = await this.prisma.staff.findFirst({

@@ -25,6 +25,9 @@ describe('AuthService - Phase 1 Auth and RBAC', () => {
       role: {
         findFirst: jest.fn(),
       },
+      userRole: {
+        findFirst: jest.fn(),
+      },
     };
 
     jwtService = {
@@ -121,6 +124,8 @@ describe('AuthService - Phase 1 Auth and RBAC', () => {
   });
 
   it('login signs access and refresh tokens, then persists refresh token', async () => {
+    (bcrypt.hash as jest.Mock).mockResolvedValue('hashed-refresh-token');
+
     const result = await service.login({
       id: 'user-1',
       email: 'customer@example.com',
@@ -130,7 +135,7 @@ describe('AuthService - Phase 1 Auth and RBAC', () => {
     expect(jwtService.sign).toHaveBeenCalledTimes(2);
     expect(prisma.user.update).toHaveBeenCalledWith({
       where: { id: 'user-1' },
-      data: { refreshToken: 'refresh-token-new' },
+      data: { refreshToken: 'hashed-refresh-token' },
     });
     expect(result).toEqual({
       access_token: 'access-token-new',
@@ -140,6 +145,8 @@ describe('AuthService - Phase 1 Auth and RBAC', () => {
   });
 
   it('refresh rotates tokens and blacklists the old refresh token', async () => {
+    (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+    (bcrypt.hash as jest.Mock).mockResolvedValue('hashed-new-refresh-token');
     redis.exists.mockResolvedValue(0);
     jwtService.verifyAsync.mockResolvedValue({ sub: 'user-1', email: 'customer@example.com' });
     jwtService.decode.mockReturnValue({ exp: Math.floor(Date.now() / 1000) + 3600 });
@@ -147,7 +154,7 @@ describe('AuthService - Phase 1 Auth and RBAC', () => {
       id: 'user-1',
       email: 'customer@example.com',
       status: UserStatus.ACTIVE,
-      refreshToken: 'refresh-token-old',
+      refreshToken: 'stored-hashed-token',
       userRoles: [],
     });
 
@@ -156,7 +163,7 @@ describe('AuthService - Phase 1 Auth and RBAC', () => {
     expect(redis.set).toHaveBeenCalledWith('blacklist:refresh:refresh-token-old', '1', expect.any(Number));
     expect(prisma.user.update).toHaveBeenCalledWith({
       where: { id: 'user-1' },
-      data: { refreshToken: 'refresh-token-new' },
+      data: { refreshToken: 'hashed-new-refresh-token' },
     });
     expect(result).toEqual({
       access_token: 'access-token-new',
@@ -201,40 +208,32 @@ describe('AuthService - Phase 1 Auth and RBAC', () => {
     await expect(service.getMe('missing-user')).rejects.toBeInstanceOf(NotFoundException);
   });
 
-  it('builds permission matrix from DB and caches granted permissions on cache miss', async () => {
-    redis.get.mockResolvedValue(null);
-    prisma.user.findUnique
-      .mockResolvedValueOnce({
-        userRoles: [
-          {
-            shopId: null,
-            role: { id: 'role-customer', name: 'Customer', code: 'CUSTOMER' },
-          },
+  it('builds permission matrix from DB with granted and denied codes', async () => {
+    prisma.userRole.findFirst.mockResolvedValue({
+      roleId: 'role-customer',
+      shopId: null,
+      role: {
+        permissions: [
+          { permission: { code: 'VIEW_SERVICE' } },
+          { permission: { code: 'CREATE_APPOINTMENT' } },
         ],
-      })
-      .mockResolvedValueOnce({
-        userRoles: [
-          {
-            role: {
-              permissions: [
-                { permission: { code: 'VIEW_SERVICE' } },
-                { permission: { code: 'CREATE_APPOINTMENT' } },
-              ],
-            },
-          },
-        ],
-      });
+      },
+    });
 
     const result = await service.getPermissionMatrix('user-1');
 
-    expect(result.grantedPermissionCodes.sort()).toEqual(['CREATE_APPOINTMENT', 'VIEW_SERVICE']);
-    expect(result.permissionMatrix.VIEW_SERVICE).toBe(true);
-    expect(result.permissionMatrix.CREATE_APPOINTMENT).toBe(true);
-    expect(result.permissionMatrix.DELETE_SERVICE).toBe(false);
-    expect(redis.set).toHaveBeenCalledWith(
-      'user:permissions:user-1',
-      JSON.stringify(['VIEW_SERVICE', 'CREATE_APPOINTMENT']),
-      300,
-    );
+    expect(result.roleId).toBe('role-customer');
+    expect(result.shopId).toBeNull();
+    expect(result.permissionMatrix['VIEW_SERVICE']).toBe(true);
+    expect(result.permissionMatrix['CREATE_APPOINTMENT']).toBe(true);
+    expect(result.permissionMatrix['DELETE_SERVICE']).toBe(false);
+  });
+
+  it('getPermissionMatrix returns empty granted codes when user has no role', async () => {
+    prisma.userRole.findFirst.mockResolvedValue(null);
+
+    const result = await service.getPermissionMatrix('user-1');
+
+    expect(result).toEqual({ roleId: null, shopId: null, grantedPermissionCodes: [] });
   });
 });

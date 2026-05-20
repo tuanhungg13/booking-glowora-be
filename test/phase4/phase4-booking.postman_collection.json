@@ -1,0 +1,541 @@
+{
+  "info": {
+    "_postman_id": "b2c3d4e5-f6a7-8901-bcde-phase4col001",
+    "name": "Phase 4 — Booking & Lịch hẹn",
+    "description": "Test toàn bộ API Phase 4:\n- Available Slots: tính slot trống theo ngày/dịch vụ/nhân viên\n- Appointments: tạo lịch hẹn, xem lịch của khách, xem lịch của shop\n- State machine: confirm, reject, complete, cancel\n- Error cases: đặt trùng slot, shop member đặt lịch, hủy quá deadline\n\n**Thứ tự chạy:**\n1. [Setup] Đăng nhập + lấy token\n2. [Slots] Test available-slots\n3. [Appointments] Tạo và quản lý lịch hẹn\n4. [State Machine] Confirm → Complete → Cancel\n5. [Error Cases] Các trường hợp lỗi\n\n**Lưu ý:**\n- store-appointments dùng header `x-shop-id: {{storeId}}`\n- slotDate phải là ngày tương lai (vd: ngày mai)\n- Cần có store ACTIVE, service ACTIVE và staff với schedule trước khi test",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl",             "value": "http://localhost:8080", "type": "string" },
+    { "key": "adminAccessToken",    "value": "", "type": "string" },
+    { "key": "ownerAccessToken",    "value": "", "type": "string" },
+    { "key": "staffAccessToken",    "value": "", "type": "string" },
+    { "key": "customerAccessToken", "value": "", "type": "string" },
+    { "key": "storeId",             "value": "", "type": "string" },
+    { "key": "serviceId",           "value": "", "type": "string" },
+    { "key": "staffId",             "value": "", "type": "string" },
+    { "key": "slotDate",            "value": "", "type": "string" },
+    { "key": "slotTime",            "value": "", "type": "string" },
+    { "key": "appointmentId",       "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "[Setup] Xác thực & Chuẩn bị",
+      "item": [
+        {
+          "name": "1. Login Admin",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "const b = pm.response.json();",
+            "if (b.data?.access_token) pm.collectionVariables.set('adminAccessToken', b.data.access_token);"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@glowora.com\",\n  \"password\": \"Admin@123456\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "2. Register Owner (p4)",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('201 hoặc 409', () => pm.expect([201, 409]).to.include(pm.response.code));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"owner_p4@glowora.vn\",\n  \"password\": \"Owner@123\",\n  \"fullName\": \"Chủ Cơ Sở P4\",\n  \"phone\": \"0911111111\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "3. Login Owner",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "const b = pm.response.json();",
+            "if (b.data?.access_token) pm.collectionVariables.set('ownerAccessToken', b.data.access_token);"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"owner_p4@glowora.vn\",\n  \"password\": \"Owner@123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "4. Register Customer (p4)",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('201 hoặc 409', () => pm.expect([201, 409]).to.include(pm.response.code));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"customer_p4@glowora.vn\",\n  \"password\": \"Customer@123\",\n  \"fullName\": \"Khách Hàng P4\",\n  \"phone\": \"0922222222\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "5. Login Customer",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "const b = pm.response.json();",
+            "if (b.data?.access_token) pm.collectionVariables.set('customerAccessToken', b.data.access_token);"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"customer_p4@glowora.vn\",\n  \"password\": \"Customer@123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "6. Create Store (as Owner)",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "const b = pm.response.json();",
+            "if (b.data?.id) pm.collectionVariables.set('storeId', b.data.id);"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Glowora P4 Spa\",\n  \"phone\": \"0282222222\",\n  \"address\": \"123 Lê Lợi, Quận 1\",\n  \"city\": \"Hồ Chí Minh\"\n}" },
+            "url": { "raw": "{{baseUrl}}/stores", "host": ["{{baseUrl}}"], "path": ["stores"] }
+          }
+        },
+        {
+          "name": "7. Admin Approve Store",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/admin/stores/{{storeId}}/approve", "host": ["{{baseUrl}}"], "path": ["admin", "stores", "{{storeId}}", "approve"] }
+          }
+        },
+        {
+          "name": "8. Create Service (as Owner)",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "const b = pm.response.json();",
+            "if (b.data?.id) pm.collectionVariables.set('serviceId', b.data.id);"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id", "value": "{{storeId}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Massage Thư Giãn\",\n  \"duration\": 60,\n  \"price\": 200000,\n  \"storeId\": \"{{storeId}}\"\n}" },
+            "url": { "raw": "{{baseUrl}}/services", "host": ["{{baseUrl}}"], "path": ["services"] }
+          }
+        },
+        {
+          "name": "9. [Manual] Set slotDate to tomorrow (YYYY-MM-DD)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/app", "host": ["{{baseUrl}}"], "path": ["app"] },
+            "description": "Thủ công: Set biến slotDate = ngày mai theo định dạng YYYY-MM-DD\nVí dụ: 2026-05-21\nVà set staffId nếu có nhân viên có schedule."
+          }
+        }
+      ]
+    },
+    {
+      "name": "[Slots] Available Slots",
+      "item": [
+        {
+          "name": "10. Get Available Slots (no staffId)",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "const b = pm.response.json();",
+            "pm.test('Has staffSlots array', () => pm.expect(b.data).to.have.property('staffSlots'));",
+            "pm.test('Has date field', () => pm.expect(b.data.date).to.equal(pm.collectionVariables.get('slotDate')));",
+            "if (b.data?.staffSlots?.length > 0 && b.data.staffSlots[0].availableSlots?.length > 0) {",
+            "  pm.collectionVariables.set('slotTime', b.data.staffSlots[0].availableSlots[0]);",
+            "  pm.collectionVariables.set('staffId', b.data.staffSlots[0].staffId);",
+            "}"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/stores/{{storeId}}/available-slots?date={{slotDate}}&serviceId={{serviceId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores", "{{storeId}}", "available-slots"],
+              "query": [
+                { "key": "date", "value": "{{slotDate}}" },
+                { "key": "serviceId", "value": "{{serviceId}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "11. Get Available Slots (with staffId)",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 200 hoặc 400/404', () => pm.expect([200, 400, 404]).to.include(pm.response.code));",
+            "if (pm.response.code === 200) {",
+            "  const b = pm.response.json();",
+            "  pm.test('Has staffSlots', () => pm.expect(b.data).to.have.property('staffSlots'));",
+            "}"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/stores/{{storeId}}/available-slots?date={{slotDate}}&serviceId={{serviceId}}&staffId={{staffId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores", "{{storeId}}", "available-slots"],
+              "query": [
+                { "key": "date", "value": "{{slotDate}}" },
+                { "key": "serviceId", "value": "{{serviceId}}" },
+                { "key": "staffId", "value": "{{staffId}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "12. [Error] Get Slots - Past Date",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 400', () => pm.response.to.have.status(400));",
+            "pm.test('Error message about past date', () => {",
+            "  const b = pm.response.json();",
+            "  pm.expect(b.success).to.be.false;",
+            "});"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/stores/{{storeId}}/available-slots?date=2020-01-01&serviceId={{serviceId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["stores", "{{storeId}}", "available-slots"],
+              "query": [
+                { "key": "date", "value": "2020-01-01" },
+                { "key": "serviceId", "value": "{{serviceId}}" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "[Appointments] Tạo & Xem lịch hẹn",
+      "item": [
+        {
+          "name": "13. Create Appointment (Customer)",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "const b = pm.response.json();",
+            "pm.test('Has appointment id', () => pm.expect(b.data).to.have.property('id'));",
+            "pm.test('Status is PENDING or CONFIRMED', () => pm.expect(['PENDING','CONFIRMED']).to.include(b.data.status));",
+            "pm.test('Price and duration are snapshots', () => {",
+            "  pm.expect(b.data).to.have.property('price');",
+            "  pm.expect(b.data).to.have.property('duration');",
+            "});",
+            "if (b.data?.id) pm.collectionVariables.set('appointmentId', b.data.id);"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"storeId\": \"{{storeId}}\",\n  \"serviceId\": \"{{serviceId}}\",\n  \"staffId\": \"{{staffId}}\",\n  \"scheduledAt\": \"{{slotDate}}T{{slotTime}}:00+07:00\",\n  \"notes\": \"Đặt lịch test phase 4\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/appointments", "host": ["{{baseUrl}}"], "path": ["appointments"] }
+          }
+        },
+        {
+          "name": "14. Get My Appointments (Customer)",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "const b = pm.response.json();",
+            "pm.test('Has items array', () => pm.expect(b.data).to.have.property('items'));",
+            "pm.test('Has total', () => pm.expect(b.data).to.have.property('total'));"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/appointments/my", "host": ["{{baseUrl}}"], "path": ["appointments", "my"] }
+          }
+        },
+        {
+          "name": "15. Get My Appointments - Filter PENDING",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "const b = pm.response.json();",
+            "pm.test('All items are PENDING', () => {",
+            "  b.data.items.forEach(a => pm.expect(a.status).to.equal('PENDING'));",
+            "});"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/appointments/my?status=PENDING",
+              "host": ["{{baseUrl}}"],
+              "path": ["appointments", "my"],
+              "query": [{ "key": "status", "value": "PENDING" }]
+            }
+          }
+        },
+        {
+          "name": "16. Get Appointment by ID",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "const b = pm.response.json();",
+            "pm.test('ID matches', () => pm.expect(b.data.id).to.equal(pm.collectionVariables.get('appointmentId')));"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/appointments/{{appointmentId}}", "host": ["{{baseUrl}}"], "path": ["appointments", "{{appointmentId}}"] }
+          }
+        },
+        {
+          "name": "17. Get Store Appointments (Owner, uses x-shop-id header)",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "const b = pm.response.json();",
+            "pm.test('Has items and pagination', () => {",
+            "  pm.expect(b.data).to.have.property('items');",
+            "  pm.expect(b.data).to.have.property('total');",
+            "  pm.expect(b.data).to.have.property('page');",
+            "});"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id", "value": "{{storeId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/store-appointments", "host": ["{{baseUrl}}"], "path": ["store-appointments"] }
+          }
+        },
+        {
+          "name": "18. Get Store Calendar (Owner)",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "const b = pm.response.json();",
+            "pm.test('Returns array', () => pm.expect(b.data).to.be.an('array'));"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id", "value": "{{storeId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/store-appointments/calendar?month=2026-06",
+              "host": ["{{baseUrl}}"],
+              "path": ["store-appointments", "calendar"],
+              "query": [{ "key": "month", "value": "2026-06" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "[State Machine] Confirm → Complete",
+      "item": [
+        {
+          "name": "19. Confirm Appointment (Owner)",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "const b = pm.response.json();",
+            "pm.test('Status is CONFIRMED', () => pm.expect(b.data.status).to.equal('CONFIRMED'));",
+            "pm.test('confirmedAt is set', () => pm.expect(b.data.confirmedAt).to.not.be.null);"
+          ]}}],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id", "value": "{{storeId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/store-appointments/{{appointmentId}}/confirm", "host": ["{{baseUrl}}"], "path": ["store-appointments", "{{appointmentId}}", "confirm"] }
+          }
+        },
+        {
+          "name": "20. [Error] Confirm Already Confirmed",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 400', () => pm.response.to.have.status(400));"
+          ]}}],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id", "value": "{{storeId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/store-appointments/{{appointmentId}}/confirm", "host": ["{{baseUrl}}"], "path": ["store-appointments", "{{appointmentId}}", "confirm"] }
+          }
+        },
+        {
+          "name": "21. Complete Appointment (Owner)",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "const b = pm.response.json();",
+            "pm.test('Status is COMPLETED', () => pm.expect(b.data.status).to.equal('COMPLETED'));",
+            "pm.test('completedAt is set', () => pm.expect(b.data.completedAt).to.not.be.null);"
+          ]}}],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id", "value": "{{storeId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/store-appointments/{{appointmentId}}/complete", "host": ["{{baseUrl}}"], "path": ["store-appointments", "{{appointmentId}}", "complete"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "[State Machine] Reject & Cancel",
+      "item": [
+        {
+          "name": "22. Create Another Appointment (for reject test)",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "const b = pm.response.json();",
+            "if (b.data?.id) pm.collectionVariables.set('appointmentId', b.data.id);"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"storeId\": \"{{storeId}}\",\n  \"serviceId\": \"{{serviceId}}\",\n  \"scheduledAt\": \"{{slotDate}}T14:00:00+07:00\",\n  \"notes\": \"Test reject\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/appointments", "host": ["{{baseUrl}}"], "path": ["appointments"] }
+          }
+        },
+        {
+          "name": "23. Reject Appointment (Owner)",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "const b = pm.response.json();",
+            "pm.test('Status is REJECTED', () => pm.expect(b.data.status).to.equal('REJECTED'));",
+            "pm.test('cancellationReason is set', () => pm.expect(b.data.cancellationReason).to.equal('Không còn nhân viên trống'));"
+          ]}}],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id", "value": "{{storeId}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"reason\": \"Không còn nhân viên trống\"\n}" },
+            "url": { "raw": "{{baseUrl}}/store-appointments/{{appointmentId}}/reject", "host": ["{{baseUrl}}"], "path": ["store-appointments", "{{appointmentId}}", "reject"] }
+          }
+        },
+        {
+          "name": "24. Create Appointment for Cancel Test",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "const b = pm.response.json();",
+            "if (b.data?.id) pm.collectionVariables.set('appointmentId', b.data.id);"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"storeId\": \"{{storeId}}\",\n  \"serviceId\": \"{{serviceId}}\",\n  \"scheduledAt\": \"{{slotDate}}T16:00:00+07:00\",\n  \"notes\": \"Test cancel\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/appointments", "host": ["{{baseUrl}}"], "path": ["appointments"] }
+          }
+        },
+        {
+          "name": "25. Cancel Appointment (Customer)",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));",
+            "const b = pm.response.json();",
+            "pm.test('Status is CANCELLED', () => pm.expect(b.data.status).to.equal('CANCELLED'));",
+            "pm.test('cancelledAt is set', () => pm.expect(b.data.cancelledAt).to.not.be.null);"
+          ]}}],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"reason\": \"Bận đột xuất\"\n}" },
+            "url": { "raw": "{{baseUrl}}/appointments/{{appointmentId}}/cancel", "host": ["{{baseUrl}}"], "path": ["appointments", "{{appointmentId}}", "cancel"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "[Error Cases]",
+      "item": [
+        {
+          "name": "26. [Error] Shop Member Cannot Book Own Store",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 403', () => pm.response.to.have.status(403));"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"storeId\": \"{{storeId}}\",\n  \"serviceId\": \"{{serviceId}}\",\n  \"scheduledAt\": \"{{slotDate}}T10:00:00+07:00\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/appointments", "host": ["{{baseUrl}}"], "path": ["appointments"] }
+          }
+        },
+        {
+          "name": "27. [Error] Get Appointment Not Found",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 404', () => pm.response.to.have.status(404));"
+          ]}}],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/appointments/non-existent-id-0000", "host": ["{{baseUrl}}"], "path": ["appointments", "non-existent-id-0000"] }
+          }
+        },
+        {
+          "name": "28. [Error] Confirm Without x-shop-id Header",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 403 hoặc 400', () => pm.expect([400, 403]).to.include(pm.response.code));"
+          ]}}],
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/store-appointments/{{appointmentId}}/confirm", "host": ["{{baseUrl}}"], "path": ["store-appointments", "{{appointmentId}}", "confirm"] }
+          }
+        },
+        {
+          "name": "29. [Error] Customer Cancel Another Customer's Appointment",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 403 hoặc 404', () => pm.expect([403, 404]).to.include(pm.response.code));"
+          ]}}],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"reason\": \"Không phải của tôi\"\n}" },
+            "url": { "raw": "{{baseUrl}}/appointments/{{appointmentId}}/cancel", "host": ["{{baseUrl}}"], "path": ["appointments", "{{appointmentId}}", "cancel"] }
+          }
+        }
+      ]
+    }
+  ]
+}

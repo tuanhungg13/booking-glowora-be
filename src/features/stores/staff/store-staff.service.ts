@@ -69,7 +69,7 @@ export class StoreStaffService {
         userId: invitedUser.id,
         type: NotificationType.STAFF_INVITED,
         title: 'Lời mời nhân viên',
-        body: `Bạn được mời làm nhân viên tại cơ sở "${store.name}". Token: ${token}`,
+        body: `Bạn được mời làm nhân viên tại cơ sở "${store.name}". Kiểm tra email để nhận link kích hoạt.`,
       },
     });
 

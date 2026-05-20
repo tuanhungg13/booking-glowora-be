@@ -209,7 +209,7 @@ model User {
   userRoles      UserRole[]
   ownedStores    Store[]        @relation("StoreOwner")
   approvedStores Store[]        @relation("StoreApprover")
-  staffProfile   Staff?
+  staffProfiles  Staff[]
   appointments   Appointment[]  @relation("CustomerAppointments")
   payments       Payment[]
   reviews        Review[]       @relation("CustomerReviews")
@@ -252,6 +252,7 @@ model Store {
   autoConfirm       Boolean     @default(false) @map("auto_confirm")
   avgRating         Decimal     @default(0.00) @map("avg_rating") @db.Decimal(3, 2)
   totalReviews      Int         @default(0) @map("total_reviews")
+  telegramGroupId   String?     @map("telegram_group_id") @db.VarChar(50)
   createdAt         DateTime    @default(now()) @map("created_at")
   updatedAt         DateTime    @updatedAt @map("updated_at")
 
@@ -302,7 +303,7 @@ model WorkingHour {
 
 model Staff {
   id           String      @id @default(uuid()) @db.Char(36)
-  userId       String      @unique @map("user_id") @db.Char(36)
+  userId       String      @map("user_id") @db.Char(36)
   storeId      String      @map("store_id") @db.Char(36)
   specialty    String?     @db.VarChar(200)
   bio          String?     @db.Text
@@ -324,6 +325,7 @@ model Staff {
   invites               StaffInvite[]
   assignedConversations Conversation[]   @relation("AssignedConversations")
 
+  @@unique([userId, storeId])
   @@index([storeId, status])
   @@map("staff")
 }
@@ -634,6 +636,7 @@ model Conversation {
   storeId         String           @map("store_id") @db.Char(36)
   mode            ConversationMode @default(BOT)
   assignedStaffId String?          @map("assigned_staff_id") @db.Char(36)
+  telegramTopicId Int?             @map("telegram_topic_id")
   lastMessageAt   DateTime?        @map("last_message_at")
   lastMessageBody String?          @map("last_message_body") @db.VarChar(200)
   createdAt       DateTime         @default(now()) @map("created_at")

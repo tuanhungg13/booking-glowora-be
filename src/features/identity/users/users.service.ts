@@ -21,6 +21,7 @@ export class UsersService {
     });
     if (existing) throw new ConflictException('Email already exists');
     const hashed = await bcrypt.hash(dto.password, 10);
+    const dedupedRoles = this.deduplicateRoles(dto.roleAssignments ?? []);
     const user = await this.prisma.user.create({
       data: {
         email: dto.email,
@@ -28,9 +29,9 @@ export class UsersService {
         fullName: dto.fullName ?? '',
         phone: dto.phone,
         status: dto.status ?? UserStatus.ACTIVE,
-        userRoles: dto.roleAssignments?.length
+        userRoles: dedupedRoles.length
           ? {
-              create: dto.roleAssignments.map((a) => ({
+              create: dedupedRoles.map((a) => ({
                 shopId: a.shopId,
                 roleId: a.roleId,
               })),
@@ -91,15 +92,16 @@ export class UsersService {
     };
     if (dto.password) data.password = await bcrypt.hash(dto.password, 10);
     if (dto.roleAssignments !== undefined) {
-      const shopRolesCount = dto.roleAssignments.filter((a) => a.shopId).length;
+      const dedupedRoles = this.deduplicateRoles(dto.roleAssignments);
+      const shopRolesCount = dedupedRoles.filter((a) => a.shopId).length;
       if (shopRolesCount > 3) {
         throw new BadRequestException('Tài khoản không thể có quá 3 vai trò cơ sở');
       }
       data.userRoles = {
         deleteMany: {},
-        ...(dto.roleAssignments.length
+        ...(dedupedRoles.length
           ? {
-              create: dto.roleAssignments.map((a) => ({
+              create: dedupedRoles.map((a) => ({
                 shopId: a.shopId,
                 roleId: a.roleId,
               })),
@@ -139,5 +141,18 @@ export class UsersService {
       createdAt: true,
       updatedAt: true,
     };
+  }
+
+  // MySQL treats NULL != NULL in UNIQUE constraints, so (userId, roleId, null) can be
+  // inserted multiple times without violating @@unique([userId, roleId, shopId]).
+  // Deduplicate here before any bulk insert to prevent phantom duplicates.
+  private deduplicateRoles(assignments: Array<{ roleId: string; shopId?: string | null }>) {
+    const seen = new Set<string>();
+    return assignments.filter((a) => {
+      const key = `${a.roleId}::${a.shopId ?? '__null__'}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
   }
 }

@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -108,6 +109,29 @@ export class StoresController {
   ) {
     if (!file) throw new BadRequestException('No file uploaded');
     return this.storesService.uploadBanner(id, user.id, `/uploads/banners/${file.filename}`);
+  }
+
+  @ApiOperation({ summary: 'Link a Telegram supergroup (forum) to this store' })
+  @ApiBearerAuth()
+  @RequirePermissions(Permissions.STORE.UPDATE)
+  @Patch(':id/telegram-group')
+  linkTelegramGroup(
+    @Param('id') id: string,
+    @Body() body: { telegramGroupId: string },
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return this.storesService.linkTelegramGroup(id, user.id, body.telegramGroupId);
+  }
+
+  @ApiOperation({ summary: 'Unlink Telegram group from this store' })
+  @ApiBearerAuth()
+  @RequirePermissions(Permissions.STORE.UPDATE)
+  @Delete(':id/telegram-group')
+  unlinkTelegramGroup(
+    @Param('id') id: string,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return this.storesService.linkTelegramGroup(id, user.id, null);
   }
 
   @ApiOperation({ summary: 'Replace working hours for current owner store' })

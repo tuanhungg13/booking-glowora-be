@@ -35,46 +35,49 @@ export class AppointmentsService {
       throw new ForbiddenException('Không thể đặt lịch tại cơ sở bạn đang làm việc');
     }
 
-    const appointment = await this.prisma.$transaction(async (tx) => {
-      const store = await tx.store.findUnique({ where: { id: dto.storeId } });
-      if (!store || store.status !== StoreStatus.ACTIVE) {
-        throw new NotFoundException('Store not found or inactive');
-      }
+    const appointment = await this.prisma.$transaction(
+      async (tx) => {
+        const store = await tx.store.findUnique({ where: { id: dto.storeId } });
+        if (!store || store.status !== StoreStatus.ACTIVE) {
+          throw new NotFoundException('Store not found or inactive');
+        }
 
-      const service = await tx.service.findFirst({
-        where: { id: dto.serviceId, shopId: dto.storeId, status: ServiceStatus.ACTIVE },
-      });
-      if (!service) throw new NotFoundException('Service not found for this store');
-
-      if (dto.staffId) {
-        const staffService = await tx.staffService.findFirst({
-          where: { staffId: dto.staffId, serviceId: dto.serviceId },
+        const service = await tx.service.findFirst({
+          where: { id: dto.serviceId, shopId: dto.storeId, status: ServiceStatus.ACTIVE },
         });
-        if (!staffService) throw new BadRequestException('Staff cannot perform this service');
-      }
+        if (!service) throw new NotFoundException('Service not found for this store');
 
-      const scheduledAt = new Date(dto.scheduledAt);
-      const staffId = dto.staffId ?? (await this.pickAvailableStaff(tx, dto.storeId, dto.serviceId, scheduledAt, service.duration));
-      if (!staffId) throw new ConflictException('No staff is available for this slot');
+        if (dto.staffId) {
+          const staffService = await tx.staffService.findFirst({
+            where: { staffId: dto.staffId, serviceId: dto.serviceId },
+          });
+          if (!staffService) throw new BadRequestException('Staff cannot perform this service');
+        }
 
-      await this.assertNoOverlap(tx, staffId, scheduledAt, service.duration);
+        const scheduledAt = new Date(dto.scheduledAt);
+        const staffId = dto.staffId ?? (await this.pickAvailableStaff(tx, dto.storeId, dto.serviceId, scheduledAt, service.duration));
+        if (!staffId) throw new ConflictException('No staff is available for this slot');
 
-      return tx.appointment.create({
-        data: {
-          customerId,
-          storeId: dto.storeId,
-          serviceId: dto.serviceId,
-          staffId,
-          scheduledAt,
-          duration: service.duration,
-          price: service.price,
-          status: store.autoConfirm ? AppointmentStatus.CONFIRMED : AppointmentStatus.PENDING,
-          confirmedAt: store.autoConfirm ? new Date() : undefined,
-          notes: dto.notes,
-        },
-        include: appointmentInclude,
-      });
-    });
+        await this.assertNoOverlap(tx, staffId, scheduledAt, service.duration);
+
+        return tx.appointment.create({
+          data: {
+            customerId,
+            storeId: dto.storeId,
+            serviceId: dto.serviceId,
+            staffId,
+            scheduledAt,
+            duration: service.duration,
+            price: service.price,
+            status: store.autoConfirm ? AppointmentStatus.CONFIRMED : AppointmentStatus.PENDING,
+            confirmedAt: store.autoConfirm ? new Date() : undefined,
+            notes: dto.notes,
+          },
+          include: appointmentInclude,
+        });
+      },
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+    );
 
     // Fire-and-forget notifications
     const customer = appointment.customer;

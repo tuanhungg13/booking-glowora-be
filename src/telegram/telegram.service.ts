@@ -34,6 +34,44 @@ export class TelegramService implements OnModuleInit {
     return randomBytes(16).toString('hex');
   }
 
+  // ─── Group / Topic methods ─────────────────────────────────────────────────
+
+  /**
+   * Tạo topic mới trong supergroup (forum mode).
+   * Trả về message_thread_id để lưu vào Conversation.telegramTopicId.
+   */
+  async createGroupTopic(groupId: string, topicName: string): Promise<number | null> {
+    if (!this.bot) return null;
+    try {
+      const result = await (this.bot as any).createForumTopic(groupId, topicName);
+      return result?.message_thread_id ?? null;
+    } catch (err) {
+      this.logger.error(`Failed to create topic "${topicName}" in group ${groupId}`, err);
+      return null;
+    }
+  }
+
+  /**
+   * Gửi tin vào 1 topic cụ thể trong group.
+   */
+  async sendToGroupTopic(
+    groupId: string,
+    topicId: number,
+    text: string,
+  ): Promise<void> {
+    if (!this.bot) return;
+    await this.bot
+      .sendMessage(groupId, text, {
+        message_thread_id: topicId,
+        parse_mode: 'Markdown',
+      } as any)
+      .catch((err) =>
+        this.logger.error(`Failed to send message to group ${groupId} topic ${topicId}`, err),
+      );
+  }
+
+  // ─── DM methods (fallback khi store chưa setup group) ─────────────────────
+
   async sendEscalationAlert(
     chatId: string,
     customerName: string,
