@@ -15,10 +15,13 @@ const appointmentInclude = {
   customer: { select: { id: true, fullName: true, email: true, phone: true } },
   store: true,
   service: true,
+  variant: true,
   staff: { include: { user: { select: { id: true, fullName: true, email: true, avatarUrl: true } } } },
   payments: true,
   review: true,
 } as const;
+
+type AppointmentFull = Prisma.AppointmentGetPayload<{ include: typeof appointmentInclude }>;
 
 @Injectable()
 export class AppointmentsService {
@@ -35,17 +38,17 @@ export class AppointmentsService {
       throw new ForbiddenException('Không thể đặt lịch tại cơ sở bạn đang làm việc');
     }
 
-    const appointment = await this.prisma.$transaction(
+    const appointment = (await this.prisma.$transaction(
       async (tx) => {
         const store = await tx.store.findUnique({ where: { id: dto.storeId } });
         if (!store || store.status !== StoreStatus.ACTIVE) {
           throw new NotFoundException('Store not found or inactive');
         }
 
-        const service = await tx.service.findFirst({
-          where: { id: dto.serviceId, shopId: dto.storeId, status: ServiceStatus.ACTIVE },
+        const variant = await tx.serviceVariant.findFirst({
+          where: { id: dto.variantId, serviceId: dto.serviceId, status: ServiceStatus.ACTIVE, service: { shopId: dto.storeId, status: ServiceStatus.ACTIVE } },
         });
-        if (!service) throw new NotFoundException('Service not found for this store');
+        if (!variant) throw new NotFoundException('Service variant not found for this store');
 
         if (dto.staffId) {
           const staffService = await tx.staffService.findFirst({
@@ -55,20 +58,21 @@ export class AppointmentsService {
         }
 
         const scheduledAt = new Date(dto.scheduledAt);
-        const staffId = dto.staffId ?? (await this.pickAvailableStaff(tx, dto.storeId, dto.serviceId, scheduledAt, service.duration));
+        const staffId = dto.staffId ?? (await this.pickAvailableStaff(tx, dto.storeId, dto.serviceId, scheduledAt, variant.duration));
         if (!staffId) throw new ConflictException('No staff is available for this slot');
 
-        await this.assertNoOverlap(tx, staffId, scheduledAt, service.duration);
+        await this.assertNoOverlap(tx, staffId, scheduledAt, variant.duration);
 
         return tx.appointment.create({
           data: {
             customerId,
             storeId: dto.storeId,
             serviceId: dto.serviceId,
+            variantId: variant.id,
             staffId,
             scheduledAt,
-            duration: service.duration,
-            price: service.price,
+            duration: variant.duration,
+            price: variant.price,
             status: store.autoConfirm ? AppointmentStatus.CONFIRMED : AppointmentStatus.PENDING,
             confirmedAt: store.autoConfirm ? new Date() : undefined,
             notes: dto.notes,
@@ -77,7 +81,7 @@ export class AppointmentsService {
         });
       },
       { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
-    );
+    )) as AppointmentFull;
 
     // Fire-and-forget notifications
     const customer = appointment.customer;

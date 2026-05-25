@@ -224,9 +224,9 @@ describe('AuthService - Phase 1 Auth and RBAC', () => {
 
     expect(result.roleId).toBe('role-customer');
     expect(result.shopId).toBeNull();
-    expect(result.permissionMatrix['VIEW_SERVICE']).toBe(true);
-    expect(result.permissionMatrix['CREATE_APPOINTMENT']).toBe(true);
-    expect(result.permissionMatrix['DELETE_SERVICE']).toBe(false);
+    expect(result.permissionMatrix?.['VIEW_SERVICE']).toBe(true);
+    expect(result.permissionMatrix?.['CREATE_APPOINTMENT']).toBe(true);
+    expect(result.permissionMatrix?.['DELETE_SERVICE']).toBe(false);
   });
 
   it('getPermissionMatrix returns empty granted codes when user has no role', async () => {

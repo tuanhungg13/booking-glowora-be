@@ -70,7 +70,7 @@ export class GeminiService {
       this.prisma.store.findUnique({ where: { id: storeId }, select: { name: true } }),
       this.prisma.service.findMany({
         where: { shopId: storeId, status: 'ACTIVE' },
-        select: { name: true, price: true, duration: true, description: true },
+        select: { name: true, description: true, variants: { where: { status: 'ACTIVE' }, select: { name: true, price: true, duration: true }, orderBy: { sortOrder: 'asc' }, take: 3 } },
         take: 20,
       }),
       this.prisma.combo.findMany({
@@ -90,7 +90,10 @@ export class GeminiService {
     };
 
     const serviceList = services
-      .map((s) => `${s.name} (${s.duration} phút, ${Number(s.price).toLocaleString('vi-VN')}đ)`)
+      .map((s) => {
+        const variantStr = s.variants.map((v) => `${v.name}: ${v.duration}p/${Number(v.price).toLocaleString('vi-VN')}đ`).join(', ');
+        return `${s.name} [${variantStr}]`;
+      })
       .join(', ') || 'Chưa có thông tin';
 
     const comboList = combos

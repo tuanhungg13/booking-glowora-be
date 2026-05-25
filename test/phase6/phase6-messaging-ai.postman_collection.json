@@ -189,10 +189,9 @@
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }],
             "url": {
-              "raw": "{{baseUrl}}/messages?conversationId={{conversationId}}",
+              "raw": "{{baseUrl}}/conversations/{{conversationId}}/messages",
               "host": ["{{baseUrl}}"],
-              "path": ["messages"],
-              "query": [{ "key": "conversationId", "value": "{{conversationId}}" }]
+              "path": ["conversations", "{{conversationId}}", "messages"]
             }
           }
         },
@@ -211,8 +210,8 @@
               { "key": "Content-Type", "value": "application/json" },
               { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"conversationId\": \"{{conversationId}}\",\n  \"senderId\": \"<customer-id>\",\n  \"content\": \"Xin chào! Giá massage bao nhiêu ạ?\"\n}" },
-            "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] }
+            "body": { "mode": "raw", "raw": "{\n  \"content\": \"Xin chào! Giá massage bao nhiêu ạ?\"\n}" },
+            "url": { "raw": "{{baseUrl}}/conversations/{{conversationId}}/messages", "host": ["{{baseUrl}}"], "path": ["conversations", "{{conversationId}}", "messages"] }
           }
         },
         {
@@ -225,7 +224,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/messages/{{messageId}}", "host": ["{{baseUrl}}"], "path": ["messages", "{{messageId}}"] }
+            "url": { "raw": "{{baseUrl}}/conversations/{{conversationId}}/messages/{{messageId}}", "host": ["{{baseUrl}}"], "path": ["conversations", "{{conversationId}}", "messages", "{{messageId}}"] }
           }
         },
         {
@@ -243,7 +242,7 @@
               { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"isRead\": true\n}" },
-            "url": { "raw": "{{baseUrl}}/messages/{{messageId}}", "host": ["{{baseUrl}}"], "path": ["messages", "{{messageId}}"] }
+            "url": { "raw": "{{baseUrl}}/conversations/{{conversationId}}/messages/{{messageId}}", "host": ["{{baseUrl}}"], "path": ["conversations", "{{conversationId}}", "messages", "{{messageId}}"] }
           }
         }
       ]
@@ -261,12 +260,12 @@
             "console.log('Telegram link URL:', `https://t.me/<BOT_USERNAME>?start=${b.data?.linkToken}`);"
           ]}}],
           "request": {
-            "method": "PATCH",
+            "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "Authorization", "value": "Bearer {{staffAccessToken}}" },
               { "key": "x-shop-id", "value": "{{storeId}}" }
             ],
-            "url": { "raw": "{{baseUrl}}/store-staff/{{staffId}}/telegram-link", "host": ["{{baseUrl}}"], "path": ["store-staff", "{{staffId}}", "telegram-link"] }
+            "url": { "raw": "{{baseUrl}}/store-staff/me/telegram-token", "host": ["{{baseUrl}}"], "path": ["store-staff", "me", "telegram-token"] }
           }
         },
         {

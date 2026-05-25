@@ -9,6 +9,10 @@ export class CreateAppointmentDto {
 
   @IsOptional()
   @IsUUID()
+  variantId?: string;
+
+  @IsOptional()
+  @IsUUID()
   staffId?: string;
 
   @IsDateString()

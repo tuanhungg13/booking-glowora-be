@@ -7,6 +7,9 @@ export class AvailableSlotsQueryDto {
   @IsUUID()
   serviceId!: string;
 
+  @IsUUID()
+  variantId!: string;
+
   @IsOptional()
   @IsUUID()
   staffId?: string;

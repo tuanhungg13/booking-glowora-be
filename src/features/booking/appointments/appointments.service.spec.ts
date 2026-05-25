@@ -15,6 +15,7 @@ describe('AppointmentsService — Phase 4', () => {
 
   const storeId = 'store-001';
   const serviceId = 'svc-001';
+  const variantId = 'var-001';
   const staffId = 'staff-001';
   const customerId = 'user-001';
   const appointmentId = 'apt-001';
@@ -31,6 +32,13 @@ describe('AppointmentsService — Phase 4', () => {
     id: serviceId,
     shopId: storeId,
     name: 'Massage Thư Giãn',
+    status: 'ACTIVE',
+  };
+
+  const baseVariant = {
+    id: variantId,
+    serviceId,
+    name: 'Gói cơ bản',
     duration: 60,
     price: 200000,
     status: 'ACTIVE',
@@ -59,7 +67,7 @@ describe('AppointmentsService — Phase 4', () => {
   beforeEach(() => {
     tx = {
       store: { findUnique: jest.fn().mockResolvedValue(baseStore) },
-      service: { findFirst: jest.fn().mockResolvedValue(baseService) },
+      serviceVariant: { findFirst: jest.fn().mockResolvedValue(baseVariant) },
       staffService: { findFirst: jest.fn().mockResolvedValue({ staffId, serviceId }), findMany: jest.fn().mockResolvedValue([{ staffId }]) },
       appointment: {
         create: jest.fn().mockResolvedValue(baseAppointment),
@@ -101,6 +109,7 @@ describe('AppointmentsService — Phase 4', () => {
     const dto = {
       storeId,
       serviceId,
+      variantId,
       staffId,
       scheduledAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
     };
@@ -123,8 +132,8 @@ describe('AppointmentsService — Phase 4', () => {
       await expect(service.create(dto, customerId)).rejects.toBeInstanceOf(NotFoundException);
     });
 
-    it('throws NotFoundException when service not found for this store', async () => {
-      tx.service.findFirst.mockResolvedValue(null);
+    it('throws NotFoundException when variant not found for this store', async () => {
+      tx.serviceVariant.findFirst.mockResolvedValue(null);
 
       await expect(service.create(dto, customerId)).rejects.toBeInstanceOf(NotFoundException);
     });
@@ -174,14 +183,14 @@ describe('AppointmentsService — Phase 4', () => {
       );
     });
 
-    it('snapshots service.duration and service.price into the appointment', async () => {
+    it('snapshots variant.duration and variant.price into the appointment', async () => {
       await service.create(dto, customerId);
 
       expect(tx.appointment.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
-            duration: baseService.duration,
-            price: baseService.price,
+            duration: baseVariant.duration,
+            price: baseVariant.price,
           }),
         }),
       );

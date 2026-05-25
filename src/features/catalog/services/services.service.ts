@@ -1,51 +1,128 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { ServiceStatus } from '@prisma/client';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma, ServiceStatus, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
+import { CreateServiceVariantDto, UpdateServiceVariantDto } from './dto/service-variant.dto';
 
-type ServiceParams = { storeId?: string; status?: ServiceStatus; categoryId?: string };
+type ServiceParams = { storeId?: string; status?: ServiceStatus; categoryId?: string; page?: number; limit?: number };
+type PublicServiceParams = { storeId?: string; categoryId?: string; q?: string; page?: number; limit?: number };
 
 const serviceInclude = {
   category: true,
+  variants: { where: { status: ServiceStatus.ACTIVE }, orderBy: { sortOrder: 'asc' as const } },
   staffs: { include: { staff: { include: { user: { select: { id: true, fullName: true, email: true, avatarUrl: true } } } } } },
+  store: { select: { id: true, name: true, slug: true, address: true, city: true, logoUrl: true } },
 } as const;
+
+function slugify(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'd')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
 
 @Injectable()
 export class ServicesService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(storeId: string, dto: CreateServiceDto) {
+    const slug = await this.generateUniqueSlug(dto.name, storeId);
     return this.prisma.service.create({
       data: {
         shopId: storeId,
         name: dto.name,
+        slug,
         description: dto.description,
-        duration: dto.duration,
-        price: dto.price,
-        costPrice: dto.costPrice,
         status: dto.status ?? ServiceStatus.ACTIVE,
         categoryId: dto.categoryId,
+        variants: {
+          create: dto.variants.map((v, i) => ({
+            name: v.name,
+            description: v.description,
+            duration: v.duration,
+            price: v.price,
+            costPrice: v.costPrice,
+            sortOrder: v.sortOrder ?? i,
+            status: v.status ?? ServiceStatus.ACTIVE,
+          })),
+        },
       },
       include: serviceInclude,
     });
   }
 
   async findAll(params?: ServiceParams) {
-    return this.prisma.service.findMany({
-      where: {
-        ...(params?.storeId && { shopId: params.storeId }),
-        ...(params?.status && { status: params.status }),
-        ...(params?.categoryId && { categoryId: params.categoryId }),
-      },
-      orderBy: { name: 'asc' },
-      include: { category: true, _count: { select: { staffs: true, appointments: true } } },
-    });
+    const page = params?.page ?? 1;
+    const limit = params?.limit ?? 20;
+    const where = {
+      ...(params?.storeId && { shopId: params.storeId }),
+      ...(params?.status && { status: params.status }),
+      ...(params?.categoryId && { categoryId: params.categoryId }),
+    };
+
+    const [items, total] = await Promise.all([
+      this.prisma.service.findMany({
+        where,
+        orderBy: { name: 'asc' },
+        skip: (page - 1) * limit,
+        take: limit,
+        include: {
+          category: true,
+          variants: { where: { status: ServiceStatus.ACTIVE }, orderBy: { sortOrder: 'asc' } },
+          _count: { select: { staffs: true, appointments: true } },
+        },
+      }),
+      this.prisma.service.count({ where }),
+    ]);
+
+    return { items, total, page, limit };
   }
 
-  async findOne(id: string, storeId?: string) {
+  async findPublic(params: PublicServiceParams) {
+    const page = params.page ?? 1;
+    const limit = params.limit ?? 20;
+    const where: Prisma.ServiceWhereInput = {
+      status: ServiceStatus.ACTIVE,
+      store: { status: StoreStatus.ACTIVE },
+      ...(params.storeId && { shopId: params.storeId }),
+      ...(params.categoryId && { categoryId: params.categoryId }),
+      ...(params.q && {
+        OR: [
+          { name: { contains: params.q } },
+          { description: { contains: params.q } },
+        ],
+      }),
+    };
+
+    const [items, total] = await Promise.all([
+      this.prisma.service.findMany({
+        where,
+        orderBy: { name: 'asc' },
+        skip: (page - 1) * limit,
+        take: limit,
+        include: {
+          category: true,
+          store: { select: { id: true, name: true, slug: true, logoUrl: true, city: true, avgRating: true } },
+          variants: { where: { status: ServiceStatus.ACTIVE }, orderBy: { sortOrder: 'asc' } },
+        },
+      }),
+      this.prisma.service.count({ where }),
+    ]);
+
+    return { items, total, page, limit };
+  }
+
+  async findOne(idOrSlug: string, storeId?: string) {
     const service = await this.prisma.service.findFirst({
-      where: { id, ...(storeId && { shopId: storeId }) },
+      where: {
+        OR: [{ id: idOrSlug }, { slug: idOrSlug }],
+        ...(storeId && { shopId: storeId }),
+      },
       include: serviceInclude,
     });
     if (!service) throw new NotFoundException('Service not found');
@@ -54,21 +131,69 @@ export class ServicesService {
 
   async update(id: string, storeId: string, dto: UpdateServiceDto) {
     await this.findOne(id, storeId);
+    const slug = dto.name ? await this.generateUniqueSlug(dto.name, storeId, id) : undefined;
 
     await this.prisma.service.update({
       where: { id },
       data: {
         name: dto.name,
+        slug,
         description: dto.description,
-        duration: dto.duration,
-        price: dto.price,
-        costPrice: dto.costPrice,
         status: dto.status,
         categoryId: dto.categoryId,
       },
     });
 
     return this.findOne(id, storeId);
+  }
+
+  async addVariant(serviceId: string, storeId: string, dto: CreateServiceVariantDto) {
+    await this.findOne(serviceId, storeId);
+    return this.prisma.serviceVariant.create({
+      data: {
+        serviceId,
+        name: dto.name,
+        description: dto.description,
+        duration: dto.duration,
+        price: dto.price,
+        costPrice: dto.costPrice,
+        sortOrder: dto.sortOrder ?? 0,
+        status: dto.status ?? ServiceStatus.ACTIVE,
+      },
+    });
+  }
+
+  async updateVariant(serviceId: string, variantId: string, storeId: string, dto: UpdateServiceVariantDto) {
+    await this.findVariantOrThrow(serviceId, variantId, storeId);
+    return this.prisma.serviceVariant.update({
+      where: { id: variantId },
+      data: {
+        name: dto.name,
+        description: dto.description,
+        duration: dto.duration,
+        price: dto.price,
+        costPrice: dto.costPrice,
+        sortOrder: dto.sortOrder,
+        status: dto.status,
+      },
+    });
+  }
+
+  async removeVariant(serviceId: string, variantId: string, storeId: string) {
+    await this.findVariantOrThrow(serviceId, variantId, storeId);
+
+    const activeCount = await this.prisma.serviceVariant.count({
+      where: { serviceId, status: ServiceStatus.ACTIVE },
+    });
+    if (activeCount <= 1) {
+      throw new BadRequestException('Dịch vụ phải có ít nhất 1 gói đang hoạt động');
+    }
+
+    await this.prisma.serviceVariant.update({
+      where: { id: variantId },
+      data: { status: ServiceStatus.INACTIVE },
+    });
+    return { deleted: true };
   }
 
   async assignStaff(id: string, storeId: string, staffIds: string[]) {
@@ -95,5 +220,26 @@ export class ServicesService {
       data: { status: ServiceStatus.INACTIVE },
     });
     return { deleted: true };
+  }
+
+  private async findVariantOrThrow(serviceId: string, variantId: string, storeId: string) {
+    const variant = await this.prisma.serviceVariant.findFirst({
+      where: { id: variantId, serviceId, service: { shopId: storeId } },
+    });
+    if (!variant) throw new NotFoundException('Variant not found');
+    return variant;
+  }
+
+  private async generateUniqueSlug(name: string, storeId: string, excludeId?: string) {
+    const base = slugify(name) || 'service';
+    let slug = base;
+    let suffix = 2;
+    while (true) {
+      const existing = await this.prisma.service.findFirst({
+        where: { shopId: storeId, slug, ...(excludeId && { id: { not: excludeId } }) },
+      });
+      if (!existing) return slug;
+      slug = `${base}-${suffix++}`;
+    }
   }
 }

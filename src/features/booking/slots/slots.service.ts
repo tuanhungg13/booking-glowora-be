@@ -32,19 +32,19 @@ export class SlotsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getAvailableSlots(storeId: string, dto: AvailableSlotsQueryDto) {
-    const { date, serviceId, staffId } = dto;
+    const { date, serviceId, variantId, staffId } = dto;
 
-    const [store, service] = await Promise.all([
+    const [store, variant] = await Promise.all([
       this.prisma.store.findUnique({ where: { id: storeId } }),
-      this.prisma.service.findFirst({
-        where: { id: serviceId, shopId: storeId, status: ServiceStatus.ACTIVE },
+      this.prisma.serviceVariant.findFirst({
+        where: { id: variantId, serviceId, status: ServiceStatus.ACTIVE, service: { shopId: storeId, status: ServiceStatus.ACTIVE } },
       }),
     ]);
 
     if (!store || store.status !== StoreStatus.ACTIVE) {
       throw new NotFoundException('Store not found or inactive');
     }
-    if (!service) throw new NotFoundException('Service not found for this store');
+    if (!variant) throw new NotFoundException('Service variant not found for this store');
 
     const tzOffset = TZ_OFFSETS[store.timezone] ?? 7 * 60;
     const todayStr = this.getTodayDateStr(tzOffset);
@@ -62,7 +62,7 @@ export class SlotsService {
       where: { storeId, dayOfWeek },
     });
     if (!workingHour || workingHour.isClosed) {
-      return this.emptyResult(date, serviceId, service.duration, store.slotIntervalMins);
+      return this.emptyResult(date, serviceId, variantId, variant.duration, store.slotIntervalMins);
     }
 
     const shopOpenMins = this.parseTime(workingHour.openTime);
@@ -85,7 +85,7 @@ export class SlotsService {
       });
       qualifiedStaffIds = mappings.map((m) => m.staffId);
       if (!qualifiedStaffIds.length) {
-        return this.emptyResult(date, serviceId, service.duration, store.slotIntervalMins);
+        return this.emptyResult(date, serviceId, variantId, variant.duration, store.slotIntervalMins);
       }
     }
 
@@ -120,7 +120,7 @@ export class SlotsService {
 
       // Generate candidate slots
       const candidates: number[] = [];
-      for (let cur = windowStart; cur + service.duration <= windowEnd; cur += store.slotIntervalMins) {
+      for (let cur = windowStart; cur + variant.duration <= windowEnd; cur += store.slotIntervalMins) {
         candidates.push(cur);
       }
 
@@ -138,7 +138,7 @@ export class SlotsService {
         // Drop slots too close to now
         if (isToday && slotMins <= nowLocalMins + BOOKING_BUFFER_MINS) return false;
 
-        const slotEnd = slotMins + service.duration;
+        const slotEnd = slotMins + variant.duration;
         return !busyApts.some((apt) => {
           const aptStart = this.getLocalMinsFromUTC(apt.scheduledAt, tzOffset);
           const aptEnd = aptStart + apt.duration;
@@ -165,14 +165,15 @@ export class SlotsService {
     return {
       date,
       serviceId,
-      serviceDuration: service.duration,
+      variantId,
+      serviceDuration: variant.duration,
       slotIntervalMins: store.slotIntervalMins,
       staffSlots,
     };
   }
 
-  private emptyResult(date: string, serviceId: string, serviceDuration: number, slotIntervalMins: number) {
-    return { date, serviceId, serviceDuration, slotIntervalMins, staffSlots: [] };
+  private emptyResult(date: string, serviceId: string, variantId: string, serviceDuration: number, slotIntervalMins: number) {
+    return { date, serviceId, variantId, serviceDuration, slotIntervalMins, staffSlots: [] };
   }
 
   private getTodayDateStr(tzOffsetMins: number): string {

@@ -27,10 +27,10 @@ export class StoreFilterDto {
   @Max(5)
   minRating?: number;
 
-  @ApiPropertyOptional({ enum: ['rating', 'newest', 'name'], example: 'rating' })
+  @ApiPropertyOptional({ enum: ['avgRating', 'newest', 'name'], example: 'avgRating' })
   @IsOptional()
-  @IsIn(['rating', 'newest', 'name'])
-  sort?: 'rating' | 'newest' | 'name';
+  @IsIn(['avgRating', 'newest', 'name'])
+  sort?: 'avgRating' | 'newest' | 'name';
 
   @ApiPropertyOptional({ example: 1, minimum: 1 })
   @IsOptional()

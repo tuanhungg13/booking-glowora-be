@@ -92,6 +92,7 @@ CREATE TABLE `stores` (
     `auto_confirm` BOOLEAN NOT NULL DEFAULT false,
     `avg_rating` DECIMAL(3, 2) NOT NULL DEFAULT 0.00,
     `total_reviews` INTEGER NOT NULL DEFAULT 0,
+    `telegram_group_id` VARCHAR(50) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
@@ -126,11 +127,13 @@ CREATE TABLE `staff` (
     `rating` DECIMAL(3, 2) NOT NULL DEFAULT 0.00,
     `total_reviews` INTEGER NOT NULL DEFAULT 0,
     `status` ENUM('ACTIVE', 'INACTIVE') NOT NULL DEFAULT 'ACTIVE',
+    `telegram_chat_id` VARCHAR(50) NULL,
+    `telegram_link_token` VARCHAR(100) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `staff_user_id_key`(`user_id`),
     INDEX `staff_store_id_status_idx`(`store_id`, `status`),
+    UNIQUE INDEX `staff_user_id_store_id_key`(`user_id`, `store_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -155,10 +158,8 @@ CREATE TABLE `services` (
     `shop_id` CHAR(36) NOT NULL,
     `category_id` CHAR(36) NULL,
     `name` VARCHAR(150) NOT NULL,
+    `slug` VARCHAR(200) NULL,
     `description` TEXT NULL,
-    `duration` INTEGER NOT NULL,
-    `price` DECIMAL(12, 2) NOT NULL,
-    `cost_price` DECIMAL(12, 2) NULL,
     `image_url` VARCHAR(191) NULL,
     `status` ENUM('ACTIVE', 'INACTIVE') NOT NULL DEFAULT 'ACTIVE',
     `avg_rating` DECIMAL(3, 2) NOT NULL DEFAULT 0.00,
@@ -167,6 +168,25 @@ CREATE TABLE `services` (
 
     INDEX `services_shop_id_status_idx`(`shop_id`, `status`),
     INDEX `services_category_id_idx`(`category_id`),
+    UNIQUE INDEX `services_shop_id_slug_key`(`shop_id`, `slug`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `service_variants` (
+    `id` CHAR(36) NOT NULL,
+    `service_id` CHAR(36) NOT NULL,
+    `name` VARCHAR(150) NOT NULL,
+    `description` TEXT NULL,
+    `duration` INTEGER NOT NULL,
+    `price` DECIMAL(12, 2) NOT NULL,
+    `cost_price` DECIMAL(12, 2) NULL,
+    `sort_order` INTEGER NOT NULL DEFAULT 0,
+    `status` ENUM('ACTIVE', 'INACTIVE') NOT NULL DEFAULT 'ACTIVE',
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL,
+
+    INDEX `service_variants_service_id_status_idx`(`service_id`, `status`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -260,6 +280,7 @@ CREATE TABLE `appointments` (
     `customer_id` CHAR(36) NOT NULL,
     `store_id` CHAR(36) NOT NULL,
     `service_id` CHAR(36) NOT NULL,
+    `variant_id` CHAR(36) NOT NULL,
     `staff_id` CHAR(36) NULL,
     `scheduled_at` DATETIME(3) NOT NULL,
     `duration` INTEGER NOT NULL,
@@ -276,6 +297,7 @@ CREATE TABLE `appointments` (
     INDEX `appointments_customer_id_status_idx`(`customer_id`, `status`),
     INDEX `appointments_store_id_status_scheduled_at_idx`(`store_id`, `status`, `scheduled_at`),
     INDEX `appointments_staff_id_scheduled_at_idx`(`staff_id`, `scheduled_at`),
+    INDEX `appointments_variant_id_idx`(`variant_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -348,6 +370,9 @@ CREATE TABLE `conversations` (
     `id` CHAR(36) NOT NULL,
     `customer_id` CHAR(36) NOT NULL,
     `store_id` CHAR(36) NOT NULL,
+    `mode` ENUM('BOT', 'HUMAN') NOT NULL DEFAULT 'BOT',
+    `assigned_staff_id` CHAR(36) NULL,
+    `telegram_topic_id` INTEGER NULL,
     `last_message_at` DATETIME(3) NULL,
     `last_message_body` VARCHAR(200) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -364,6 +389,7 @@ CREATE TABLE `messages` (
     `id` CHAR(36) NOT NULL,
     `conversation_id` CHAR(36) NOT NULL,
     `sender_id` CHAR(36) NOT NULL,
+    `sender_type` ENUM('CUSTOMER', 'STAFF', 'BOT') NOT NULL DEFAULT 'CUSTOMER',
     `content` TEXT NOT NULL,
     `is_read` BOOLEAN NOT NULL DEFAULT false,
     `read_at` DATETIME(3) NULL,
@@ -431,6 +457,9 @@ ALTER TABLE `services` ADD CONSTRAINT `services_shop_id_fkey` FOREIGN KEY (`shop
 ALTER TABLE `services` ADD CONSTRAINT `services_category_id_fkey` FOREIGN KEY (`category_id`) REFERENCES `service_categories`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `service_variants` ADD CONSTRAINT `service_variants_service_id_fkey` FOREIGN KEY (`service_id`) REFERENCES `services`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `staff_services` ADD CONSTRAINT `staff_services_staff_id_fkey` FOREIGN KEY (`staff_id`) REFERENCES `staff`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -476,6 +505,9 @@ ALTER TABLE `appointments` ADD CONSTRAINT `appointments_store_id_fkey` FOREIGN K
 ALTER TABLE `appointments` ADD CONSTRAINT `appointments_service_id_fkey` FOREIGN KEY (`service_id`) REFERENCES `services`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `appointments` ADD CONSTRAINT `appointments_variant_id_fkey` FOREIGN KEY (`variant_id`) REFERENCES `service_variants`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `appointments` ADD CONSTRAINT `appointments_staff_id_fkey` FOREIGN KEY (`staff_id`) REFERENCES `staff`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -510,6 +542,9 @@ ALTER TABLE `conversations` ADD CONSTRAINT `conversations_customer_id_fkey` FORE
 
 -- AddForeignKey
 ALTER TABLE `conversations` ADD CONSTRAINT `conversations_store_id_fkey` FOREIGN KEY (`store_id`) REFERENCES `stores`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `conversations` ADD CONSTRAINT `conversations_assigned_staff_id_fkey` FOREIGN KEY (`assigned_staff_id`) REFERENCES `staff`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `messages` ADD CONSTRAINT `messages_conversation_id_fkey` FOREIGN KEY (`conversation_id`) REFERENCES `conversations`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

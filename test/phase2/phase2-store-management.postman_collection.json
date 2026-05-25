@@ -1063,10 +1063,10 @@
           ],
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [{ "key": "x-shop-id", "value": "{{storeId}}" }],
             "url": {
-              "raw": "{{baseUrl}}/stores/{{storeId}}/staff",
-              "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff"]
+              "raw": "{{baseUrl}}/store-staff",
+              "host": ["{{baseUrl}}"], "path": ["store-staff"]
             }
           }
         },
@@ -1095,15 +1095,16 @@
             "method": "POST",
             "header": [
               { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"{{staffUserEmail}}\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/stores/{{storeId}}/staff/invite",
-              "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "invite"]
+              "raw": "{{baseUrl}}/store-staff/invite",
+              "host": ["{{baseUrl}}"], "path": ["store-staff", "invite"]
             }
           }
         },
@@ -1126,15 +1127,16 @@
             "method": "POST",
             "header": [
               { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"nobody@nowhere.com\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/stores/{{storeId}}/staff/invite",
-              "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "invite"]
+              "raw": "{{baseUrl}}/store-staff/invite",
+              "host": ["{{baseUrl}}"], "path": ["store-staff", "invite"]
             }
           }
         },
@@ -1157,15 +1159,16 @@
             "method": "POST",
             "header": [
               { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{adminAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"{{staffUserEmail}}\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/stores/{{storeId}}/staff/invite",
-              "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "invite"]
+              "raw": "{{baseUrl}}/store-staff/invite",
+              "host": ["{{baseUrl}}"], "path": ["store-staff", "invite"]
             }
           }
         },
@@ -1223,12 +1226,11 @@
           ],
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [{ "key": "x-shop-id", "value": "{{storeId}}" }],
             "url": {
-              "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}",
+              "raw": "{{baseUrl}}/store-staff/{{staffId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["stores", "{{storeId}}", "staff", "{{staffId}}"],
-              "description": "staffId được set từ invite response. Nếu rỗng, paste staffId thủ công."
+              "path": ["store-staff", "{{staffId}}"]
             }
           }
         },
@@ -1251,15 +1253,16 @@
             "method": "PATCH",
             "header": [
               { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"specialty\": \"Massage mặt và cham soc da\",\n  \"bio\": \"5 năm kinh nghiệm trong lĩnh vực spa cao cấp.\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}",
-              "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}"]
+              "raw": "{{baseUrl}}/store-staff/{{staffId}}",
+              "host": ["{{baseUrl}}"], "path": ["store-staff", "{{staffId}}"]
             }
           }
         },
@@ -1280,10 +1283,13 @@
           ],
           "request": {
             "method": "DELETE",
-            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
+            ],
             "url": {
-              "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}",
-              "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}"]
+              "raw": "{{baseUrl}}/store-staff/{{staffId}}",
+              "host": ["{{baseUrl}}"], "path": ["store-staff", "{{staffId}}"]
             }
           }
         }

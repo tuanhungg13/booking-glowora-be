@@ -7,6 +7,8 @@ function slugify(value: string): string {
   return value
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\u0111/g, 'd')
+    .replace(/\u0110/g, 'd')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
@@ -17,10 +19,11 @@ export class CategoriesService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateCategoryDto) {
+    const slug = await this.generateUniqueSlug(dto.name);
     return this.prisma.serviceCategory.create({
       data: {
         name: dto.name,
-        slug: slugify(dto.name),
+        slug,
         description: dto.description,
         iconUrl: dto.iconUrl,
       },
@@ -34,9 +37,9 @@ export class CategoriesService {
     });
   }
 
-  async findOne(id: string) {
-    const category = await this.prisma.serviceCategory.findUnique({
-      where: { id },
+  async findOne(idOrSlug: string) {
+    const category = await this.prisma.serviceCategory.findFirst({
+      where: { OR: [{ id: idOrSlug }, { slug: idOrSlug }] },
       include: { services: true, combos: true },
     });
     if (!category) throw new NotFoundException('Category not found');
@@ -45,15 +48,29 @@ export class CategoriesService {
 
   async update(id: string, dto: UpdateCategoryDto) {
     await this.findOne(id);
+    const slug = dto.name ? await this.generateUniqueSlug(dto.name, id) : undefined;
     return this.prisma.serviceCategory.update({
       where: { id },
       data: {
         name: dto.name,
-        slug: dto.name ? slugify(dto.name) : undefined,
+        slug,
         description: dto.description,
         iconUrl: dto.iconUrl,
       },
     });
+  }
+
+  private async generateUniqueSlug(name: string, excludeId?: string) {
+    const base = slugify(name) || 'category';
+    let slug = base;
+    let suffix = 2;
+    while (true) {
+      const existing = await this.prisma.serviceCategory.findFirst({
+        where: { slug, ...(excludeId && { id: { not: excludeId } }) },
+      });
+      if (!existing) return slug;
+      slug = `${base}-${suffix++}`;
+    }
   }
 
   async remove(id: string) {

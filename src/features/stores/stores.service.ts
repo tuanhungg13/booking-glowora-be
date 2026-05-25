@@ -302,7 +302,7 @@ export class StoresService {
   private buildOrderBy(sort?: StoreFilterDto['sort']): Prisma.StoreOrderByWithRelationInput {
     if (sort === 'newest') return { createdAt: 'desc' };
     if (sort === 'name') return { name: 'asc' };
-    return { avgRating: 'desc' };
+    return { avgRating: 'desc' }; // default + 'avgRating'
   }
 
   private async generateUniqueSlug(name: string, city: string) {

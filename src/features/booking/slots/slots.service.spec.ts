@@ -7,6 +7,7 @@ describe('SlotsService — Phase 4', () => {
 
   const storeId = 'store-001';
   const serviceId = 'svc-001';
+  const variantId = 'var-001';
   const staffId = 'staff-001';
 
   const baseStore = {
@@ -18,10 +19,10 @@ describe('SlotsService — Phase 4', () => {
     maxAdvanceDays: 30,
   };
 
-  const baseService = {
-    id: serviceId,
-    shopId: storeId,
-    name: 'Massage',
+  const baseVariant = {
+    id: variantId,
+    serviceId,
+    name: 'Gói cơ bản',
     duration: 60,
     status: 'ACTIVE',
   };
@@ -50,7 +51,7 @@ describe('SlotsService — Phase 4', () => {
   beforeEach(() => {
     prisma = {
       store: { findUnique: jest.fn().mockResolvedValue(baseStore) },
-      service: { findFirst: jest.fn().mockResolvedValue(baseService) },
+      serviceVariant: { findFirst: jest.fn().mockResolvedValue(baseVariant) },
       workingHour: { findFirst: jest.fn().mockResolvedValue(baseWorkingHour) },
       staff: {
         findFirst: jest.fn().mockResolvedValue({ id: staffId, storeId, status: 'ACTIVE' }),
@@ -77,7 +78,7 @@ describe('SlotsService — Phase 4', () => {
       prisma.store.findUnique.mockResolvedValue(null);
 
       await expect(
-        service.getAvailableSlots(storeId, { date: '2026-06-02', serviceId }),
+        service.getAvailableSlots(storeId, { date: '2026-06-02', serviceId, variantId }),
       ).rejects.toBeInstanceOf(NotFoundException);
     });
 
@@ -85,15 +86,15 @@ describe('SlotsService — Phase 4', () => {
       prisma.store.findUnique.mockResolvedValue({ ...baseStore, status: 'PENDING' });
 
       await expect(
-        service.getAvailableSlots(storeId, { date: '2026-06-02', serviceId }),
+        service.getAvailableSlots(storeId, { date: '2026-06-02', serviceId, variantId }),
       ).rejects.toBeInstanceOf(NotFoundException);
     });
 
-    it('throws NotFoundException when service is not found for this store', async () => {
-      prisma.service.findFirst.mockResolvedValue(null);
+    it('throws NotFoundException when variant is not found for this store', async () => {
+      prisma.serviceVariant.findFirst.mockResolvedValue(null);
 
       await expect(
-        service.getAvailableSlots(storeId, { date: '2026-06-02', serviceId }),
+        service.getAvailableSlots(storeId, { date: '2026-06-02', serviceId, variantId }),
       ).rejects.toBeInstanceOf(NotFoundException);
     });
   });
@@ -103,7 +104,7 @@ describe('SlotsService — Phase 4', () => {
   describe('date validation', () => {
     it('throws BadRequestException for a past date', async () => {
       await expect(
-        service.getAvailableSlots(storeId, { date: '2020-01-01', serviceId }),
+        service.getAvailableSlots(storeId, { date: '2020-01-01', serviceId, variantId }),
       ).rejects.toBeInstanceOf(BadRequestException);
     });
 
@@ -114,7 +115,7 @@ describe('SlotsService — Phase 4', () => {
         .slice(0, 10);
 
       await expect(
-        service.getAvailableSlots(storeId, { date: farFuture, serviceId }),
+        service.getAvailableSlots(storeId, { date: farFuture, serviceId, variantId }),
       ).rejects.toBeInstanceOf(BadRequestException);
     });
   });
@@ -126,7 +127,7 @@ describe('SlotsService — Phase 4', () => {
       prisma.workingHour.findFirst.mockResolvedValue({ ...baseWorkingHour, isClosed: true });
 
       const tomorrow = getDateStr(1);
-      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId });
+      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId, variantId });
 
       expect(result.staffSlots).toHaveLength(0);
     });
@@ -135,7 +136,7 @@ describe('SlotsService — Phase 4', () => {
       prisma.workingHour.findFirst.mockResolvedValue(null);
 
       const tomorrow = getDateStr(1);
-      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId });
+      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId, variantId });
 
       expect(result.staffSlots).toHaveLength(0);
     });
@@ -149,7 +150,7 @@ describe('SlotsService — Phase 4', () => {
 
       const tomorrow = getDateStr(1);
       await expect(
-        service.getAvailableSlots(storeId, { date: tomorrow, serviceId, staffId }),
+        service.getAvailableSlots(storeId, { date: tomorrow, serviceId, variantId, staffId }),
       ).rejects.toBeInstanceOf(NotFoundException);
     });
 
@@ -158,7 +159,7 @@ describe('SlotsService — Phase 4', () => {
 
       const tomorrow = getDateStr(1);
       await expect(
-        service.getAvailableSlots(storeId, { date: tomorrow, serviceId, staffId }),
+        service.getAvailableSlots(storeId, { date: tomorrow, serviceId, variantId, staffId }),
       ).rejects.toBeInstanceOf(BadRequestException);
     });
   });
@@ -170,7 +171,7 @@ describe('SlotsService — Phase 4', () => {
       prisma.staffService.findMany.mockResolvedValue([]);
 
       const tomorrow = getDateStr(1);
-      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId });
+      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId, variantId });
 
       expect(result.staffSlots).toHaveLength(0);
     });
@@ -179,7 +180,7 @@ describe('SlotsService — Phase 4', () => {
       prisma.staffSchedule.findFirst.mockResolvedValue(null);
 
       const tomorrow = getDateStr(1);
-      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId });
+      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId, variantId });
 
       expect(result.staffSlots).toHaveLength(0);
     });
@@ -188,14 +189,14 @@ describe('SlotsService — Phase 4', () => {
       prisma.staffDayOff.findFirst.mockResolvedValue({ staffId, date: new Date() });
 
       const tomorrow = getDateStr(1);
-      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId });
+      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId, variantId });
 
       expect(result.staffSlots).toHaveLength(0);
     });
 
     it('returns available slots for staff when there are no busy appointments', async () => {
       const tomorrow = getDateStr(1);
-      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId });
+      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId, variantId });
 
       expect(result.staffSlots).toHaveLength(1);
       expect(result.staffSlots[0].staffId).toBe(staffId);
@@ -204,7 +205,7 @@ describe('SlotsService — Phase 4', () => {
 
     it('slots are formatted as HH:mm strings', async () => {
       const tomorrow = getDateStr(1);
-      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId });
+      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId, variantId });
 
       const slotPattern = /^\d{2}:\d{2}$/;
       result.staffSlots[0].availableSlots.forEach((slot) => {
@@ -221,7 +222,7 @@ describe('SlotsService — Phase 4', () => {
         { scheduledAt: tomorrowDate, duration: 60 },
       ]);
 
-      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId });
+      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId, variantId });
 
       if (result.staffSlots.length > 0) {
         expect(result.staffSlots[0].availableSlots).not.toContain('09:00');
@@ -230,12 +231,12 @@ describe('SlotsService — Phase 4', () => {
 
     it('returns correct response shape with date, serviceId, serviceDuration, slotIntervalMins', async () => {
       const tomorrow = getDateStr(1);
-      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId });
+      const result = await service.getAvailableSlots(storeId, { date: tomorrow, serviceId, variantId });
 
       expect(result).toMatchObject({
         date: tomorrow,
         serviceId,
-        serviceDuration: baseService.duration,
+        serviceDuration: baseVariant.duration,
         slotIntervalMins: baseStore.slotIntervalMins,
       });
     });

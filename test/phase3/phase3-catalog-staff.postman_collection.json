@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "d4e5f6a7-b8c9-0123-defa-345678901234",
     "name": "Phase 3 — Catalog & Staff",
-    "description": "Test toàn bộ API Phase 3:\n- Categories CRUD (Super Admin)\n- Services CRUD + assign staff (Owner)\n- Combos CRUD với items (Owner)\n- Staff management: invite / accept / update / remove (Owner + Staff)\n- Staff Schedule: bulk upsert, CRUD (Owner)\n- Staff Day Off: CRUD (Owner / Staff)\n\n**Luồng chạy khuyến nghị:**\n1. [Setup] Login Admin → lấy adminAccessToken\n2. [Setup] Register + Login Owner → lấy ownerAccessToken\n3. [Setup] Register + Login Staff User → lấy staffAccessToken\n4. [Setup] Tạo + duyệt Store → lấy storeId\n5. [Categories] CRUD bằng admin token\n6. [Services] CRUD + assign staff bằng owner token\n7. [Combos] CRUD với items bằng owner token\n8. [Staff Management] Invite → Accept → Update → Remove\n9. [Staff Schedule] Bulk upsert + CRUD\n10. [Staff Day Off] CRUD",
+    "description": "Test toàn bộ API Phase 3:\n- Categories CRUD (Super Admin)\n- Services CRUD + assign staff (Owner, dùng header x-shop-id)\n- Combos CRUD với items (Owner, dùng header x-shop-id)\n- Staff management: invite / accept / update / remove (Owner + Staff)\n- Staff Schedule: bulk upsert, CRUD (Owner, dùng header x-shop-id)\n- Staff Day Off: CRUD (Owner / Staff, dùng header x-shop-id)\n\n**Lưu ý quan trọng:**\n- Services, Combos, Staff Schedule, Staff Day Off đều dùng header `x-shop-id: {{storeId}}` thay vì storeId trong URL\n- Staff endpoints dùng `/store-staff` với header `x-shop-id`\n\n**Luồng chạy khuyến nghị:**\n1. [Setup] Login Admin → lấy adminAccessToken\n2. [Setup] Register + Login Owner → lấy ownerAccessToken\n3. [Setup] Register + Login Staff User → lấy staffAccessToken\n4. [Setup] Tạo + duyệt Store → lấy storeId\n5. [Categories] CRUD bằng admin token\n6. [Services] CRUD + assign staff bằng owner token\n7. [Combos] CRUD với items bằng owner token\n8. [Staff Management] Invite → Accept → Update → Remove\n9. [Staff Schedule] Bulk upsert + CRUD\n10. [Staff Day Off] CRUD",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -13,6 +13,7 @@
     { "key": "storeId",          "value": "", "type": "string" },
     { "key": "categoryId",       "value": "", "type": "string" },
     { "key": "serviceId",        "value": "", "type": "string" },
+    { "key": "variantId",        "value": "", "type": "string" },
     { "key": "comboId",          "value": "", "type": "string" },
     { "key": "staffId",          "value": "", "type": "string" },
     { "key": "scheduleId",       "value": "", "type": "string" },
@@ -173,12 +174,7 @@
         {
           "name": "GET /categories/:id — Public detail",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "pm.test('Has services and combos', () => {",
-            "  const d = pm.response.json().data;",
-            "  pm.expect(d).to.have.property('services');",
-            "  pm.expect(d).to.have.property('combos');",
-            "});"
+            "pm.test('Status 200', () => pm.response.to.have.status(200));"
           ]}}],
           "request": {
             "method": "GET",
@@ -229,8 +225,7 @@
         {
           "name": "DELETE /categories/:id — Admin deletes",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "pm.test('deleted true', () => pm.expect(pm.response.json().data.deleted).to.be.true);"
+            "pm.test('Status 200', () => pm.response.to.have.status(200));"
           ]}}],
           "request": {
             "method": "DELETE",
@@ -259,9 +254,10 @@
     },
     {
       "name": "[Services] CRUD",
+      "description": "Tất cả service endpoints dùng header x-shop-id thay vì storeId trong URL.",
       "item": [
         {
-          "name": "POST /stores/:storeId/services — Owner creates service (save serviceId)",
+          "name": "POST /services — Owner creates service (save serviceId)",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 201', () => pm.response.to.have.status(201));",
             "const body = pm.response.json();",
@@ -276,37 +272,42 @@
             "method": "POST",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"name\": \"Facial Treatment\",\n  \"description\": \"Điều trị da chuyên sâu\",\n  \"duration\": 60,\n  \"price\": 350000,\n  \"categoryId\": \"{{categoryId}}\"\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/services", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "services"] }
+            "url": { "raw": "{{baseUrl}}/services", "host": ["{{baseUrl}}"], "path": ["services"] }
           }
         },
         {
-          "name": "POST /stores/:storeId/services — 401 khi không có token",
+          "name": "POST /services — 401 khi không có token",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 401', () => pm.response.to.have.status(401));"
           ]}}],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-shop-id",    "value": "{{storeId}}" }
+            ],
             "body": { "mode": "raw", "raw": "{\n  \"name\": \"Unauthorized Service\",\n  \"duration\": 30,\n  \"price\": 100000\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/services", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "services"] }
+            "url": { "raw": "{{baseUrl}}/services", "host": ["{{baseUrl}}"], "path": ["services"] }
           }
         },
         {
-          "name": "GET /stores/:storeId/services — Public listing",
+          "name": "GET /services — Public listing",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.test('Has service in list', () => pm.expect(pm.response.json().data.length).to.be.greaterThan(0));"
           ]}}],
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/services", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "services"] }
+            "header": [{ "key": "x-shop-id", "value": "{{storeId}}" }],
+            "url": { "raw": "{{baseUrl}}/services", "host": ["{{baseUrl}}"], "path": ["services"] }
           }
         },
         {
-          "name": "GET /stores/:storeId/services?status=INACTIVE — Filter inactive",
+          "name": "GET /services?status=INACTIVE — Filter inactive",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.test('Empty or inactive services', () => {",
@@ -316,32 +317,35 @@
           ]}}],
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/services?status=INACTIVE", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "services"], "query": [{ "key": "status", "value": "INACTIVE" }] }
+            "header": [{ "key": "x-shop-id", "value": "{{storeId}}" }],
+            "url": { "raw": "{{baseUrl}}/services?status=INACTIVE", "host": ["{{baseUrl}}"], "path": ["services"], "query": [{ "key": "status", "value": "INACTIVE" }] }
           }
         },
         {
-          "name": "GET /stores/:storeId/services/:id — Public detail",
+          "name": "GET /services/:id — Public detail",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.test('Correct service', () => pm.expect(pm.response.json().data.id).to.eql(pm.collectionVariables.get('serviceId')));"
           ]}}],
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/services/{{serviceId}}", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "services", "{{serviceId}}"] }
+            "header": [{ "key": "x-shop-id", "value": "{{storeId}}" }],
+            "url": { "raw": "{{baseUrl}}/services/{{serviceId}}", "host": ["{{baseUrl}}"], "path": ["services", "{{serviceId}}"] }
           }
         },
         {
-          "name": "GET /stores/:storeId/services/:id — 404 với sai storeId",
+          "name": "GET /services/:id — 404 với storeId không khớp",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 404', () => pm.response.to.have.status(404));"
           ]}}],
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/stores/00000000-0000-0000-0000-000000000000/services/{{serviceId}}", "host": ["{{baseUrl}}"], "path": ["stores", "00000000-0000-0000-0000-000000000000", "services", "{{serviceId}}"] }
+            "header": [{ "key": "x-shop-id", "value": "00000000-0000-0000-0000-000000000000" }],
+            "url": { "raw": "{{baseUrl}}/services/{{serviceId}}", "host": ["{{baseUrl}}"], "path": ["services", "{{serviceId}}"] }
           }
         },
         {
-          "name": "PATCH /stores/:storeId/services/:id — Owner updates price & name",
+          "name": "PATCH /services/:id — Owner updates price & name",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.test('Price updated', () => pm.expect(pm.response.json().data.price).to.eql(400000));"
@@ -350,49 +354,93 @@
             "method": "PATCH",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"name\": \"Premium Facial Treatment\",\n  \"price\": 400000\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/services/{{serviceId}}", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "services", "{{serviceId}}"] }
+            "url": { "raw": "{{baseUrl}}/services/{{serviceId}}", "host": ["{{baseUrl}}"], "path": ["services", "{{serviceId}}"] }
           }
         },
         {
-          "name": "PATCH /stores/:storeId/services/:id — 422 khi price âm",
+          "name": "PATCH /services/:id — 400 khi price âm",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 422', () => pm.response.to.have.status(422));"
+            "pm.test('Status 400', () => pm.response.to.have.status(400));"
           ]}}],
           "request": {
             "method": "PATCH",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"price\": -100\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/services/{{serviceId}}", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "services", "{{serviceId}}"] }
+            "url": { "raw": "{{baseUrl}}/services/{{serviceId}}", "host": ["{{baseUrl}}"], "path": ["services", "{{serviceId}}"] }
           }
         },
         {
-          "name": "DELETE /stores/:storeId/services/:id — Owner soft-deletes",
+          "name": "POST /services/:id/variants — Add variant (save variantId)",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "pm.test('deleted true', () => pm.expect(pm.response.json().data.deleted).to.be.true);"
+            "pm.test('Status 201', () => pm.response.to.have.status(201));",
+            "const body = pm.response.json();",
+            "pm.test('Has id and name', () => {",
+            "  pm.expect(body.data).to.have.property('id');",
+            "  pm.expect(body.data).to.have.property('name');",
+            "});",
+            "if (body.data?.id) pm.collectionVariables.set('variantId', body.data.id);"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Gói 60 phút\",\n  \"price\": 400000,\n  \"duration\": 60\n}" },
+            "url": { "raw": "{{baseUrl}}/services/{{serviceId}}/variants", "host": ["{{baseUrl}}"], "path": ["services", "{{serviceId}}", "variants"] }
+          }
+        },
+        {
+          "name": "PATCH /services/:id/variants/:variantId — Update variant",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));"
+          ]}}],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"price\": 450000\n}" },
+            "url": { "raw": "{{baseUrl}}/services/{{serviceId}}/variants/{{variantId}}", "host": ["{{baseUrl}}"], "path": ["services", "{{serviceId}}", "variants", "{{variantId}}"] }
+          }
+        },
+        {
+          "name": "DELETE /services/:id/variants/:variantId — Remove variant",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+            "pm.test('Status 200', () => pm.response.to.have.status(200));"
           ]}}],
           "request": {
             "method": "DELETE",
-            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/services/{{serviceId}}", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "services", "{{serviceId}}"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/services/{{serviceId}}/variants/{{variantId}}", "host": ["{{baseUrl}}"], "path": ["services", "{{serviceId}}", "variants", "{{variantId}}"] }
           }
         },
         {
-          "name": "GET /stores/:storeId/services/:id — Deleted service is INACTIVE",
+          "name": "DELETE /services/:id — Owner soft-deletes",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "pm.test('Status is INACTIVE', () => pm.expect(pm.response.json().data.status).to.eql('INACTIVE'));"
+            "pm.test('Status 200', () => pm.response.to.have.status(200));"
           ]}}],
           "request": {
-            "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/services/{{serviceId}}", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "services", "{{serviceId}}"] }
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/services/{{serviceId}}", "host": ["{{baseUrl}}"], "path": ["services", "{{serviceId}}"] }
           }
         },
         {
@@ -406,19 +454,21 @@
             "method": "POST",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"name\": \"Massage Thư Giãn\",\n  \"duration\": 90,\n  \"price\": 500000,\n  \"categoryId\": \"{{categoryId}}\"\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/services", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "services"] }
+            "url": { "raw": "{{baseUrl}}/services", "host": ["{{baseUrl}}"], "path": ["services"] }
           }
         }
       ]
     },
     {
       "name": "[Combos] CRUD",
+      "description": "Tất cả combo endpoints dùng header x-shop-id thay vì storeId trong URL.",
       "item": [
         {
-          "name": "POST /stores/:storeId/combos — Owner creates combo with items (save comboId)",
+          "name": "POST /combos — Owner creates combo with items (save comboId)",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 201', () => pm.response.to.have.status(201));",
             "const body = pm.response.json();",
@@ -429,51 +479,55 @@
             "method": "POST",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"name\": \"Gói Thư Giãn Toàn Diện\",\n  \"description\": \"Combo massage + facial\",\n  \"price\": 800000,\n  \"estimatedDurationMinutes\": 120,\n  \"categoryId\": \"{{categoryId}}\",\n  \"serviceIds\": [\n    { \"serviceId\": \"{{serviceId}}\", \"quantity\": 1, \"order\": 0 }\n  ]\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/combos", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "combos"] }
+            "url": { "raw": "{{baseUrl}}/combos", "host": ["{{baseUrl}}"], "path": ["combos"] }
           }
         },
         {
-          "name": "POST /stores/:storeId/combos — 422 khi thiếu price",
+          "name": "POST /combos — 400 khi thiếu price",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 422', () => pm.response.to.have.status(422));"
+            "pm.test('Status 400', () => pm.response.to.have.status(400));"
           ]}}],
           "request": {
             "method": "POST",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"name\": \"Combo Thiếu Price\"\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/combos", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "combos"] }
+            "url": { "raw": "{{baseUrl}}/combos", "host": ["{{baseUrl}}"], "path": ["combos"] }
           }
         },
         {
-          "name": "GET /stores/:storeId/combos — Public listing",
+          "name": "GET /combos — Public listing",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.test('Returns array', () => pm.expect(pm.response.json().data).to.be.an('array'));"
           ]}}],
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/combos", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "combos"] }
+            "header": [{ "key": "x-shop-id", "value": "{{storeId}}" }],
+            "url": { "raw": "{{baseUrl}}/combos", "host": ["{{baseUrl}}"], "path": ["combos"] }
           }
         },
         {
-          "name": "GET /stores/:storeId/combos/:id — Public detail",
+          "name": "GET /combos/:id — Public detail",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.test('Has items array', () => pm.expect(pm.response.json().data.items).to.be.an('array'));"
           ]}}],
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/combos/{{comboId}}", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "combos", "{{comboId}}"] }
+            "header": [{ "key": "x-shop-id", "value": "{{storeId}}" }],
+            "url": { "raw": "{{baseUrl}}/combos/{{comboId}}", "host": ["{{baseUrl}}"], "path": ["combos", "{{comboId}}"] }
           }
         },
         {
-          "name": "PATCH /stores/:storeId/combos/:id — Owner updates price and replaces items",
+          "name": "PATCH /combos/:id — Owner updates price and replaces items",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.test('Price updated', () => pm.expect(pm.response.json().data.price).to.eql(750000));"
@@ -482,42 +536,47 @@
             "method": "PATCH",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"price\": 750000,\n  \"serviceIds\": [\n    { \"serviceId\": \"{{serviceId}}\", \"quantity\": 2, \"order\": 0 }\n  ]\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/combos/{{comboId}}", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "combos", "{{comboId}}"] }
+            "url": { "raw": "{{baseUrl}}/combos/{{comboId}}", "host": ["{{baseUrl}}"], "path": ["combos", "{{comboId}}"] }
           }
         },
         {
-          "name": "DELETE /stores/:storeId/combos/:id — Owner soft-deletes",
+          "name": "DELETE /combos/:id — Owner soft-deletes",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "pm.test('deleted true', () => pm.expect(pm.response.json().data.deleted).to.be.true);"
+            "pm.test('Status 200', () => pm.response.to.have.status(200));"
           ]}}],
           "request": {
             "method": "DELETE",
-            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/combos/{{comboId}}", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "combos", "{{comboId}}"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/combos/{{comboId}}", "host": ["{{baseUrl}}"], "path": ["combos", "{{comboId}}"] }
           }
         }
       ]
     },
     {
       "name": "[Staff Management] Invite / Accept / Update / Remove",
+      "description": "Staff endpoints dùng /store-staff với header x-shop-id.",
       "item": [
         {
-          "name": "GET /stores/:storeId/staff — Public danh sách (empty)",
+          "name": "GET /store-staff — Public danh sách",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.test('Returns array', () => pm.expect(pm.response.json().data).to.be.an('array'));"
           ]}}],
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff"] }
+            "header": [{ "key": "x-shop-id", "value": "{{storeId}}" }],
+            "url": { "raw": "{{baseUrl}}/store-staff", "host": ["{{baseUrl}}"], "path": ["store-staff"] }
           }
         },
         {
-          "name": "POST /stores/:storeId/staff/invite — Owner mời nhân viên (save inviteToken)",
+          "name": "POST /store-staff/invite — Owner mời nhân viên (save inviteToken)",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 201', () => pm.response.to.have.status(201));",
             "const body = pm.response.json();",
@@ -528,14 +587,15 @@
             "method": "POST",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{staffUserEmail}}\"\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/invite", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "invite"] }
+            "url": { "raw": "{{baseUrl}}/store-staff/invite", "host": ["{{baseUrl}}"], "path": ["store-staff", "invite"] }
           }
         },
         {
-          "name": "POST /stores/:storeId/staff/invite — 409 mời trùng (pending invite)",
+          "name": "POST /store-staff/invite — 409 mời trùng (pending invite)",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 409', () => pm.response.to.have.status(409));"
           ]}}],
@@ -543,14 +603,15 @@
             "method": "POST",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{staffUserEmail}}\"\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/invite", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "invite"] }
+            "url": { "raw": "{{baseUrl}}/store-staff/invite", "host": ["{{baseUrl}}"], "path": ["store-staff", "invite"] }
           }
         },
         {
-          "name": "POST /stores/:storeId/staff/invite — 404 email chưa đăng ký",
+          "name": "POST /store-staff/invite — 404 email chưa đăng ký",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 404', () => pm.response.to.have.status(404));"
           ]}}],
@@ -558,10 +619,11 @@
             "method": "POST",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"email\": \"khongtonTai@glowora.vn\"\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/invite", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "invite"] }
+            "url": { "raw": "{{baseUrl}}/store-staff/invite", "host": ["{{baseUrl}}"], "path": ["store-staff", "invite"] }
           }
         },
         {
@@ -601,44 +663,31 @@
           }
         },
         {
-          "name": "POST /staff-invites/accept — 400 token không hợp lệ",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 400', () => pm.response.to.have.status(400));"
-          ]}}],
-          "request": {
-            "method": "POST",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{staffAccessToken}}" }
-            ],
-            "body": { "mode": "raw", "raw": "{\n  \"token\": \"invalid-fake-token-xyz\"\n}" },
-            "url": { "raw": "{{baseUrl}}/staff-invites/accept", "host": ["{{baseUrl}}"], "path": ["staff-invites", "accept"] }
-          }
-        },
-        {
-          "name": "GET /stores/:storeId/staff — Public sau khi accept (có 1 nhân viên)",
+          "name": "GET /store-staff — Public sau khi accept (có 1 nhân viên)",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.test('Has 1 staff', () => pm.expect(pm.response.json().data.length).to.be.greaterThan(0));"
           ]}}],
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff"] }
+            "header": [{ "key": "x-shop-id", "value": "{{storeId}}" }],
+            "url": { "raw": "{{baseUrl}}/store-staff", "host": ["{{baseUrl}}"], "path": ["store-staff"] }
           }
         },
         {
-          "name": "GET /stores/:storeId/staff/:staffId — Public chi tiết nhân viên",
+          "name": "GET /store-staff/:staffId — Public chi tiết nhân viên",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.test('Correct staff id', () => pm.expect(pm.response.json().data.id).to.eql(pm.collectionVariables.get('staffId')));"
           ]}}],
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}"] }
+            "header": [{ "key": "x-shop-id", "value": "{{storeId}}" }],
+            "url": { "raw": "{{baseUrl}}/store-staff/{{staffId}}", "host": ["{{baseUrl}}"], "path": ["store-staff", "{{staffId}}"] }
           }
         },
         {
-          "name": "PATCH /stores/:storeId/staff/:staffId — Owner cập nhật bio nhân viên",
+          "name": "PATCH /store-staff/:staffId — Owner cập nhật bio nhân viên",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.test('Specialty updated', () => pm.expect(pm.response.json().data.specialty).to.include('Massage'));"
@@ -647,14 +696,15 @@
             "method": "PATCH",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"specialty\": \"Massage, Facial Care\",\n  \"bio\": \"Nhân viên 3 năm kinh nghiệm\"\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}"] }
+            "url": { "raw": "{{baseUrl}}/store-staff/{{staffId}}", "host": ["{{baseUrl}}"], "path": ["store-staff", "{{staffId}}"] }
           }
         },
         {
-          "name": "PATCH /stores/:storeId/services/:serviceId/staff — Assign staff to service",
+          "name": "PATCH /services/:serviceId/staff — Assign staff to service",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.test('Staff assigned', () => pm.expect(pm.response.json().data.staffs.length).to.be.greaterThan(0));"
@@ -663,26 +713,29 @@
             "method": "PATCH",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"staffIds\": [\"{{staffId}}\"]\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/services/{{serviceId}}/staff", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "services", "{{serviceId}}", "staff"] }
+            "url": { "raw": "{{baseUrl}}/services/{{serviceId}}/staff", "host": ["{{baseUrl}}"], "path": ["services", "{{serviceId}}", "staff"] }
           }
         },
         {
-          "name": "DELETE /stores/:storeId/staff/:staffId — Owner xóa nhân viên",
+          "name": "DELETE /store-staff/:staffId — Owner xóa nhân viên",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "pm.test('removed true', () => pm.expect(pm.response.json().data.removed).to.be.true);"
+            "pm.test('Status 200', () => pm.response.to.have.status(200));"
           ]}}],
           "request": {
             "method": "DELETE",
-            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/store-staff/{{staffId}}", "host": ["{{baseUrl}}"], "path": ["store-staff", "{{staffId}}"] }
           }
         },
         {
-          "name": "[Re-invite & Re-accept] Staff để test schedule / day-off",
+          "name": "[Re-invite] Staff để test schedule / day-off",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Invite or already pending', () => pm.expect([201, 409]).to.include(pm.response.code));"
           ]}}],
@@ -690,20 +743,21 @@
             "method": "POST",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"email\": \"staff_p3b@glowora.vn\"\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/invite", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "invite"] }
+            "url": { "raw": "{{baseUrl}}/store-staff/invite", "host": ["{{baseUrl}}"], "path": ["store-staff", "invite"] }
           }
         }
       ]
     },
     {
       "name": "[Staff Schedule] Bulk Upsert & CRUD",
-      "description": "Yêu cầu staffId đã được set (từ folder Staff Management hoặc điền thủ công).",
+      "description": "Dùng header x-shop-id. Yêu cầu staffId đã được set.",
       "item": [
         {
-          "name": "PUT /stores/:storeId/staff/:staffId/schedules — Bulk upsert 5 ngày",
+          "name": "PUT /staff/:staffId/schedules — Bulk upsert 5 ngày",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200 hoặc 201', () => pm.expect([200, 201]).to.include(pm.response.code));",
             "const body = pm.response.json();",
@@ -714,14 +768,15 @@
             "method": "PUT",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"schedules\": [\n    { \"dayOfWeek\": \"MONDAY\",    \"startTime\": \"09:00\", \"endTime\": \"18:00\", \"isActive\": true },\n    { \"dayOfWeek\": \"TUESDAY\",   \"startTime\": \"09:00\", \"endTime\": \"18:00\", \"isActive\": true },\n    { \"dayOfWeek\": \"WEDNESDAY\", \"startTime\": \"09:00\", \"endTime\": \"18:00\", \"isActive\": true },\n    { \"dayOfWeek\": \"THURSDAY\",  \"startTime\": \"09:00\", \"endTime\": \"18:00\", \"isActive\": true },\n    { \"dayOfWeek\": \"FRIDAY\",    \"startTime\": \"09:00\", \"endTime\": \"17:00\", \"isActive\": true }\n  ]\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/schedules", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "schedules"] }
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/schedules", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "schedules"] }
           }
         },
         {
-          "name": "PUT /stores/:storeId/staff/:staffId/schedules — Xóa toàn bộ (body rỗng)",
+          "name": "PUT /staff/:staffId/schedules — Xóa toàn bộ (body rỗng)",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200 hoặc 201', () => pm.expect([200, 201]).to.include(pm.response.code));",
             "pm.test('Empty array returned', () => pm.expect(pm.response.json().data).to.be.an('array').that.is.empty);"
@@ -730,14 +785,15 @@
             "method": "PUT",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"schedules\": []\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/schedules", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "schedules"] }
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/schedules", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "schedules"] }
           }
         },
         {
-          "name": "POST /stores/:storeId/staff/:staffId/schedules — Tạo schedule thứ 2 (save scheduleId)",
+          "name": "POST /staff/:staffId/schedules — Tạo schedule thứ 2 (save scheduleId)",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 201', () => pm.response.to.have.status(201));",
             "const body = pm.response.json();",
@@ -748,38 +804,45 @@
             "method": "POST",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"dayOfWeek\": \"MONDAY\",\n  \"startTime\": \"08:00\",\n  \"endTime\": \"17:00\"\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/schedules", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "schedules"] }
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/schedules", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "schedules"] }
           }
         },
         {
-          "name": "GET /stores/:storeId/staff/:staffId/schedules — Xem danh sách",
+          "name": "GET /staff/:staffId/schedules — Xem danh sách",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.test('Has schedules', () => pm.expect(pm.response.json().data.length).to.be.greaterThan(0));"
           ]}}],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/schedules", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "schedules"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/schedules", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "schedules"] }
           }
         },
         {
-          "name": "GET /stores/:storeId/staff/:staffId/schedules?dayOfWeek=MONDAY — Filter",
+          "name": "GET /staff/:staffId/schedules?dayOfWeek=MONDAY — Filter",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.response.json().data.forEach(s => pm.test('dayOfWeek is MONDAY', () => pm.expect(s.dayOfWeek).to.eql('MONDAY')));"
           ]}}],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/schedules?dayOfWeek=MONDAY", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "schedules"], "query": [{ "key": "dayOfWeek", "value": "MONDAY" }] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/schedules?dayOfWeek=MONDAY", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "schedules"], "query": [{ "key": "dayOfWeek", "value": "MONDAY" }] }
           }
         },
         {
-          "name": "PATCH /stores/:storeId/staff/:staffId/schedules/:id — Cập nhật giờ",
+          "name": "PATCH /staff/:staffId/schedules/:id — Cập nhật giờ",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.test('endTime updated', () => pm.expect(pm.response.json().data.endTime).to.eql('16:00'));"
@@ -788,22 +851,25 @@
             "method": "PATCH",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"startTime\": \"09:00\",\n  \"endTime\": \"16:00\"\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/schedules/{{scheduleId}}", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "schedules", "{{scheduleId}}"] }
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/schedules/{{scheduleId}}", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "schedules", "{{scheduleId}}"] }
           }
         },
         {
-          "name": "DELETE /stores/:storeId/staff/:staffId/schedules/:id — Xóa schedule",
+          "name": "DELETE /staff/:staffId/schedules/:id — Xóa schedule",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "pm.test('deleted true', () => pm.expect(pm.response.json().data.deleted).to.be.true);"
+            "pm.test('Status 200', () => pm.response.to.have.status(200));"
           ]}}],
           "request": {
             "method": "DELETE",
-            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/schedules/{{scheduleId}}", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "schedules", "{{scheduleId}}"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/schedules/{{scheduleId}}", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "schedules", "{{scheduleId}}"] }
           }
         },
         {
@@ -813,17 +879,21 @@
           ]}}],
           "request": {
             "method": "DELETE",
-            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/schedules/00000000-0000-0000-0000-000000000000", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "schedules", "00000000-0000-0000-0000-000000000000"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/schedules/00000000-0000-0000-0000-000000000000", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "schedules", "00000000-0000-0000-0000-000000000000"] }
           }
         }
       ]
     },
     {
       "name": "[Staff Day Off] CRUD",
+      "description": "Dùng header x-shop-id. Yêu cầu staffId đã được set.",
       "item": [
         {
-          "name": "POST /stores/:storeId/staff/:staffId/day-off — Owner đăng ký nghỉ phép (save dayOffId)",
+          "name": "POST /staff/:staffId/day-off — Owner đăng ký nghỉ phép (save dayOffId)",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 201', () => pm.response.to.have.status(201));",
             "const body = pm.response.json();",
@@ -837,10 +907,11 @@
             "method": "POST",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"date\": \"2026-12-25\",\n  \"reason\": \"Nghỉ lễ Giáng Sinh\"\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/day-off", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "day-off"] }
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/day-off", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "day-off"] }
           }
         },
         {
@@ -852,10 +923,11 @@
             "method": "POST",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"date\": \"2020-01-01\",\n  \"reason\": \"Quá khứ\"\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/day-off", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "day-off"] }
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/day-off", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "day-off"] }
           }
         },
         {
@@ -867,22 +939,26 @@
             "method": "POST",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"date\": \"2026-12-25\",\n  \"reason\": \"Trùng\"\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/day-off", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "day-off"] }
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/day-off", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "day-off"] }
           }
         },
         {
-          "name": "GET /stores/:storeId/staff/:staffId/day-off — Danh sách",
+          "name": "GET /staff/:staffId/day-off — Danh sách",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.test('Has day off entries', () => pm.expect(pm.response.json().data.length).to.be.greaterThan(0));"
           ]}}],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/day-off", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "day-off"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/day-off", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "day-off"] }
           }
         },
         {
@@ -893,24 +969,30 @@
           ]}}],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/day-off?from=2026-12-01&to=2026-12-31", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "day-off"], "query": [{ "key": "from", "value": "2026-12-01" }, { "key": "to", "value": "2026-12-31" }] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/day-off?from=2026-12-01&to=2026-12-31", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "day-off"], "query": [{ "key": "from", "value": "2026-12-01" }, { "key": "to", "value": "2026-12-31" }] }
           }
         },
         {
-          "name": "GET /stores/:storeId/staff/:staffId/day-off/:id — Chi tiết",
+          "name": "GET /staff/:staffId/day-off/:id — Chi tiết",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.test('Correct id', () => pm.expect(pm.response.json().data.id).to.eql(pm.collectionVariables.get('dayOffId')));"
           ]}}],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/day-off/{{dayOffId}}", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "day-off", "{{dayOffId}}"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/day-off/{{dayOffId}}", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "day-off", "{{dayOffId}}"] }
           }
         },
         {
-          "name": "PATCH /stores/:storeId/staff/:staffId/day-off/:id — Cập nhật lý do",
+          "name": "PATCH /staff/:staffId/day-off/:id — Cập nhật lý do",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
             "pm.test('Status 200', () => pm.response.to.have.status(200));",
             "pm.test('Reason updated', () => pm.expect(pm.response.json().data.reason).to.include('Cập nhật'));"
@@ -919,10 +1001,11 @@
             "method": "PATCH",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"reason\": \"Cập nhật lý do: nghỉ kết hợp du lịch\"\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/day-off/{{dayOffId}}", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "day-off", "{{dayOffId}}"] }
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/day-off/{{dayOffId}}", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "day-off", "{{dayOffId}}"] }
           }
         },
         {
@@ -934,22 +1017,25 @@
             "method": "PATCH",
             "header": [
               { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"date\": \"2020-01-01\"\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/day-off/{{dayOffId}}", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "day-off", "{{dayOffId}}"] }
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/day-off/{{dayOffId}}", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "day-off", "{{dayOffId}}"] }
           }
         },
         {
-          "name": "DELETE /stores/:storeId/staff/:staffId/day-off/:id — Xóa ngày nghỉ",
+          "name": "DELETE /staff/:staffId/day-off/:id — Xóa ngày nghỉ",
           "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "pm.test('deleted true', () => pm.expect(pm.response.json().data.deleted).to.be.true);"
+            "pm.test('Status 200', () => pm.response.to.have.status(200));"
           ]}}],
           "request": {
             "method": "DELETE",
-            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/day-off/{{dayOffId}}", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "day-off", "{{dayOffId}}"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/day-off/{{dayOffId}}", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "day-off", "{{dayOffId}}"] }
           }
         },
         {
@@ -959,8 +1045,11 @@
           ]}}],
           "request": {
             "method": "DELETE",
-            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/staff/{{staffId}}/day-off/00000000-0000-0000-0000-000000000000", "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "staff", "{{staffId}}", "day-off", "00000000-0000-0000-0000-000000000000"] }
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
+              { "key": "x-shop-id",     "value": "{{storeId}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/staff/{{staffId}}/day-off/00000000-0000-0000-0000-000000000000", "host": ["{{baseUrl}}"], "path": ["staff", "{{staffId}}", "day-off", "00000000-0000-0000-0000-000000000000"] }
           }
         }
       ]

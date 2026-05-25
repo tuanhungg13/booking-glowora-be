@@ -132,7 +132,7 @@
               { "key": "x-shop-id", "value": "{{storeId}}" }
             ],
             "body": { "mode": "raw", "raw": "{\n  \"name\": \"Chăm Sóc Da Cơ Bản\",\n  \"duration\": 60,\n  \"price\": 500000,\n  \"costPrice\": 150000\n}" },
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}/services", "host": ["{{baseUrl}}"], "path": ["stores","{{storeId}}","services"] }
+            "url": { "raw": "{{baseUrl}}/services", "host": ["{{baseUrl}}"], "path": ["services"] }
           }
         },
         {

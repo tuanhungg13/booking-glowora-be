@@ -130,7 +130,7 @@
               { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
               { "key": "x-shop-id", "value": "{{storeId}}" }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Massage Thư Giãn\",\n  \"duration\": 60,\n  \"price\": 200000,\n  \"storeId\": \"{{storeId}}\"\n}" },
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Massage Thư Giãn\",\n  \"duration\": 60,\n  \"price\": 200000\n}" },
             "url": { "raw": "{{baseUrl}}/services", "host": ["{{baseUrl}}"], "path": ["services"] }
           }
         },

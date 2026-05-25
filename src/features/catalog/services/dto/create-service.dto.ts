@@ -1,65 +1,37 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsNumber, IsOptional, IsString, IsUUID, Min } from 'class-validator';
+import { IsArray, IsEnum, IsOptional, IsString, IsUUID, ValidateNested, ArrayMinSize } from 'class-validator';
+import { Type } from 'class-transformer';
 import { ServiceStatus } from '@prisma/client';
+import { CreateServiceVariantDto } from './service-variant.dto';
 
 export class CreateServiceDto {
-  @ApiProperty({
-    example: 'Men\'s Haircut',
-    description: 'The name of the service',
-  })
+  @ApiProperty({ example: "Chăm sóc da mặt chuyên sâu" })
   @IsString()
   name!: string;
 
-  @ApiPropertyOptional({
-    example: 'A standard men\'s haircut including wash and style.',
-    description: 'A brief description of the service',
-  })
+  @ApiPropertyOptional({ example: 'Liệu trình làm sạch sâu, cấp ẩm...' })
   @IsOptional()
   @IsString()
   description?: string;
 
-  @ApiProperty({
-    example: 30,
-    description: 'The duration of the service in minutes',
-    minimum: 1,
-  })
-  @IsInt()
-  @Min(1)
-  duration!: number;
-
-  @ApiProperty({
-    example: 250000,
-    description: 'The price of the service in the shop\'s currency',
-    minimum: 0,
-  })
-  @IsNumber()
-  @Min(0)
-  price!: number;
-
-  @ApiPropertyOptional({
-    example: 50000,
-    description: 'The cost price of the service (internal use)',
-    minimum: 0,
-  })
+  @ApiPropertyOptional({ example: '550e8400-e29b-41d4-a716-446655440002' })
   @IsOptional()
-  @IsNumber()
-  @Min(0)
-  costPrice?: number;
+  @IsUUID()
+  categoryId?: string;
 
-  @ApiPropertyOptional({
-    enum: ServiceStatus,
-    example: ServiceStatus.ACTIVE,
-    description: 'The status of the service',
-  })
+  @ApiPropertyOptional({ enum: ServiceStatus, default: ServiceStatus.ACTIVE })
   @IsOptional()
   @IsEnum(ServiceStatus)
   status?: ServiceStatus;
 
-  @ApiPropertyOptional({
-    example: '550e8400-e29b-41d4-a716-446655440002',
-    description: 'The UUID of the category this service belongs to',
+  @ApiProperty({
+    type: [CreateServiceVariantDto],
+    description: 'Danh sách gói dịch vụ, phải có ít nhất 1 gói',
+    minItems: 1,
   })
-  @IsOptional()
-  @IsUUID()
-  categoryId?: string;
+  @IsArray()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() => CreateServiceVariantDto)
+  variants!: CreateServiceVariantDto[];
 }
