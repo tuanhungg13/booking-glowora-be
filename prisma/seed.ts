@@ -164,7 +164,7 @@ async function main() {
   const systemRoles = [
     { code: 'SUPER_ADMIN', name: 'Super Admin', description: 'Quản trị viên hệ thống, toàn quyền', isSystem: true },
     { code: 'SHOP_OWNER', name: 'Shop Owner', description: 'Chủ cơ sở, quản lý toàn bộ hoạt động', isSystem: true },
-    { code: 'STAFF', name: 'Staff', description: 'Nhân viên cơ sở', isSystem: true },
+    { code: 'SHOP_STAFF', name: 'Shop Staff', description: 'Nhân viên cơ sở', isSystem: true },
     { code: 'CUSTOMER', name: 'Customer', description: 'Khách hàng đặt lịch', isSystem: true },
   ];
 
@@ -213,7 +213,7 @@ async function main() {
 
   // 4. Gán permissions từng role
   await assignPermissions(roles['CUSTOMER'], CUSTOMER_PERMISSIONS);
-  await assignPermissions(roles['STAFF'], STAFF_PERMISSIONS);
+  await assignPermissions(roles['SHOP_STAFF'], STAFF_PERMISSIONS);
   await assignPermissions(roles['SHOP_OWNER'], SHOP_OWNER_PERMISSIONS);
   console.log('✅ Role permissions seeded');
 

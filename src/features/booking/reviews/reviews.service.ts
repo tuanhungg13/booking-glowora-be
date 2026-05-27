@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { AppointmentStatus, Prisma } from '@prisma/client';
+import { BookingStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReviewFilterDto } from './dto/review-filter.dto';
@@ -15,47 +15,55 @@ const reviewInclude = {
   store: true,
   service: true,
   staff: { include: { user: { select: { id: true, fullName: true, avatarUrl: true } } } },
-  appointment: true,
+  bookingItem: { include: { booking: { select: { id: true, scheduledAt: true } } } },
 } as const;
 
 @Injectable()
 export class ReviewsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dto: CreateReviewDto, customerId?: string, appointmentIdOverride?: string) {
-    const aptId = appointmentIdOverride ?? dto.appointmentId;
-    if (!aptId) throw new BadRequestException('appointmentId is required');
+  async create(dto: CreateReviewDto, customerId?: string, bookingItemIdOverride?: string) {
+    const itemId = bookingItemIdOverride ?? dto.bookingItemId;
+    if (!itemId) throw new BadRequestException('bookingItemId is required');
 
-    const appointment = await this.prisma.appointment.findUnique({
-      where: { id: aptId },
+    const bookingItem = await this.prisma.bookingItem.findUnique({
+      where: { id: itemId },
+      include: { booking: true },
     });
-    if (!appointment) throw new NotFoundException('Appointment not found');
-    if (customerId && appointment.customerId !== customerId) {
-      throw new BadRequestException('Cannot review another customer appointment');
+    if (!bookingItem) throw new NotFoundException('BookingItem not found');
+    if (customerId && bookingItem.booking.customerId !== customerId) {
+      throw new BadRequestException('Cannot review another customer booking');
     }
-    if (appointment.status !== AppointmentStatus.COMPLETED) {
+    if (bookingItem.booking.status !== BookingStatus.COMPLETED) {
       throw new BadRequestException('Chỉ đánh giá sau khi dịch vụ hoàn thành');
     }
+
     const existing = await this.prisma.review.findUnique({
-      where: { appointmentId: aptId },
+      where: { bookingItemId: itemId },
     });
-    if (existing) throw new ConflictException('Bạn đã đánh giá lịch hẹn này rồi');
+    if (existing) throw new ConflictException('Bạn đã đánh giá dịch vụ này rồi');
 
     const review = await this.prisma.$transaction(async (tx) => {
       const r = await tx.review.create({
         data: {
-          appointmentId: appointment.id,
-          customerId: appointment.customerId,
-          storeId: appointment.storeId,
-          serviceId: appointment.serviceId,
-          staffId: appointment.staffId,
+          bookingItemId: itemId,
+          bookingId: bookingItem.bookingId,
+          customerId: bookingItem.booking.customerId,
+          storeId: bookingItem.booking.storeId,
+          serviceId: bookingItem.serviceId,
+          staffId: bookingItem.staffId,
           rating: dto.rating,
           comment: dto.comment,
           ...(dto.imageUrls ? { imageUrls: dto.imageUrls } : {}),
         },
         include: reviewInclude,
       });
-      await this.recalculateRatings(appointment.storeId, appointment.serviceId, appointment.staffId, tx);
+      await this.recalculateRatings(
+        bookingItem.booking.storeId,
+        bookingItem.serviceId,
+        bookingItem.staffId,
+        tx,
+      );
       return r;
     });
 
@@ -143,9 +151,9 @@ export class ReviewsService {
     return { items, total, page, limit };
   }
 
-  async findByAppointment(appointmentId: string) {
+  async findByBookingItem(bookingItemId: string) {
     return this.prisma.review.findUnique({
-      where: { appointmentId },
+      where: { bookingItemId },
       include: reviewInclude,
     });
   }

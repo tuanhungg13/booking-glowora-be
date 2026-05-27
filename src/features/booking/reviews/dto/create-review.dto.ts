@@ -13,7 +13,7 @@ import {
 export class CreateReviewDto {
   @IsOptional()
   @IsUUID()
-  appointmentId?: string;
+  bookingItemId?: string;
 
   @IsInt()
   @Min(1)

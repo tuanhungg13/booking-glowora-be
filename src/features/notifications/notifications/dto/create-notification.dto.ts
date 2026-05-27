@@ -16,7 +16,7 @@ export class CreateNotificationDto {
 
   @IsOptional()
   @IsUUID()
-  appointmentId?: string;
+  bookingId?: string;
 
   @IsOptional()
   @IsBoolean()

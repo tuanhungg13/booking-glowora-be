@@ -39,7 +39,7 @@ export class PermissionsGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const user = request.user as { id: string; roles?: string[] } | undefined;
     if (!user?.id) {
-      throw new ForbiddenException('Authentication required');
+      throw new ForbiddenException({ message: 'Authentication required', errorCode: 'FORBIDDEN' });
     }
 
     const userPermissionCodes = await this.getUserPermissionCodes(user.id);
@@ -48,18 +48,20 @@ export class PermissionsGuard implements CanActivate {
     if (options.mode === 'all') {
       const hasAll = required.size > 0 && [...required].every((code) => userPermissionCodes.has(code));
       if (!hasAll) {
-        throw new ForbiddenException(
-          `Insufficient permissions. Required: ${options.codes.join(', ')}`,
-        );
+        throw new ForbiddenException({
+          message: `Insufficient permissions. Required: ${options.codes.join(', ')}`,
+          errorCode: 'FORBIDDEN',
+        });
       }
       return true;
     }
 
     const hasAny = [...required].some((code) => userPermissionCodes.has(code));
     if (!hasAny) {
-      throw new ForbiddenException(
-        `Insufficient permissions. One of required: ${options.codes.join(', ')}`,
-      );
+      throw new ForbiddenException({
+        message: `Insufficient permissions. One of required: ${options.codes.join(', ')}`,
+        errorCode: 'FORBIDDEN',
+      });
     }
     return true;
   }

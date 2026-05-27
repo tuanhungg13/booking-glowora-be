@@ -1,5 +1,5 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { AppointmentStatus, PaymentMethod, PaymentStatus } from '@prisma/client';
+import { BookingStatus, PaymentMethod, PaymentStatus } from '@prisma/client';
 import { PaymentsService } from './payments.service';
 import * as vnpayUtil from './vnpay.util';
 
@@ -9,39 +9,38 @@ describe('PaymentsService — Phase 5', () => {
   let config: any;
   let notifications: any;
 
-  const appointmentId = 'apt-uuid-001';
+  const bookingId = 'booking-uuid-001';
   const userId = 'user-uuid-001';
   const paymentId = 'pay-uuid-001';
-  const txnRef = `${appointmentId}-1700000000000`;
+  const txnRef = `${bookingId}-1700000000000`;
 
-  const baseAppointment = {
-    id: appointmentId,
+  const baseBooking = {
+    id: bookingId,
     customerId: userId,
-    status: AppointmentStatus.COMPLETED,
-    price: 500000,
+    status: BookingStatus.COMPLETED,
+    totalPrice: 500000,
     storeId: 'store-001',
-    serviceId: 'svc-001',
     store: { name: 'Glowora HN' },
-    service: { name: 'Facial Treatment' },
+    items: [{ service: { name: 'Facial Treatment' } }],
   };
 
   const basePendingPayment = {
     id: paymentId,
-    appointmentId,
+    bookingId,
     customerId: userId,
     amount: 500000,
     status: PaymentStatus.PENDING,
     vnpTxnRef: txnRef,
     customer: { id: userId, fullName: 'Nguyễn A', email: 'a@test.com' },
-    appointment: {
+    booking: {
       store: { name: 'Glowora HN' },
-      service: { name: 'Facial Treatment' },
+      items: [{ service: { name: 'Facial Treatment' } }],
     },
   };
 
   beforeEach(() => {
     prisma = {
-      appointment: { findFirst: jest.fn() },
+      booking: { findFirst: jest.fn() },
       payment: {
         findFirst: jest.fn(),
         findMany: jest.fn(),
@@ -73,49 +72,49 @@ describe('PaymentsService — Phase 5', () => {
   // ─── createVnpayPayment ───────────────────────────────────────────────────
 
   describe('createVnpayPayment', () => {
-    it('throws NotFoundException when appointment does not belong to user', async () => {
-      prisma.appointment.findFirst.mockResolvedValue(null);
+    it('throws NotFoundException when booking does not belong to user', async () => {
+      prisma.booking.findFirst.mockResolvedValue(null);
 
       await expect(
-        service.createVnpayPayment(appointmentId, userId, {}),
+        service.createVnpayPayment(bookingId, userId, {}),
       ).rejects.toBeInstanceOf(NotFoundException);
 
       expect(prisma.payment.create).not.toHaveBeenCalled();
     });
 
-    it('throws BadRequestException when appointment status is not COMPLETED', async () => {
-      prisma.appointment.findFirst.mockResolvedValue({
-        ...baseAppointment,
-        status: AppointmentStatus.CONFIRMED,
+    it('throws BadRequestException when booking status is not COMPLETED', async () => {
+      prisma.booking.findFirst.mockResolvedValue({
+        ...baseBooking,
+        status: BookingStatus.CONFIRMED,
       });
 
       await expect(
-        service.createVnpayPayment(appointmentId, userId, {}),
+        service.createVnpayPayment(bookingId, userId, {}),
       ).rejects.toBeInstanceOf(BadRequestException);
     });
 
     it('throws BadRequestException when a PAID payment already exists', async () => {
-      prisma.appointment.findFirst.mockResolvedValue(baseAppointment);
+      prisma.booking.findFirst.mockResolvedValue(baseBooking);
       prisma.payment.findFirst.mockResolvedValue({ status: PaymentStatus.PAID });
 
       await expect(
-        service.createVnpayPayment(appointmentId, userId, {}),
+        service.createVnpayPayment(bookingId, userId, {}),
       ).rejects.toBeInstanceOf(BadRequestException);
 
       expect(prisma.payment.create).not.toHaveBeenCalled();
     });
 
     it('creates a PENDING VNPAY payment and returns paymentUrl + paymentId', async () => {
-      prisma.appointment.findFirst.mockResolvedValue(baseAppointment);
+      prisma.booking.findFirst.mockResolvedValue(baseBooking);
       prisma.payment.findFirst.mockResolvedValue(null);
       prisma.payment.create.mockResolvedValue(basePendingPayment);
 
-      const result = await service.createVnpayPayment(appointmentId, userId, {});
+      const result = await service.createVnpayPayment(bookingId, userId, {});
 
       expect(prisma.payment.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
-            appointmentId,
+            bookingId,
             customerId: userId,
             amount: 500000,
             status: PaymentStatus.PENDING,
@@ -160,14 +159,13 @@ describe('PaymentsService — Phase 5', () => {
       const url = await service.handleReturn({ vnp_TxnRef: txnRef });
 
       expect(url).toContain('status=PAID');
-      expect(url).toContain(`appointmentId=${appointmentId}`);
+      expect(url).toContain(`bookingId=${bookingId}`);
       expect(prisma.payment.update).not.toHaveBeenCalled();
     });
 
     it('redirects to error=amount_mismatch when amounts differ', async () => {
       prisma.payment.findFirst.mockResolvedValue(basePendingPayment);
 
-      // 1,000,000 VND → vnp_Amount = 100000000 (≠ 500000)
       const url = await service.handleReturn({
         vnp_TxnRef: txnRef,
         vnp_Amount: '100000000',
@@ -183,7 +181,7 @@ describe('PaymentsService — Phase 5', () => {
 
       const url = await service.handleReturn({
         vnp_TxnRef: txnRef,
-        vnp_Amount: '50000000', // 500000 × 100
+        vnp_Amount: '50000000',
         vnp_ResponseCode: '00',
         vnp_TransactionStatus: '00',
         vnp_TransactionNo: 'VNP12345',
@@ -196,7 +194,7 @@ describe('PaymentsService — Phase 5', () => {
         }),
       );
       expect(url).toContain('success=true');
-      expect(url).toContain(`appointmentId=${appointmentId}`);
+      expect(url).toContain(`bookingId=${bookingId}`);
     });
 
     it('updates payment to FAILED and redirects success=false on cancel (ResponseCode=24)', async () => {
@@ -248,7 +246,7 @@ describe('PaymentsService — Phase 5', () => {
 
       const result = await service.handleIpn({
         vnp_TxnRef: txnRef,
-        vnp_Amount: '100', // wrong amount
+        vnp_Amount: '100',
       });
 
       expect(result).toEqual({ RspCode: '04', Message: 'Invalid Amount' });
@@ -299,7 +297,6 @@ describe('PaymentsService — Phase 5', () => {
           data: expect.objectContaining({ status: PaymentStatus.PAID }),
         }),
       );
-      // flush the fire-and-forget microtask
       await Promise.resolve();
       expect(notifications.notifyPaymentSuccess).toHaveBeenCalledWith(
         expect.objectContaining({ customerId: userId }),
@@ -344,28 +341,28 @@ describe('PaymentsService — Phase 5', () => {
     expect(result).toHaveLength(1);
   });
 
-  // ─── findPaymentByAppointment ─────────────────────────────────────────────
+  // ─── findPaymentByBooking ─────────────────────────────────────────────────
 
-  it('findPaymentByAppointment scopes to userId when provided', async () => {
+  it('findPaymentByBooking scopes to userId when provided', async () => {
     prisma.payment.findMany.mockResolvedValue([]);
 
-    await service.findPaymentByAppointment(appointmentId, userId);
+    await service.findPaymentByBooking(bookingId, userId);
 
     expect(prisma.payment.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: { appointmentId, customerId: userId },
+        where: { bookingId, customerId: userId },
       }),
     );
   });
 
-  it('findPaymentByAppointment omits customerId filter when not provided', async () => {
+  it('findPaymentByBooking omits customerId filter when not provided', async () => {
     prisma.payment.findMany.mockResolvedValue([]);
 
-    await service.findPaymentByAppointment(appointmentId);
+    await service.findPaymentByBooking(bookingId);
 
     expect(prisma.payment.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: { appointmentId },
+        where: { bookingId },
       }),
     );
   });

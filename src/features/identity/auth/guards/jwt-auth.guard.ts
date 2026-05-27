@@ -22,9 +22,14 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
-  handleRequest<TUser>(err: Error | null, user: TUser | false): TUser {
+  handleRequest<TUser>(err: Error | null, user: TUser | false, info: Error): TUser {
     if (err) throw err;
-    if (!user) throw new UnauthorizedException('Invalid or expired token');
+    if (!user) {
+      if (info?.name === 'TokenExpiredError') {
+        throw new UnauthorizedException({ message: 'Access token has expired', errorCode: 'TOKEN_EXPIRED' });
+      }
+      throw new UnauthorizedException({ message: 'Invalid or missing token', errorCode: 'TOKEN_INVALID' });
+    }
     return user;
   }
 }

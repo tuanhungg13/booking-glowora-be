@@ -74,7 +74,7 @@ export class ServicesService {
         include: {
           category: true,
           variants: { where: { status: ServiceStatus.ACTIVE }, orderBy: { sortOrder: 'asc' } },
-          _count: { select: { staffs: true, appointments: true } },
+          _count: { select: { staffs: true, bookingItems: true } },
         },
       }),
       this.prisma.service.count({ where }),

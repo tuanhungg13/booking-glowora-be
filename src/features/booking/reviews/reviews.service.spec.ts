@@ -3,7 +3,7 @@ import {
   ConflictException,
   NotFoundException,
 } from '@nestjs/common';
-import { AppointmentStatus } from '@prisma/client';
+import { BookingStatus } from '@prisma/client';
 import { ReviewsService } from './reviews.service';
 
 describe('ReviewsService — Phase 5', () => {
@@ -15,21 +15,27 @@ describe('ReviewsService — Phase 5', () => {
   const serviceId = 'svc-001';
   const staffId = 'staff-001';
   const customerId = 'user-001';
-  const appointmentId = 'apt-001';
+  const bookingId = 'booking-001';
+  const bookingItemId = 'item-001';
   const reviewId = 'rev-001';
 
-  const baseAppointment = {
-    id: appointmentId,
-    customerId,
-    storeId,
+  const baseBookingItem = {
+    id: bookingItemId,
+    bookingId,
     serviceId,
     staffId,
-    status: AppointmentStatus.COMPLETED,
+    booking: {
+      id: bookingId,
+      customerId,
+      storeId,
+      status: BookingStatus.COMPLETED,
+    },
   };
 
   const baseReview = {
     id: reviewId,
-    appointmentId,
+    bookingItemId,
+    bookingId,
     customerId,
     storeId,
     serviceId,
@@ -60,7 +66,7 @@ describe('ReviewsService — Phase 5', () => {
     };
 
     prisma = {
-      appointment: { findUnique: jest.fn() },
+      bookingItem: { findUnique: jest.fn() },
       review: {
         findUnique: jest.fn(),
         findMany: jest.fn(),
@@ -85,63 +91,64 @@ describe('ReviewsService — Phase 5', () => {
 
   describe('create', () => {
     beforeEach(() => {
-      prisma.appointment.findUnique.mockResolvedValue(baseAppointment);
+      prisma.bookingItem.findUnique.mockResolvedValue(baseBookingItem);
       prisma.review.findUnique.mockResolvedValue(null);
     });
 
-    it('throws BadRequestException when no appointmentId in dto and no override', async () => {
+    it('throws BadRequestException when no bookingItemId in dto and no override', async () => {
       await expect(
         service.create({ rating: 5 }, customerId, undefined),
       ).rejects.toBeInstanceOf(BadRequestException);
     });
 
-    it('accepts appointmentId from URL override (new Phase 5 endpoint)', async () => {
+    it('accepts bookingItemId from URL override', async () => {
       await expect(
-        service.create({ rating: 5 }, customerId, appointmentId),
+        service.create({ rating: 5 }, customerId, bookingItemId),
       ).resolves.toBeDefined();
     });
 
-    it('throws NotFoundException when appointment not found', async () => {
-      prisma.appointment.findUnique.mockResolvedValue(null);
+    it('throws NotFoundException when bookingItem not found', async () => {
+      prisma.bookingItem.findUnique.mockResolvedValue(null);
 
       await expect(
-        service.create({ rating: 5 }, customerId, appointmentId),
+        service.create({ rating: 5 }, customerId, bookingItemId),
       ).rejects.toBeInstanceOf(NotFoundException);
     });
 
-    it('throws BadRequestException when appointment belongs to another customer', async () => {
+    it('throws BadRequestException when booking belongs to another customer', async () => {
       await expect(
-        service.create({ rating: 5 }, 'other-user-id', appointmentId),
+        service.create({ rating: 5 }, 'other-user-id', bookingItemId),
       ).rejects.toBeInstanceOf(BadRequestException);
     });
 
-    it('throws BadRequestException when appointment status is not COMPLETED', async () => {
-      prisma.appointment.findUnique.mockResolvedValue({
-        ...baseAppointment,
-        status: AppointmentStatus.PENDING,
+    it('throws BadRequestException when booking status is not COMPLETED', async () => {
+      prisma.bookingItem.findUnique.mockResolvedValue({
+        ...baseBookingItem,
+        booking: { ...baseBookingItem.booking, status: BookingStatus.PENDING },
       });
 
       await expect(
-        service.create({ rating: 5 }, customerId, appointmentId),
+        service.create({ rating: 5 }, customerId, bookingItemId),
       ).rejects.toBeInstanceOf(BadRequestException);
     });
 
-    it('throws ConflictException when appointment is already reviewed', async () => {
+    it('throws ConflictException when bookingItem is already reviewed', async () => {
       prisma.review.findUnique.mockResolvedValue(baseReview);
 
       await expect(
-        service.create({ rating: 5 }, customerId, appointmentId),
+        service.create({ rating: 5 }, customerId, bookingItemId),
       ).rejects.toBeInstanceOf(ConflictException);
     });
 
     it('creates review in a transaction with correct data', async () => {
-      await service.create({ rating: 5, comment: 'Tuyệt vời!' }, customerId, appointmentId);
+      await service.create({ rating: 5, comment: 'Tuyệt vời!' }, customerId, bookingItemId);
 
       expect(prisma.$transaction).toHaveBeenCalled();
       expect(tx.review.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
-            appointmentId,
+            bookingItemId,
+            bookingId,
             customerId,
             storeId,
             serviceId,
@@ -154,7 +161,7 @@ describe('ReviewsService — Phase 5', () => {
     });
 
     it('recalculates ratings for store, service, and staff after create', async () => {
-      await service.create({ rating: 5 }, customerId, appointmentId);
+      await service.create({ rating: 5 }, customerId, bookingItemId);
 
       expect(tx.store.update).toHaveBeenCalledWith(
         expect.objectContaining({ where: { id: storeId } }),
@@ -167,10 +174,13 @@ describe('ReviewsService — Phase 5', () => {
       );
     });
 
-    it('skips staff rating update when appointment has no staffId', async () => {
-      prisma.appointment.findUnique.mockResolvedValue({ ...baseAppointment, staffId: null });
+    it('skips staff rating update when bookingItem has no staffId', async () => {
+      prisma.bookingItem.findUnique.mockResolvedValue({
+        ...baseBookingItem,
+        staffId: null,
+      });
 
-      await service.create({ rating: 4 }, customerId, appointmentId);
+      await service.create({ rating: 4 }, customerId, bookingItemId);
 
       expect(tx.staff.update).not.toHaveBeenCalled();
     });
@@ -251,23 +261,23 @@ describe('ReviewsService — Phase 5', () => {
     });
   });
 
-  // ─── findByAppointment ────────────────────────────────────────────────────
+  // ─── findByBookingItem ────────────────────────────────────────────────────
 
-  it('findByAppointment returns review by appointmentId', async () => {
+  it('findByBookingItem returns review by bookingItemId', async () => {
     prisma.review.findUnique.mockResolvedValue(baseReview);
 
-    const result = await service.findByAppointment(appointmentId);
+    const result = await service.findByBookingItem(bookingItemId);
 
     expect(prisma.review.findUnique).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { appointmentId } }),
+      expect.objectContaining({ where: { bookingItemId } }),
     );
     expect(result?.id).toBe(reviewId);
   });
 
-  it('findByAppointment returns null when no review exists', async () => {
+  it('findByBookingItem returns null when no review exists', async () => {
     prisma.review.findUnique.mockResolvedValue(null);
 
-    const result = await service.findByAppointment('no-review-apt');
+    const result = await service.findByBookingItem('no-review-item');
 
     expect(result).toBeNull();
   });

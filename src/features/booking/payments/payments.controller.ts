@@ -23,7 +23,7 @@ import { CreateVnpayPaymentDto } from './dto/create-vnpay-payment.dto';
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  @ApiOperation({ summary: 'Tạo URL thanh toán VNPAY' })
+  @ApiOperation({ summary: 'Tạo URL thanh toán VNPAY cho booking' })
   @ApiBearerAuth()
   @Post('payments/vnpay/create')
   @RequirePermissions(Permissions.PAYMENT.CREATE)
@@ -32,7 +32,7 @@ export class PaymentsController {
     @CurrentUser() user: CurrentUserPayload,
     @Req() req: Request,
   ) {
-    return this.paymentsService.createVnpayPayment(dto.appointmentId, user.id, req);
+    return this.paymentsService.createVnpayPayment(dto.bookingId, user.id, req);
   }
 
   @ApiOperation({ summary: 'VNPAY return URL — browser redirect sau thanh toán' })
@@ -57,13 +57,13 @@ export class PaymentsController {
     return this.paymentsService.findMyPayments(user.id);
   }
 
-  @ApiOperation({ summary: 'Trạng thái thanh toán của một lịch hẹn' })
+  @ApiOperation({ summary: 'Trạng thái thanh toán của một booking' })
   @ApiBearerAuth()
-  @Get('appointments/:id/payment')
-  findByAppointment(
+  @Get('bookings/:id/payment')
+  findByBooking(
     @Param('id') id: string,
     @CurrentUser() user: CurrentUserPayload,
   ) {
-    return this.paymentsService.findPaymentByAppointment(id, user.id);
+    return this.paymentsService.findPaymentByBooking(id, user.id);
   }
 }

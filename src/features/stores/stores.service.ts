@@ -26,7 +26,10 @@ const storeDetailInclude = {
   ...storeListInclude,
   services: {
     where: { status: 'ACTIVE' as const },
-    include: { category: true },
+    include: {
+      category: true,
+      variants: { where: { status: 'ACTIVE' as const }, orderBy: { sortOrder: 'asc' as const } },
+    },
     orderBy: { createdAt: 'desc' as const },
   },
   reviews: {
@@ -196,6 +199,32 @@ export class StoresService {
       orderBy: { createdAt: 'desc' },
       include: storeListInclude,
     });
+  }
+
+  async findMyShops(userId: string) {
+    const memberships = await this.prisma.userRole.findMany({
+      where: { userId, shopId: { not: null } },
+      include: {
+        role: { select: { id: true, name: true, code: true } },
+        shop: {
+          select: { id: true, name: true, slug: true, logoUrl: true, status: true },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return memberships
+      .filter((m) => m.shop !== null)
+      .map((m) => ({
+        shopId: m.shop!.id,
+        name: m.shop!.name,
+        slug: m.shop!.slug,
+        logoUrl: m.shop!.logoUrl,
+        status: m.shop!.status,
+        roleId: m.role.id,
+        roleCode: m.role.code,
+        roleName: m.role.name,
+      }));
   }
 
   async update(id: string, ownerId: string, dto: UpdateStoreDto) {

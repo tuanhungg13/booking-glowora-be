@@ -11,7 +11,7 @@ export class ServiceQueryDto {
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsUUID()
+  @IsUUID('all')
   categoryId?: string;
 
   @ApiPropertyOptional({ example: 1, minimum: 1 })
@@ -33,12 +33,12 @@ export class ServiceQueryDto {
 export class PublicServiceQueryDto {
   @ApiPropertyOptional()
   @IsOptional()
-  @IsUUID()
+  @IsUUID('all')
   storeId?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsUUID()
+  @IsUUID('all')
   categoryId?: string;
 
   @ApiPropertyOptional({ example: 'facial' })

@@ -8,15 +8,15 @@ describe('NotificationsService — Phase 4 & 5', () => {
 
   const userId = 'user-001';
   const storeId = 'store-001';
-  const appointmentId = 'apt-001';
+  const bookingId = 'booking-001';
   const notifId = 'notif-001';
   const ownerId = 'owner-001';
 
   const baseNotif = {
     id: notifId,
     userId,
-    appointmentId,
-    type: NotificationType.APPOINTMENT_CREATED,
+    bookingId,
+    type: NotificationType.BOOKING_CREATED,
     title: 'Test title',
     body: 'Test body',
     isRead: false,
@@ -51,8 +51,8 @@ describe('NotificationsService — Phase 4 & 5', () => {
     it('creates a notification with correct data', async () => {
       const dto = {
         userId,
-        appointmentId,
-        type: NotificationType.APPOINTMENT_CREATED,
+        bookingId,
+        type: NotificationType.BOOKING_CREATED,
         title: 'Test',
         body: 'Body',
       };
@@ -61,7 +61,7 @@ describe('NotificationsService — Phase 4 & 5', () => {
 
       expect(prisma.notification.create).toHaveBeenCalledWith(
         expect.objectContaining({
-          data: expect.objectContaining({ userId, type: NotificationType.APPOINTMENT_CREATED }),
+          data: expect.objectContaining({ userId, type: NotificationType.BOOKING_CREATED }),
         }),
       );
       expect(result.id).toBe(notifId);
@@ -206,41 +206,41 @@ describe('NotificationsService — Phase 4 & 5', () => {
     });
   });
 
-  // ─── Appointment lifecycle notifications ──────────────────────────────────
+  // ─── Booking lifecycle notifications ──────────────────────────────────────
 
-  describe('notifyAppointmentCreated', () => {
+  describe('notifyBookingCreated', () => {
     const params = {
-      appointmentId,
+      bookingId,
       storeId,
       storeName: 'Glowora Spa',
       customerId: userId,
       customerName: 'Test User',
       customerEmail: 'test@test.com',
-      serviceName: 'Massage',
+      serviceNames: 'Massage, Facial',
       scheduledAt: new Date('2026-06-10T09:00:00Z'),
     };
 
     it('creates notification for store owner when owner exists', async () => {
-      await service.notifyAppointmentCreated(params);
+      await service.notifyBookingCreated(params);
 
       expect(prisma.notification.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             userId: ownerId,
-            type: NotificationType.APPOINTMENT_CREATED,
+            type: NotificationType.BOOKING_CREATED,
           }),
         }),
       );
     });
 
     it('creates notification for customer', async () => {
-      await service.notifyAppointmentCreated(params);
+      await service.notifyBookingCreated(params);
 
       expect(prisma.notification.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             userId: params.customerId,
-            type: NotificationType.APPOINTMENT_CREATED,
+            type: NotificationType.BOOKING_CREATED,
           }),
         }),
       );
@@ -249,7 +249,7 @@ describe('NotificationsService — Phase 4 & 5', () => {
     it('skips owner notification when owner role not found', async () => {
       prisma.userRole.findFirst.mockResolvedValue(null);
 
-      await service.notifyAppointmentCreated(params);
+      await service.notifyBookingCreated(params);
 
       // Only customer notification
       expect(prisma.notification.create).toHaveBeenCalledTimes(1);
@@ -261,14 +261,14 @@ describe('NotificationsService — Phase 4 & 5', () => {
     });
   });
 
-  describe('notifyAppointmentConfirmed', () => {
+  describe('notifyBookingConfirmed', () => {
     it('creates confirmed notification for customer', async () => {
-      await service.notifyAppointmentConfirmed({
-        appointmentId,
+      await service.notifyBookingConfirmed({
+        bookingId,
         customerId: userId,
         customerEmail: 'test@test.com',
         storeName: 'Glowora',
-        serviceName: 'Massage',
+        serviceNames: 'Massage',
         scheduledAt: new Date(),
       });
 
@@ -276,21 +276,21 @@ describe('NotificationsService — Phase 4 & 5', () => {
         expect.objectContaining({
           data: expect.objectContaining({
             userId,
-            type: NotificationType.APPOINTMENT_CONFIRMED,
+            type: NotificationType.BOOKING_CONFIRMED,
           }),
         }),
       );
     });
   });
 
-  describe('notifyAppointmentRejected', () => {
+  describe('notifyBookingRejected', () => {
     it('creates rejected notification for customer with reason', async () => {
-      await service.notifyAppointmentRejected({
-        appointmentId,
+      await service.notifyBookingRejected({
+        bookingId,
         customerId: userId,
         customerEmail: 'test@test.com',
         storeName: 'Glowora',
-        serviceName: 'Massage',
+        serviceNames: 'Massage',
         reason: 'Hết nhân viên',
       });
 
@@ -298,7 +298,7 @@ describe('NotificationsService — Phase 4 & 5', () => {
         expect.objectContaining({
           data: expect.objectContaining({
             userId,
-            type: NotificationType.APPOINTMENT_REJECTED,
+            type: NotificationType.BOOKING_REJECTED,
             body: expect.stringContaining('Hết nhân viên'),
           }),
         }),
@@ -306,21 +306,21 @@ describe('NotificationsService — Phase 4 & 5', () => {
     });
   });
 
-  describe('notifyAppointmentCompleted', () => {
+  describe('notifyBookingCompleted', () => {
     it('creates completed notification prompting customer to review', async () => {
-      await service.notifyAppointmentCompleted({
-        appointmentId,
+      await service.notifyBookingCompleted({
+        bookingId,
         customerId: userId,
         customerEmail: 'test@test.com',
         storeName: 'Glowora',
-        serviceName: 'Massage',
+        serviceNames: 'Massage',
       });
 
       expect(prisma.notification.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             userId,
-            type: NotificationType.APPOINTMENT_COMPLETED,
+            type: NotificationType.BOOKING_COMPLETED,
           }),
         }),
       );
@@ -330,13 +330,13 @@ describe('NotificationsService — Phase 4 & 5', () => {
   describe('notifyPaymentSuccess', () => {
     it('creates payment success notification with formatted amount', async () => {
       await service.notifyPaymentSuccess({
-        appointmentId,
+        bookingId,
         customerId: userId,
         customerEmail: 'test@test.com',
         customerName: 'Test User',
         amount: 200000,
         storeName: 'Glowora',
-        serviceName: 'Massage',
+        serviceNames: 'Massage',
       });
 
       expect(prisma.notification.create).toHaveBeenCalledWith(

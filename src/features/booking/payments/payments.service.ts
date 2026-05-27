@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AppointmentStatus, PaymentMethod, PaymentStatus } from '@prisma/client';
+import { BookingStatus, PaymentMethod, PaymentStatus } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { NotificationsService } from '../../notifications/notifications/notifications.service';
 import {
@@ -15,7 +15,12 @@ import {
 } from './vnpay.util';
 
 const paymentInclude = {
-  appointment: { include: { store: true, service: true } },
+  booking: {
+    include: {
+      store: true,
+      items: { include: { service: true } },
+    },
+  },
   customer: { select: { id: true, fullName: true, email: true } },
 } as const;
 
@@ -27,40 +32,41 @@ export class PaymentsService {
     private readonly notifications: NotificationsService,
   ) {}
 
-  async createVnpayPayment(appointmentId: string, userId: string, req: unknown) {
-    const appointment = await this.prisma.appointment.findFirst({
-      where: { id: appointmentId, customerId: userId },
-      include: { store: true, service: true },
+  async createVnpayPayment(bookingId: string, userId: string, req: unknown) {
+    const booking = await this.prisma.booking.findFirst({
+      where: { id: bookingId, customerId: userId },
+      include: { store: true, items: { include: { service: true } } },
     });
-    if (!appointment) throw new NotFoundException('Appointment not found');
+    if (!booking) throw new NotFoundException('Booking not found');
 
-    if (appointment.status !== AppointmentStatus.COMPLETED) {
+    if (booking.status !== BookingStatus.COMPLETED) {
       throw new BadRequestException('Chỉ thanh toán sau khi dịch vụ hoàn thành');
     }
 
     const paidPayment = await this.prisma.payment.findFirst({
-      where: { appointmentId, status: PaymentStatus.PAID },
+      where: { bookingId, status: PaymentStatus.PAID },
     });
     if (paidPayment) {
-      throw new BadRequestException('Lịch hẹn này đã được thanh toán');
+      throw new BadRequestException('Booking này đã được thanh toán');
     }
 
-    const txnRef = `${appointmentId}-${Date.now()}`;
+    const txnRef = `${bookingId}-${Date.now()}`;
     const payment = await this.prisma.payment.create({
       data: {
-        appointmentId,
+        bookingId,
         customerId: userId,
-        amount: appointment.price,
+        amount: booking.totalPrice,
         status: PaymentStatus.PENDING,
         method: PaymentMethod.VNPAY,
         vnpTxnRef: txnRef,
       },
     });
 
+    const serviceNames = booking.items.map((i) => i.service.name).join(', ');
     const paymentUrl = buildVnpayUrl(
       {
-        amount: Number(appointment.price),
-        orderInfo: `Thanh toan dich vu ${appointment.service.name} tai ${appointment.store.name}`,
+        amount: Number(booking.totalPrice),
+        orderInfo: `Thanh toan ${serviceNames} tai ${booking.store.name}`,
         txnRef,
         clientIp: getClientIp(req as Record<string, unknown>),
         returnUrl: this.config.get<string>('VNPAY_RETURN_URL') ?? '',
@@ -91,7 +97,7 @@ export class PaymentsService {
     }
 
     if (payment.status !== PaymentStatus.PENDING) {
-      return `${frontendUrl}/payment/result?status=${payment.status}&appointmentId=${payment.appointmentId}`;
+      return `${frontendUrl}/payment/result?status=${payment.status}&bookingId=${payment.bookingId}`;
     }
 
     const vnpAmount = parseInt(vnpParams['vnp_Amount'] ?? '0') / 100;
@@ -101,12 +107,12 @@ export class PaymentsService {
 
     if (vnpParams['vnp_ResponseCode'] === '00' && vnpParams['vnp_TransactionStatus'] === '00') {
       await this.updatePaymentSuccess(payment.id, vnpParams);
-      return `${frontendUrl}/payment/result?success=true&appointmentId=${payment.appointmentId}`;
+      return `${frontendUrl}/payment/result?success=true&bookingId=${payment.bookingId}`;
     }
 
     await this.updatePaymentFailed(payment.id, vnpParams);
     const message = mapVnpayErrorCode(vnpParams['vnp_ResponseCode'] ?? '');
-    return `${frontendUrl}/payment/result?success=false&message=${encodeURIComponent(message)}&appointmentId=${payment.appointmentId}`;
+    return `${frontendUrl}/payment/result?success=false&message=${encodeURIComponent(message)}&bookingId=${payment.bookingId}`;
   }
 
   async handleIpn(vnpParams: Record<string, string>): Promise<{ RspCode: string; Message: string }> {
@@ -120,7 +126,7 @@ export class PaymentsService {
       where: { vnpTxnRef: vnpParams['vnp_TxnRef'] },
       include: {
         customer: { select: { id: true, fullName: true, email: true } },
-        appointment: { include: { store: true, service: true } },
+        booking: { include: { store: true, items: { include: { service: true } } } },
       },
     });
     if (!payment) return { RspCode: '01', Message: 'Order not found' };
@@ -136,15 +142,16 @@ export class PaymentsService {
 
     if (vnpParams['vnp_ResponseCode'] === '00' && vnpParams['vnp_TransactionStatus'] === '00') {
       await this.updatePaymentSuccess(payment.id, vnpParams);
+      const serviceNames = payment.booking.items.map((i) => i.service.name).join(', ');
       this.notifications
         .notifyPaymentSuccess({
-          appointmentId: payment.appointmentId,
+          bookingId: payment.bookingId,
           customerId: payment.customer.id,
           customerEmail: payment.customer.email,
           customerName: payment.customer.fullName,
           amount: Number(payment.amount),
-          storeName: payment.appointment.store.name,
-          serviceName: payment.appointment.service.name,
+          storeName: payment.booking.store.name,
+          serviceNames,
         })
         .catch(() => {});
     } else {
@@ -162,10 +169,10 @@ export class PaymentsService {
     });
   }
 
-  async findPaymentByAppointment(appointmentId: string, userId?: string) {
+  async findPaymentByBooking(bookingId: string, userId?: string) {
     return this.prisma.payment.findMany({
       where: {
-        appointmentId,
+        bookingId,
         ...(userId ? { customerId: userId } : {}),
       },
       orderBy: { createdAt: 'desc' },

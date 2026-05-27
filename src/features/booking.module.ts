@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppointmentsModule } from './booking/appointments/appointments.module';
+import { BookingsModule } from './booking/bookings/bookings.module';
 import { PaymentsModule } from './booking/payments/payments.module';
 import { ReviewsModule } from './booking/reviews/reviews.module';
 import { SlotsModule } from './booking/slots/slots.module';
 
 @Module({
-  imports: [AppointmentsModule, PaymentsModule, ReviewsModule, SlotsModule],
-  exports: [AppointmentsModule, PaymentsModule, ReviewsModule, SlotsModule],
+  imports: [BookingsModule, PaymentsModule, ReviewsModule, SlotsModule],
+  exports: [BookingsModule, PaymentsModule, ReviewsModule, SlotsModule],
 })
 export class BookingModule {}

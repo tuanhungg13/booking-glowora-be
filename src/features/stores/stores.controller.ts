@@ -62,6 +62,13 @@ export class StoresController {
     return this.storesService.findMine(user.id);
   }
 
+  @ApiOperation({ summary: 'All shops current user belongs to with role (flat)' })
+  @ApiBearerAuth()
+  @Get('my-shops')
+  findMyShops(@CurrentUser() user: CurrentUserPayload) {
+    return this.storesService.findMyShops(user.id);
+  }
+
   @ApiOperation({ summary: 'Public store detail by id or slug' })
   @Public()
   @Get(':idOrSlug')

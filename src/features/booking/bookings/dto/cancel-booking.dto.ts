@@ -1,6 +1,6 @@
 import { IsOptional, IsString, MaxLength } from 'class-validator';
 
-export class CancelAppointmentDto {
+export class CancelBookingDto {
   @IsOptional()
   @IsString()
   @MaxLength(500)

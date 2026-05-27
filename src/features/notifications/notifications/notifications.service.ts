@@ -12,7 +12,7 @@ export class NotificationsService {
     return this.prisma.notification.create({
       data: {
         userId: dto.userId,
-        appointmentId: dto.appointmentId,
+        bookingId: dto.bookingId,
         type: dto.type,
         title: dto.title,
         body: dto.body,
@@ -80,10 +80,7 @@ export class NotificationsService {
   async markOneAsRead(id: string, userId: string) {
     const notif = await this.prisma.notification.findFirst({ where: { id, userId } });
     if (!notif) throw new NotFoundException('Notification not found');
-    return this.prisma.notification.update({
-      where: { id },
-      data: { isRead: true },
-    });
+    return this.prisma.notification.update({ where: { id }, data: { isRead: true } });
   }
 
   async getUnreadCount(userId: string) {
@@ -91,22 +88,21 @@ export class NotificationsService {
     return { count };
   }
 
-  // --- Appointment lifecycle notifications ---
+  // ─── Booking lifecycle notifications ─────────────────────────────────────
 
-  async notifyAppointmentCreated(params: {
-    appointmentId: string;
+  async notifyBookingCreated(params: {
+    bookingId: string;
     storeId: string;
     storeName: string;
     customerId: string;
     customerName: string;
     customerEmail: string;
-    serviceName: string;
+    serviceNames: string;
     scheduledAt: Date;
   }) {
-    const { appointmentId, storeId, storeName, customerId, customerName, customerEmail, serviceName, scheduledAt } = params;
+    const { bookingId, storeId, storeName, customerId, customerName, customerEmail, serviceNames, scheduledAt } = params;
     const timeStr = this.formatDateTime(scheduledAt);
 
-    // Notify store owner
     const ownerRole = await this.prisma.userRole.findFirst({
       where: { shopId: storeId, role: { code: 'SHOP_OWNER' } },
     });
@@ -114,110 +110,108 @@ export class NotificationsService {
       await this.prisma.notification.create({
         data: {
           userId: ownerRole.userId,
-          appointmentId,
-          type: NotificationType.APPOINTMENT_CREATED,
+          bookingId,
+          type: NotificationType.BOOKING_CREATED,
           title: `Lịch hẹn mới tại ${storeName}`,
-          body: `${customerName} đã đặt dịch vụ ${serviceName} vào ${timeStr}`,
+          body: `${customerName} đã đặt ${serviceNames} vào ${timeStr}`,
         },
       });
     }
 
-    // Notify customer
     await this.prisma.notification.create({
       data: {
         userId: customerId,
-        appointmentId,
-        type: NotificationType.APPOINTMENT_CREATED,
+        bookingId,
+        type: NotificationType.BOOKING_CREATED,
         title: 'Đặt lịch thành công',
-        body: `Lịch hẹn dịch vụ ${serviceName} tại ${storeName} vào ${timeStr} đang chờ xác nhận.`,
+        body: `Lịch hẹn ${serviceNames} tại ${storeName} vào ${timeStr} đang chờ xác nhận.`,
       },
     });
 
     console.log(`[EMAIL] To: ${customerEmail} | Subject: Xác nhận đặt lịch tại ${storeName}`);
   }
 
-  async notifyAppointmentConfirmed(params: {
-    appointmentId: string;
+  async notifyBookingConfirmed(params: {
+    bookingId: string;
     customerId: string;
     customerEmail: string;
     storeName: string;
-    serviceName: string;
+    serviceNames: string;
     scheduledAt: Date;
   }) {
-    const { appointmentId, customerId, customerEmail, storeName, serviceName, scheduledAt } = params;
+    const { bookingId, customerId, customerEmail, storeName, serviceNames, scheduledAt } = params;
     const timeStr = this.formatDateTime(scheduledAt);
 
     await this.prisma.notification.create({
       data: {
         userId: customerId,
-        appointmentId,
-        type: NotificationType.APPOINTMENT_CONFIRMED,
+        bookingId,
+        type: NotificationType.BOOKING_CONFIRMED,
         title: 'Lịch hẹn đã được xác nhận',
-        body: `Lịch hẹn dịch vụ ${serviceName} tại ${storeName} vào ${timeStr} đã được xác nhận.`,
+        body: `Lịch hẹn ${serviceNames} tại ${storeName} vào ${timeStr} đã được xác nhận.`,
       },
     });
 
     console.log(`[EMAIL] To: ${customerEmail} | Subject: Lịch hẹn đã được xác nhận tại ${storeName}`);
   }
 
-  async notifyAppointmentRejected(params: {
-    appointmentId: string;
+  async notifyBookingRejected(params: {
+    bookingId: string;
     customerId: string;
     customerEmail: string;
     storeName: string;
-    serviceName: string;
+    serviceNames: string;
     reason: string;
   }) {
-    const { appointmentId, customerId, customerEmail, storeName, serviceName, reason } = params;
+    const { bookingId, customerId, customerEmail, storeName, serviceNames, reason } = params;
 
     await this.prisma.notification.create({
       data: {
         userId: customerId,
-        appointmentId,
-        type: NotificationType.APPOINTMENT_REJECTED,
+        bookingId,
+        type: NotificationType.BOOKING_REJECTED,
         title: 'Lịch hẹn chưa được xác nhận',
-        body: `Lịch hẹn dịch vụ ${serviceName} tại ${storeName} bị từ chối. Lý do: ${reason}`,
+        body: `Lịch hẹn ${serviceNames} tại ${storeName} bị từ chối. Lý do: ${reason}`,
       },
     });
 
     console.log(`[EMAIL] To: ${customerEmail} | Subject: Lịch hẹn chưa được xác nhận tại ${storeName}`);
   }
 
-  async notifyAppointmentCompleted(params: {
-    appointmentId: string;
+  async notifyBookingCompleted(params: {
+    bookingId: string;
     customerId: string;
     customerEmail: string;
     storeName: string;
-    serviceName: string;
+    serviceNames: string;
   }) {
-    const { appointmentId, customerId, customerEmail, storeName, serviceName } = params;
+    const { bookingId, customerId, customerEmail, storeName, serviceNames } = params;
 
     await this.prisma.notification.create({
       data: {
         userId: customerId,
-        appointmentId,
-        type: NotificationType.APPOINTMENT_COMPLETED,
+        bookingId,
+        type: NotificationType.BOOKING_COMPLETED,
         title: 'Cảm ơn bạn đã sử dụng dịch vụ',
-        body: `Dịch vụ ${serviceName} tại ${storeName} đã hoàn thành. Hãy để lại đánh giá nhé!`,
+        body: `${serviceNames} tại ${storeName} đã hoàn thành. Hãy để lại đánh giá nhé!`,
       },
     });
 
     console.log(`[EMAIL] To: ${customerEmail} | Subject: Cảm ơn bạn đã sử dụng dịch vụ tại ${storeName}`);
   }
 
-  async notifyAppointmentCancelled(params: {
-    appointmentId: string;
+  async notifyBookingCancelled(params: {
+    bookingId: string;
     storeId: string;
     storeName: string;
     customerId: string;
     customerName: string;
     customerEmail: string;
-    serviceName: string;
+    serviceNames: string;
     reason?: string;
   }) {
-    const { appointmentId, storeId, storeName, customerId, customerName, customerEmail, serviceName, reason } = params;
+    const { bookingId, storeId, storeName, customerId, customerName, customerEmail, serviceNames, reason } = params;
 
-    // Notify store owner
     const ownerRole = await this.prisma.userRole.findFirst({
       where: { shopId: storeId, role: { code: 'SHOP_OWNER' } },
     });
@@ -225,22 +219,21 @@ export class NotificationsService {
       await this.prisma.notification.create({
         data: {
           userId: ownerRole.userId,
-          appointmentId,
-          type: NotificationType.APPOINTMENT_CANCELLED,
+          bookingId,
+          type: NotificationType.BOOKING_CANCELLED,
           title: 'Khách đã hủy lịch hẹn',
-          body: `${customerName} đã hủy lịch hẹn dịch vụ ${serviceName}.${reason ? ` Lý do: ${reason}` : ''}`,
+          body: `${customerName} đã hủy lịch hẹn ${serviceNames}.${reason ? ` Lý do: ${reason}` : ''}`,
         },
       });
     }
 
-    // Notify customer
     await this.prisma.notification.create({
       data: {
         userId: customerId,
-        appointmentId,
-        type: NotificationType.APPOINTMENT_CANCELLED,
+        bookingId,
+        type: NotificationType.BOOKING_CANCELLED,
         title: 'Lịch hẹn đã bị hủy',
-        body: `Lịch hẹn dịch vụ ${serviceName} tại ${storeName} đã được hủy.`,
+        body: `Lịch hẹn ${serviceNames} tại ${storeName} đã được hủy.`,
       },
     });
 
@@ -248,24 +241,24 @@ export class NotificationsService {
   }
 
   async notifyPaymentSuccess(params: {
-    appointmentId: string;
+    bookingId: string;
     customerId: string;
     customerEmail: string;
     customerName: string;
     amount: number;
     storeName: string;
-    serviceName: string;
+    serviceNames: string;
   }) {
-    const { appointmentId, customerId, customerEmail, storeName, serviceName, amount } = params;
+    const { bookingId, customerId, customerEmail, storeName, serviceNames, amount } = params;
     const formattedAmount = amount.toLocaleString('vi-VN');
 
     await this.prisma.notification.create({
       data: {
         userId: customerId,
-        appointmentId,
+        bookingId,
         type: NotificationType.PAYMENT_SUCCESS,
         title: 'Thanh toán thành công',
-        body: `Bạn đã thanh toán ${formattedAmount}₫ cho dịch vụ ${serviceName} tại ${storeName}.`,
+        body: `Bạn đã thanh toán ${formattedAmount}₫ cho ${serviceNames} tại ${storeName}.`,
       },
     });
 

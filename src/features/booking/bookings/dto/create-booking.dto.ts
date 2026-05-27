@@ -4,11 +4,13 @@ import {
   IsArray,
   IsDateString,
   IsOptional,
+  IsString,
   IsUUID,
+  MaxLength,
   ValidateNested,
 } from 'class-validator';
 
-export class SlotServiceItemDto {
+export class BookingServiceItemDto {
   @IsUUID()
   serviceId!: string;
 
@@ -20,13 +22,21 @@ export class SlotServiceItemDto {
   staffId?: string;
 }
 
-export class AvailableSlotsDto {
+export class CreateBookingDto {
+  @IsUUID()
+  storeId!: string;
+
   @IsDateString()
-  date!: string;
+  scheduledAt!: string;
 
   @IsArray()
   @ArrayMinSize(1)
   @ValidateNested({ each: true })
-  @Type(() => SlotServiceItemDto)
-  services!: SlotServiceItemDto[];
+  @Type(() => BookingServiceItemDto)
+  services!: BookingServiceItemDto[];
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(1000)
+  notes?: string;
 }

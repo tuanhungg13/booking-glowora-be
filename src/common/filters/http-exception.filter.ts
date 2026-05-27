@@ -27,10 +27,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
         ? exceptionResponse.message.join(', ')
         : (exceptionResponse.message ?? exception.message);
 
-    response.status(status).json({
-      success: false,
-      message,
-      data: null,
-    });
+    const errorCode =
+      typeof exceptionResponse === 'object' && exceptionResponse !== null
+        ? (exceptionResponse as Record<string, unknown>).errorCode
+        : undefined;
+
+    const body: Record<string, unknown> = { success: false, message, data: null };
+    if (errorCode !== undefined) body.errorCode = errorCode;
+
+    response.status(status).json(body);
   }
 }

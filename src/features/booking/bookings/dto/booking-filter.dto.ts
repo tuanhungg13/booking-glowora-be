@@ -1,11 +1,11 @@
-import { AppointmentStatus } from '@prisma/client';
+import { BookingStatus } from '@prisma/client';
 import { Type } from 'class-transformer';
 import { IsDateString, IsEnum, IsInt, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
 
-export class AppointmentFilterDto {
+export class BookingFilterDto {
   @IsOptional()
-  @IsEnum(AppointmentStatus)
-  status?: AppointmentStatus;
+  @IsEnum(BookingStatus)
+  status?: BookingStatus;
 
   @IsOptional()
   @IsDateString()

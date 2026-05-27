@@ -2,21 +2,75 @@
   "info": {
     "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
     "name": "Phase 5 — Thanh toán VNPAY & Đánh giá",
-    "description": "Test toàn bộ API Phase 5:\n- VNPAY: Tạo URL thanh toán, giả lập IPN, Return URL\n- Payments: Lịch sử thanh toán, trạng thái theo appointment\n- Reviews: Tạo đánh giá (public POST), xem reviews (store/service/appointment), admin ẩn/hiện\n\n**Thứ tự chạy:**\n1. [Setup] Đăng nhập + Tạo dữ liệu\n2. [Payments] Test VNPAY flow\n3. [Reviews] Test review flow\n4. [Error Cases] Test các trường hợp lỗi\n\n**Lưu ý VNPAY:**\n- Cần VNPAY_TMN_CODE và VNPAY_HASH_SECRET thật từ sandbox\n- IPN cần ngrok để test server-to-server\n- paymentUrl tự mở trên browser để test thật",
+    "description": "Test toàn bộ API Phase 5:\n- VNPAY: Tạo URL thanh toán, giả lập IPN, Return URL\n- Payments: Lịch sử thanh toán, trạng thái theo booking\n- Reviews: Tạo đánh giá (public POST), xem reviews (store/service/booking), admin ẩn/hiện\n\n**Thứ tự chạy:**\n1. [Setup] Đăng nhập + Tạo dữ liệu\n2. [Payments] Test VNPAY flow\n3. [Reviews] Test review flow\n4. [Error Cases] Test các trường hợp lỗi\n\n**Lưu ý VNPAY:**\n- Cần VNPAY_TMN_CODE và VNPAY_HASH_SECRET thật từ sandbox\n- IPN cần ngrok để test server-to-server\n- paymentUrl tự mở trên browser để test thật",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl",                "value": "http://localhost:8080", "type": "string" },
-    { "key": "adminAccessToken",       "value": "", "type": "string" },
-    { "key": "ownerAccessToken",       "value": "", "type": "string" },
-    { "key": "customerAccessToken",    "value": "", "type": "string" },
-    { "key": "storeId",                "value": "", "type": "string" },
-    { "key": "serviceId",              "value": "", "type": "string" },
-    { "key": "appointmentId",          "value": "", "type": "string" },
-    { "key": "completedAppointmentId", "value": "", "type": "string" },
-    { "key": "paymentId",              "value": "", "type": "string" },
-    { "key": "paymentUrl",             "value": "", "type": "string" },
-    { "key": "reviewId",               "value": "", "type": "string" }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "adminAccessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "ownerAccessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "customerAccessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "storeId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "serviceId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "bookingId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "completedBookingId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "paymentId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "paymentUrl",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "reviewId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "variantId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "bookingItemId",
+      "value": "",
+      "type": "string"
+    }
   ],
   "item": [
     {
@@ -24,161 +78,440 @@
       "item": [
         {
           "name": "1. Login Admin",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 201', () => pm.response.to.have.status(201));",
-            "const b = pm.response.json();",
-            "pm.test('Has access_token', () => pm.expect(b.data).to.have.property('access_token'));",
-            "if (b.data?.access_token) pm.collectionVariables.set('adminAccessToken', b.data.access_token);"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test('Has access_token', () => pm.expect(b.data).to.have.property('access_token'));",
+                  "if (b.data?.access_token) pm.collectionVariables.set('adminAccessToken', b.data.access_token);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@glowora.com\",\n  \"password\": \"Admin@123456\"\n}" },
-            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth","login"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@glowora.com\",\n  \"password\": \"Admin@123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
           }
         },
         {
           "name": "2. Register Customer (p5)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('201 hoặc 409', () => pm.expect([201,409]).to.include(pm.response.code));"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 hoặc 409', () => pm.expect([201,409]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"email\": \"customer_p5@glowora.vn\",\n  \"password\": \"Customer@123\",\n  \"fullName\": \"Khách P5\",\n  \"phone\": \"0977777777\"\n}" },
-            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth","register"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer_p5@glowora.vn\",\n  \"password\": \"Customer@123\",\n  \"fullName\": \"Khách P5\",\n  \"phone\": \"0977777777\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
           }
         },
         {
           "name": "3. Login Customer (save customerAccessToken)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 201', () => pm.response.to.have.status(201));",
-            "const b = pm.response.json();",
-            "if (b.data?.access_token) pm.collectionVariables.set('customerAccessToken', b.data.access_token);"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "if (b.data?.access_token) pm.collectionVariables.set('customerAccessToken', b.data.access_token);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"email\": \"customer_p5@glowora.vn\",\n  \"password\": \"Customer@123\"\n}" },
-            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth","login"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer_p5@glowora.vn\",\n  \"password\": \"Customer@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
           }
         },
         {
           "name": "4. Register Owner (p5)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('201 hoặc 409', () => pm.expect([201,409]).to.include(pm.response.code));"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 hoặc 409', () => pm.expect([201,409]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"email\": \"owner_p5@glowora.vn\",\n  \"password\": \"Owner@123\",\n  \"fullName\": \"Chủ Cơ Sở P5\",\n  \"phone\": \"0944444444\"\n}" },
-            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth","register"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"owner_p5@glowora.vn\",\n  \"password\": \"Owner@123\",\n  \"fullName\": \"Chủ Cơ Sở P5\",\n  \"phone\": \"0944444444\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
           }
         },
         {
           "name": "5. Login Owner (save ownerAccessToken)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 201', () => pm.response.to.have.status(201));",
-            "const b = pm.response.json();",
-            "if (b.data?.access_token) pm.collectionVariables.set('ownerAccessToken', b.data.access_token);"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "if (b.data?.access_token) pm.collectionVariables.set('ownerAccessToken', b.data.access_token);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"email\": \"owner_p5@glowora.vn\",\n  \"password\": \"Owner@123\"\n}" },
-            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth","login"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"owner_p5@glowora.vn\",\n  \"password\": \"Owner@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
           }
         },
         {
           "name": "6. Tạo Store (Owner)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('201 hoặc 409', () => pm.expect([201,409]).to.include(pm.response.code));",
-            "const b = pm.response.json();",
-            "if (b.data?.id) pm.collectionVariables.set('storeId', b.data.id);"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 hoặc 409', () => pm.expect([201,409]).to.include(pm.response.code));",
+                  "const b = pm.response.json();",
+                  "if (b.data?.id) pm.collectionVariables.set('storeId', b.data.id);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Glowora P5 Spa\",\n  \"address\": \"123 Đường Test, HN\",\n  \"phone\": \"0244444444\",\n  \"timezone\": \"Asia/Ho_Chi_Minh\"\n}" },
-            "url": { "raw": "{{baseUrl}}/stores", "host": ["{{baseUrl}}"], "path": ["stores"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Glowora P5 Spa\",\n  \"address\": \"123 Duong Test, HN\",\n  \"city\": \"Ha Noi\",\n  \"phone\": \"0244444444\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/stores",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores"
+              ]
+            }
           }
         },
         {
           "name": "7. Admin Approve Store",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('2xx', () => pm.expect(pm.response.code).to.be.within(200,204));"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('2xx', () => pm.expect(pm.response.code).to.be.within(200,204));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "PATCH",
-            "header": [{ "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/admin/stores/{{storeId}}/approve", "host": ["{{baseUrl}}"], "path": ["admin","stores","{{storeId}}","approve"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/stores/{{storeId}}/approve",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores",
+                "{{storeId}}",
+                "approve"
+              ]
+            }
           }
         },
         {
           "name": "8. Tạo Service (Owner)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 201', () => pm.response.to.have.status(201));",
-            "const b = pm.response.json();",
-            "if (b.data?.id) pm.collectionVariables.set('serviceId', b.data.id);"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "if (b.data?.id) pm.collectionVariables.set('serviceId', b.data.id);",
+                  "if (b.data?.variants?.[0]?.id) pm.collectionVariables.set('variantId', b.data.variants[0].id);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
-              { "key": "x-shop-id", "value": "{{storeId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Chăm Sóc Da Cơ Bản\",\n  \"duration\": 60,\n  \"price\": 500000,\n  \"costPrice\": 150000\n}" },
-            "url": { "raw": "{{baseUrl}}/services", "host": ["{{baseUrl}}"], "path": ["services"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cham Soc Da Co Ban\",\n  \"variants\": [\n    {\n      \"name\": \"Goi 60 phut\",\n      \"duration\": 60,\n      \"price\": 500000,\n      \"costPrice\": 150000,\n      \"sortOrder\": 0\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/services",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "services"
+              ]
+            }
           }
         },
         {
-          "name": "9. Customer tạo Appointment",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 201', () => pm.response.to.have.status(201));",
-            "const b = pm.response.json();",
-            "if (b.data?.id) pm.collectionVariables.set('appointmentId', b.data.id);"
-          ]}}],
+          "name": "9. Customer tạo Booking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "if (b.data?.id) pm.collectionVariables.set('bookingId', b.data.id);",
+                  "if (b.data?.items?.[0]?.id) pm.collectionVariables.set('bookingItemId', b.data.items[0].id);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerAccessToken}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"storeId\": \"{{storeId}}\",\n  \"serviceId\": \"{{serviceId}}\",\n  \"scheduledAt\": \"2026-12-20T09:00:00.000Z\"\n}" },
-            "url": { "raw": "{{baseUrl}}/appointments", "host": ["{{baseUrl}}"], "path": ["appointments"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"storeId\": \"{{storeId}}\",\n  \"scheduledAt\": \"2026-12-20T09:00:00.000Z\",\n  \"services\": [\n    {\n      \"serviceId\": \"{{serviceId}}\",\n      \"variantId\": \"{{variantId}}\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/bookings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings"
+              ]
+            }
           }
         },
         {
-          "name": "10. Owner Confirm Appointment",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('2xx', () => pm.expect(pm.response.code).to.be.within(200,201));"
-          ]}}],
+          "name": "10. Owner Confirm Booking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('2xx', () => pm.expect(pm.response.code).to.be.within(200,201));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
-              { "key": "x-shop-id", "value": "{{storeId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
             ],
-            "url": { "raw": "{{baseUrl}}/store-appointments/{{appointmentId}}/confirm", "host": ["{{baseUrl}}"], "path": ["store-appointments","{{appointmentId}}","confirm"] }
+            "url": {
+              "raw": "{{baseUrl}}/store-bookings/{{bookingId}}/confirm",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "store-bookings",
+                "{{bookingId}}",
+                "confirm"
+              ]
+            }
           }
         },
         {
-          "name": "11. Owner Complete Appointment (save completedAppointmentId)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('2xx', () => pm.expect(pm.response.code).to.be.within(200,201));",
-            "pm.collectionVariables.set('completedAppointmentId', pm.collectionVariables.get('appointmentId'));"
-          ]}}],
+          "name": "11. Owner Complete Booking (save completedBookingId)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('2xx', () => pm.expect(pm.response.code).to.be.within(200,201));",
+                  "const b = pm.response.json();",
+                  "pm.collectionVariables.set('completedBookingId', pm.collectionVariables.get('bookingId'));",
+                  "if (b.data?.items?.[0]?.id) pm.collectionVariables.set('bookingItemId', b.data.items[0].id);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
-              { "key": "x-shop-id", "value": "{{storeId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
             ],
-            "url": { "raw": "{{baseUrl}}/store-appointments/{{appointmentId}}/complete", "host": ["{{baseUrl}}"], "path": ["store-appointments","{{appointmentId}}","complete"] }
+            "url": {
+              "raw": "{{baseUrl}}/store-bookings/{{bookingId}}/complete",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "store-bookings",
+                "{{bookingId}}",
+                "complete"
+              ]
+            }
           }
         }
       ]
@@ -188,157 +521,380 @@
       "item": [
         {
           "name": "12. Tạo VNPAY Payment URL ✅",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 201', () => pm.response.to.have.status(201));",
-            "const b = pm.response.json();",
-            "pm.test('Có paymentUrl', () => pm.expect(b.data).to.have.property('paymentUrl'));",
-            "pm.test('Có paymentId', () => pm.expect(b.data).to.have.property('paymentId'));",
-            "pm.test('paymentUrl chứa sandbox.vnpayment.vn', () => pm.expect(b.data.paymentUrl).to.include('sandbox.vnpayment.vn'));",
-            "pm.test('paymentUrl có vnp_Amount', () => pm.expect(b.data.paymentUrl).to.include('vnp_Amount'));",
-            "pm.test('paymentUrl có vnp_SecureHash', () => pm.expect(b.data.paymentUrl).to.include('vnp_SecureHash'));",
-            "if (b.data?.paymentId) pm.collectionVariables.set('paymentId', b.data.paymentId);",
-            "if (b.data?.paymentUrl) pm.collectionVariables.set('paymentUrl', b.data.paymentUrl);"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test('Có paymentUrl', () => pm.expect(b.data).to.have.property('paymentUrl'));",
+                  "pm.test('Có paymentId', () => pm.expect(b.data).to.have.property('paymentId'));",
+                  "pm.test('paymentUrl chứa sandbox.vnpayment.vn', () => pm.expect(b.data.paymentUrl).to.include('sandbox.vnpayment.vn'));",
+                  "pm.test('paymentUrl có vnp_Amount', () => pm.expect(b.data.paymentUrl).to.include('vnp_Amount'));",
+                  "pm.test('paymentUrl có vnp_SecureHash', () => pm.expect(b.data.paymentUrl).to.include('vnp_SecureHash'));",
+                  "if (b.data?.paymentId) pm.collectionVariables.set('paymentId', b.data.paymentId);",
+                  "if (b.data?.paymentUrl) pm.collectionVariables.set('paymentUrl', b.data.paymentUrl);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerAccessToken}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"appointmentId\": \"{{completedAppointmentId}}\"\n}" },
-            "url": { "raw": "{{baseUrl}}/payments/vnpay/create", "host": ["{{baseUrl}}"], "path": ["payments","vnpay","create"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookingId\": \"{{completedBookingId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/vnpay/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "vnpay",
+                "create"
+              ]
+            }
           }
         },
         {
           "name": "13. Tạo payment 2 lần — idempotent OK (tạo được nhiều PENDING) ✅",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 201 — cho phép retry PENDING', () => pm.response.to.have.status(201));",
-            "const b = pm.response.json();",
-            "pm.test('paymentUrl mới khác paymentUrl cũ', () => {",
-            "  pm.expect(b.data.paymentUrl).to.not.equal(pm.collectionVariables.get('paymentUrl'));",
-            "});"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 — cho phép retry PENDING', () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test('paymentUrl mới khác paymentUrl cũ', () => {",
+                  "  pm.expect(b.data.paymentUrl).to.not.equal(pm.collectionVariables.get('paymentUrl'));",
+                  "});"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerAccessToken}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"appointmentId\": \"{{completedAppointmentId}}\"\n}" },
-            "url": { "raw": "{{baseUrl}}/payments/vnpay/create", "host": ["{{baseUrl}}"], "path": ["payments","vnpay","create"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookingId\": \"{{completedBookingId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/vnpay/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "vnpay",
+                "create"
+              ]
+            }
           }
         },
         {
-          "name": "14. Tạo payment cho appointment chưa COMPLETED ❌ 400",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 404 hoặc 400', () => pm.expect([400,404]).to.include(pm.response.code));",
-            "const b = pm.response.json();",
-            "pm.test('Error message', () => pm.expect(b.success).to.be.false);"
-          ]}}],
+          "name": "14. Tạo payment cho booking chưa COMPLETED ❌ 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 404 hoặc 400', () => pm.expect([400,404]).to.include(pm.response.code));",
+                  "const b = pm.response.json();",
+                  "pm.test('Error message', () => pm.expect(b.success).to.be.false);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerAccessToken}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"appointmentId\": \"00000000-0000-0000-0000-000000000000\"\n}" },
-            "url": { "raw": "{{baseUrl}}/payments/vnpay/create", "host": ["{{baseUrl}}"], "path": ["payments","vnpay","create"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookingId\": \"00000000-0000-0000-0000-000000000000\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/vnpay/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "vnpay",
+                "create"
+              ]
+            }
           }
         },
         {
           "name": "15. [MANUAL] Mở paymentUrl trên browser để test VNPAY",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Đây là bước manual', () => {",
-            "  console.log('PaymentUrl:', pm.collectionVariables.get('paymentUrl'));",
-            "  console.log('Mở URL trên browser để hoàn tất thanh toán VNPAY sandbox');",
-            "  pm.expect(true).to.be.true;",
-            "});"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Đây là bước manual', () => {",
+                  "  console.log('PaymentUrl:', pm.collectionVariables.get('paymentUrl'));",
+                  "  console.log('Mở URL trên browser để hoàn tất thanh toán VNPAY sandbox');",
+                  "  pm.expect(true).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
-            "url": { "raw": "{{paymentUrl}}", "host": ["{{paymentUrl}}"] }
+            "url": {
+              "raw": "{{paymentUrl}}",
+              "host": [
+                "{{paymentUrl}}"
+              ]
+            }
           }
         },
         {
           "name": "16. [Giả lập IPN] VNPAY thông báo thanh toán THÀNH CÔNG ✅",
-          "event": [{ "listen": "prerequest", "script": { "type": "text/javascript", "exec": [
-            "// Để test thật, cần VNPAY_HASH_SECRET thật + params từ VNPAY",
-            "// Request này giả lập cấu trúc IPN (chữ ký sẽ fail nếu không có secret thật)",
-            "console.log('Lưu ý: IPN này sẽ trả RspCode 97 (chữ ký sai) nếu không có HASH_SECRET thật');"
-          ]}},
-          { "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200 — VNPAY luôn nhận 200', () => pm.response.to.have.status(200));",
-            "const b = pm.response.json();",
-            "pm.test('Có RspCode', () => pm.expect(b.data).to.have.property('RspCode'));",
-            "pm.test('Có Message', () => pm.expect(b.data).to.have.property('Message'));",
-            "console.log('IPN RspCode:', b.data?.RspCode, '|', b.data?.Message);"
-          ]}}],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Để test thật, cần VNPAY_HASH_SECRET thật + params từ VNPAY",
+                  "// Request này giả lập cấu trúc IPN (chữ ký sẽ fail nếu không có secret thật)",
+                  "console.log('Lưu ý: IPN này sẽ trả RspCode 97 (chữ ký sai) nếu không có HASH_SECRET thật');"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 — VNPAY luôn nhận 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('Có RspCode', () => pm.expect(b.data).to.have.property('RspCode'));",
+                  "pm.test('Có Message', () => pm.expect(b.data).to.have.property('Message'));",
+                  "console.log('IPN RspCode:', b.data?.RspCode, '|', b.data?.Message);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"vnp_TmnCode\": \"YOUR_TMN_CODE\",\n  \"vnp_Amount\": \"50000000\",\n  \"vnp_BankCode\": \"VCB\",\n  \"vnp_CardType\": \"ATM\",\n  \"vnp_PayDate\": \"20261220093045\",\n  \"vnp_OrderInfo\": \"Thanh toan dich vu\",\n  \"vnp_TransactionNo\": \"14823741\",\n  \"vnp_ResponseCode\": \"00\",\n  \"vnp_TransactionStatus\": \"00\",\n  \"vnp_TxnRef\": \"{{completedAppointmentId}}-REPLACE_WITH_REAL_TXNREF\",\n  \"vnp_SecureHashType\": \"HmacSHA512\",\n  \"vnp_SecureHash\": \"REPLACE_WITH_REAL_HASH\"\n}" },
-            "url": { "raw": "{{baseUrl}}/payments/vnpay/ipn", "host": ["{{baseUrl}}"], "path": ["payments","vnpay","ipn"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vnp_TmnCode\": \"YOUR_TMN_CODE\",\n  \"vnp_Amount\": \"50000000\",\n  \"vnp_BankCode\": \"VCB\",\n  \"vnp_CardType\": \"ATM\",\n  \"vnp_PayDate\": \"20261220093045\",\n  \"vnp_OrderInfo\": \"Thanh toan dich vu\",\n  \"vnp_TransactionNo\": \"14823741\",\n  \"vnp_ResponseCode\": \"00\",\n  \"vnp_TransactionStatus\": \"00\",\n  \"vnp_TxnRef\": \"{{completedBookingId}}-REPLACE_WITH_REAL_TXNREF\",\n  \"vnp_SecureHashType\": \"HmacSHA512\",\n  \"vnp_SecureHash\": \"REPLACE_WITH_REAL_HASH\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/vnpay/ipn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "vnpay",
+                "ipn"
+              ]
+            }
           }
         },
         {
           "name": "17. [Giả lập IPN] Gửi IPN lần 2 — idempotent ✅",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "const b = pm.response.json();",
-            "console.log('IPN lần 2 RspCode:', b.data?.RspCode);"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "console.log('IPN lần 2 RspCode:', b.data?.RspCode);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"vnp_TxnRef\": \"{{completedAppointmentId}}-SAME_TXNREF\",\n  \"vnp_Amount\": \"50000000\",\n  \"vnp_ResponseCode\": \"00\",\n  \"vnp_TransactionStatus\": \"00\",\n  \"vnp_SecureHash\": \"SAME_HASH\"\n}" },
-            "url": { "raw": "{{baseUrl}}/payments/vnpay/ipn", "host": ["{{baseUrl}}"], "path": ["payments","vnpay","ipn"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vnp_TxnRef\": \"{{completedBookingId}}-SAME_TXNREF\",\n  \"vnp_Amount\": \"50000000\",\n  \"vnp_ResponseCode\": \"00\",\n  \"vnp_TransactionStatus\": \"00\",\n  \"vnp_SecureHash\": \"SAME_HASH\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/vnpay/ipn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "vnpay",
+                "ipn"
+              ]
+            }
           }
         },
         {
           "name": "18. [Giả lập IPN] Chữ ký sai → RspCode 97 ✅",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "const b = pm.response.json();",
-            "pm.test('RspCode là 97 (chữ ký sai)', () => pm.expect(b.data.RspCode).to.equal('97'));"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('RspCode là 97 (chữ ký sai)', () => pm.expect(b.data.RspCode).to.equal('97'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"vnp_TxnRef\": \"fake-ref\",\n  \"vnp_Amount\": \"50000000\",\n  \"vnp_SecureHash\": \"INVALID_HASH_XXXX\"\n}" },
-            "url": { "raw": "{{baseUrl}}/payments/vnpay/ipn", "host": ["{{baseUrl}}"], "path": ["payments","vnpay","ipn"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vnp_TxnRef\": \"fake-ref\",\n  \"vnp_Amount\": \"50000000\",\n  \"vnp_SecureHash\": \"INVALID_HASH_XXXX\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/vnpay/ipn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "vnpay",
+                "ipn"
+              ]
+            }
           }
         },
         {
           "name": "19. Lịch sử thanh toán của Customer ✅",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "const b = pm.response.json();",
-            "pm.test('data là array', () => pm.expect(b.data).to.be.an('array'));",
-            "console.log('My payments count:', b.data?.length);"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('data là array', () => pm.expect(b.data).to.be.an('array'));",
+                  "console.log('My payments count:', b.data?.length);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/payments/my", "host": ["{{baseUrl}}"], "path": ["payments","my"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerAccessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payments/my",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "my"
+              ]
+            }
           }
         },
         {
-          "name": "20. Xem thanh toán theo Appointment ✅",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "const b = pm.response.json();",
-            "pm.test('data là array', () => pm.expect(b.data).to.be.an('array'));",
-            "if (b.data?.length > 0) {",
-            "  pm.test('Payment có appointmentId khớp', () => {",
-            "    pm.expect(b.data[0].appointmentId).to.equal(pm.collectionVariables.get('completedAppointmentId'));",
-            "  });",
-            "}"
-          ]}}],
+          "name": "20. Xem thanh toán theo Booking ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('data la array', () => pm.expect(b.data).to.be.an('array'));",
+                  "if (b.data?.length > 0) {",
+                  "  pm.test('Payment co bookingId khop', () => {",
+                  "    pm.expect(b.data[0].bookingId).to.equal(pm.collectionVariables.get('completedBookingId'));",
+                  "  });",
+                  "}"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/appointments/{{completedAppointmentId}}/payment", "host": ["{{baseUrl}}"], "path": ["appointments","{{completedAppointmentId}}","payment"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerAccessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/bookings/{{completedBookingId}}/payment",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings",
+                "{{completedBookingId}}",
+                "payment"
+              ]
+            }
           }
         }
       ]
@@ -347,177 +903,409 @@
       "name": "[Reviews] Đánh giá dịch vụ",
       "item": [
         {
-          "name": "21. Tạo review cho appointment COMPLETED ✅",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 201', () => pm.response.to.have.status(201));",
-            "const b = pm.response.json();",
-            "pm.test('Có id', () => pm.expect(b.data).to.have.property('id'));",
-            "pm.test('Rating đúng', () => pm.expect(b.data.rating).to.equal(5));",
-            "pm.test('Comment đúng', () => pm.expect(b.data.comment).to.equal('Dịch vụ rất tốt!'));",
-            "if (b.data?.id) pm.collectionVariables.set('reviewId', b.data.id);"
-          ]}}],
+          "name": "21. Tao review cho booking item COMPLETED",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "const b = pm.response.json();",
+                  "pm.test('Có id', () => pm.expect(b.data).to.have.property('id'));",
+                  "pm.test('Rating đúng', () => pm.expect(b.data.rating).to.equal(5));",
+                  "pm.test('Comment đúng', () => pm.expect(b.data.comment).to.equal('Dịch vụ rất tốt!'));",
+                  "if (b.data?.id) pm.collectionVariables.set('reviewId', b.data.id);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerAccessToken}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Dịch vụ rất tốt!\"\n}" },
-            "url": { "raw": "{{baseUrl}}/appointments/{{completedAppointmentId}}/review", "host": ["{{baseUrl}}"], "path": ["appointments","{{completedAppointmentId}}","review"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Dịch vụ rất tốt!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/booking-items/{{bookingItemId}}/review",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking-items",
+                "{{bookingItemId}}",
+                "review"
+              ]
+            }
           }
         },
         {
           "name": "22. Tạo review lần 2 — duplicate ❌ 409",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 409 Conflict', () => pm.response.to.have.status(409));",
-            "const b = pm.response.json();",
-            "pm.test('success là false', () => pm.expect(b.success).to.be.false);"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 409 Conflict', () => pm.response.to.have.status(409));",
+                  "const b = pm.response.json();",
+                  "pm.test('success là false', () => pm.expect(b.success).to.be.false);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerAccessToken}}"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"rating\": 3,\n  \"comment\": \"Lần 2\"\n}" },
-            "url": { "raw": "{{baseUrl}}/appointments/{{completedAppointmentId}}/review", "host": ["{{baseUrl}}"], "path": ["appointments","{{completedAppointmentId}}","review"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 3,\n  \"comment\": \"Lần 2\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/booking-items/{{bookingItemId}}/review",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking-items",
+                "{{bookingItemId}}",
+                "review"
+              ]
+            }
           }
         },
         {
-          "name": "23. Xem review của appointment (PUBLIC — không cần token) ✅",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "const b = pm.response.json();",
-            "if (b.data) {",
-            "  pm.test('Rating là 5', () => pm.expect(b.data.rating).to.equal(5));",
-            "  pm.test('appointmentId khớp', () => pm.expect(b.data.appointmentId).to.equal(pm.collectionVariables.get('completedAppointmentId')));",
-            "}"
-          ]}}],
+          "name": "23. Xem review của booking (PUBLIC — không cần token) ✅",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "if (b.data) {",
+                  "  pm.test('Rating la 5', () => pm.expect(b.data.rating).to.equal(5));",
+                  "  pm.test('bookingItemId khop', () => pm.expect(b.data.bookingItemId).to.equal(pm.collectionVariables.get('bookingItemId')));",
+                  "}"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
-            "url": { "raw": "{{baseUrl}}/appointments/{{completedAppointmentId}}/review", "host": ["{{baseUrl}}"], "path": ["appointments","{{completedAppointmentId}}","review"] }
+            "url": {
+              "raw": "{{baseUrl}}/booking-items/{{bookingItemId}}/review",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking-items",
+                "{{bookingItemId}}",
+                "review"
+              ]
+            }
           }
         },
         {
           "name": "24. Xem reviews của Store (PUBLIC + pagination) ✅",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "const b = pm.response.json();",
-            "pm.test('Có items array', () => pm.expect(b.data.items).to.be.an('array'));",
-            "pm.test('Có total', () => pm.expect(b.data).to.have.property('total'));",
-            "pm.test('Có breakdown với 5 keys', () => {",
-            "  const bd = b.data.breakdown;",
-            "  pm.expect(bd).to.have.property('5');",
-            "  pm.expect(bd).to.have.property('1');",
-            "});",
-            "pm.test('Có page và limit', () => {",
-            "  pm.expect(b.data).to.have.property('page');",
-            "  pm.expect(b.data).to.have.property('limit');",
-            "});"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('Co data array', () => pm.expect(b.data).to.be.an('array'));",
+                  "pm.test('Co total meta', () => pm.expect(b.meta).to.have.property('total'));",
+                  "pm.test('Co page va limit meta', () => {",
+                  "  pm.expect(b.meta).to.have.property('page');",
+                  "  pm.expect(b.meta).to.have.property('limit');",
+                  "});"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/stores/{{storeId}}/reviews?page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["stores","{{storeId}}","reviews"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "{{storeId}}",
+                "reviews"
+              ],
               "query": [
-                { "key": "page", "value": "1" },
-                { "key": "limit", "value": "10" }
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
               ]
             }
           }
         },
         {
           "name": "25. Xem reviews của Store filter by rating=5 ✅",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "const b = pm.response.json();",
-            "if (b.data.items.length > 0) {",
-            "  pm.test('Tất cả reviews có rating=5', () => {",
-            "    b.data.items.forEach(r => pm.expect(r.rating).to.equal(5));",
-            "  });",
-            "}"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "if (b.data.length > 0) {",
+                  "  pm.test('Tat ca reviews co rating=5', () => {",
+                  "    b.data.forEach(r => pm.expect(r.rating).to.equal(5));",
+                  "  });",
+                  "}"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/stores/{{storeId}}/reviews?rating=5&page=1&limit=5",
-              "host": ["{{baseUrl}}"],
-              "path": ["stores","{{storeId}}","reviews"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "{{storeId}}",
+                "reviews"
+              ],
               "query": [
-                { "key": "rating", "value": "5" },
-                { "key": "page", "value": "1" },
-                { "key": "limit", "value": "5" }
+                {
+                  "key": "rating",
+                  "value": "5"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
               ]
             }
           }
         },
         {
           "name": "26. Xem reviews của Service (PUBLIC) ✅",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "const b = pm.response.json();",
-            "pm.test('Có items array', () => pm.expect(b.data.items).to.be.an('array'));",
-            "pm.test('Có total', () => pm.expect(b.data).to.have.property('total'));"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('Co data array', () => pm.expect(b.data).to.be.an('array'));",
+                  "pm.test('Co total meta', () => pm.expect(b.meta).to.have.property('total'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
-            "url": { "raw": "{{baseUrl}}/services/{{serviceId}}/reviews?page=1&limit=10", "host": ["{{baseUrl}}"], "path": ["services","{{serviceId}}","reviews"], "query": [{ "key": "page", "value": "1" }, { "key": "limit", "value": "10" }] }
+            "url": {
+              "raw": "{{baseUrl}}/services/{{serviceId}}/reviews?page=1&limit=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "services",
+                "{{serviceId}}",
+                "reviews"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
           }
         },
         {
           "name": "27. Admin ẩn review (MANAGE_REVIEW) ✅",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "const b = pm.response.json();",
-            "pm.test('isVisible là false', () => pm.expect(b.data.isVisible).to.be.false);"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('isVisible là false', () => pm.expect(b.data.isVisible).to.be.false);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "PATCH",
-            "header": [{ "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/admin/reviews/{{reviewId}}/hide", "host": ["{{baseUrl}}"], "path": ["admin","reviews","{{reviewId}}","hide"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/reviews/{{reviewId}}/hide",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "reviews",
+                "{{reviewId}}",
+                "hide"
+              ]
+            }
           }
         },
         {
           "name": "28. Verify avgRating store đã giảm sau khi ẩn review ✅",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "const b = pm.response.json();",
-            "console.log('Store avgRating sau hide:', b.data?.avgRating, 'totalReviews:', b.data?.totalReviews);"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "console.log('Store avgRating sau hide:', b.data?.avgRating, 'totalReviews:', b.data?.totalReviews);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/stores/{{storeId}}", "host": ["{{baseUrl}}"], "path": ["stores","{{storeId}}"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/stores/{{storeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "{{storeId}}"
+              ]
+            }
           }
         },
         {
           "name": "29. Admin hiện lại review ✅",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "const b = pm.response.json();",
-            "pm.test('isVisible là true', () => pm.expect(b.data.isVisible).to.be.true);"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('isVisible là true', () => pm.expect(b.data.isVisible).to.be.true);"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "PATCH",
-            "header": [{ "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/admin/reviews/{{reviewId}}/show", "host": ["{{baseUrl}}"], "path": ["admin","reviews","{{reviewId}}","show"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/reviews/{{reviewId}}/show",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "reviews",
+                "{{reviewId}}",
+                "show"
+              ]
+            }
           }
         },
         {
           "name": "30. Customer ẩn review — thiếu quyền ❌ 403",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 403 Forbidden', () => pm.response.to.have.status(403));"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 403 Forbidden', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "PATCH",
-            "header": [{ "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }],
-            "url": { "raw": "{{baseUrl}}/admin/reviews/{{reviewId}}/hide", "host": ["{{baseUrl}}"], "path": ["admin","reviews","{{reviewId}}","hide"] }
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerAccessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/reviews/{{reviewId}}/hide",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "reviews",
+                "{{reviewId}}",
+                "hide"
+              ]
+            }
           }
         }
       ]
@@ -527,53 +1315,141 @@
       "item": [
         {
           "name": "31. Tạo payment không có token ❌ 401",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 401', () => pm.response.to.have.status(401));"
-          ]}}],
-          "request": {
-            "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"appointmentId\": \"{{completedAppointmentId}}\"\n}" },
-            "url": { "raw": "{{baseUrl}}/payments/vnpay/create", "host": ["{{baseUrl}}"], "path": ["payments","vnpay","create"] }
-          }
-        },
-        {
-          "name": "32. Tạo review appointmentId sai format ❌ 400",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 400 Bad Request', () => pm.response.to.have.status(400));"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
-            "body": { "mode": "raw", "raw": "{\n  \"rating\": 6\n}" },
-            "url": { "raw": "{{baseUrl}}/appointments/not-a-uuid/review", "host": ["{{baseUrl}}"], "path": ["appointments","not-a-uuid","review"] }
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookingId\": \"{{completedBookingId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/vnpay/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "vnpay",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "32. Tao review bookingItemId sai format",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400 hoac 404', () => pm.expect([400, 404]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerAccessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 6\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/booking-items/not-a-uuid/review",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking-items",
+                "not-a-uuid",
+                "review"
+              ]
+            }
           }
         },
         {
           "name": "33. Xem My Payments không có token ❌ 401",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 401', () => pm.response.to.have.status(401));"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
-            "url": { "raw": "{{baseUrl}}/payments/my", "host": ["{{baseUrl}}"], "path": ["payments","my"] }
+            "url": {
+              "raw": "{{baseUrl}}/payments/my",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "my"
+              ]
+            }
           }
         },
         {
           "name": "34. Store không tồn tại → reviews trả empty ✅",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status 200', () => pm.response.to.have.status(200));",
-            "const b = pm.response.json();",
-            "pm.test('items rỗng', () => pm.expect(b.data.total).to.equal(0));"
-          ]}}],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const b = pm.response.json();",
+                  "pm.test('items rong', () => pm.expect(b.meta.total).to.equal(0));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
-            "url": { "raw": "{{baseUrl}}/stores/00000000-0000-0000-0000-000000000000/reviews", "host": ["{{baseUrl}}"], "path": ["stores","00000000-0000-0000-0000-000000000000","reviews"] }
+            "url": {
+              "raw": "{{baseUrl}}/stores/00000000-0000-0000-0000-000000000000/reviews",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "00000000-0000-0000-0000-000000000000",
+                "reviews"
+              ]
+            }
           }
         }
       ]

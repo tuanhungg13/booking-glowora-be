@@ -24,7 +24,7 @@ import { ReviewFilterDto } from './dto/review-filter.dto';
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
-  // ─── Public read endpoints (register BEFORE parameterized routes) ───
+  // ─── Public read endpoints ────────────────────────────────────────────────
 
   @ApiOperation({ summary: 'Reviews của một store (public)' })
   @Public()
@@ -40,28 +40,28 @@ export class ReviewsController {
     return this.reviewsService.findByService(serviceId, filter);
   }
 
-  @ApiOperation({ summary: 'Review của một lịch hẹn (public)' })
+  @ApiOperation({ summary: 'Review của một booking item (public)' })
   @Public()
-  @Get('appointments/:appointmentId/review')
-  findByAppointment(@Param('appointmentId') appointmentId: string) {
-    return this.reviewsService.findByAppointment(appointmentId);
+  @Get('booking-items/:bookingItemId/review')
+  findByBookingItem(@Param('bookingItemId') bookingItemId: string) {
+    return this.reviewsService.findByBookingItem(bookingItemId);
   }
 
-  // ─── Customer: tạo review ───
+  // ─── Customer: tạo review cho từng dịch vụ trong booking ─────────────────
 
-  @ApiOperation({ summary: 'Đánh giá lịch hẹn đã hoàn thành' })
+  @ApiOperation({ summary: 'Đánh giá một dịch vụ trong booking đã hoàn thành' })
   @ApiBearerAuth()
-  @Post('appointments/:appointmentId/review')
+  @Post('booking-items/:bookingItemId/review')
   @RequirePermissions(Permissions.REVIEW.CREATE)
-  createForAppointment(
-    @Param('appointmentId') appointmentId: string,
+  createForBookingItem(
+    @Param('bookingItemId') bookingItemId: string,
     @Body() dto: CreateReviewDto,
     @CurrentUser() user: CurrentUserPayload,
   ) {
-    return this.reviewsService.create(dto, user.id, appointmentId);
+    return this.reviewsService.create(dto, user.id, bookingItemId);
   }
 
-  // ─── Admin: ẩn/hiện review ───
+  // ─── Admin: ẩn/hiện review ────────────────────────────────────────────────
 
   @ApiOperation({ summary: 'Ẩn review vi phạm (SUPER_ADMIN)' })
   @ApiBearerAuth()
@@ -79,9 +79,9 @@ export class ReviewsController {
     return this.reviewsService.toggleVisibility(id, true);
   }
 
-  // ─── CRUD cơ bản ───
+  // ─── CRUD cơ bản ─────────────────────────────────────────────────────────
 
-  @ApiOperation({ summary: 'Tạo review (legacy — dùng POST /appointments/:id/review)' })
+  @ApiOperation({ summary: 'Tạo review (dùng POST /booking-items/:id/review)' })
   @ApiBearerAuth()
   @Post('reviews')
   @RequirePermissions(Permissions.REVIEW.CREATE)

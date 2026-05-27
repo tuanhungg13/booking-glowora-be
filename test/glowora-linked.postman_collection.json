@@ -1,0 +1,2734 @@
+{
+  "info": {
+    "_postman_id": "b9f2795a-role-workflows-glowora",
+    "name": "Glowora Booking API - Role Workflows",
+    "description": "One collection organized by real user roles and jobs.\n\nRun order:\n00 Shared Setup creates fresh test users and tokens.\n01 Shop Owner creates the shop shell.\n02 Super Admin approves the shop.\n03 Shop Owner builds catalog and invites staff.\n04 Shop Staff accepts invite and manages booking work.\n05 Customer browses, books, pays, reviews, chats.\n06 Super Admin moderates review after customer review exists.\n07 Public Read APIs can be run after shop is approved.\n\nUse one environment only: test/glowora-local.postman_environment.json.\nSeed requirements: pnpm run db:seed. Demo seed is optional: pnpm run db:seed:demo.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "if (!pm.environment.get('baseUrl')) pm.environment.set('baseUrl', 'http://localhost:8080');",
+          "if (!pm.environment.get('adminEmail')) pm.environment.set('adminEmail', 'admin@glowora.com');",
+          "if (!pm.environment.get('adminPassword')) pm.environment.set('adminPassword', 'Admin@123456');",
+          "if (!pm.environment.get('defaultPassword')) pm.environment.set('defaultPassword', 'User@123456');",
+          "if (!pm.environment.get('runId')) {",
+          "  const runId = Date.now().toString();",
+          "  pm.environment.set('runId', runId);",
+          "  pm.environment.set('ownerEmail', 'owner+' + runId + '@glowora.local');",
+          "  pm.environment.set('customerEmail', 'customer+' + runId + '@glowora.local');",
+          "  pm.environment.set('staffEmail', 'staff+' + runId + '@glowora.local');",
+          "}",
+          "const future = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);",
+          "future.setUTCHours(3, 0, 0, 0);",
+          "pm.environment.set('bookingScheduledAt', future.toISOString());",
+          "pm.environment.set('slotDate', future.toISOString().slice(0, 10));",
+          "pm.environment.set('currentMonth', future.toISOString().slice(0, 7));"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "00 - Shared Setup",
+      "description": "Create a clean run, login admin, create owner/customer/staff users, and save role tokens.",
+      "item": [
+        {
+          "name": "00.01 Reset run variables",
+          "description": "Run this first. It creates a new runId and fresh emails, then clears ids and tokens from previous runs.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": []
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const keys = [",
+                  "  'runId', 'ownerEmail', 'customerEmail', 'staffEmail',",
+                  "  'accessToken', 'adminToken', 'ownerToken', 'customerToken', 'staffToken',",
+                  "  'adminUserId', 'ownerUserId', 'customerUserId', 'staffUserId',",
+                  "  'storeId', 'storeSlug', 'serviceId', 'variantId', 'extraVariantId',",
+                  "  'staffInviteToken', 'staffId', 'staffTelegramToken', 'staffTelegramLink',",
+                  "  'comboId', 'bookingScheduledAt', 'slotDate', 'currentMonth',",
+                  "  'bookingId', 'bookingItemId', 'paymentId', 'paymentUrl',",
+                  "  'reviewId', 'conversationId', 'messageId', 'notificationId'",
+                  "];",
+                  "keys.forEach((key) => pm.environment.unset(key));",
+                  "const runId = Date.now().toString();",
+                  "pm.environment.set('runId', runId);",
+                  "pm.environment.set('ownerEmail', 'owner+' + runId + '@glowora.local');",
+                  "pm.environment.set('customerEmail', 'customer+' + runId + '@glowora.local');",
+                  "pm.environment.set('staffEmail', 'staff+' + runId + '@glowora.local');",
+                  "pm.environment.set('defaultPassword', pm.environment.get('defaultPassword') || 'User@123456');",
+                  "const future = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);",
+                  "future.setUTCHours(3, 0, 0, 0);",
+                  "pm.environment.set('bookingScheduledAt', future.toISOString());",
+                  "pm.environment.set('slotDate', future.toISOString().slice(0, 10));",
+                  "pm.environment.set('currentMonth', future.toISOString().slice(0, 7));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Fresh role emails created', function () {",
+                  "  pm.expect(pm.environment.get('ownerEmail')).to.include(pm.environment.get('runId'));",
+                  "  pm.expect(pm.environment.get('customerEmail')).to.include(pm.environment.get('runId'));",
+                  "  pm.expect(pm.environment.get('staffEmail')).to.include(pm.environment.get('runId'));",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "00.02 Health check",
+          "description": "Checks that the Nest app is running.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "00.03 Super Admin login",
+          "description": "Requires pnpm run db:seed. Saves adminToken/adminUserId.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.environment.set('adminToken', data.access_token);",
+                  "pm.environment.set('adminUserId', data.user.id);",
+                  "pm.environment.set('accessToken', data.access_token);",
+                  "pm.test('Saved admin token and user id', function () {",
+                  "  pm.expect(pm.environment.get('adminToken')).to.be.a('string').and.not.empty;",
+                  "  pm.expect(pm.environment.get('adminUserId')).to.be.a('string').and.not.empty;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "00.04 Register Shop Owner",
+          "description": "Creates the owner account. It is CUSTOMER until it creates a store.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{ownerEmail}}\",\n  \"password\": \"{{defaultPassword}}\",\n  \"fullName\": \"Owner {{runId}}\",\n  \"phone\": \"0901000001\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "00.05 Shop Owner login",
+          "description": "Saves ownerToken/ownerUserId.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{ownerEmail}}\",\n  \"password\": \"{{defaultPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.environment.set('ownerToken', data.access_token);",
+                  "pm.environment.set('ownerUserId', data.user.id);",
+                  "pm.environment.set('accessToken', data.access_token);",
+                  "pm.test('Saved owner token and user id', function () {",
+                  "  pm.expect(pm.environment.get('ownerToken')).to.be.a('string').and.not.empty;",
+                  "  pm.expect(pm.environment.get('ownerUserId')).to.be.a('string').and.not.empty;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "00.06 Register Customer",
+          "description": "Creates a customer for booking/payment/review/chat.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{customerEmail}}\",\n  \"password\": \"{{defaultPassword}}\",\n  \"fullName\": \"Customer {{runId}}\",\n  \"phone\": \"0902000001\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "00.07 Customer login",
+          "description": "Saves customerToken/customerUserId.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{customerEmail}}\",\n  \"password\": \"{{defaultPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.environment.set('customerToken', data.access_token);",
+                  "pm.environment.set('customerUserId', data.user.id);",
+                  "pm.environment.set('accessToken', data.access_token);",
+                  "pm.test('Saved customer token and user id', function () {",
+                  "  pm.expect(pm.environment.get('customerToken')).to.be.a('string').and.not.empty;",
+                  "  pm.expect(pm.environment.get('customerUserId')).to.be.a('string').and.not.empty;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "00.08 Register Staff Candidate",
+          "description": "Staff candidate must exist before owner can invite them.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{staffEmail}}\",\n  \"password\": \"{{defaultPassword}}\",\n  \"fullName\": \"Staff {{runId}}\",\n  \"phone\": \"0903000001\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "00.09 Staff Candidate login",
+          "description": "Saves staffToken/staffUserId. The actual SHOP_STAFF role is added after accepting invite.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{staffEmail}}\",\n  \"password\": \"{{defaultPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.environment.set('staffToken', data.access_token);",
+                  "pm.environment.set('staffUserId', data.user.id);",
+                  "pm.environment.set('accessToken', data.access_token);",
+                  "pm.test('Saved staff token and user id', function () {",
+                  "  pm.expect(pm.environment.get('staffToken')).to.be.a('string').and.not.empty;",
+                  "  pm.expect(pm.environment.get('staffUserId')).to.be.a('string').and.not.empty;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "01 - SHOP_OWNER: Store Setup",
+      "description": "Owner creates and configures a shop. Store remains PENDING until super admin approves it.",
+      "item": [
+        {
+          "name": "01.01 Create pending store",
+          "description": "Saves storeId/storeSlug. Later role workflows use this store as x-shop-id.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/stores",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Role Flow Spa {{runId}}\",\n  \"address\": \"12 Nguyen Hue\",\n  \"city\": \"Ho Chi Minh\",\n  \"district\": \"Quan 1\",\n  \"phone\": \"0287000000\",\n  \"email\": \"role-flow-{{runId}}@glowora.local\",\n  \"website\": \"https://glowora.local\",\n  \"description\": \"Shop created by role workflow Postman collection.\",\n  \"slotIntervalMins\": 30,\n  \"cancelBeforeHours\": 2,\n  \"maxAdvanceDays\": 30,\n  \"autoConfirm\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.environment.set('storeId', data.id);",
+                  "pm.environment.set('storeSlug', data.slug || '');",
+                  "pm.test('Saved storeId', function () { pm.expect(pm.environment.get('storeId')).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "01.02 Owner - list my stores",
+          "description": "Owner sees stores they created.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/stores/mine",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "mine"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "01.03 Owner - list my shop memberships",
+          "description": "Shows shop role membership after store creation.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/stores/my-shops",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "my-shops"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "01.04 Owner - permission matrix in shop",
+          "description": "Verifies SHOP_OWNER permissions in x-shop-id context.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/getMatrix",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "getMatrix"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 - SUPER_ADMIN: Store Moderation",
+      "description": "Super admin reviews and approves the pending shop.",
+      "item": [
+        {
+          "name": "02.01 Admin - list pending stores",
+          "description": "Use before approval to inspect pending shops.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/stores?status=PENDING",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "PENDING"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02.02 Admin - approve store",
+          "description": "Makes the shop ACTIVE so public/customer workflows can use it.",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/stores/{{storeId}}/approve",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores",
+                "{{storeId}}",
+                "approve"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.environment.set('storeId', data.id);",
+                  "pm.environment.set('storeSlug', data.slug || pm.environment.get('storeSlug'));",
+                  "pm.test('Store approved', function () { pm.expect(data.status).to.eql('ACTIVE'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02.03 Admin - get approved store detail",
+          "description": "Confirms admin can inspect the approved shop.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/stores/{{storeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores",
+                "{{storeId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02.04 Admin - list active stores",
+          "description": "Checks active store list after approval.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/stores?status=ACTIVE",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "ACTIVE"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 - SHOP_OWNER: Catalog, Hours, Staff Invite",
+      "description": "Owner configures working hours, services, staff, and combo for the approved shop.",
+      "item": [
+        {
+          "name": "03.01 Owner - replace working hours",
+          "description": "Opens every day 08:00-20:00 for deterministic slot tests.",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/stores/{{storeId}}/working-hours",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "{{storeId}}",
+                "working-hours"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hours\": [\n    {\n      \"dayOfWeek\": \"MONDAY\",\n      \"openTime\": \"08:00\",\n      \"closeTime\": \"20:00\",\n      \"isClosed\": false\n    },\n    {\n      \"dayOfWeek\": \"TUESDAY\",\n      \"openTime\": \"08:00\",\n      \"closeTime\": \"20:00\",\n      \"isClosed\": false\n    },\n    {\n      \"dayOfWeek\": \"WEDNESDAY\",\n      \"openTime\": \"08:00\",\n      \"closeTime\": \"20:00\",\n      \"isClosed\": false\n    },\n    {\n      \"dayOfWeek\": \"THURSDAY\",\n      \"openTime\": \"08:00\",\n      \"closeTime\": \"20:00\",\n      \"isClosed\": false\n    },\n    {\n      \"dayOfWeek\": \"FRIDAY\",\n      \"openTime\": \"08:00\",\n      \"closeTime\": \"20:00\",\n      \"isClosed\": false\n    },\n    {\n      \"dayOfWeek\": \"SATURDAY\",\n      \"openTime\": \"08:00\",\n      \"closeTime\": \"20:00\",\n      \"isClosed\": false\n    },\n    {\n      \"dayOfWeek\": \"SUNDAY\",\n      \"openTime\": \"08:00\",\n      \"closeTime\": \"20:00\",\n      \"isClosed\": false\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03.02 Owner - create service with variant",
+          "description": "Saves serviceId/variantId for staff assignment, booking, payment, review.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/services",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "services"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Facial Role Flow {{runId}}\",\n  \"description\": \"Service created by role workflow.\",\n  \"status\": \"ACTIVE\",\n  \"variants\": [\n    {\n      \"name\": \"Basic 60 minutes\",\n      \"description\": \"Cleanse and hydration.\",\n      \"duration\": 60,\n      \"price\": 300000,\n      \"costPrice\": 120000,\n      \"sortOrder\": 0,\n      \"status\": \"ACTIVE\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.environment.set('serviceId', data.id);",
+                  "pm.environment.set('variantId', data.variants && data.variants[0] ? data.variants[0].id : '');",
+                  "pm.test('Saved service and variant', function () {",
+                  "  pm.expect(pm.environment.get('serviceId')).to.be.a('string').and.not.empty;",
+                  "  pm.expect(pm.environment.get('variantId')).to.be.a('string').and.not.empty;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03.03 Owner - add premium variant",
+          "description": "Example service maintenance task for owner.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/services/{{serviceId}}/variants",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "services",
+                "{{serviceId}}",
+                "variants"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Premium 90 minutes\",\n  \"description\": \"Extended care package.\",\n  \"duration\": 90,\n  \"price\": 450000,\n  \"costPrice\": 180000,\n  \"sortOrder\": 1,\n  \"status\": \"ACTIVE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.environment.set('extraVariantId', data.id);",
+                  "pm.test('Saved extraVariantId', function () { pm.expect(pm.environment.get('extraVariantId')).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03.04 Owner - invite staff candidate",
+          "description": "Saves staffInviteToken. If this flow says SHOP_STAFF template missing, run pnpm run db:seed.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/store-staff/invite",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "store-staff",
+                "invite"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{staffEmail}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.environment.set('staffInviteToken', data.token || (data.invite && data.invite.token));",
+                  "pm.test('Saved staffInviteToken', function () { pm.expect(pm.environment.get('staffInviteToken')).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 - SHOP_STAFF: Accept Invite & Work Setup",
+      "description": "Staff accepts the invite. Owner then assigns service and schedule so staff can handle bookings.",
+      "item": [
+        {
+          "name": "04.01 Staff - accept invite",
+          "description": "Creates staff profile and shop-specific SHOP_STAFF role. Saves staffId.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/staff-invites/accept",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "staff-invites",
+                "accept"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"{{staffInviteToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.environment.set('staffId', data.id);",
+                  "pm.test('Saved staffId', function () { pm.expect(pm.environment.get('staffId')).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04.02 Staff - permission matrix in shop",
+          "description": "Verifies staff permissions after accepting invite.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/getMatrix",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "getMatrix"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04.03 Owner - assign staff to service",
+          "description": "Allows staff to perform the service used by customer booking.",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/services/{{serviceId}}/staff",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "services",
+                "{{serviceId}}",
+                "staff"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"staffIds\": [\n    \"{{staffId}}\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04.04 Owner - upsert staff weekly schedule",
+          "description": "Creates deterministic staff schedule for available-slots.",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/staff/{{staffId}}/schedules",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "staff",
+                "{{staffId}}",
+                "schedules"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"schedules\": [\n    {\n      \"dayOfWeek\": \"MONDAY\",\n      \"startTime\": \"08:00\",\n      \"endTime\": \"20:00\",\n      \"isActive\": true\n    },\n    {\n      \"dayOfWeek\": \"TUESDAY\",\n      \"startTime\": \"08:00\",\n      \"endTime\": \"20:00\",\n      \"isActive\": true\n    },\n    {\n      \"dayOfWeek\": \"WEDNESDAY\",\n      \"startTime\": \"08:00\",\n      \"endTime\": \"20:00\",\n      \"isActive\": true\n    },\n    {\n      \"dayOfWeek\": \"THURSDAY\",\n      \"startTime\": \"08:00\",\n      \"endTime\": \"20:00\",\n      \"isActive\": true\n    },\n    {\n      \"dayOfWeek\": \"FRIDAY\",\n      \"startTime\": \"08:00\",\n      \"endTime\": \"20:00\",\n      \"isActive\": true\n    },\n    {\n      \"dayOfWeek\": \"SATURDAY\",\n      \"startTime\": \"08:00\",\n      \"endTime\": \"20:00\",\n      \"isActive\": true\n    },\n    {\n      \"dayOfWeek\": \"SUNDAY\",\n      \"startTime\": \"08:00\",\n      \"endTime\": \"20:00\",\n      \"isActive\": true\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04.05 Staff - list own/store staff record",
+          "description": "Public staff detail by x-shop-id.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/store-staff/{{staffId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "store-staff",
+                "{{staffId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04.06 Staff - generate Telegram link token",
+          "description": "Optional staff operational task.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/store-staff/me/telegram-token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "store-staff",
+                "me",
+                "telegram-token"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.environment.set('staffTelegramToken', data.token || '');",
+                  "pm.environment.set('staffTelegramLink', data.linkUrl || '');",
+                  "pm.test('Saved Telegram token', function () { pm.expect(pm.environment.get('staffTelegramToken')).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "05 - CUSTOMER: Browse, Book, Pay, Review, Chat",
+      "description": "Customer uses public catalog, books the staff service, pays after completion, reviews, and sends a chat message.",
+      "item": [
+        {
+          "name": "05.01 Public - list active stores",
+          "description": "Customer-facing store list.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05.02 Public - store detail",
+          "description": "Customer-facing store detail after approval.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores/{{storeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "{{storeId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05.03 Public - services in store",
+          "description": "Customer-facing service list for this shop.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/services",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "services"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05.04 Public - available slots",
+          "description": "Uses saved storeId/serviceId/variantId/staffId and generated slotDate.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores/{{storeId}}/available-slots?date={{slotDate}}&serviceId={{serviceId}}&variantId={{variantId}}&staffId={{staffId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "{{storeId}}",
+                "available-slots"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "{{slotDate}}"
+                },
+                {
+                  "key": "serviceId",
+                  "value": "{{serviceId}}"
+                },
+                {
+                  "key": "variantId",
+                  "value": "{{variantId}}"
+                },
+                {
+                  "key": "staffId",
+                  "value": "{{staffId}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05.05 Customer - create booking",
+          "description": "Saves bookingId/bookingItemId. Staff workflow confirms/completes it next.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/bookings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"storeId\": \"{{storeId}}\",\n  \"scheduledAt\": \"{{bookingScheduledAt}}\",\n  \"services\": [\n    {\n      \"serviceId\": \"{{serviceId}}\",\n      \"variantId\": \"{{variantId}}\",\n      \"staffId\": \"{{staffId}}\"\n    }\n  ],\n  \"notes\": \"Booking created by role workflow.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.environment.set('bookingId', data.id);",
+                  "pm.environment.set('bookingItemId', data.items && data.items[0] ? data.items[0].id : '');",
+                  "pm.test('Saved booking and booking item', function () {",
+                  "  pm.expect(pm.environment.get('bookingId')).to.be.a('string').and.not.empty;",
+                  "  pm.expect(pm.environment.get('bookingItemId')).to.be.a('string').and.not.empty;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05.06 Customer - list my bookings",
+          "description": "Customer sees the booking they created.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/bookings/my",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings",
+                "my"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05.07 Staff - list store bookings",
+          "description": "Staff sees store bookings after invite/role setup.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/store-bookings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "store-bookings"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05.08 Staff - confirm booking",
+          "description": "Staff transitions PENDING -> CONFIRMED.",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/store-bookings/{{bookingId}}/confirm",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "store-bookings",
+                "{{bookingId}}",
+                "confirm"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05.09 Staff - complete booking",
+          "description": "Staff transitions CONFIRMED -> COMPLETED. Payment/review depend on this.",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/store-bookings/{{bookingId}}/complete",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "store-bookings",
+                "{{bookingId}}",
+                "complete"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05.10 Customer - create VNPAY payment URL",
+          "description": "Saves paymentId/paymentUrl. Actual bank redirect is outside this API test.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payments/vnpay/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "vnpay",
+                "create"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookingId\": \"{{bookingId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.environment.set('paymentId', data.paymentId || '');",
+                  "pm.environment.set('paymentUrl', data.paymentUrl || '');",
+                  "pm.test('Saved paymentId', function () { pm.expect(pm.environment.get('paymentId')).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05.11 Customer - get booking payment attempts",
+          "description": "Checks payment record linked to booking.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/bookings/{{bookingId}}/payment",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings",
+                "{{bookingId}}",
+                "payment"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05.12 Customer - review booking item",
+          "description": "Saves reviewId for admin moderation.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/booking-items/{{bookingItemId}}/review",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking-items",
+                "{{bookingItemId}}",
+                "review"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Great role-workflow experience.\",\n  \"imageUrls\": []\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.environment.set('reviewId', data.id);",
+                  "pm.test('Saved reviewId', function () { pm.expect(pm.environment.get('reviewId')).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05.13 Customer - create conversation",
+          "description": "Saves conversationId for message tests.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/conversations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "conversations"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"{{customerUserId}}\",\n  \"storeId\": \"{{storeId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.environment.set('conversationId', data.id);",
+                  "pm.test('Saved conversationId', function () { pm.expect(pm.environment.get('conversationId')).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05.14 Customer - send message",
+          "description": "Saves messageId. REST endpoint requires senderId.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/conversations/{{conversationId}}/messages",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "conversations",
+                "{{conversationId}}",
+                "messages"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"senderId\": \"{{customerUserId}}\",\n  \"content\": \"Xin chao, toi muon hoi ve dich vu.\",\n  \"isRead\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.environment.set('messageId', data.id);",
+                  "pm.test('Saved messageId', function () { pm.expect(pm.environment.get('messageId')).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05.15 Customer - my notifications",
+          "description": "Customer notification inbox.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notifications/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notifications",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05.16 Customer - mark all notifications read",
+          "description": "Notification action owned by current user.",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notifications/me/read-all",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notifications",
+                "me",
+                "read-all"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "06 - SUPER_ADMIN: Review Moderation",
+      "description": "Admin moderates content after customer creates review.",
+      "item": [
+        {
+          "name": "06.01 Admin - list reviews",
+          "description": "Admin review listing.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reviews",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reviews"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06.02 Admin - hide review",
+          "description": "Uses reviewId from customer workflow.",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/reviews/{{reviewId}}/hide",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "reviews",
+                "{{reviewId}}",
+                "hide"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06.03 Admin - show review",
+          "description": "Restores review visibility.",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/reviews/{{reviewId}}/show",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "reviews",
+                "{{reviewId}}",
+                "show"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "07 - PUBLIC: Read APIs",
+      "description": "Public endpoints without token. Useful after setup/approval/catalog exists.",
+      "item": [
+        {
+          "name": "07.01 Public - list stores",
+          "description": "No token.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07.02 Public - store detail by id",
+          "description": "No token.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores/{{storeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "{{storeId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07.03 Public - categories",
+          "description": "No token.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07.04 Public - explore services",
+          "description": "Cross-shop service search.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/services/explore?storeId={{storeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "services",
+                "explore"
+              ],
+              "query": [
+                {
+                  "key": "storeId",
+                  "value": "{{storeId}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07.05 Public - store reviews",
+          "description": "Visible reviews only.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/stores/{{storeId}}/reviews",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "{{storeId}}",
+                "reviews"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07.06 Public - service reviews",
+          "description": "Visible reviews for saved service.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/services/{{serviceId}}/reviews",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "services",
+                "{{serviceId}}",
+                "reviews"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07.07 Public - combos in store",
+          "description": "No token, but x-shop-id chooses the store.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/combos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "combos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

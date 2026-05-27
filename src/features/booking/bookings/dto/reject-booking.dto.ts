@@ -1,6 +1,6 @@
 import { IsString, MaxLength, MinLength } from 'class-validator';
 
-export class RejectAppointmentDto {
+export class RejectBookingDto {
   @IsString()
   @MinLength(5)
   @MaxLength(500)

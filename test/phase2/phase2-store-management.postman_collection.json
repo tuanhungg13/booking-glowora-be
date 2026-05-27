@@ -6,14 +6,46 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl",           "value": "http://localhost:8080", "type": "string" },
-    { "key": "adminAccessToken",  "value": "", "type": "string" },
-    { "key": "ownerAccessToken",  "value": "", "type": "string" },
-    { "key": "ownerRefreshToken", "value": "", "type": "string" },
-    { "key": "storeId",           "value": "", "type": "string" },
-    { "key": "storeSlug",         "value": "", "type": "string" },
-    { "key": "staffUserEmail",    "value": "staff_p2@glowora.vn", "type": "string" },
-    { "key": "staffId",           "value": "", "type": "string" }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "adminAccessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "ownerAccessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "ownerRefreshToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "storeId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "storeSlug",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "staffUserEmail",
+      "value": "staff_p2@glowora.vn",
+      "type": "string"
+    },
+    {
+      "key": "staffId",
+      "value": "",
+      "type": "string"
+    }
   ],
   "item": [
     {
@@ -39,14 +71,25 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"admin@glowora.com\",\n  \"password\": \"Admin@123456\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login",
-              "host": ["{{baseUrl}}"], "path": ["auth", "login"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
             }
           }
         },
@@ -67,14 +110,25 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"owner_p2@glowora.vn\",\n  \"password\": \"Owner@123\",\n  \"fullName\": \"Chủ Cơ Sở Test\",\n  \"phone\": \"0911111111\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/register",
-              "host": ["{{baseUrl}}"], "path": ["auth", "register"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
             }
           }
         },
@@ -102,14 +156,25 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"owner_p2@glowora.vn\",\n  \"password\": \"Owner@123\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login",
-              "host": ["{{baseUrl}}"], "path": ["auth", "login"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
             }
           }
         },
@@ -130,14 +195,25 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"{{staffUserEmail}}\",\n  \"password\": \"Staff@123\",\n  \"fullName\": \"Nhân Viên Test P2\",\n  \"phone\": \"0922222222\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/register",
-              "host": ["{{baseUrl}}"], "path": ["auth", "register"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
             }
           }
         }
@@ -157,10 +233,9 @@
                   "pm.test('Status 200', () => pm.response.to.have.status(200));",
                   "const body = pm.response.json();",
                   "pm.test('success = true', () => pm.expect(body.success).to.be.true);",
-                  "pm.test('Has items and total', () => {",
-                  "  pm.expect(body.data).to.have.property('items');",
-                  "  pm.expect(body.data).to.have.property('total');",
-                  "  pm.expect(body.data.items).to.be.an('array');",
+                  "pm.test('Has data array and pagination meta', () => {",
+                  "  pm.expect(body.data).to.be.an('array');",
+                  "  pm.expect(body.meta).to.have.property('total');",
                   "});"
                 ]
               }
@@ -171,7 +246,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/stores",
-              "host": ["{{baseUrl}}"], "path": ["stores"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores"
+              ]
             }
           }
         },
@@ -187,8 +267,9 @@
                   "const body = pm.response.json();",
                   "pm.test('success = true', () => pm.expect(body.success).to.be.true);",
                   "pm.test('Has pagination meta', () => {",
-                  "  pm.expect(body.data).to.have.property('page');",
-                  "  pm.expect(body.data).to.have.property('limit');",
+                  "  pm.expect(body.data).to.be.an('array');",
+                  "  pm.expect(body.meta).to.have.property('page');",
+                  "  pm.expect(body.meta).to.have.property('limit');",
                   "});"
                 ]
               }
@@ -199,20 +280,39 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/stores?city=Ha Noi&q=spa&sort=newest&page=1&limit=6",
-              "host": ["{{baseUrl}}"],
-              "path": ["stores"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores"
+              ],
               "query": [
-                { "key": "city",  "value": "Ha Noi" },
-                { "key": "q",     "value": "spa" },
-                { "key": "sort",  "value": "newest" },
-                { "key": "page",  "value": "1" },
-                { "key": "limit", "value": "6" }
+                {
+                  "key": "city",
+                  "value": "Ha Noi"
+                },
+                {
+                  "key": "q",
+                  "value": "spa"
+                },
+                {
+                  "key": "sort",
+                  "value": "newest"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "6"
+                }
               ]
             }
           }
         },
         {
-          "name": "[Happy] List stores — sort by rating, minRating=4",
+          "name": "[Happy] List stores — sort by avgRating, minRating=4",
           "event": [
             {
               "listen": "test",
@@ -230,12 +330,22 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/stores?minRating=4&sort=rating",
-              "host": ["{{baseUrl}}"],
-              "path": ["stores"],
+              "raw": "{{baseUrl}}/stores?minRating=4&sort=avgRating",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores"
+              ],
               "query": [
-                { "key": "minRating", "value": "4" },
-                { "key": "sort",      "value": "rating" }
+                {
+                  "key": "minRating",
+                  "value": "4"
+                },
+                {
+                  "key": "sort",
+                  "value": "avgRating"
+                }
               ]
             }
           }
@@ -268,8 +378,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/stores/{{storeSlug}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["stores", "{{storeSlug}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "{{storeSlug}}"
+              ]
             }
           }
         },
@@ -293,8 +408,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/stores/store-that-does-not-exist",
-              "host": ["{{baseUrl}}"],
-              "path": ["stores", "store-that-does-not-exist"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "store-that-does-not-exist"
+              ]
             }
           }
         }
@@ -332,8 +452,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -341,7 +467,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/stores",
-              "host": ["{{baseUrl}}"], "path": ["stores"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores"
+              ]
             }
           }
         },
@@ -363,8 +494,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -372,7 +509,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/stores",
-              "host": ["{{baseUrl}}"], "path": ["stores"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores"
+              ]
             }
           }
         },
@@ -394,8 +536,14 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -403,7 +551,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/stores",
-              "host": ["{{baseUrl}}"], "path": ["stores"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores"
+              ]
             }
           }
         },
@@ -422,14 +575,24 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Spa Test\",\n  \"address\": \"456 Le Loi\",\n  \"city\": \"HCM\",\n  \"phone\": \"0281234567\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/stores",
-              "host": ["{{baseUrl}}"], "path": ["stores"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores"
+              ]
             }
           }
         },
@@ -458,10 +621,21 @@
           ],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/stores/mine",
-              "host": ["{{baseUrl}}"], "path": ["stores", "mine"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "mine"
+              ]
             }
           }
         },
@@ -483,8 +657,14 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -492,7 +672,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/stores/{{storeId}}",
-              "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "{{storeId}}"
+              ]
             }
           }
         },
@@ -514,8 +700,14 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -523,7 +715,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/stores/{{storeId}}",
-              "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "{{storeId}}"
+              ]
             }
           }
         },
@@ -545,8 +743,14 @@
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -554,7 +758,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/stores/{{storeId}}/working-hours",
-              "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "working-hours"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "{{storeId}}",
+                "working-hours"
+              ]
             }
           }
         },
@@ -576,8 +787,14 @@
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -585,7 +802,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/stores/{{storeId}}/working-hours",
-              "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "working-hours"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "{{storeId}}",
+                "working-hours"
+              ]
             }
           }
         },
@@ -607,8 +831,14 @@
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -616,7 +846,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/stores/{{storeId}}/working-hours",
-              "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "working-hours"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "{{storeId}}",
+                "working-hours"
+              ]
             }
           }
         },
@@ -638,8 +875,14 @@
           "request": {
             "method": "PUT",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -647,7 +890,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/stores/{{storeId}}/working-hours",
-              "host": ["{{baseUrl}}"], "path": ["stores", "{{storeId}}", "working-hours"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "{{storeId}}",
+                "working-hours"
+              ]
             }
           }
         }
@@ -677,15 +927,34 @@
           ],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/admin/stores?status=PENDING&page=1&limit=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "stores"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores"
+              ],
               "query": [
-                { "key": "status", "value": "PENDING" },
-                { "key": "page",   "value": "1" },
-                { "key": "limit",  "value": "10" }
+                {
+                  "key": "status",
+                  "value": "PENDING"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
               ]
             }
           }
@@ -707,14 +976,30 @@
           ],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/admin/stores?city=Ha Noi&q=glowora",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "stores"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores"
+              ],
               "query": [
-                { "key": "city", "value": "Ha Noi" },
-                { "key": "q",    "value": "glowora" }
+                {
+                  "key": "city",
+                  "value": "Ha Noi"
+                },
+                {
+                  "key": "q",
+                  "value": "glowora"
+                }
               ]
             }
           }
@@ -739,10 +1024,22 @@
           ],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/admin/stores/{{storeId}}",
-              "host": ["{{baseUrl}}"], "path": ["admin", "stores", "{{storeId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores",
+                "{{storeId}}"
+              ]
             }
           }
         },
@@ -763,10 +1060,22 @@
           ],
           "request": {
             "method": "GET",
-            "header": [{ "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/admin/stores/non-existent-id",
-              "host": ["{{baseUrl}}"], "path": ["admin", "stores", "non-existent-id"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores",
+                "non-existent-id"
+              ]
             }
           }
         },
@@ -794,10 +1103,23 @@
           ],
           "request": {
             "method": "PATCH",
-            "header": [{ "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/admin/stores/{{storeId}}/approve",
-              "host": ["{{baseUrl}}"], "path": ["admin", "stores", "{{storeId}}", "approve"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores",
+                "{{storeId}}",
+                "approve"
+              ]
             }
           }
         },
@@ -818,10 +1140,23 @@
           ],
           "request": {
             "method": "PATCH",
-            "header": [{ "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/admin/stores/{{storeId}}/approve",
-              "host": ["{{baseUrl}}"], "path": ["admin", "stores", "{{storeId}}", "approve"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores",
+                "{{storeId}}",
+                "approve"
+              ]
             }
           }
         },
@@ -842,10 +1177,23 @@
           ],
           "request": {
             "method": "PATCH",
-            "header": [{ "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/admin/stores/{{storeId}}/approve",
-              "host": ["{{baseUrl}}"], "path": ["admin", "stores", "{{storeId}}", "approve"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores",
+                "{{storeId}}",
+                "approve"
+              ]
             }
           }
         }
@@ -875,8 +1223,14 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -884,7 +1238,15 @@
             },
             "url": {
               "raw": "{{baseUrl}}/admin/stores/{{storeId}}/lock",
-              "host": ["{{baseUrl}}"], "path": ["admin", "stores", "{{storeId}}", "lock"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores",
+                "{{storeId}}",
+                "lock"
+              ]
             }
           }
         },
@@ -906,8 +1268,14 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -915,7 +1283,15 @@
             },
             "url": {
               "raw": "{{baseUrl}}/admin/stores/{{storeId}}/lock",
-              "host": ["{{baseUrl}}"], "path": ["admin", "stores", "{{storeId}}", "lock"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores",
+                "{{storeId}}",
+                "lock"
+              ]
             }
           }
         },
@@ -939,10 +1315,23 @@
           ],
           "request": {
             "method": "PATCH",
-            "header": [{ "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/admin/stores/{{storeId}}/unlock",
-              "host": ["{{baseUrl}}"], "path": ["admin", "stores", "{{storeId}}", "unlock"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores",
+                "{{storeId}}",
+                "unlock"
+              ]
             }
           }
         },
@@ -963,10 +1352,23 @@
           ],
           "request": {
             "method": "PATCH",
-            "header": [{ "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/admin/stores/{{storeId}}/unlock",
-              "host": ["{{baseUrl}}"], "path": ["admin", "stores", "{{storeId}}", "unlock"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores",
+                "{{storeId}}",
+                "unlock"
+              ]
             }
           }
         },
@@ -994,8 +1396,14 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -1003,8 +1411,15 @@
             },
             "url": {
               "raw": "{{baseUrl}}/admin/stores/{{storeId}}/reject",
-              "host": ["{{baseUrl}}"],
-              "path": ["admin", "stores", "{{storeId}}", "reject"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores",
+                "{{storeId}}",
+                "reject"
+              ],
               "description": "Lưu ý: cần store ở trạng thái PENDING. Tạo store mới trước khi chạy request này nếu store hiện tại đã ACTIVE."
             }
           }
@@ -1027,8 +1442,14 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{adminAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -1036,7 +1457,15 @@
             },
             "url": {
               "raw": "{{baseUrl}}/admin/stores/{{storeId}}/reject",
-              "host": ["{{baseUrl}}"], "path": ["admin", "stores", "{{storeId}}", "reject"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "stores",
+                "{{storeId}}",
+                "reject"
+              ]
             }
           }
         }
@@ -1063,10 +1492,20 @@
           ],
           "request": {
             "method": "GET",
-            "header": [{ "key": "x-shop-id", "value": "{{storeId}}" }],
+            "header": [
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/store-staff",
-              "host": ["{{baseUrl}}"], "path": ["store-staff"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "store-staff"
+              ]
             }
           }
         },
@@ -1094,9 +1533,18 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
-              { "key": "x-shop-id",     "value": "{{storeId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -1104,7 +1552,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/store-staff/invite",
-              "host": ["{{baseUrl}}"], "path": ["store-staff", "invite"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "store-staff",
+                "invite"
+              ]
             }
           }
         },
@@ -1126,9 +1580,18 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
-              { "key": "x-shop-id",     "value": "{{storeId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -1136,7 +1599,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/store-staff/invite",
-              "host": ["{{baseUrl}}"], "path": ["store-staff", "invite"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "store-staff",
+                "invite"
+              ]
             }
           }
         },
@@ -1158,9 +1627,18 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{adminAccessToken}}" },
-              { "key": "x-shop-id",     "value": "{{storeId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -1168,7 +1646,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/store-staff/invite",
-              "host": ["{{baseUrl}}"], "path": ["store-staff", "invite"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "store-staff",
+                "invite"
+              ]
             }
           }
         },
@@ -1192,20 +1676,34 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"token\": \"REPLACE_WITH_INVITE_TOKEN_FROM_INVITE_RESPONSE\"\n}",
               "options": {
-                "raw": { "language": "json" }
+                "raw": {
+                  "language": "json"
+                }
               }
             },
             "description": "Lấy token từ response của request 'Invite staff by email', paste vào trường token.",
             "url": {
               "raw": "{{baseUrl}}/staff-invites/accept",
-              "host": ["{{baseUrl}}"], "path": ["staff-invites", "accept"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "staff-invites",
+                "accept"
+              ]
             }
           }
         },
@@ -1226,11 +1724,21 @@
           ],
           "request": {
             "method": "GET",
-            "header": [{ "key": "x-shop-id", "value": "{{storeId}}" }],
+            "header": [
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/store-staff/{{staffId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["store-staff", "{{staffId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "store-staff",
+                "{{staffId}}"
+              ]
             }
           }
         },
@@ -1252,9 +1760,18 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Content-Type",  "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
-              { "key": "x-shop-id",     "value": "{{storeId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
             ],
             "body": {
               "mode": "raw",
@@ -1262,7 +1779,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/store-staff/{{staffId}}",
-              "host": ["{{baseUrl}}"], "path": ["store-staff", "{{staffId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "store-staff",
+                "{{staffId}}"
+              ]
             }
           }
         },
@@ -1284,12 +1807,24 @@
           "request": {
             "method": "DELETE",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{ownerAccessToken}}" },
-              { "key": "x-shop-id",     "value": "{{storeId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerAccessToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
             ],
             "url": {
               "raw": "{{baseUrl}}/store-staff/{{staffId}}",
-              "host": ["{{baseUrl}}"], "path": ["store-staff", "{{staffId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "store-staff",
+                "{{staffId}}"
+              ]
             }
           }
         }
