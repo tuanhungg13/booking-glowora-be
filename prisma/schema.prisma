@@ -222,6 +222,39 @@ model User {
 }
 
 // =============================================================================
+// MODEL: Province (Tỉnh / Thành phố)
+// =============================================================================
+
+model Province {
+  id     Int    @id
+  code   String @unique @db.Char(2)
+  name   String @db.VarChar(100)
+  type   String @db.VarChar(10)
+
+  wards  Ward[]
+  stores Store[]
+
+  @@map("provinces")
+}
+
+// =============================================================================
+// MODEL: Ward (Xã / Phường / Đặc khu)
+// =============================================================================
+
+model Ward {
+  id         Int      @id
+  provinceId Int      @map("province_id")
+  name       String   @db.VarChar(100)
+  type       String   @db.VarChar(10)
+
+  province   Province @relation(fields: [provinceId], references: [id])
+  stores     Store[]
+
+  @@index([provinceId])
+  @@map("wards")
+}
+
+// =============================================================================
 // MODEL: Store
 // =============================================================================
 
@@ -235,8 +268,9 @@ model Store {
   website           String?     @db.VarChar(200)
   description       String?     @db.Text
   address           String      @db.VarChar(300)
-  city              String      @db.VarChar(100)
   district          String?     @db.VarChar(100)
+  wardId            Int?        @map("ward_id")
+  provinceId        Int?        @map("province_id")
   latitude          Float?
   longitude         Float?
   logoUrl           String?     @map("logo_url")
@@ -259,6 +293,8 @@ model Store {
 
   owner          User            @relation("StoreOwner", fields: [ownerId], references: [id])
   approvedBy     User?           @relation("StoreApprover", fields: [approvedById], references: [id])
+  ward           Ward?           @relation(fields: [wardId], references: [id])
+  province       Province?       @relation(fields: [provinceId], references: [id])
   workingHours   WorkingHour[]
   staff          Staff[]
   services       Service[]
@@ -266,15 +302,16 @@ model Store {
   reviews        Review[]
   roles          Role[]          @relation("ShopRoles")
   userRoles      UserRole[]      @relation("UserShopRoles")
-  combos         Combo[]
-  staffInvites   StaffInvite[]
+  combos             Combo[]
+  shopCategories     ServiceCategory[] @relation("ShopCategories")
+  staffInvites       StaffInvite[]
   staffSchedules StaffSchedule[]
   staffDayOffs   StaffDayOff[]
   conversations  Conversation[]
 
   @@index([ownerId])
   @@index([status])
-  @@index([city, status])
+  @@index([provinceId, wardId, status])
   @@map("stores")
 }
 
@@ -336,16 +373,24 @@ model Staff {
 
 model ServiceCategory {
   id          String   @id @default(uuid()) @db.Char(36)
-  name        String   @unique @db.VarChar(100)
+  name        String   @db.VarChar(100)
   slug        String?  @unique @db.VarChar(120)
   description String?
   iconUrl     String?  @map("icon_url")
+  shopId      String?  @map("shop_id") @db.Char(36)
+  parentId    String?  @map("parent_id") @db.Char(36)
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
+  shop     Store?            @relation("ShopCategories", fields: [shopId], references: [id])
+  parent   ServiceCategory?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children ServiceCategory[] @relation("CategoryTree")
   services Service[]
   combos   Combo[]
 
+  @@unique([name, shopId])
+  @@index([shopId])
+  @@index([parentId])
   @@map("service_categories")
 }
 

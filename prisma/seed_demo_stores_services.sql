@@ -66,10 +66,18 @@ ON DUPLICATE KEY UPDATE
   `description` = VALUES(`description`),
   `updated_at` = NOW();
 
+-- Re-read actual IDs in case rows already existed with different UUIDs
+SET @cat_facial    = (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1);
+SET @cat_massage   = (SELECT `id` FROM `service_categories` WHERE `slug` = 'massage-va-tri-lieu' LIMIT 1);
+SET @cat_body      = (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1);
+SET @cat_nail_lash = (SELECT `id` FROM `service_categories` WHERE `slug` = 'nail-va-mi' LIMIT 1);
+SET @cat_waxing    = (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long-va-waxing' LIMIT 1);
+SET @cat_wellness  = (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1);
+
 -- Stores
 INSERT INTO `stores` (
   `id`, `slug`, `owner_id`, `name`, `phone`, `email`, `website`, `description`,
-  `address`, `city`, `district`, `latitude`, `longitude`, `status`, `approved_at`,
+  `address`, `province_id`, `district`, `latitude`, `longitude`, `status`, `approved_at`,
   `timezone`, `slot_interval_mins`, `cancel_before_hours`, `max_advance_days`,
   `auto_confirm`, `avg_rating`, `total_reviews`, `created_at`, `updated_at`
 ) VALUES
@@ -77,7 +85,7 @@ INSERT INTO `stores` (
     @store1_id, 'lumina-skin-spa-ho-chi-minh', @owner1_id, 'Lumina Skin & Spa',
     '02871010001', 'hello@lumina-spa.vn', 'https://lumina-spa.vn',
     'Spa chăm sóc da và thư giãn tại Quận 1, tập trung vào liệu trình da mặt chuyên sâu, massage trị liệu và chăm sóc body bằng sản phẩm dịu nhẹ.',
-    '28 Nguyễn Trãi, Phường Bến Thành', 'Hồ Chí Minh', 'Quận 1',
+    '28 Nguyễn Trãi, Phường Bến Thành', 29, 'Quận 1',
     10.770120, 106.693420, 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh',
     30, 2, 30, 1, 4.80, 128, NOW(), NOW()
   ),
@@ -85,7 +93,7 @@ INSERT INTO `stores` (
     @store2_id, 'an-nhien-beauty-lounge-ha-noi', @owner2_id, 'An Nhiên Beauty Lounge',
     '02471010002', 'hello@annhien-beauty.vn', 'https://annhien-beauty.vn',
     'Beauty lounge tại Ba Đình với dịch vụ da mặt, dưỡng sinh, massage thư giãn và chăm sóc sắc đẹp theo phong cách nhẹ nhàng, riêng tư.',
-    '16 Phan Đình Phùng, Phường Quán Thánh', 'Hà Nội', 'Ba Đình',
+    '16 Phan Đình Phùng, Phường Quán Thánh', 1, 'Ba Đình',
     21.039210, 105.840320, 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh',
     30, 2, 45, 1, 4.75, 96, NOW(), NOW()
   )
@@ -97,7 +105,7 @@ ON DUPLICATE KEY UPDATE
   `website` = VALUES(`website`),
   `description` = VALUES(`description`),
   `address` = VALUES(`address`),
-  `city` = VALUES(`city`),
+  `province_id` = VALUES(`province_id`),
   `district` = VALUES(`district`),
   `latitude` = VALUES(`latitude`),
   `longitude` = VALUES(`longitude`),

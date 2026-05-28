@@ -14,6 +14,7 @@ import { MessagingModule } from './features/messaging.module';
 import { StaffModule } from './features/staff.module';
 import { NotificationsModule } from './features/notifications/notifications/notifications.module';
 import { StoresModule } from './features/stores/stores.module';
+import { LocationsModule } from './features/locations/locations.module';
 import { StoreStaffModule } from './features/stores/staff/store-staff.module';
 import { AiModule } from './ai/ai.module';
 import { TelegramModule } from './telegram/telegram.module';
@@ -31,6 +32,7 @@ import { GatewaysModule } from './gateways/gateways.module';
     StaffModule,
     StoresModule,
     StoreStaffModule,
+    LocationsModule,
     NotificationsModule,
     AiModule,
     TelegramModule,

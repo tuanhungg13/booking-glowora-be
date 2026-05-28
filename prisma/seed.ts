@@ -243,6 +243,41 @@ async function main() {
   }
   console.log(`✅ Super Admin seeded (${adminEmail})`);
 
+  // 6. Service Categories
+  const CATEGORIES = [
+    // ── Làm đẹp chuyên biệt ─────────────────────────────────────────────────
+    { name: 'Nail & Móng tay', slug: 'nail-mong-tay', description: 'Sơn móng, đắp gel, vẽ móng nghệ thuật, móng bột' },
+    { name: 'Tóc (Nữ)', slug: 'toc-nu', description: 'Cắt, uốn, nhuộm, duỗi, ép, phục hồi tóc hư tổn' },
+    { name: 'Cắt tóc & Barber', slug: 'cat-toc-barber', description: 'Cắt tóc nam, barber style, cạo râu, gội sấy' },
+    { name: 'Chăm sóc da mặt', slug: 'cham-soc-da-mat', description: 'Facial, trị mụn, dưỡng trắng, tẩy da chết, trẻ hóa da' },
+    { name: 'Spa & Massage', slug: 'spa-massage', description: 'Massage thư giãn, đá nóng, thải độc, chăm sóc toàn thân' },
+    { name: 'Trang điểm', slug: 'trang-diem', description: 'Makeup cô dâu, đi tiệc, chụp hình, dạy trang điểm cá nhân' },
+    { name: 'Lông mày & Mi mắt', slug: 'long-may-mi-mat', description: 'Nối mi, lift mi, uốn mi, tạo dáng & wax lông mày' },
+    { name: 'Phun xăm thẩm mỹ', slug: 'phun-xam-tham-my', description: 'Phun môi, phun chân mày, phun mí mắt, điêu khắc chân mày' },
+    { name: 'Triệt lông', slug: 'triet-long', description: 'Triệt lông laser, IPL, waxing toàn thân hoặc từng vùng' },
+    { name: 'Xông hơi & Tắm trắng', slug: 'xong-hoi-tam-trang', description: 'Xông hơi, tắm trắng, ủ body, ngâm thảo dược' },
+    { name: 'Chăm sóc cơ thể', slug: 'cham-soc-co-the', description: 'Body scrub, body wrap, điêu khắc cơ thể, giảm béo' },
+    { name: 'Thẩm mỹ viện', slug: 'tham-my-vien', description: 'Nâng cơ, căng da, điêu khắc mặt, công nghệ thẩm mỹ cao' },
+    // ── Sức khỏe & vận động ──────────────────────────────────────────────────
+    { name: 'Fitness & PT cá nhân', slug: 'fitness-pt', description: 'Phòng gym, huấn luyện viên cá nhân, group class' },
+    { name: 'Yoga & Thiền', slug: 'yoga-thien', description: 'Yoga, Pilates, thiền định, hơi thở, cân bằng thân tâm' },
+    // ── Khác ─────────────────────────────────────────────────────────────────
+    { name: 'Chăm sóc trẻ em', slug: 'cham-soc-tre-em', description: 'Cắt tóc, vệ sinh cá nhân, chăm sóc sức khỏe cho bé' },
+    // ── Danh mục chung (dùng khi không có danh mục phù hợp) ─────────────────
+    { name: 'Làm đẹp tổng hợp', slug: 'lam-dep-tong-hop', description: 'Dịch vụ làm đẹp đa dạng, kết hợp nhiều loại hình' },
+    { name: 'Chăm sóc sức khỏe', slug: 'cham-soc-suc-khoe', description: 'Dịch vụ chăm sóc sức khỏe tổng quát' },
+    { name: 'Dịch vụ khác', slug: 'dich-vu-khac', description: 'Dịch vụ không thuộc các danh mục trên' },
+  ];
+
+  for (const cat of CATEGORIES) {
+    await prisma.serviceCategory.upsert({
+      where: { slug: cat.slug },
+      update: { slug: cat.slug, description: cat.description },
+      create: cat,
+    });
+  }
+  console.log(`✅ ${CATEGORIES.length} service categories seeded`);
+
   console.log('🎉 Seed completed!');
 }
 
