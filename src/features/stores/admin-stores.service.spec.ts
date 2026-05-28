@@ -31,7 +31,7 @@ describe('AdminStoresService - Phase 2 approval flow', () => {
 
     const result = await service.findAll({
       status: StoreStatus.PENDING,
-      city: 'Ha Noi',
+      provinceId: 1,
       q: 'owner@example.com',
       page: 2,
       limit: 5,
@@ -41,7 +41,7 @@ describe('AdminStoresService - Phase 2 approval flow', () => {
       expect.objectContaining({
         where: expect.objectContaining({
           status: StoreStatus.PENDING,
-          city: { contains: 'Ha Noi' },
+          provinceId: 1,
           OR: expect.arrayContaining([
             { name: { contains: 'owner@example.com' } },
             { owner: { email: { contains: 'owner@example.com' } } },

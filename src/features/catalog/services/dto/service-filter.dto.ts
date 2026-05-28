@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsIn, IsInt, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
+import { IsIn, IsInt, IsNumber, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
 import { ServiceStatus } from '@prisma/client';
 
 export class ServiceQueryDto {
@@ -45,6 +45,41 @@ export class PublicServiceQueryDto {
   @IsOptional()
   @IsString()
   q?: string;
+
+  @ApiPropertyOptional({ example: 100000, description: 'Giá tối thiểu (theo variant thấp nhất)' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  minPrice?: number;
+
+  @ApiPropertyOptional({ example: 500000, description: 'Giá tối đa (theo variant thấp nhất)' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  maxPrice?: number;
+
+  @ApiPropertyOptional({ example: 4, minimum: 1, maximum: 5, description: 'Rating tối thiểu' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(1)
+  @Max(5)
+  minRating?: number;
+
+  @ApiPropertyOptional({ example: 5, minimum: 1, maximum: 5, description: 'Rating tối đa' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(1)
+  @Max(5)
+  maxRating?: number;
+
+  @ApiPropertyOptional({ enum: ['avgRating', 'price', 'price-desc', 'newest'], example: 'avgRating' })
+  @IsOptional()
+  @IsIn(['avgRating', 'price', 'price-desc', 'newest'])
+  sort?: 'avgRating' | 'price' | 'price-desc' | 'newest';
 
   @ApiPropertyOptional({ example: 1, minimum: 1 })
   @IsOptional()

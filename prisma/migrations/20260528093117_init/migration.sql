@@ -65,6 +65,28 @@ CREATE TABLE `users` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `provinces` (
+    `id` INTEGER NOT NULL,
+    `code` CHAR(2) NOT NULL,
+    `name` VARCHAR(100) NOT NULL,
+    `type` VARCHAR(10) NOT NULL,
+
+    UNIQUE INDEX `provinces_code_key`(`code`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `wards` (
+    `id` INTEGER NOT NULL,
+    `province_id` INTEGER NOT NULL,
+    `name` VARCHAR(100) NOT NULL,
+    `type` VARCHAR(10) NOT NULL,
+
+    INDEX `wards_province_id_idx`(`province_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `stores` (
     `id` CHAR(36) NOT NULL,
     `slug` VARCHAR(200) NULL,
@@ -75,8 +97,9 @@ CREATE TABLE `stores` (
     `website` VARCHAR(200) NULL,
     `description` TEXT NULL,
     `address` VARCHAR(300) NOT NULL,
-    `city` VARCHAR(100) NOT NULL,
     `district` VARCHAR(100) NULL,
+    `ward_id` INTEGER NULL,
+    `province_id` INTEGER NULL,
     `latitude` DOUBLE NULL,
     `longitude` DOUBLE NULL,
     `logo_url` VARCHAR(191) NULL,
@@ -89,6 +112,7 @@ CREATE TABLE `stores` (
     `slot_interval_mins` INTEGER NOT NULL DEFAULT 30,
     `cancel_before_hours` INTEGER NOT NULL DEFAULT 2,
     `max_advance_days` INTEGER NOT NULL DEFAULT 30,
+    `booking_buffer_mins` INTEGER NOT NULL DEFAULT 30,
     `auto_confirm` BOOLEAN NOT NULL DEFAULT false,
     `avg_rating` DECIMAL(3, 2) NOT NULL DEFAULT 0.00,
     `total_reviews` INTEGER NOT NULL DEFAULT 0,
@@ -99,7 +123,7 @@ CREATE TABLE `stores` (
     UNIQUE INDEX `stores_slug_key`(`slug`),
     INDEX `stores_owner_id_idx`(`owner_id`),
     INDEX `stores_status_idx`(`status`),
-    INDEX `stores_city_status_idx`(`city`, `status`),
+    INDEX `stores_province_id_ward_id_status_idx`(`province_id`, `ward_id`, `status`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -144,11 +168,15 @@ CREATE TABLE `service_categories` (
     `slug` VARCHAR(120) NULL,
     `description` VARCHAR(191) NULL,
     `icon_url` VARCHAR(191) NULL,
+    `shop_id` CHAR(36) NULL,
+    `parent_id` CHAR(36) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `service_categories_name_key`(`name`),
     UNIQUE INDEX `service_categories_slug_key`(`slug`),
+    INDEX `service_categories_shop_id_idx`(`shop_id`),
+    INDEX `service_categories_parent_id_idx`(`parent_id`),
+    UNIQUE INDEX `service_categories_name_shop_id_key`(`name`, `shop_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -275,16 +303,13 @@ CREATE TABLE `staff_invites` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `appointments` (
+CREATE TABLE `bookings` (
     `id` CHAR(36) NOT NULL,
     `customer_id` CHAR(36) NOT NULL,
     `store_id` CHAR(36) NOT NULL,
-    `service_id` CHAR(36) NOT NULL,
-    `variant_id` CHAR(36) NOT NULL,
-    `staff_id` CHAR(36) NULL,
     `scheduled_at` DATETIME(3) NOT NULL,
-    `duration` INTEGER NOT NULL,
-    `price` DECIMAL(12, 2) NOT NULL,
+    `total_duration` INTEGER NOT NULL,
+    `total_price` DECIMAL(12, 2) NOT NULL,
     `status` ENUM('PENDING', 'CONFIRMED', 'COMPLETED', 'REJECTED', 'CANCELLED') NOT NULL DEFAULT 'PENDING',
     `notes` TEXT NULL,
     `cancellation_reason` TEXT NULL,
@@ -294,17 +319,33 @@ CREATE TABLE `appointments` (
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
-    INDEX `appointments_customer_id_status_idx`(`customer_id`, `status`),
-    INDEX `appointments_store_id_status_scheduled_at_idx`(`store_id`, `status`, `scheduled_at`),
-    INDEX `appointments_staff_id_scheduled_at_idx`(`staff_id`, `scheduled_at`),
-    INDEX `appointments_variant_id_idx`(`variant_id`),
+    INDEX `bookings_customer_id_status_idx`(`customer_id`, `status`),
+    INDEX `bookings_store_id_status_scheduled_at_idx`(`store_id`, `status`, `scheduled_at`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `booking_items` (
+    `id` CHAR(36) NOT NULL,
+    `booking_id` CHAR(36) NOT NULL,
+    `sort_order` INTEGER NOT NULL,
+    `service_id` CHAR(36) NOT NULL,
+    `variant_id` CHAR(36) NOT NULL,
+    `staff_id` CHAR(36) NULL,
+    `start_time` DATETIME(3) NOT NULL,
+    `duration` INTEGER NOT NULL,
+    `price` DECIMAL(12, 2) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    INDEX `booking_items_booking_id_idx`(`booking_id`),
+    INDEX `booking_items_staff_id_start_time_idx`(`staff_id`, `start_time`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `payments` (
     `id` CHAR(36) NOT NULL,
-    `appointment_id` CHAR(36) NOT NULL,
+    `booking_id` CHAR(36) NOT NULL,
     `customer_id` CHAR(36) NOT NULL,
     `amount` DECIMAL(12, 2) NOT NULL,
     `method` ENUM('VNPAY', 'STRIPE', 'CASH') NOT NULL DEFAULT 'VNPAY',
@@ -321,7 +362,7 @@ CREATE TABLE `payments` (
     `updated_at` DATETIME(3) NOT NULL,
 
     UNIQUE INDEX `payments_vnp_txn_ref_key`(`vnp_txn_ref`),
-    INDEX `payments_appointment_id_idx`(`appointment_id`),
+    INDEX `payments_booking_id_idx`(`booking_id`),
     INDEX `payments_customer_id_status_idx`(`customer_id`, `status`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -329,7 +370,8 @@ CREATE TABLE `payments` (
 -- CreateTable
 CREATE TABLE `reviews` (
     `id` CHAR(36) NOT NULL,
-    `appointment_id` CHAR(36) NOT NULL,
+    `booking_item_id` CHAR(36) NOT NULL,
+    `booking_id` CHAR(36) NOT NULL,
     `customer_id` CHAR(36) NOT NULL,
     `store_id` CHAR(36) NOT NULL,
     `service_id` CHAR(36) NOT NULL,
@@ -341,7 +383,7 @@ CREATE TABLE `reviews` (
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `reviews_appointment_id_key`(`appointment_id`),
+    UNIQUE INDEX `reviews_booking_item_id_key`(`booking_item_id`),
     INDEX `reviews_store_id_is_visible_created_at_idx`(`store_id`, `is_visible`, `created_at`),
     INDEX `reviews_service_id_is_visible_idx`(`service_id`, `is_visible`),
     INDEX `reviews_staff_id_is_visible_idx`(`staff_id`, `is_visible`),
@@ -352,8 +394,8 @@ CREATE TABLE `reviews` (
 CREATE TABLE `notifications` (
     `id` CHAR(36) NOT NULL,
     `user_id` CHAR(36) NOT NULL,
-    `appointment_id` CHAR(36) NULL,
-    `type` ENUM('APPOINTMENT_CREATED', 'APPOINTMENT_CONFIRMED', 'APPOINTMENT_REJECTED', 'APPOINTMENT_COMPLETED', 'APPOINTMENT_CANCELLED', 'STORE_APPROVED', 'STORE_REJECTED', 'STORE_LOCKED', 'STAFF_INVITED', 'PAYMENT_SUCCESS') NOT NULL,
+    `booking_id` CHAR(36) NULL,
+    `type` ENUM('BOOKING_CREATED', 'BOOKING_CONFIRMED', 'BOOKING_REJECTED', 'BOOKING_COMPLETED', 'BOOKING_CANCELLED', 'STORE_APPROVED', 'STORE_REJECTED', 'STORE_LOCKED', 'STAFF_INVITED', 'PAYMENT_SUCCESS') NOT NULL,
     `title` VARCHAR(200) NOT NULL,
     `body` TEXT NOT NULL,
     `is_read` BOOLEAN NOT NULL DEFAULT false,
@@ -403,7 +445,7 @@ CREATE TABLE `messages` (
 -- CreateTable
 CREATE TABLE `system_logs` (
     `id` CHAR(36) NOT NULL,
-    `type` ENUM('AUTH_REGISTER', 'AUTH_LOGIN', 'AUTH_LOGOUT', 'STORE_CREATED', 'STORE_APPROVED', 'STORE_REJECTED', 'STORE_BANNED', 'STORE_UNLOCKED', 'USER_BANNED', 'USER_UNBANNED', 'PAYMENT_COMPLETED', 'PAYMENT_FAILED', 'REVIEW_HIDDEN', 'REVIEW_SHOWN', 'APPOINTMENT_CREATED', 'APPOINTMENT_CONFIRMED', 'APPOINTMENT_REJECTED', 'APPOINTMENT_COMPLETED', 'APPOINTMENT_CANCELLED') NOT NULL,
+    `type` ENUM('AUTH_REGISTER', 'AUTH_LOGIN', 'AUTH_LOGOUT', 'STORE_CREATED', 'STORE_APPROVED', 'STORE_REJECTED', 'STORE_BANNED', 'STORE_UNLOCKED', 'USER_BANNED', 'USER_UNBANNED', 'PAYMENT_COMPLETED', 'PAYMENT_FAILED', 'REVIEW_HIDDEN', 'REVIEW_SHOWN', 'BOOKING_CREATED', 'BOOKING_CONFIRMED', 'BOOKING_REJECTED', 'BOOKING_COMPLETED', 'BOOKING_CANCELLED') NOT NULL,
     `actor_id` CHAR(36) NULL,
     `target_id` CHAR(36) NULL,
     `target_type` VARCHAR(50) NULL,
@@ -436,10 +478,19 @@ ALTER TABLE `user_roles` ADD CONSTRAINT `user_roles_role_id_fkey` FOREIGN KEY (`
 ALTER TABLE `user_roles` ADD CONSTRAINT `user_roles_shop_id_fkey` FOREIGN KEY (`shop_id`) REFERENCES `stores`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `wards` ADD CONSTRAINT `wards_province_id_fkey` FOREIGN KEY (`province_id`) REFERENCES `provinces`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `stores` ADD CONSTRAINT `stores_owner_id_fkey` FOREIGN KEY (`owner_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `stores` ADD CONSTRAINT `stores_approved_by_id_fkey` FOREIGN KEY (`approved_by_id`) REFERENCES `users`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `stores` ADD CONSTRAINT `stores_ward_id_fkey` FOREIGN KEY (`ward_id`) REFERENCES `wards`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `stores` ADD CONSTRAINT `stores_province_id_fkey` FOREIGN KEY (`province_id`) REFERENCES `provinces`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `working_hours` ADD CONSTRAINT `working_hours_store_id_fkey` FOREIGN KEY (`store_id`) REFERENCES `stores`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -449,6 +500,12 @@ ALTER TABLE `staff` ADD CONSTRAINT `staff_user_id_fkey` FOREIGN KEY (`user_id`) 
 
 -- AddForeignKey
 ALTER TABLE `staff` ADD CONSTRAINT `staff_store_id_fkey` FOREIGN KEY (`store_id`) REFERENCES `stores`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `service_categories` ADD CONSTRAINT `service_categories_shop_id_fkey` FOREIGN KEY (`shop_id`) REFERENCES `stores`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `service_categories` ADD CONSTRAINT `service_categories_parent_id_fkey` FOREIGN KEY (`parent_id`) REFERENCES `service_categories`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `services` ADD CONSTRAINT `services_shop_id_fkey` FOREIGN KEY (`shop_id`) REFERENCES `stores`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -496,28 +553,34 @@ ALTER TABLE `staff_invites` ADD CONSTRAINT `staff_invites_store_id_fkey` FOREIGN
 ALTER TABLE `staff_invites` ADD CONSTRAINT `staff_invites_staff_id_fkey` FOREIGN KEY (`staff_id`) REFERENCES `staff`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `appointments` ADD CONSTRAINT `appointments_customer_id_fkey` FOREIGN KEY (`customer_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `bookings` ADD CONSTRAINT `bookings_customer_id_fkey` FOREIGN KEY (`customer_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `appointments` ADD CONSTRAINT `appointments_store_id_fkey` FOREIGN KEY (`store_id`) REFERENCES `stores`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `bookings` ADD CONSTRAINT `bookings_store_id_fkey` FOREIGN KEY (`store_id`) REFERENCES `stores`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `appointments` ADD CONSTRAINT `appointments_service_id_fkey` FOREIGN KEY (`service_id`) REFERENCES `services`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `booking_items` ADD CONSTRAINT `booking_items_booking_id_fkey` FOREIGN KEY (`booking_id`) REFERENCES `bookings`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `appointments` ADD CONSTRAINT `appointments_variant_id_fkey` FOREIGN KEY (`variant_id`) REFERENCES `service_variants`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `booking_items` ADD CONSTRAINT `booking_items_service_id_fkey` FOREIGN KEY (`service_id`) REFERENCES `services`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `appointments` ADD CONSTRAINT `appointments_staff_id_fkey` FOREIGN KEY (`staff_id`) REFERENCES `staff`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `booking_items` ADD CONSTRAINT `booking_items_variant_id_fkey` FOREIGN KEY (`variant_id`) REFERENCES `service_variants`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `payments` ADD CONSTRAINT `payments_appointment_id_fkey` FOREIGN KEY (`appointment_id`) REFERENCES `appointments`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `booking_items` ADD CONSTRAINT `booking_items_staff_id_fkey` FOREIGN KEY (`staff_id`) REFERENCES `staff`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `payments` ADD CONSTRAINT `payments_booking_id_fkey` FOREIGN KEY (`booking_id`) REFERENCES `bookings`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `payments` ADD CONSTRAINT `payments_customer_id_fkey` FOREIGN KEY (`customer_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `reviews` ADD CONSTRAINT `reviews_appointment_id_fkey` FOREIGN KEY (`appointment_id`) REFERENCES `appointments`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `reviews` ADD CONSTRAINT `reviews_booking_item_id_fkey` FOREIGN KEY (`booking_item_id`) REFERENCES `booking_items`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `reviews` ADD CONSTRAINT `reviews_booking_id_fkey` FOREIGN KEY (`booking_id`) REFERENCES `bookings`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `reviews` ADD CONSTRAINT `reviews_customer_id_fkey` FOREIGN KEY (`customer_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -535,7 +598,7 @@ ALTER TABLE `reviews` ADD CONSTRAINT `reviews_staff_id_fkey` FOREIGN KEY (`staff
 ALTER TABLE `notifications` ADD CONSTRAINT `notifications_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `notifications` ADD CONSTRAINT `notifications_appointment_id_fkey` FOREIGN KEY (`appointment_id`) REFERENCES `appointments`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `notifications` ADD CONSTRAINT `notifications_booking_id_fkey` FOREIGN KEY (`booking_id`) REFERENCES `bookings`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `conversations` ADD CONSTRAINT `conversations_customer_id_fkey` FOREIGN KEY (`customer_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

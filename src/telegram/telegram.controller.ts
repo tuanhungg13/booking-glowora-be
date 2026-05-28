@@ -1,5 +1,5 @@
 import { Body, Controller, Inject, Logger, Post, forwardRef } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiExcludeController, ApiTags } from '@nestjs/swagger';
 import { Public } from '../common/decorators/public.decorator';
 import { TelegramService } from './telegram.service';
 import { PrismaService } from '../prisma/prisma.service';
@@ -7,7 +7,7 @@ import { RedisService } from '../redis/redis.service';
 import { ConversationsService } from '../features/messaging/conversations/conversations.service';
 import { ChatGateway } from '../gateways/chat.gateway';
 
-@ApiTags('telegram')
+@ApiExcludeController()
 @Controller('telegram')
 export class TelegramController {
   private readonly logger = new Logger(TelegramController.name);

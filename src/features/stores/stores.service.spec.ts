@@ -170,7 +170,7 @@ describe('StoresService - Phase 2 Store owner flow', () => {
     prisma.store.count.mockReturnValue(countPromise);
 
     const result = await service.findAll({
-      city: 'Ha Noi',
+      provinceId: 1,
       q: 'Glowora',
       categoryId: '550e8400-e29b-41d4-a716-446655440000',
       minRating: 4,
@@ -183,7 +183,7 @@ describe('StoresService - Phase 2 Store owner flow', () => {
       expect.objectContaining({
         where: expect.objectContaining({
           status: StoreStatus.ACTIVE,
-          city: { contains: 'Ha Noi' },
+          provinceId: 1,
           avgRating: { gte: 4 },
           services: {
             some: {

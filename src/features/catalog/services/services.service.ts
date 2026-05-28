@@ -6,7 +6,7 @@ import { UpdateServiceDto } from './dto/update-service.dto';
 import { CreateServiceVariantDto, UpdateServiceVariantDto } from './dto/service-variant.dto';
 
 type ServiceParams = { storeId?: string; status?: ServiceStatus; categoryId?: string; page?: number; limit?: number };
-type PublicServiceParams = { storeId?: string; categoryId?: string; q?: string; page?: number; limit?: number };
+type PublicServiceParams = { storeId?: string; categoryId?: string; q?: string; minPrice?: number; maxPrice?: number; minRating?: number; maxRating?: number; sort?: 'avgRating' | 'price' | 'price-desc' | 'newest'; page?: number; limit?: number };
 
 const serviceInclude = {
   category: true,
@@ -90,31 +90,88 @@ export class ServicesService {
       status: ServiceStatus.ACTIVE,
       store: { status: StoreStatus.ACTIVE },
       ...(params.storeId && { shopId: params.storeId }),
-      ...(params.categoryId && { categoryId: params.categoryId }),
+      ...(params.categoryId && {
+        OR: [
+          { category: { parentId: params.categoryId } },
+          { categoryId: params.categoryId },
+        ],
+      }),
       ...(params.q && {
         OR: [
           { name: { contains: params.q } },
           { description: { contains: params.q } },
         ],
       }),
-    };
-
-    const [items, total] = await Promise.all([
-      this.prisma.service.findMany({
-        where,
-        orderBy: { name: 'asc' },
-        skip: (page - 1) * limit,
-        take: limit,
-        include: {
-          category: true,
-          store: { select: { id: true, name: true, slug: true, logoUrl: true, city: true, avgRating: true } },
-          variants: { where: { status: ServiceStatus.ACTIVE }, orderBy: { sortOrder: 'asc' } },
+      ...((params.minPrice !== undefined || params.maxPrice !== undefined) && {
+        variants: {
+          some: {
+            status: ServiceStatus.ACTIVE,
+            price: {
+              ...(params.minPrice !== undefined && { gte: params.minPrice }),
+              ...(params.maxPrice !== undefined && { lte: params.maxPrice }),
+            },
+          },
         },
       }),
+      ...((params.minRating !== undefined || params.maxRating !== undefined) && {
+        avgRating: {
+          ...(params.minRating !== undefined && { gte: params.minRating }),
+          ...(params.maxRating !== undefined && { lte: params.maxRating }),
+        },
+      }),
+    };
+
+    const publicInclude = {
+      category: true,
+      store: { select: { id: true, name: true, slug: true, logoUrl: true, provinceId: true, avgRating: true } },
+      variants: { where: { status: ServiceStatus.ACTIVE }, orderBy: { sortOrder: 'asc' as const } },
+    };
+
+    if (params.sort === 'price' || params.sort === 'price-desc') {
+      return this.findPublicSortedByPrice(where, publicInclude, page, limit, params.sort === 'price-desc' ? 'desc' : 'asc');
+    }
+
+    const orderBy: Prisma.ServiceOrderByWithRelationInput =
+      params.sort === 'newest' ? { createdAt: 'desc' } :
+      params.sort === 'avgRating' ? { avgRating: 'desc' } :
+      { avgRating: 'desc' };
+
+    const [items, total] = await Promise.all([
+      this.prisma.service.findMany({ where, orderBy, skip: (page - 1) * limit, take: limit, include: publicInclude }),
       this.prisma.service.count({ where }),
     ]);
 
     return { items, total, page, limit };
+  }
+
+  private async findPublicSortedByPrice(
+    where: Prisma.ServiceWhereInput,
+    include: object,
+    page: number,
+    limit: number,
+    direction: 'asc' | 'desc' = 'asc',
+  ) {
+    const allIds = await this.prisma.service.findMany({ where, select: { id: true } });
+    const ids = allIds.map((s) => s.id);
+
+    const grouped = await this.prisma.serviceVariant.groupBy({
+      by: ['serviceId'],
+      where: { serviceId: { in: ids }, status: ServiceStatus.ACTIVE },
+      _min: { price: true },
+      orderBy: { _min: { price: direction } },
+    });
+
+    const paginatedIds = grouped.slice((page - 1) * limit, page * limit).map((g) => g.serviceId);
+
+    const items = await this.prisma.service.findMany({
+      where: { id: { in: paginatedIds } },
+      include: include as any,
+    });
+
+    const order = new Map(paginatedIds.map((id, i) => [id, i]));
+    items.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+
+    return { items, total: ids.length, page, limit };
   }
 
   async findOne(idOrSlug: string, storeId?: string) {

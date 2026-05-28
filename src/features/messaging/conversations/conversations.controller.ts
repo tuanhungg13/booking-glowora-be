@@ -8,7 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ConversationsService } from './conversations.service';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
@@ -22,15 +22,21 @@ import { ShopId } from '../../../common/decorators/shop-id.decorator';
 export class ConversationsController {
   constructor(private readonly conversationsService: ConversationsService) {}
 
-  @Post()
+  @ApiOperation({ summary: 'Tạo cuộc hội thoại mới' })
   @ApiBearerAuth()
+  @Post()
   @RequirePermissions(Permissions.CONVERSATION.CREATE)
   create(@Body() dto: CreateConversationDto) {
     return this.conversationsService.create(dto);
   }
 
-  @Get()
+  @ApiOperation({ summary: 'Lấy danh sách tất cả hội thoại (admin)' })
+  @ApiQuery({ name: 'customerId', required: false, description: 'Lọc theo khách hàng' })
+  @ApiQuery({ name: 'storeId', required: false, description: 'Lọc theo shop' })
+  @ApiQuery({ name: 'skip', required: false, type: Number })
+  @ApiQuery({ name: 'take', required: false, type: Number })
   @ApiBearerAuth()
+  @Get()
   @RequirePermissions(Permissions.CONVERSATION.VIEW)
   findAll(
     @Query('customerId') customerId?: string,
@@ -46,7 +52,9 @@ export class ConversationsController {
     });
   }
 
-  @ApiOperation({ summary: 'List conversations for a store (staff view)' })
+  @ApiOperation({ summary: 'Lấy danh sách hội thoại của shop (staff view)' })
+  @ApiQuery({ name: 'skip', required: false, type: Number })
+  @ApiQuery({ name: 'take', required: false, type: Number })
   @ApiBearerAuth()
   @RequirePermissions(Permissions.CONVERSATION.VIEW)
   @Get('store')
@@ -62,21 +70,26 @@ export class ConversationsController {
     });
   }
 
-  @Get(':id')
+  @ApiOperation({ summary: 'Lấy chi tiết hội thoại' })
+  @ApiParam({ name: 'id', description: 'Conversation ID' })
   @ApiBearerAuth()
+  @Get(':id')
   @RequirePermissions(Permissions.CONVERSATION.VIEW)
   findOne(@Param('id') id: string) {
     return this.conversationsService.findOne(id);
   }
 
-  @Patch(':id')
+  @ApiOperation({ summary: 'Cập nhật thông tin hội thoại' })
+  @ApiParam({ name: 'id', description: 'Conversation ID' })
   @ApiBearerAuth()
+  @Patch(':id')
   @RequirePermissions(Permissions.CONVERSATION.UPDATE)
   update(@Param('id') id: string, @Body() dto: UpdateConversationDto) {
     return this.conversationsService.update(id, dto);
   }
 
-  @ApiOperation({ summary: 'Manually escalate conversation to human staff' })
+  @ApiOperation({ summary: 'Chuyển hội thoại sang nhân viên hỗ trợ thủ công' })
+  @ApiParam({ name: 'id', description: 'Conversation ID' })
   @ApiBearerAuth()
   @RequirePermissions(Permissions.CONVERSATION.UPDATE)
   @Patch(':id/escalate')
@@ -84,7 +97,8 @@ export class ConversationsController {
     return this.conversationsService.escalateToHuman(id);
   }
 
-  @ApiOperation({ summary: 'Switch conversation back to bot mode' })
+  @ApiOperation({ summary: 'Chuyển hội thoại về chế độ bot tự động' })
+  @ApiParam({ name: 'id', description: 'Conversation ID' })
   @ApiBearerAuth()
   @RequirePermissions(Permissions.CONVERSATION.UPDATE)
   @Patch(':id/bot-mode')
@@ -92,8 +106,10 @@ export class ConversationsController {
     return this.conversationsService.setBotMode(id);
   }
 
-  @Delete(':id')
+  @ApiOperation({ summary: 'Xóa hội thoại' })
+  @ApiParam({ name: 'id', description: 'Conversation ID' })
   @ApiBearerAuth()
+  @Delete(':id')
   @RequirePermissions(Permissions.CONVERSATION.DELETE)
   remove(@Param('id') id: string) {
     return this.conversationsService.remove(id);

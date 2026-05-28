@@ -20,7 +20,7 @@ export class AdminStoresService {
     const limit = filter.limit ?? 20;
     const where: Prisma.StoreWhereInput = {
       ...(filter.status && { status: filter.status }),
-      ...(filter.city && { city: { contains: filter.city } }),
+      ...(filter.provinceId && { provinceId: filter.provinceId }),
       ...(filter.q && {
         OR: [
           { name: { contains: filter.q } },

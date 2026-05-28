@@ -19,6 +19,8 @@ const MAX_SHOP_ROLES_PER_USER = 3;
 const storeListInclude = {
   workingHours: { orderBy: { dayOfWeek: 'asc' as const } },
   owner: { select: { id: true, fullName: true, email: true, phone: true } },
+  province: { select: { id: true, name: true, type: true } },
+  ward: { select: { id: true, name: true, type: true } },
   _count: { select: { services: true, reviews: true, staff: true } },
 } as const;
 
@@ -66,13 +68,20 @@ export class StoresService {
   ) {}
 
   async create(dto: CreateStoreDto, ownerId: string) {
+    if (dto.provinceId) {
+      const province = await this.prisma.province.findUnique({ where: { id: dto.provinceId } });
+      if (!province) throw new BadRequestException(`Province ${dto.provinceId} not found`);
+    }
+    if (dto.wardId) {
+      const ward = await this.prisma.ward.findUnique({ where: { id: dto.wardId } });
+      if (!ward) throw new BadRequestException(`Ward ${dto.wardId} not found`);
+      if (dto.provinceId && ward.provinceId !== dto.provinceId) {
+        throw new BadRequestException('Ward does not belong to the specified province');
+      }
+    }
+
     const existingStore = await this.prisma.store.findFirst({
-      where: {
-        ownerId,
-        name: dto.name,
-        address: dto.address,
-        city: dto.city,
-      },
+      where: { ownerId, name: dto.name, address: dto.address },
     });
     if (existingStore) {
       throw new ConflictException('Store already exists for this owner and address');
@@ -93,7 +102,7 @@ export class StoresService {
       throw new BadRequestException('SHOP_OWNER template role is missing. Run database seed first.');
     }
 
-    const slug = await this.generateUniqueSlug(dto.name, dto.city);
+    const slug = await this.generateUniqueSlug(dto.name, dto.provinceId);
 
     const store = await this.prisma.$transaction(async (tx) => {
       const createdStore = await tx.store.create({
@@ -106,8 +115,9 @@ export class StoresService {
           website: dto.website,
           description: dto.description,
           address: dto.address,
-          city: dto.city,
           district: dto.district,
+          wardId: dto.wardId,
+          provinceId: dto.provinceId,
           status: StoreStatus.PENDING,
           slotIntervalMins: dto.slotIntervalMins,
           cancelBeforeHours: dto.cancelBeforeHours,
@@ -308,7 +318,8 @@ export class StoresService {
   private buildPublicWhere(filter: StoreFilterDto): Prisma.StoreWhereInput {
     return {
       status: StoreStatus.ACTIVE,
-      ...(filter.city && { city: { contains: filter.city } }),
+      ...(filter.provinceId && { provinceId: filter.provinceId }),
+      ...(filter.wardId && { wardId: filter.wardId }),
       ...(filter.q && {
         OR: [
           { name: { contains: filter.q } },
@@ -316,12 +327,20 @@ export class StoresService {
           { description: { contains: filter.q } },
         ],
       }),
-      ...(filter.minRating && { avgRating: { gte: filter.minRating } }),
+      ...((filter.minRating || filter.maxRating) && {
+        avgRating: {
+          ...(filter.minRating && { gte: filter.minRating }),
+          ...(filter.maxRating && { lte: filter.maxRating }),
+        },
+      }),
       ...(filter.categoryId && {
         services: {
           some: {
-            categoryId: filter.categoryId,
             status: 'ACTIVE',
+            OR: [
+              { category: { parentId: filter.categoryId } },
+              { categoryId: filter.categoryId },
+            ],
           },
         },
       }),
@@ -334,8 +353,13 @@ export class StoresService {
     return { avgRating: 'desc' }; // default + 'avgRating'
   }
 
-  private async generateUniqueSlug(name: string, city: string) {
-    const base = this.slugify(`${name} ${city}`) || 'store';
+  private async generateUniqueSlug(name: string, provinceId?: number) {
+    let provinceName = '';
+    if (provinceId) {
+      const province = await this.prisma.province.findUnique({ where: { id: provinceId } });
+      if (province) provinceName = province.name;
+    }
+    const base = this.slugify(provinceName ? `${name} ${provinceName}` : name) || 'store';
     let slug = base;
     let suffix = 2;
     while (await this.prisma.store.findUnique({ where: { slug } })) {

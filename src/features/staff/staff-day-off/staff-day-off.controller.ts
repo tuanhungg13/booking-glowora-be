@@ -8,6 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiHeader, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { StaffDayOffService } from './staff-day-off.service';
 import { CreateStaffDayOffDto } from './dto/create-staff-day-off.dto';
 import { UpdateStaffDayOffDto } from './dto/update-staff-day-off.dto';
@@ -15,10 +16,16 @@ import { RequirePermissions } from '../../../common/decorators/require-permissio
 import { Permissions } from '../../../common/constants/permissions';
 import { ShopId } from '../../../common/decorators/shop-id.decorator';
 
+@ApiTags('staff / day-off')
+@ApiBearerAuth()
+@ApiHeader({ name: 'x-shop-id', description: 'ID của shop', required: true })
 @Controller('staff/:staffId/day-off')
 export class StaffDayOffController {
   constructor(private readonly staffDayOffService: StaffDayOffService) {}
 
+  @ApiOperation({ summary: 'Đăng ký ngày nghỉ cho nhân viên' })
+  @ApiParam({ name: 'staffId', description: 'Staff ID' })
+  @ApiResponse({ status: 201, description: 'Tạo thành công' })
   @Post()
   @RequirePermissions(Permissions.STAFF_DAY_OFF.CREATE)
   create(
@@ -29,6 +36,11 @@ export class StaffDayOffController {
     return this.staffDayOffService.create(storeId, staffId, dto);
   }
 
+  @ApiOperation({ summary: 'Lấy danh sách ngày nghỉ (có thể lọc theo khoảng thời gian)' })
+  @ApiParam({ name: 'staffId', description: 'Staff ID' })
+  @ApiQuery({ name: 'from', required: false, description: 'ISO date string — VD: 2025-01-01' })
+  @ApiQuery({ name: 'to', required: false, description: 'ISO date string — VD: 2025-01-31' })
+  @ApiResponse({ status: 200, description: 'Danh sách ngày nghỉ' })
   @Get()
   @RequirePermissions(Permissions.STAFF_DAY_OFF.VIEW)
   findAll(
@@ -43,18 +55,31 @@ export class StaffDayOffController {
     });
   }
 
+  @ApiOperation({ summary: 'Lấy chi tiết ngày nghỉ' })
+  @ApiParam({ name: 'staffId', description: 'Staff ID' })
+  @ApiParam({ name: 'id', description: 'Day-off ID' })
+  @ApiResponse({ status: 200, description: 'Chi tiết ngày nghỉ' })
+  @ApiResponse({ status: 404, description: 'Không tìm thấy' })
   @Get(':id')
   @RequirePermissions(Permissions.STAFF_DAY_OFF.VIEW)
   findOne(@Param('id') id: string) {
     return this.staffDayOffService.findOne(id);
   }
 
+  @ApiOperation({ summary: 'Cập nhật ngày nghỉ' })
+  @ApiParam({ name: 'staffId', description: 'Staff ID' })
+  @ApiParam({ name: 'id', description: 'Day-off ID' })
+  @ApiResponse({ status: 200, description: 'Cập nhật thành công' })
   @Patch(':id')
   @RequirePermissions(Permissions.STAFF_DAY_OFF.UPDATE)
   update(@Param('id') id: string, @Body() dto: UpdateStaffDayOffDto) {
     return this.staffDayOffService.update(id, dto);
   }
 
+  @ApiOperation({ summary: 'Hủy ngày nghỉ' })
+  @ApiParam({ name: 'staffId', description: 'Staff ID' })
+  @ApiParam({ name: 'id', description: 'Day-off ID' })
+  @ApiResponse({ status: 200, description: 'Xóa thành công' })
   @Delete(':id')
   @RequirePermissions(Permissions.STAFF_DAY_OFF.DELETE)
   remove(@Param('id') id: string) {

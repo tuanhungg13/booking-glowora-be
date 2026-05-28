@@ -8,7 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ServicesService } from './services.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
@@ -21,36 +21,44 @@ import { Permissions } from '../../../common/constants/permissions';
 import { ShopId } from '../../../common/decorators/shop-id.decorator';
 
 @ApiTags('services')
+@ApiHeader({ name: 'x-shop-id', description: 'ID của shop', required: true })
 @Controller('services')
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
+  @ApiOperation({ summary: 'Tạo dịch vụ mới' })
+  @ApiBearerAuth()
   @Post()
   @RequirePermissions(Permissions.SERVICE.CREATE)
   create(@ShopId() storeId: string, @Body() dto: CreateServiceDto) {
     return this.servicesService.create(storeId, dto);
   }
 
-  @ApiOperation({ summary: 'Public cross-shop service exploration with pagination' })
+  @ApiOperation({ summary: 'Khám phá dịch vụ công khai từ nhiều shop (public)' })
   @Public()
   @Get('explore')
   findPublic(@Query() query: PublicServiceQueryDto) {
     return this.servicesService.findPublic(query);
   }
 
-  @ApiOperation({ summary: 'List services for a specific shop (requires x-shop-id header)' })
+  @ApiOperation({ summary: 'Lấy danh sách dịch vụ của shop (public, yêu cầu x-shop-id)' })
   @Public()
   @Get()
   findAll(@ShopId() storeId: string, @Query() query: ServiceQueryDto) {
     return this.servicesService.findAll({ storeId, ...query });
   }
 
+  @ApiOperation({ summary: 'Lấy chi tiết dịch vụ (public)' })
+  @ApiParam({ name: 'id', description: 'Service ID' })
   @Public()
   @Get(':id')
   findOne(@ShopId() storeId: string, @Param('id') id: string) {
     return this.servicesService.findOne(id, storeId);
   }
 
+  @ApiOperation({ summary: 'Cập nhật dịch vụ' })
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id', description: 'Service ID' })
   @Patch(':id')
   @RequirePermissions(Permissions.SERVICE.UPDATE)
   update(
@@ -61,6 +69,9 @@ export class ServicesController {
     return this.servicesService.update(id, storeId, dto);
   }
 
+  @ApiOperation({ summary: 'Thêm variant cho dịch vụ' })
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id', description: 'Service ID' })
   @Post(':id/variants')
   @RequirePermissions(Permissions.SERVICE.UPDATE)
   addVariant(
@@ -71,6 +82,10 @@ export class ServicesController {
     return this.servicesService.addVariant(serviceId, storeId, dto);
   }
 
+  @ApiOperation({ summary: 'Cập nhật variant của dịch vụ' })
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id', description: 'Service ID' })
+  @ApiParam({ name: 'variantId', description: 'Variant ID' })
   @Patch(':id/variants/:variantId')
   @RequirePermissions(Permissions.SERVICE.UPDATE)
   updateVariant(
@@ -82,6 +97,10 @@ export class ServicesController {
     return this.servicesService.updateVariant(serviceId, variantId, storeId, dto);
   }
 
+  @ApiOperation({ summary: 'Xóa variant của dịch vụ' })
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id', description: 'Service ID' })
+  @ApiParam({ name: 'variantId', description: 'Variant ID' })
   @Delete(':id/variants/:variantId')
   @RequirePermissions(Permissions.SERVICE.UPDATE)
   removeVariant(
@@ -92,6 +111,9 @@ export class ServicesController {
     return this.servicesService.removeVariant(serviceId, variantId, storeId);
   }
 
+  @ApiOperation({ summary: 'Gán nhân viên cho dịch vụ' })
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id', description: 'Service ID' })
   @Patch(':id/staff')
   @RequirePermissions(Permissions.SERVICE.UPDATE)
   assignStaff(
@@ -102,6 +124,9 @@ export class ServicesController {
     return this.servicesService.assignStaff(id, storeId, dto.staffIds);
   }
 
+  @ApiOperation({ summary: 'Xóa dịch vụ' })
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id', description: 'Service ID' })
   @Delete(':id')
   @RequirePermissions(Permissions.SERVICE.DELETE)
   remove(@ShopId() storeId: string, @Param('id') id: string) {

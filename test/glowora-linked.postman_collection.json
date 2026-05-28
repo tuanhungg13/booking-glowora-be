@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "b9f2795a-role-workflows-glowora",
     "name": "Glowora Booking API - Role Workflows",
-    "description": "One collection organized by real user roles and jobs.\n\nRun order:\n00 Shared Setup creates fresh test users and tokens.\n01 Shop Owner creates the shop shell.\n02 Super Admin approves the shop.\n03 Shop Owner builds catalog and invites staff.\n04 Shop Staff accepts invite and manages booking work.\n05 Customer browses, books, pays, reviews, chats.\n06 Super Admin moderates review after customer review exists.\n07 Public Read APIs can be run after shop is approved.\n\nUse one environment only: test/glowora-local.postman_environment.json.\nSeed requirements: pnpm run db:seed. Demo seed is optional: pnpm run db:seed:demo.",
+    "description": "One collection organized by real user roles and jobs.\n\nRun order:\n00 Shared Setup creates fresh test users and tokens.\n01 Shop Owner creates the shop shell.\n02 Super Admin approves the shop.\n03 Shop Owner builds catalog and invites staff.\n04 Shop Staff accepts invite and manages booking work.\n05 Customer browses, books, pays, reviews, chats.\n06 Super Admin moderates review after customer review exists.\n07 Public Read APIs can be run after shop is approved.\n\nUse one environment only: test/glowora-local.postman_environment.json.\nSeed requirements: pnpm run db:seed. Demo seed is optional: pnpm run db:seed:demo. Location seed is optional for /locations checks: pnpm exec prisma db execute --file prisma/seed_provinces_wards.sql.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "event": [
@@ -559,7 +559,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Role Flow Spa {{runId}}\",\n  \"address\": \"12 Nguyen Hue\",\n  \"city\": \"Ho Chi Minh\",\n  \"district\": \"Quan 1\",\n  \"phone\": \"0287000000\",\n  \"email\": \"role-flow-{{runId}}@glowora.local\",\n  \"website\": \"https://glowora.local\",\n  \"description\": \"Shop created by role workflow Postman collection.\",\n  \"slotIntervalMins\": 30,\n  \"cancelBeforeHours\": 2,\n  \"maxAdvanceDays\": 30,\n  \"autoConfirm\": false\n}",
+              "raw": "{\n  \"name\": \"Role Flow Spa {{runId}}\",\n  \"address\": \"12 Nguyen Hue\",\n  \"district\": \"Quan 1\",\n  \"phone\": \"0287000000\",\n  \"email\": \"role-flow-{{runId}}@glowora.local\",\n  \"website\": \"https://glowora.vn\",\n  \"description\": \"Shop created by role workflow Postman collection.\",\n  \"slotIntervalMins\": 30,\n  \"cancelBeforeHours\": 2,\n  \"maxAdvanceDays\": 30,\n  \"bookingBufferMins\": 30,\n  \"autoConfirm\": false\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1636,12 +1636,17 @@
         },
         {
           "name": "05.04 Public - available slots",
-          "description": "Uses saved storeId/serviceId/variantId/staffId and generated slotDate.",
+          "description": "Uses saved storeId/serviceId/variantId/staffId and generated slotDate. Controller expects POST body JSON.",
           "request": {
-            "method": "GET",
-            "header": [],
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "url": {
-              "raw": "{{baseUrl}}/stores/{{storeId}}/available-slots?date={{slotDate}}&serviceId={{serviceId}}&variantId={{variantId}}&staffId={{staffId}}",
+              "raw": "{{baseUrl}}/stores/{{storeId}}/available-slots",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -1649,25 +1654,16 @@
                 "stores",
                 "{{storeId}}",
                 "available-slots"
-              ],
-              "query": [
-                {
-                  "key": "date",
-                  "value": "{{slotDate}}"
-                },
-                {
-                  "key": "serviceId",
-                  "value": "{{serviceId}}"
-                },
-                {
-                  "key": "variantId",
-                  "value": "{{variantId}}"
-                },
-                {
-                  "key": "staffId",
-                  "value": "{{staffId}}"
-                }
               ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"{{slotDate}}\",\n  \"services\": [\n    {\n      \"serviceId\": \"{{serviceId}}\",\n      \"variantId\": \"{{variantId}}\",\n      \"staffId\": \"{{staffId}}\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             }
           },
           "event": [
@@ -2723,6 +2719,90 @@
                   "pm.test('API data exists', function () {",
                   "  pm.expect(res).to.have.property('data');",
                   "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07.08 Public - list provinces",
+          "description": "No token. Saves provinceId from the first returned province when location seed exists.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/locations/provinces",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "locations",
+                "provinces"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "if (Array.isArray(res.data) && res.data[0] && res.data[0].id) {",
+                  "  pm.environment.set('provinceId', String(res.data[0].id));",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07.09 Public - list wards by province",
+          "description": "No token. Uses provinceId and saves wardId from the first returned ward when available.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/locations/provinces/{{provinceId}}/wards",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "locations",
+                "provinces",
+                "{{provinceId}}",
+                "wards"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "if (Array.isArray(res.data) && res.data[0] && res.data[0].id) {",
+                  "  pm.environment.set('wardId', String(res.data[0].id));",
+                  "}"
                 ]
               }
             }

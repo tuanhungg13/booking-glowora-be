@@ -4,6 +4,7 @@ import {
   IsEmail,
   IsInt,
   IsOptional,
+  IsPositive,
   IsString,
   IsUrl,
   Max,
@@ -24,16 +25,23 @@ export class CreateStoreDto {
   @MaxLength(300)
   address!: string;
 
-  @ApiProperty({ example: 'Ha Noi' })
-  @IsString()
-  @MaxLength(100)
-  city!: string;
-
-  @ApiPropertyOptional({ example: 'Cau Giay' })
+  @ApiPropertyOptional({ example: 'Cau Giay', description: 'Quận/Huyện (free text)' })
   @IsOptional()
   @IsString()
   @MaxLength(100)
   district?: string;
+
+  @ApiPropertyOptional({ example: 10101003, description: 'ID xã/phường từ bảng wards' })
+  @IsOptional()
+  @IsInt()
+  @IsPositive()
+  wardId?: number;
+
+  @ApiPropertyOptional({ example: 1, description: 'ID tỉnh/thành phố từ bảng provinces' })
+  @IsOptional()
+  @IsInt()
+  @IsPositive()
+  provinceId?: number;
 
   @ApiProperty({ example: '0901234567' })
   @IsString()
