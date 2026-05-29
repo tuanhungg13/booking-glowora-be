@@ -206,6 +206,15 @@ export class StoreStaffService {
     return { ...rest, telegramLinked: telegramChatId !== null };
   }
 
+  async getMyTelegramStatus(storeId: string, userId: string) {
+    const staff = await this.prisma.staff.findFirst({
+      where: { userId, storeId, status: StaffStatus.ACTIVE },
+      select: { telegramChatId: true },
+    });
+    if (!staff) throw new NotFoundException('Bạn không phải nhân viên của cơ sở này');
+    return { telegramLinked: staff.telegramChatId !== null };
+  }
+
   async generateTelegramToken(storeId: string, userId: string) {
     const staff = await this.prisma.staff.findFirst({
       where: { userId, storeId, status: StaffStatus.ACTIVE },

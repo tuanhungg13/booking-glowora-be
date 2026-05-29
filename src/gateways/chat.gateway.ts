@@ -53,6 +53,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }) as { sub: string; email: string };
 
       client.data.userId = payload.sub;
+      await client.join(`user:${payload.sub}`);
       this.logger.log(`Client connected: ${client.id} (user: ${payload.sub})`);
     } catch {
       // Token không hợp lệ → cũng cho kết nối như ẩn danh (không set userId)
@@ -174,7 +175,34 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     return { reset: true };
   }
 
+  @SubscribeMessage('join_store')
+  async handleJoinStore(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: { storeId: string },
+  ) {
+    const userId = client.data.userId as string;
+    if (!userId) return { error: 'Unauthorized' };
+
+    const store = await this.prisma.store.findUnique({
+      where: { id: data.storeId },
+      select: { ownerId: true },
+    });
+    if (!store) return { error: 'Store not found' };
+    if (store.ownerId !== userId) return { error: 'Forbidden' };
+
+    await client.join(`store:${data.storeId}`);
+    return { joined: true, storeId: data.storeId };
+  }
+
   emitToConversation(conversationId: string, event: string, data: unknown) {
     this.server.to(`conv:${conversationId}`).emit(event, data);
+  }
+
+  emitToStore(storeId: string, event: string, data: unknown) {
+    this.server.to(`store:${storeId}`).emit(event, data);
+  }
+
+  emitToUser(userId: string, event: string, data: unknown) {
+    this.server.to(`user:${userId}`).emit(event, data);
   }
 }

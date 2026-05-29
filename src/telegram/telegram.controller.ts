@@ -37,8 +37,14 @@ export class TelegramController {
     const threadId: number | undefined = message.message_thread_id;
 
     // /start <token> — link staff (DM) hoặc setup group store (supergroup)
-    if (text.startsWith('/start ')) {
-      const token = text.split(' ')[1]?.trim();
+    // Telegram group gửi dạng "/start@botname token", DM gửi "/start token"
+    const startMatch = text.match(/^\/start(?:@\S+)?(?:\s+(\S+))?$/);
+    if (startMatch) {
+      const token = startMatch[1];
+      if (!token) {
+        this.logger.warn(`[webhook] /start received but no token — text="${text}"`);
+        return { ok: true };
+      }
       if (token) {
         if (message.chat.type === 'private') {
           await this.handleLinkToken(String(message.chat.id), token);
@@ -136,6 +142,8 @@ export class TelegramController {
     await this.redis.del(`telegram:store-setup:${token}`);
 
     this.logger.log(`[handleGroupSetupToken] Linked group ${groupId} → store ${storeId}`);
+
+    this.chatGateway.emitToStore(storeId, 'telegram_linked', { telegramGroupId: groupId });
 
     await this.telegram.sendConfirmation(
       groupId,

@@ -1,12 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
 import { NotificationType } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { ChatGateway } from '../../../gateways/chat.gateway';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 
 @Injectable()
 export class NotificationsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @Inject(forwardRef(() => ChatGateway))
+    private readonly gateway: ChatGateway,
+  ) {}
 
   async create(dto: CreateNotificationDto) {
     return this.prisma.notification.create({
@@ -107,7 +112,7 @@ export class NotificationsService {
       where: { shopId: storeId, role: { code: 'SHOP_OWNER' } },
     });
     if (ownerRole) {
-      await this.prisma.notification.create({
+      const ownerNotif = await this.prisma.notification.create({
         data: {
           userId: ownerRole.userId,
           bookingId,
@@ -116,9 +121,10 @@ export class NotificationsService {
           body: `${customerName} đã đặt ${serviceNames} vào ${timeStr}`,
         },
       });
+      this.gateway.emitToUser(ownerRole.userId, 'notification_received', ownerNotif);
     }
 
-    await this.prisma.notification.create({
+    const customerNotif = await this.prisma.notification.create({
       data: {
         userId: customerId,
         bookingId,
@@ -127,6 +133,7 @@ export class NotificationsService {
         body: `Lịch hẹn ${serviceNames} tại ${storeName} vào ${timeStr} đang chờ xác nhận.`,
       },
     });
+    this.gateway.emitToUser(customerId, 'notification_received', customerNotif);
 
     console.log(`[EMAIL] To: ${customerEmail} | Subject: Xác nhận đặt lịch tại ${storeName}`);
   }
@@ -142,7 +149,7 @@ export class NotificationsService {
     const { bookingId, customerId, customerEmail, storeName, serviceNames, scheduledAt } = params;
     const timeStr = this.formatDateTime(scheduledAt);
 
-    await this.prisma.notification.create({
+    const notif = await this.prisma.notification.create({
       data: {
         userId: customerId,
         bookingId,
@@ -151,6 +158,7 @@ export class NotificationsService {
         body: `Lịch hẹn ${serviceNames} tại ${storeName} vào ${timeStr} đã được xác nhận.`,
       },
     });
+    this.gateway.emitToUser(customerId, 'notification_received', notif);
 
     console.log(`[EMAIL] To: ${customerEmail} | Subject: Lịch hẹn đã được xác nhận tại ${storeName}`);
   }
@@ -165,7 +173,7 @@ export class NotificationsService {
   }) {
     const { bookingId, customerId, customerEmail, storeName, serviceNames, reason } = params;
 
-    await this.prisma.notification.create({
+    const notif = await this.prisma.notification.create({
       data: {
         userId: customerId,
         bookingId,
@@ -174,6 +182,7 @@ export class NotificationsService {
         body: `Lịch hẹn ${serviceNames} tại ${storeName} bị từ chối. Lý do: ${reason}`,
       },
     });
+    this.gateway.emitToUser(customerId, 'notification_received', notif);
 
     console.log(`[EMAIL] To: ${customerEmail} | Subject: Lịch hẹn chưa được xác nhận tại ${storeName}`);
   }
@@ -187,7 +196,7 @@ export class NotificationsService {
   }) {
     const { bookingId, customerId, customerEmail, storeName, serviceNames } = params;
 
-    await this.prisma.notification.create({
+    const notif = await this.prisma.notification.create({
       data: {
         userId: customerId,
         bookingId,
@@ -196,6 +205,7 @@ export class NotificationsService {
         body: `${serviceNames} tại ${storeName} đã hoàn thành. Hãy để lại đánh giá nhé!`,
       },
     });
+    this.gateway.emitToUser(customerId, 'notification_received', notif);
 
     console.log(`[EMAIL] To: ${customerEmail} | Subject: Cảm ơn bạn đã sử dụng dịch vụ tại ${storeName}`);
   }
@@ -216,7 +226,7 @@ export class NotificationsService {
       where: { shopId: storeId, role: { code: 'SHOP_OWNER' } },
     });
     if (ownerRole) {
-      await this.prisma.notification.create({
+      const ownerNotif = await this.prisma.notification.create({
         data: {
           userId: ownerRole.userId,
           bookingId,
@@ -225,9 +235,10 @@ export class NotificationsService {
           body: `${customerName} đã hủy lịch hẹn ${serviceNames}.${reason ? ` Lý do: ${reason}` : ''}`,
         },
       });
+      this.gateway.emitToUser(ownerRole.userId, 'notification_received', ownerNotif);
     }
 
-    await this.prisma.notification.create({
+    const customerNotif = await this.prisma.notification.create({
       data: {
         userId: customerId,
         bookingId,
@@ -236,6 +247,7 @@ export class NotificationsService {
         body: `Lịch hẹn ${serviceNames} tại ${storeName} đã được hủy.`,
       },
     });
+    this.gateway.emitToUser(customerId, 'notification_received', customerNotif);
 
     console.log(`[EMAIL] To: ${customerEmail} | Subject: Lịch hẹn tại ${storeName} đã bị hủy`);
   }
@@ -252,7 +264,7 @@ export class NotificationsService {
     const { bookingId, customerId, customerEmail, storeName, serviceNames, amount } = params;
     const formattedAmount = amount.toLocaleString('vi-VN');
 
-    await this.prisma.notification.create({
+    const notif = await this.prisma.notification.create({
       data: {
         userId: customerId,
         bookingId,
@@ -261,6 +273,7 @@ export class NotificationsService {
         body: `Bạn đã thanh toán ${formattedAmount}₫ cho ${serviceNames} tại ${storeName}.`,
       },
     });
+    this.gateway.emitToUser(customerId, 'notification_received', notif);
 
     console.log(`[EMAIL] To: ${customerEmail} | Subject: Xác nhận thanh toán thành công tại ${storeName}`);
   }

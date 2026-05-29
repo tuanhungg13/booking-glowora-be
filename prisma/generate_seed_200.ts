@@ -955,17 +955,38 @@ function personName(seed: number): string {
   return FIRST_NAMES[seed % FIRST_NAMES.length];
 }
 
-function buildServiceDescription(store: StoreSeed, serviceTemplate: ServiceTemplate): string {
+function buildStoreDescription(store: StoreSeed, address: string, district: string): string {
+  return [
+    '<div class="store-description">',
+    `  <h3>${store.name}</h3>`,
+    `  <p>${store.name} la mot diem den demo thuoc nhom ${store.kind.label} tai ${district}, ${store.city.label}. Khong gian duoc mo ta theo huong gan gui, gon gang va de tao cam giac tin cay ngay tu lan dau khach hang xem thong tin. Cua hang phu hop cho nhung nguoi muon tim mot noi co quy trinh ro rang, lich hen linh hoat, thong tin minh bach va trai nghiem on dinh. Dia chi demo tai ${address} giup du lieu co ngu canh dia phuong khi kiem thu ban do, bo loc khu vuc, tim kiem theo thanh pho va trang chi tiet cua tung co so.</p>`,
+    `  <p>Diem manh cua ${store.name} nam o cach sap xep dich vu theo nhom nhu cau thay vi chi liet ke ten goi. Khach hang bat dau tu nhu cau thu gian, cham soc ca nhan, cai thien ngoai hinh, phuc hoi the trang hoac duy tri lich cham soc dinh ky. Tung nhom dich vu duoc mo ta de he thong co noi dung day du hon khi hien thi tren trang public, trong ket qua tim kiem, trong luong dat lich va trong cac man hinh quan tri. Dieu nay giup viec test giao dien, SEO noi bo, chatbot va goi y dich vu co du lieu gan voi ngu canh thuc te hon.</p>`,
+    `  <p>Quy trinh van hanh cua cua hang duoc mo phong theo mot co so dich vu hien dai. Khach hang se duoc xem gio mo cua, chon dich vu, chon nhan vien phu hop, chon khung gio, xac nhan thong tin ca nhan va theo doi trang thai lich hen. Doi ngu shop duoc trao quyen quan ly danh muc, gia, thoi luong, nhan su, lich lam viec va danh gia sau khi hoan thanh. Mo ta nay co chu dich dai hon de kiem thu cac thanh phan rich text, layout card, trang chi tiet, cat ngan noi dung va cac truong hop hien thi tren mobile.</p>`,
+    `  <p>Khong gian cua ${store.name} duoc dinh vi la than thien nhung van chuyen nghiep. Khu vuc tiep don can co thong tin lich hen ro rang, nhan vien nam duoc nhu cau cua khach va huong dan tung buoc truoc khi bat dau. Khu vuc thuc hien dich vu uu tien ve sinh, su rieng tu va su thoai mai. Cac vat tu, san pham va dung cu trong du lieu demo duoc mo ta theo huong an toan, nhe diu, co kiem soat va phu hop voi nhieu tinh huong dat lich khac nhau.</p>`,
+    `  <p>Voi nhom ${store.kind.label}, cua hang phuc vu ca khach hang lan dau trai nghiem lan khach hang quay lai theo chu ky. Noi dung mo ta tap trung vao cam giac yen tam, kha nang tu van truoc dich vu, su thong nhat trong thao tac va viec theo doi ket qua sau khi hoan tat. Khi dung du lieu nay trong demo, tung shop co du noi dung de kiem tra tim kiem toan van, hien thi do dai khac nhau, loc theo danh muc va danh gia muc do phu hop cua dich vu voi nhu cau ca nhan.</p>`,
+    `  <p>${store.name} cung la mot ban ghi demo de kiem thu cac tinh nang danh cho chu shop. Owner duoc phep truy cap bang dieu khien, cap nhat thong tin cua hang, quan ly nhan vien, gan dich vu cho tung nhan vien, dieu chinh lich nghi va theo doi booking. Cac truong mo ta dai giup phat hien som loi tran layout, loi xu ly HTML, loi cat chu, loi ma hoa tieng Viet va loi hieu nang khi trang tai nhieu noi dung cung luc.</p>`,
+    `  <p>Tom lai, ${store.name} khong chi la mot cua hang demo de lap day danh sach. Ban ghi nay dai hon de tao cam giac giong mot ho so kinh doanh that, co boi canh dia phuong, co dinh vi dich vu, co quy trinh van hanh va co ky vong trai nghiem cho khach. Noi dung nay giup cac man hinh frontend, API tim kiem, chatbot, thong bao va cong cu quan tri co du chat lieu de kiem thu trong cac tinh huong gan voi san pham thuc te.</p>`,
+    '</div>',
+  ].join('\n');
+}
+
+function buildServiceDescription(store: StoreSeed, serviceName: string, serviceTemplate: ServiceTemplate, categoryName: string): string {
   return [
     '<div class="service-description">',
-    `  <h3>${serviceTemplate.name}</h3>`,
-    `  <p>${store.name} thuc hien lieu trinh ${serviceTemplate.focus}, phu hop cho khach hang can trai nghiem on dinh va co the dat lich lap lai.</p>`,
+    `  <h3>${serviceName}</h3>`,
+    `  <p>${serviceName} tai ${store.name} la goi dich vu demo thuoc nhom ${categoryName}, duoc viet dai hon de mo phong noi dung tu van tren mot trang dat lich that. Dich vu tap trung vao ${serviceTemplate.focus}, phu hop voi khach hang muon co mot trai nghiem duoc giai thich ro truoc khi quyet dinh dat hen. Noi dung nay giup nguoi dung hieu muc tieu cua lieu trinh, cach nhan vien tiep nhan nhu cau, nhung diem can luu y va ly do nen chon khung gio phu hop voi lich sinh hoat ca nhan.</p>`,
+    `  <p>Truoc khi bat dau, nhan vien se ghi nhan tinh trang hien tai, mong muon cua khach va cac yeu to anh huong den ket qua. Voi dich vu ${serviceTemplate.focus}, buoc tu van co vai tro quan trong vi tung khach hang co nen tang, thoi quen cham soc, muc do nhay cam va ky vong khac nhau. Phan mo ta dai nay tao du lieu tot hon cho chatbot, trang chi tiet dich vu, tooltip, ket qua tim kiem va cac man hinh so sanh dich vu trong cung mot cua hang.</p>`,
+    `  <p>Quy trinh thuc hien duoc mo phong theo huong co cau truc: tiep nhan, lam sach hoac chuan bi khu vuc can cham soc, tien hanh cac buoc chinh, kiem tra phan hoi cua khach, hoan thien ket qua va huong dan cham soc sau dich vu. Tung buoc khong nhat thiet dai trong thuc te, nhung can du ro de khach hang cam thay minh biet dieu gi se xay ra. Dieu nay dac biet huu ich khi kiem thu luong dat lich nhieu dich vu, hien thi thoi luong va gan nhan vien co chuyen mon.</p>`,
+    `  <p>Khach hang nen chon ${serviceName} khi can mot phuong an on dinh, de hieu va de lap lai theo chu ky. Goi nay khong duoc mo ta nhu mot cam ket ket qua tuyet doi, ma nhu mot trai nghiem duoc chuan hoa, duoc dieu chinh theo tinh trang thuc te. Neu khach hang co tien su kich ung, dang dieu tri da, vua thuc hien thu thuat khac hoac co lich trinh dac biet, nhan vien nen hoi ky truoc khi bat dau de dam bao viec phuc vu phu hop.</p>`,
+    `  <p>Trong bo du lieu demo, dich vu nay cung giup kiem tra cac chuc nang lien quan den gia, bien the thoi luong, danh muc, anh dai dien, danh gia trung binh va phan cong nhan vien. Khi noi dung mo ta dai hon, frontend duoc thu nghiem voi cac truong hop nhu thu gon van ban, hien thi rich text, can bang chieu cao card, render tren mobile, tim kiem theo tu khoa dai va doc noi dung bang cong cu ho tro truy cap.</p>`,
+    `  <p>Sau khi hoan thanh, khach hang nen duoc nhac ve cach cham soc tai nha, khoang thoi gian nen quay lai va nhung dau hieu can theo doi. Voi ${serviceTemplate.focus}, phan huong dan sau dich vu giup nang cao cam giac chuyen nghiep va lam cho trai nghiem khong ket thuc ngay tai thoi diem thanh toan. Cua hang dung thong tin nay de gui thong bao, tao ghi chu booking, hoac lam noi dung tham khao cho nhan vien vua vao lam.</p>`,
     '  <ul>',
-    '    <li>Tu van nhanh truoc khi bat dau</li>',
-    '    <li>Thuc hien theo quy trinh ve sinh va thao tac chuan</li>',
-    '    <li>Su dung san pham diu nhe, phu hop da so nhu cau</li>',
-    '    <li>Huong dan cham soc sau dich vu</li>',
+    '    <li>Tu van nhu cau, tinh trang hien tai va muc tieu truoc khi bat dau.</li>',
+    '    <li>Thuc hien theo quy trinh ve sinh, thao tac ro rang va co kiem tra phan hoi.</li>',
+    '    <li>Su dung san pham hoac dung cu phu hop voi tinh huong dich vu da chon.</li>',
+    '    <li>Ghi nhan luu y sau dich vu de khach de theo doi va dat lich lan tiep theo.</li>',
     '  </ul>',
+    `  <p>${serviceName} duoc tao ra de lam cho du lieu cua ${store.name} co chieu sau hon. Noi dung khong chi phuc vu viec doc mo ta, ma con giup he thong co them ngu lieu de kiem tra tim kiem, sap xep, goi y, hien thi danh sach va xu ly cac truong rich text dai. Khi dung trong demo, goi dich vu nay tao cam giac gan voi mot co so that: co muc tieu, co quy trinh, co canh bao nhe, co huong dan sau dich vu va co ly do de khach hang quay lai.</p>`,
     '</div>',
   ].join('\n');
 }
@@ -1018,6 +1039,7 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
     const lng = store.city.lng[0] + rand() * (store.city.lng[1] - store.city.lng[0]);
     const wardId = pick(store.city.wards, rand);
     const district = pick(store.city.districts, rand);
+    const address = `${randInt(1, 199, rand)} ${pick(['Nguyen Hue', 'Le Loi', 'Tran Hung Dao', 'Hai Ba Trung', 'Phan Chu Trinh', 'Ly Thuong Kiet'], rand)}`;
     const staffCount = randInt(3, 10, seededRand(store.index));
     const serviceCount = randInt(20, 40, seededRand(store.index + 1000));
 
@@ -1026,11 +1048,15 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
     );
 
     storeRows.push(
-      `(${sql(randomUUID())}, ${sql(store.slug)}, ${subUser(store.ownerEmail)}, ${sql(store.name)}, ${sql(`02871${store.code}00`)}, ${sql(`hello.s${store.code}@glowora.local`)}, ${sql(`https://${store.slug}.glowora.local`)}, ${sql(`<p>${store.name} la cua hang demo thuoc nhom ${store.kind.label}, du lieu duoc tao de test tim kiem, dat lich, nhan vien va dich vu.</p>`)}, ${sql(`${randInt(1, 199, rand)} ${pick(['Nguyen Hue', 'Le Loi', 'Tran Hung Dao', 'Hai Ba Trung', 'Phan Chu Trinh', 'Ly Thuong Kiet'], rand)}`)}, ${sql(district)}, ${store.city.provinceId}, ${wardId}, ${lat.toFixed(6)}, ${lng.toFixed(6)}, NULL, ${sql(store.kind.imageUrl)}, 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 30, ${store.index % 2 === 0 ? 'TRUE' : 'FALSE'}, ${(4.2 + rand() * 0.7).toFixed(2)}, ${randInt(12, 180, rand)}, NOW(), NOW())`,
+      `(${sql(randomUUID())}, ${sql(store.slug)}, ${subUser(store.ownerEmail)}, ${sql(store.name)}, ${sql(`02871${store.code}00`)}, ${sql(`hello.s${store.code}@glowora.local`)}, ${sql(`https://${store.slug}.glowora.local`)}, ${sql(buildStoreDescription(store, address, district))}, ${sql(address)}, ${sql(district)}, ${store.city.provinceId}, ${wardId}, ${lat.toFixed(6)}, ${lng.toFixed(6)}, NULL, ${sql(store.kind.imageUrl)}, 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 30, ${store.index % 2 === 0 ? 'TRUE' : 'FALSE'}, ${(4.2 + rand() * 0.7).toFixed(2)}, ${randInt(12, 180, rand)}, NOW(), NOW())`,
     );
 
     ownerRoleRows.push(
       `(${sql(randomUUID())}, ${subUser(store.ownerEmail)}, ${subRole('SHOP_OWNER')}, ${subStore(store.slug)}, NOW())`,
+    );
+
+    staffRows.push(
+      `(${sql(randomUUID())}, ${subUser(store.ownerEmail)}, ${subStore(store.slug)}, NULL, NULL, 0.00, 0, 'ACTIVE', NULL, NULL, NOW(), NOW())`,
     );
 
     for (const day of DAYS) {
@@ -1084,7 +1110,7 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
       const category = categories.find((item) => item.key === template.categoryKey) ?? categories[0];
 
       serviceRows.push(
-        `(${sql(randomUUID())}, ${subStore(store.slug)}, ${subShopCategory(category.name, store.slug)}, ${sql(serviceName)}, ${sql(serviceSlug)}, ${sql(buildServiceDescription(store, template))}, ${sql(template.imageUrl)}, 'ACTIVE', ${(4.15 + localRand() * 0.75).toFixed(2)}, NOW(), NOW())`,
+        `(${sql(randomUUID())}, ${subStore(store.slug)}, ${subShopCategory(category.name, store.slug)}, ${sql(serviceName)}, ${sql(serviceSlug)}, ${sql(buildServiceDescription(store, serviceName, template, category.name))}, ${sql(template.imageUrl)}, 'ACTIVE', ${(4.15 + localRand() * 0.75).toFixed(2)}, NOW(), NOW())`,
       );
 
       const variantCount = serviceIndex <= 10 ? randInt(2, 4, localRand) : randInt(1, 2, localRand);
@@ -1183,7 +1209,7 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
         'updated_at',
       ],
       {
-        batchSize: 100,
+        batchSize: 25,
         suffix:
           'ON DUPLICATE KEY UPDATE `owner_id` = VALUES(`owner_id`), `name` = VALUES(`name`), `phone` = VALUES(`phone`), `email` = VALUES(`email`), `description` = VALUES(`description`), `address` = VALUES(`address`), `district` = VALUES(`district`), `province_id` = VALUES(`province_id`), `ward_id` = VALUES(`ward_id`), `latitude` = VALUES(`latitude`), `longitude` = VALUES(`longitude`), `banner_url` = VALUES(`banner_url`), `status` = VALUES(`status`), `updated_at` = NOW();',
       },
@@ -1238,7 +1264,7 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
   sqlLines.push('-- SECTION 10: Services');
   sqlLines.push(
     ...batchInsert(serviceRows, 'services', ['id', 'shop_id', 'category_id', 'name', 'slug', 'description', 'image_url', 'status', 'avg_rating', 'created_at', 'updated_at'], {
-      batchSize: 150,
+      batchSize: 25,
       suffix:
         'ON DUPLICATE KEY UPDATE `category_id` = VALUES(`category_id`), `name` = VALUES(`name`), `description` = VALUES(`description`), `image_url` = VALUES(`image_url`), `status` = VALUES(`status`), `avg_rating` = VALUES(`avg_rating`), `updated_at` = NOW();',
     }),

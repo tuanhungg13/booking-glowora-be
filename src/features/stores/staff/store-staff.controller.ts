@@ -66,6 +66,16 @@ export class StoreStaffController {
     return this.storeStaffService.remove(storeId, user.id, staffId);
   }
 
+  @ApiOperation({ summary: 'Get current staff Telegram link status' })
+  @ApiBearerAuth()
+  @Get('me/telegram-status')
+  getMyTelegramStatus(
+    @ShopId() storeId: string,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return this.storeStaffService.getMyTelegramStatus(storeId, user.id);
+  }
+
   @ApiOperation({ summary: 'Generate Telegram deep link to link staff account' })
   @ApiBearerAuth()
   @Post('me/telegram-token')

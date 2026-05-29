@@ -23,6 +23,8 @@ describe('NotificationsService — Phase 4 & 5', () => {
     createdAt: new Date(),
   };
 
+  let gateway: any;
+
   beforeEach(() => {
     prisma = {
       notification: {
@@ -40,7 +42,9 @@ describe('NotificationsService — Phase 4 & 5', () => {
       },
     };
 
-    service = new NotificationsService(prisma);
+    gateway = { emitToUser: jest.fn() };
+
+    service = new NotificationsService(prisma, gateway);
   });
 
   afterEach(() => jest.clearAllMocks());
