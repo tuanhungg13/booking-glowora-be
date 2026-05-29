@@ -5,7 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { DayOfWeek, Prisma, StoreStatus } from '@prisma/client';
+import { DayOfWeek, Prisma, StaffStatus, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { PermissionCacheService } from '../../redis/permission-cache.service';
 import { CreateStoreDto } from './dto/create-store.dto';
@@ -122,6 +122,7 @@ export class StoresService {
           slotIntervalMins: dto.slotIntervalMins,
           cancelBeforeHours: dto.cancelBeforeHours,
           maxAdvanceDays: dto.maxAdvanceDays,
+          bookingBufferMins: dto.bookingBufferMins,
           autoConfirm: dto.autoConfirm,
         },
       });
@@ -158,6 +159,14 @@ export class StoresService {
           userId: ownerId,
           roleId: ownerRole.id,
           shopId: createdStore.id,
+        },
+      });
+
+      await tx.staff.create({
+        data: {
+          userId: ownerId,
+          storeId: createdStore.id,
+          status: StaffStatus.ACTIVE,
         },
       });
 
@@ -204,11 +213,12 @@ export class StoresService {
   }
 
   async findMine(ownerId: string) {
-    return this.prisma.store.findMany({
+    const stores = await this.prisma.store.findMany({
       where: { ownerId },
       orderBy: { createdAt: 'desc' },
       include: storeListInclude,
     });
+    return stores.map((s) => this.mapStoreOwnerView(s));
   }
 
   async findMyShops(userId: string) {
@@ -239,11 +249,13 @@ export class StoresService {
 
   async update(id: string, ownerId: string, dto: UpdateStoreDto) {
     await this.checkOwnership(id, ownerId);
-    return this.prisma.store.update({
-      where: { id },
-      data: dto,
-      include: storeListInclude,
-    });
+    return this.mapStoreOwnerView(
+      await this.prisma.store.update({
+        where: { id },
+        data: dto,
+        include: storeListInclude,
+      }),
+    );
   }
 
   async updateWorkingHours(id: string, ownerId: string, dto: UpdateWorkingHoursDto) {
@@ -366,6 +378,10 @@ export class StoresService {
       slug = `${base}-${suffix++}`;
     }
     return slug;
+  }
+
+  private mapStoreOwnerView<T extends { telegramGroupId: string | null }>(store: T): T & { telegramGroupLinked: boolean } {
+    return { ...store, telegramGroupLinked: store.telegramGroupId !== null };
   }
 
   private slugify(value: string) {

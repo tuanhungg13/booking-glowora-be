@@ -8,7 +8,7 @@ const adminStoreInclude = {
   owner: { select: { id: true, fullName: true, email: true, phone: true } },
   approvedBy: { select: { id: true, fullName: true, email: true } },
   workingHours: { orderBy: { dayOfWeek: 'asc' as const } },
-  _count: { select: { services: true, reviews: true, staff: true, appointments: true } },
+  _count: { select: { services: true, reviews: true, staff: true, bookings: true } },
 } as const;
 
 @Injectable()

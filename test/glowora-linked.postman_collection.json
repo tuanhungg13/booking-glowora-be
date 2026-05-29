@@ -2158,22 +2158,18 @@
           ]
         },
         {
-          "name": "05.14 Customer - send message",
-          "description": "Saves messageId. REST endpoint requires senderId.",
+          "name": "05.14 Customer - list conversation messages (REST)",
+          "description": "Lists messages in the conversation (paginated, ordered by createdAt asc).\n\nNOTE: Messages are created only via WebSocket (event: send_message). Use Postman's WebSocket request tool to connect to ws://localhost:8080, authenticate with the customerToken, join the conversation room, then emit send_message. This REST endpoint is for reading the stored history.\n\nSaves the first messageId for use in mark-as-read tests (08.07).",
           "request": {
-            "method": "POST",
+            "method": "GET",
             "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
               {
                 "key": "Authorization",
                 "value": "Bearer {{customerToken}}"
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/conversations/{{conversationId}}/messages",
+              "raw": "{{baseUrl}}/conversations/{{conversationId}}/messages?skip=0&take=20",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -2181,16 +2177,17 @@
                 "conversations",
                 "{{conversationId}}",
                 "messages"
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"senderId\": \"{{customerUserId}}\",\n  \"content\": \"Xin chao, toi muon hoi ve dich vu.\",\n  \"isRead\": false\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              ],
+              "query": [
+                {
+                  "key": "skip",
+                  "value": "0"
+                },
+                {
+                  "key": "take",
+                  "value": "20"
                 }
-              }
+              ]
             }
           },
           "event": [
@@ -2210,8 +2207,16 @@
                   "  pm.expect(res).to.have.property('data');",
                   "});",
                   "const data = pm.response.json().data;",
-                  "pm.environment.set('messageId', data.id);",
-                  "pm.test('Saved messageId', function () { pm.expect(pm.environment.get('messageId')).to.be.a('string').and.not.empty; });"
+                  "if (data && data.items && data.items.length > 0) {",
+                  "  pm.environment.set('messageId', data.items[0].id);",
+                  "  pm.test('Saved messageId from first message', function () {",
+                  "    pm.expect(pm.environment.get('messageId')).to.be.a('string').and.not.empty;",
+                  "  });",
+                  "} else {",
+                  "  pm.test('No messages yet (send via WebSocket first)', function () {",
+                  "    pm.expect(res).to.have.property('success', true);",
+                  "  });",
+                  "}"
                 ]
               }
             }
@@ -2803,6 +2808,484 @@
                   "if (Array.isArray(res.data) && res.data[0] && res.data[0].id) {",
                   "  pm.environment.set('wardId', String(res.data[0].id));",
                   "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "08 - TELEGRAM & CHAT: Full Integration Flow",
+      "description": "End-to-end Telegram and chat integration tests.\n\nRun order:\n08.01 Owner links a Telegram supergroup to the store (group topic path).\n08.02 Staff generates a fresh Telegram link token.\n08.03 Simulate staff clicking the /start deep link — sets Staff.telegramChatId in the DB.\n08.04 Staff views all store conversations.\n08.05 Customer reads their conversation with all embedded messages.\n08.06 Staff fetches paginated messages for the same conversation.\n08.07 Staff marks a specific message as read (skipped automatically if no messageId is saved).\n08.08 Owner unlinks the Telegram group (cleanup).\n\nPre-conditions: Sections 00–05 must have run successfully (storeId, ownerToken, staffToken, customerToken, staffId, conversationId must be set).\n\nNOTE on WebSocket: Sending messages (customer→app and Telegram reply→WebSocket broadcast) requires a WebSocket client. In Postman use the WebSocket request tab:\n  URL: ws://localhost:8080\n  Auth header: Authorization: Bearer {{customerToken}}\n  Events: join_conversation {conversationId}, send_message {conversationId, content}",
+      "item": [
+        {
+          "name": "08.01 Owner - link Telegram supergroup to store",
+          "description": "Links a Telegram supergroup (forum/Topics mode) to the store. Customer messages will be forwarded to this group as individual topic threads.\n\nProduction setup:\n1. Create a Telegram supergroup.\n2. Enable Topics: Group Settings → Topics → on.\n3. Add the bot as admin with 'Manage Topics' permission.\n4. Get the group ID (format: -100xxxxxxxxxx) from the bot or via getUpdates.\n\nFor local testing a placeholder ID is used — the API call succeeds (DB updated) but Telegram forwarding requires a real group.",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/stores/{{storeId}}/telegram-group",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "{{storeId}}",
+                "telegram-group"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"telegramGroupId\": \"-100000000001\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('Telegram group linked', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08.02 Staff - generate Telegram link token",
+          "description": "Generates a new one-time deep-link token for the staff member. The returned linkUrl is what the staff opens in Telegram to connect their account.\n\nFormat: https://t.me/<BotName>?start=<token>\n\nClicking this URL opens a Telegram chat with the bot and auto-sends /start <token>. The webhook (08.03) then links the staff's Telegram chatId.\n\nDependency: staffToken and storeId must be set (sections 00 and 04).",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/store-staff/me/telegram-token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "store-staff",
+                "me",
+                "telegram-token"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.environment.set('staffTelegramToken', data.token || '');",
+                  "pm.environment.set('staffTelegramLink', data.linkUrl || '');",
+                  "pm.test('Saved staffTelegramToken and link', function () {",
+                  "  pm.expect(pm.environment.get('staffTelegramToken')).to.be.a('string').and.not.empty;",
+                  "  pm.expect(pm.environment.get('staffTelegramLink')).to.include('t.me');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08.03 Simulate - Staff links Telegram account (/start webhook)",
+          "description": "Simulates the Telegram webhook payload Telegram sends when a staff member opens the deep link and starts the bot.\n\nWhat happens after this call:\n- Staff.telegramChatId = 100100100 (the fake chatId in the payload)\n- Staff.telegramLinkToken = null (consumed)\n- The bot attempts to send a confirmation DM (fails in dev without a real bot token, but the DB update succeeds)\n\nIn production Telegram sends this automatically — you do not call /telegram/webhook yourself.\n\nDependency: staffTelegramToken must be set from 08.02 (or 04.06).",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/telegram/webhook",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "telegram",
+                "webhook"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"update_id\": 987654321,\n  \"message\": {\n    \"message_id\": 1,\n    \"from\": {\n      \"id\": 100100100,\n      \"is_bot\": false,\n      \"first_name\": \"Test Staff\"\n    },\n    \"chat\": {\n      \"id\": 100100100,\n      \"type\": \"private\",\n      \"first_name\": \"Test Staff\"\n    },\n    \"date\": 1234567890,\n    \"text\": \"/start {{staffTelegramToken}}\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.environment.set('staffTelegramChatId', '100100100');"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', function () {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('Webhook acknowledged (ok: true)', function () {",
+                  "  pm.expect(res).to.have.property('ok', true);",
+                  "});",
+                  "pm.test('staffTelegramChatId saved', function () {",
+                  "  pm.expect(pm.environment.get('staffTelegramChatId')).to.eql('100100100');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08.04 Staff - list store conversations",
+          "description": "Staff sees all conversations for their store, ordered by most recent message (lastMessageAt desc).\n\nEach conversation item includes: id, customerId, storeId, mode, lastMessageAt, lastMessageBody, _count.messages, customer info.\n\nRequires CONVERSATION.VIEW permission (granted to SHOP_STAFF and SHOP_OWNER).",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/conversations/store?skip=0&take=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "conversations",
+                "store"
+              ],
+              "query": [
+                {
+                  "key": "skip",
+                  "value": "0"
+                },
+                {
+                  "key": "take",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.test('Response has items and total', function () {",
+                  "  pm.expect(data).to.have.property('items');",
+                  "  pm.expect(data).to.have.property('total');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08.05 Customer - get conversation detail with messages",
+          "description": "Returns the full conversation object including all embedded messages (ordered by createdAt asc).\n\nMessages in data.messages are created by the WebSocket send_message event. If the array is empty, send a message via WebSocket first:\n  1. Connect ws://localhost:8080 with Authorization: Bearer {{customerToken}}\n  2. Emit join_conversation: { conversationId }\n  3. Emit send_message: { conversationId, content: 'Xin chào, tôi cần tư vấn.' }\n\nAlso saves the first messageId for the mark-as-read test (08.07).",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/conversations/{{conversationId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "conversations",
+                "{{conversationId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.test('Conversation id matches', function () {",
+                  "  pm.expect(data.id).to.eql(pm.environment.get('conversationId'));",
+                  "});",
+                  "if (data.messages && data.messages.length > 0) {",
+                  "  pm.environment.set('messageId', data.messages[0].id);",
+                  "  pm.test('Messages present — saved first messageId', function () {",
+                  "    pm.expect(pm.environment.get('messageId')).to.be.a('string').and.not.empty;",
+                  "  });",
+                  "} else {",
+                  "  pm.test('No messages yet — send via WebSocket then re-run', function () {",
+                  "    pm.expect(res.success).to.be.true;",
+                  "  });",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08.06 Staff - get messages in conversation (paginated)",
+          "description": "Staff fetches the message history for a specific conversation, ordered by createdAt asc, with skip/take pagination.\n\nEach message item includes: id, conversationId, senderId, senderType (CUSTOMER/STAFF/BOT), content, isRead, readAt, createdAt, sender info.\n\nDependency: conversationId must be set from 05.13.",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/conversations/{{conversationId}}/messages?skip=0&take=50",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "conversations",
+                "{{conversationId}}",
+                "messages"
+              ],
+              "query": [
+                {
+                  "key": "skip",
+                  "value": "0"
+                },
+                {
+                  "key": "take",
+                  "value": "50"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('API data exists', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});",
+                  "const data = pm.response.json().data;",
+                  "pm.test('Response has items and total', function () {",
+                  "  pm.expect(data).to.have.property('items');",
+                  "  pm.expect(data).to.have.property('total');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08.07 Staff - mark message as read",
+          "description": "Marks a specific message as read (isRead: true, readAt: now).\n\nAuto-skipped if messageId is not set — run 08.05 after sending at least one WebSocket message to populate messageId.\n\nRequires MESSAGE.UPDATE permission (granted to SHOP_STAFF and SHOP_OWNER).",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{staffToken}}"
+              },
+              {
+                "key": "x-shop-id",
+                "value": "{{storeId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/conversations/{{conversationId}}/messages/{{messageId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "conversations",
+                "{{conversationId}}",
+                "messages",
+                "{{messageId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isRead\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.environment.get('messageId')) {",
+                  "  pm.execution.skipRequest();",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('Message marked as read', function () {",
+                  "  pm.expect(res.data).to.have.property('isRead', true);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08.08 Owner - unlink Telegram group from store (cleanup)",
+          "description": "Removes the Telegram group link from the store (sets Store.telegramGroupId = null).\n\nAfter this, new customer messages will fall back to the DM path:\n- The assigned staff member receives a Telegram DM from the bot\n- Staff replies in DM → bot relays back to the conversation\n\nRun this to clean up after testing the group topic path.",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ownerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/stores/{{storeId}}/telegram-group",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stores",
+                "{{storeId}}",
+                "telegram-group"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 2xx', function () {",
+                  "  pm.expect(pm.response.code).to.be.within(200, 299);",
+                  "});",
+                  "const res = pm.response.json();",
+                  "pm.test('API success=true', function () {",
+                  "  pm.expect(res).to.have.property('success', true);",
+                  "});",
+                  "pm.test('Telegram group unlinked', function () {",
+                  "  pm.expect(res).to.have.property('data');",
+                  "});"
                 ]
               }
             }

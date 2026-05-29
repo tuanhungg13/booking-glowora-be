@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(docker start glowora_mysql *)",
-      "Bash(npx prisma *)"
+      "Bash(npx prisma *)",
+      "Bash(npx tsc *)"
     ]
   }
 }

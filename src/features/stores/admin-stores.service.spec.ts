@@ -50,6 +50,9 @@ describe('AdminStoresService - Phase 2 approval flow', () => {
         skip: 5,
         take: 5,
         orderBy: { createdAt: 'desc' },
+        include: expect.objectContaining({
+          _count: { select: { services: true, reviews: true, staff: true, bookings: true } },
+        }),
       }),
     );
     expect(result).toEqual({

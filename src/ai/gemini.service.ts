@@ -4,13 +4,25 @@ import {
   GoogleGenerativeAI,
   Content,
 } from '@google/generative-ai';
+import { StoreStatus } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 
-export interface ShopContext {
+export interface PlatformContext {
+  categories: string;
+  categorySlugRef: string;
+  storeCount: number;
+  cityOverview: string;
+}
+
+export interface PlatformServiceSuggestion {
+  id: string;
+  name: string;
+  slug: string | null;
+  imageUrl: string | null;
+  avgRating: number;
+  storeId: string;
   storeName: string;
-  services: string;
-  combos: string;
-  workingHours: string;
+  variants: { name: string; price: number; duration: number }[];
 }
 
 export interface ChatMessage {
@@ -22,6 +34,7 @@ export interface ChatMessage {
 export class GeminiService {
   private readonly logger = new Logger(GeminiService.name);
   private genAI: GoogleGenerativeAI;
+  private readonly model: string;
 
   constructor(
     private readonly config: ConfigService,
@@ -29,17 +42,18 @@ export class GeminiService {
   ) {
     const apiKey = this.config.get<string>('GEMINI_API_KEY') ?? '';
     this.genAI = new GoogleGenerativeAI(apiKey);
+    this.model = this.config.get<string>('GEMINI_MODEL') ?? 'gemini-2.0-flash-lite';
   }
 
-  async chat(
+  async chatGlobal(
     history: ChatMessage[],
     userMessage: string,
-    shopContext: ShopContext,
-  ): Promise<{ reply: string; escalate: boolean }> {
+    ctx: PlatformContext,
+  ): Promise<{ reply: string; suggestedCategorySlugs: string[] }> {
     try {
       const model = this.genAI.getGenerativeModel({
-        model: 'gemini-1.5-flash',
-        systemInstruction: this.buildSystemPrompt(shopContext),
+        model: this.model,
+        systemInstruction: this.buildPlatformPrompt(ctx),
       });
 
       const geminiHistory: Content[] = history.map((m) => ({
@@ -51,79 +65,132 @@ export class GeminiService {
       const result = await chat.sendMessage(userMessage);
       const text = result.response.text();
 
-      const escalate = text.includes('[ESCALATE]');
-      const reply = text.replace('[ESCALATE]', '').trim();
+      const suggestMatch = text.match(/\[SUGGEST:([\w\-,]+)\]/);
+      const suggestedCategorySlugs = suggestMatch
+        ? suggestMatch[1].split(',').map((s) => s.trim()).filter(Boolean)
+        : [];
 
-      return { reply, escalate };
+      const reply = text.replace(/\[SUGGEST:[\w\-,]+\]/, '').trim();
+
+      return { reply, suggestedCategorySlugs };
     } catch (err) {
-      this.logger.error('Gemini chat error', err);
-      return {
-        reply:
-          'Xin lỗi, tôi đang gặp sự cố. Để được hỗ trợ tốt hơn, hãy để nhân viên của chúng tôi tư vấn cho bạn.',
-        escalate: true,
-      };
+      this.logger.error('Gemini platform chat error', err);
+      return { reply: 'Xin lỗi, tôi đang gặp sự cố kỹ thuật. Vui lòng thử lại sau.', suggestedCategorySlugs: [] };
     }
   }
 
-  async buildShopContext(storeId: string): Promise<ShopContext> {
-    const [store, services, combos, workingHours] = await Promise.all([
-      this.prisma.store.findUnique({ where: { id: storeId }, select: { name: true } }),
-      this.prisma.service.findMany({
-        where: { shopId: storeId, status: 'ACTIVE' },
-        select: { name: true, description: true, variants: { where: { status: 'ACTIVE' }, select: { name: true, price: true, duration: true }, orderBy: { sortOrder: 'asc' }, take: 3 } },
+  async fetchServicesByCategories(categorySlugs: string[]): Promise<PlatformServiceSuggestion[]> {
+    if (!categorySlugs.length) return [];
+
+    const services = await this.prisma.service.findMany({
+      where: {
+        status: 'ACTIVE',
+        category: { slug: { in: categorySlugs } },
+        store: { status: StoreStatus.ACTIVE },
+      },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        imageUrl: true,
+        avgRating: true,
+        shopId: true,
+        store: { select: { name: true } },
+        variants: {
+          where: { status: 'ACTIVE' },
+          select: { name: true, price: true, duration: true },
+          orderBy: { sortOrder: 'asc' },
+          take: 2,
+        },
+      },
+      orderBy: { avgRating: 'desc' },
+      take: 5,
+    });
+
+    return services.map((s) => ({
+      id: s.id,
+      name: s.name,
+      slug: s.slug,
+      imageUrl: s.imageUrl,
+      avgRating: Number(s.avgRating),
+      storeId: s.shopId,
+      storeName: s.store.name,
+      variants: s.variants.map((v) => ({
+        name: v.name,
+        price: Number(v.price),
+        duration: v.duration,
+      })),
+    }));
+  }
+
+  async buildPlatformContext(): Promise<PlatformContext> {
+    const [categories, storesByProvince] = await Promise.all([
+      this.prisma.serviceCategory.findMany({
+        where: { shopId: null, parentId: null },
+        select: { name: true, slug: true },
         take: 20,
       }),
-      this.prisma.combo.findMany({
-        where: { shopId: storeId, status: 'ACTIVE' },
-        select: { name: true, price: true, description: true },
-        take: 10,
-      }),
-      this.prisma.workingHour.findMany({
-        where: { storeId },
-        select: { dayOfWeek: true, openTime: true, closeTime: true, isClosed: true },
+      this.prisma.store.groupBy({
+        by: ['provinceId'],
+        where: { status: StoreStatus.ACTIVE },
+        _count: { _all: true },
       }),
     ]);
 
-    const DAY_VI: Record<string, string> = {
-      MONDAY: 'Thứ 2', TUESDAY: 'Thứ 3', WEDNESDAY: 'Thứ 4',
-      THURSDAY: 'Thứ 5', FRIDAY: 'Thứ 6', SATURDAY: 'Thứ 7', SUNDAY: 'CN',
-    };
+    const provinceIds = storesByProvince
+      .map((s) => s.provinceId)
+      .filter((id): id is number => id !== null);
 
-    const serviceList = services
-      .map((s) => {
-        const variantStr = s.variants.map((v) => `${v.name}: ${v.duration}p/${Number(v.price).toLocaleString('vi-VN')}đ`).join(', ');
-        return `${s.name} [${variantStr}]`;
-      })
-      .join(', ') || 'Chưa có thông tin';
+    const provinces = provinceIds.length
+      ? await this.prisma.province.findMany({
+          where: { id: { in: provinceIds } },
+          select: { id: true, name: true },
+        })
+      : [];
 
-    const comboList = combos
-      .map((c) => `${c.name} (${Number(c.price).toLocaleString('vi-VN')}đ)`)
-      .join(', ') || 'Chưa có combo';
+    const provinceMap = new Map(provinces.map((p) => [p.id, p.name]));
+    const storeCount = storesByProvince.reduce((sum, s) => sum + s._count._all, 0);
 
-    const hourList = workingHours
-      .filter((h) => !h.isClosed)
-      .map((h) => `${DAY_VI[h.dayOfWeek] ?? h.dayOfWeek}: ${h.openTime}-${h.closeTime}`)
-      .join(', ') || 'Liên hệ để biết lịch';
+    const cityOverview = storesByProvince
+      .sort((a, b) => b._count._all - a._count._all)
+      .slice(0, 8)
+      .map((s) => `${provinceMap.get(s.provinceId ?? 0) ?? 'Khác'}: ${s._count._all} cửa hàng`)
+      .join(', ') || 'Đang cập nhật';
 
     return {
-      storeName: store?.name ?? 'Spa',
-      services: serviceList,
-      combos: comboList,
-      workingHours: hourList,
+      categories: categories.map((c) => c.name).join(', ') || 'Đang cập nhật',
+      categorySlugRef: categories
+        .filter((c) => c.slug)
+        .map((c) => `${c.slug}=${c.name}`)
+        .join(', '),
+      storeCount,
+      cityOverview,
     };
   }
 
-  private buildSystemPrompt(ctx: ShopContext): string {
-    return `Bạn là trợ lý AI của ${ctx.storeName}. Nhiệm vụ của bạn là tư vấn dịch vụ và hỗ trợ khách hàng đặt lịch.
+  private buildPlatformPrompt(ctx: PlatformContext): string {
+    return `Bạn là trợ lý AI của Glowora — nền tảng đặt lịch dịch vụ làm đẹp trực tuyến.
 
-Dịch vụ hiện có: ${ctx.services}.
-Combo ưu đãi: ${ctx.combos}.
-Giờ mở cửa: ${ctx.workingHours}.
+Thông tin nền tảng:
+- Tổng số cửa hàng đang hoạt động: ${ctx.storeCount}
+- Danh mục dịch vụ: ${ctx.categories}
+- Phân bố cửa hàng theo thành phố: ${ctx.cityOverview}
+
+Nhiệm vụ của bạn:
+1. Giúp khách hàng tìm kiếm dịch vụ và cửa hàng phù hợp với nhu cầu.
+2. Tư vấn tổng quan về các dịch vụ làm đẹp phổ biến.
+3. Hướng dẫn khách hàng sử dụng nền tảng (đặt lịch, thanh toán, đánh giá).
 
 Quy tắc bắt buộc:
 1. Trả lời ngắn gọn, thân thiện bằng tiếng Việt.
-2. Gợi ý dịch vụ phù hợp khi khách mô tả nhu cầu.
-3. Nếu khách hỏi về vấn đề y tế/da liễu phức tạp, cần tư vấn chuyên sâu, hoặc yêu cầu gặp nhân viên thật → thêm [ESCALATE] vào CUỐI câu trả lời.
-4. Không bịa đặt thông tin về giá cả hay dịch vụ không có trong danh sách.`;
+2. Khi khách mô tả vấn đề về da/tóc/sắc đẹp, KHÔNG gợi ý dịch vụ ngay — hãy hỏi thêm 1-2 câu để hiểu rõ nhu cầu. Chỉ gợi ý dịch vụ sau khi đã có đủ thông tin hoặc khách hỏi thẳng.
+3. Nếu khách hỏi chi tiết về một cửa hàng cụ thể → hướng dẫn họ vào trang của cửa hàng đó để xem thông tin và chat trực tiếp với nhân viên.
+4. Không bịa thông tin không có trong dữ liệu.
+5. Không tư vấn y tế chuyên sâu.
+6. Chỉ thêm tag [SUGGEST:slug1,slug2] ở DÒNG CUỐI khi đã tư vấn đủ và gợi ý dịch vụ cụ thể. KHÔNG thêm khi mới nhận mô tả vấn đề, chào hỏi, hay hỏi thông tin chung. Tối đa 3 danh mục.
+
+Bảng mã slug (CHỈ dùng trong tag [SUGGEST:...], KHÔNG hiển thị ra câu trả lời):
+${ctx.categorySlugRef}`;
   }
+
 }

@@ -23,8 +23,11 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "db:seed": "ts-node -r tsconfig-paths/register prisma/seed.ts",
     "db:seed:demo": "prisma db execute --file prisma/seed_demo_stores_services.sql",
+    "db:seed:200:generate": "ts-node -r tsconfig-paths/register prisma/generate_seed_200.ts",
+    "db:seed:200": "prisma db execute --file prisma/seed_200_stores.sql",
     "db:migrate": "prisma migrate dev",
-    "db:reset": "prisma migrate reset --force && pnpm run db:seed"
+    "db:reset": "prisma migrate reset --force && pnpm run db:seed",
+    "db:seed_location": "prisma db execute --file prisma/seed_provinces_wards.sql"
   },
   "prisma": {
     "seed": "ts-node -r tsconfig-paths/register prisma/seed.ts"

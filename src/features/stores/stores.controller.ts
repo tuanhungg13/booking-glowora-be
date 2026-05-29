@@ -25,6 +25,7 @@ import { StoreFilterDto } from './dto/store-filter.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { UpdateWorkingHoursDto } from './dto/update-working-hours.dto';
 import { StoresService } from './stores.service';
+import { TelegramService } from '../../telegram/telegram.service';
 
 const imageStorage = (folder: string) =>
   diskStorage({
@@ -38,7 +39,10 @@ const imageStorage = (folder: string) =>
 @ApiTags('stores')
 @Controller('stores')
 export class StoresController {
-  constructor(private readonly storesService: StoresService) {}
+  constructor(
+    private readonly storesService: StoresService,
+    private readonly telegramService: TelegramService,
+  ) {}
 
   @ApiOperation({ summary: 'Public listing for active stores' })
   @Public()
@@ -116,6 +120,20 @@ export class StoresController {
   ) {
     if (!file) throw new BadRequestException('No file uploaded');
     return this.storesService.uploadBanner(id, user.id, `/uploads/banners/${file.filename}`);
+  }
+
+  @ApiOperation({ summary: 'Generate a one-time Telegram group setup link (valid 10 min)' })
+  @ApiBearerAuth()
+  @RequirePermissions(Permissions.STORE.UPDATE)
+  @Post(':id/telegram/setup-link')
+  async generateTelegramSetupLink(
+    @Param('id') id: string,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    await this.storesService.checkOwnership(id, user.id);
+    const url = await this.telegramService.generateStoreSetupUrl(id);
+    if (!url) throw new BadRequestException('TELEGRAM_BOT_USERNAME chưa được cấu hình');
+    return { url };
   }
 
   @ApiOperation({ summary: 'Link a Telegram supergroup (forum) to this store' })

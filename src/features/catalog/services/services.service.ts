@@ -12,7 +12,7 @@ const serviceInclude = {
   category: true,
   variants: { where: { status: ServiceStatus.ACTIVE }, orderBy: { sortOrder: 'asc' as const } },
   staffs: { include: { staff: { include: { user: { select: { id: true, fullName: true, email: true, avatarUrl: true } } } } } },
-  store: { select: { id: true, name: true, slug: true, address: true, city: true, logoUrl: true } },
+  store: { select: { id: true, name: true, slug: true, address: true, district: true, logoUrl: true } },
 } as const;
 
 function slugify(value: string): string {

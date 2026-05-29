@@ -148,15 +148,16 @@ export class StoreStaffService {
     });
 
     await this.permissionCache.invalidateUser(userId);
-    return staff;
+    return this.mapStaff(staff);
   }
 
   async findAll(storeId: string) {
-    return this.prisma.staff.findMany({
+    const list = await this.prisma.staff.findMany({
       where: { storeId },
       orderBy: { createdAt: 'asc' },
       include: staffInclude,
     });
+    return list.map((s) => this.mapStaff(s));
   }
 
   async findOne(storeId: string, staffId: string) {
@@ -165,17 +166,19 @@ export class StoreStaffService {
       include: staffInclude,
     });
     if (!staff) throw new NotFoundException('Nhân viên không tồn tại trong cơ sở này');
-    return staff;
+    return this.mapStaff(staff);
   }
 
   async update(storeId: string, ownerId: string, staffId: string, dto: UpdateStaffDto) {
     await this.storesService.checkOwnership(storeId, ownerId);
     await this.findOne(storeId, staffId);
-    return this.prisma.staff.update({
-      where: { id: staffId },
-      data: dto,
-      include: staffInclude,
-    });
+    return this.mapStaff(
+      await this.prisma.staff.update({
+        where: { id: staffId },
+        data: dto,
+        include: staffInclude,
+      }),
+    );
   }
 
   async remove(storeId: string, ownerId: string, staffId: string) {
@@ -196,6 +199,13 @@ export class StoreStaffService {
     return { removed: true };
   }
 
+  private mapStaff<T extends { telegramChatId: string | null; telegramLinkToken?: string | null }>(
+    staff: T,
+  ): Omit<T, 'telegramChatId' | 'telegramLinkToken'> & { telegramLinked: boolean } {
+    const { telegramChatId, telegramLinkToken: _token, ...rest } = staff as any;
+    return { ...rest, telegramLinked: telegramChatId !== null };
+  }
+
   async generateTelegramToken(storeId: string, userId: string) {
     const staff = await this.prisma.staff.findFirst({
       where: { userId, storeId, status: StaffStatus.ACTIVE },
@@ -208,7 +218,7 @@ export class StoreStaffService {
       data: { telegramLinkToken: token },
     });
 
-    const botName = process.env.TELEGRAM_BOT_NAME ?? 'GloworaBot';
+    const botName = process.env.TELEGRAM_BOT_USERNAME ?? 'GloworaBot';
     return { linkUrl: `https://t.me/${botName}?start=${token}`, token };
   }
 }
