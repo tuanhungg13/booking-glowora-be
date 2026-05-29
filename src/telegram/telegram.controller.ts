@@ -26,15 +26,26 @@ export class TelegramController {
   @Post('webhook')
   async handleWebhook(@Body() update: any) {
     const message = update?.message;
+    if (message?.chat) {
+      this.logger.log(
+        `[webhook] chat.id=${message.chat.id} chat.type=${message.chat.type} chat.title="${message.chat.title ?? 'DM'}"`,
+      );
+    }
     if (!message?.text) return { ok: true };
 
     const text: string = message.text;
     const threadId: number | undefined = message.message_thread_id;
 
-    // /start <token> — link staff Telegram account (chỉ xảy ra trong DM)
+    // /start <token> — link staff (DM) hoặc setup group store (supergroup)
     if (text.startsWith('/start ')) {
       const token = text.split(' ')[1]?.trim();
-      if (token) await this.handleLinkToken(String(message.chat.id), token);
+      if (token) {
+        if (message.chat.type === 'private') {
+          await this.handleLinkToken(String(message.chat.id), token);
+        } else {
+          await this.handleGroupSetupToken(String(message.chat.id), token);
+        }
+      }
       return { ok: true };
     }
 
@@ -53,15 +64,25 @@ export class TelegramController {
 
   private async handleGroupTopicReply(message: any, threadId: number, text: string) {
     const groupId = String(message.chat.id);
-    const senderChatId = String(message.from.id); // trong group, from.id == chatId của DM
+    const senderChatId = String(message.from.id);
+
+    this.logger.log(`[handleGroupTopicReply] groupId=${groupId} threadId=${threadId} senderChatId=${senderChatId}`);
 
     const conversationId = await this.redis.get(`telegram:topic:${groupId}:${threadId}`);
-    if (!conversationId) return;
+    if (!conversationId) {
+      this.logger.warn(`[handleGroupTopicReply] No Redis key for telegram:topic:${groupId}:${threadId} — message dropped`);
+      return;
+    }
+
+    this.logger.log(`[handleGroupTopicReply] conversationId=${conversationId}`);
 
     try {
       const msg = await this.conversations.handleStaffReply(conversationId, senderChatId, text);
       if (msg) {
         this.chatGateway.emitToConversation(conversationId, 'message_received', msg);
+        this.logger.log(`[handleGroupTopicReply] ✅ Message emitted to WebSocket room conv:${conversationId}`);
+      } else {
+        this.logger.warn(`[handleGroupTopicReply] handleStaffReply returned null — message not emitted`);
       }
     } catch (err) {
       this.logger.error('Failed to handle group topic reply', err);
@@ -72,8 +93,11 @@ export class TelegramController {
 
   private async handleDmReply(message: any, text: string) {
     const chatId = String(message.chat.id);
+    this.logger.log(`[handleDmReply] chatId=${chatId}`);
+
     const conversationId = await this.redis.get(`telegram:active:${chatId}`);
     if (!conversationId) {
+      this.logger.warn(`[handleDmReply] No active conversation for chatId=${chatId}`);
       await this.telegram.sendConfirmation(
         chatId,
         '⚠️ Không có cuộc hội thoại nào đang hoạt động. Vui lòng chờ khách hàng nhắn tin trước.',
@@ -81,14 +105,44 @@ export class TelegramController {
       return;
     }
 
+    this.logger.log(`[handleDmReply] conversationId=${conversationId}`);
+
     try {
       const msg = await this.conversations.handleStaffReply(conversationId, chatId, text);
       if (msg) {
         this.chatGateway.emitToConversation(conversationId, 'message_received', msg);
+        this.logger.log(`[handleDmReply] ✅ Message emitted to WebSocket room conv:${conversationId}`);
+      } else {
+        this.logger.warn(`[handleDmReply] handleStaffReply returned null — message not emitted`);
       }
     } catch (err) {
       this.logger.error('Failed to handle DM reply', err);
     }
+  }
+
+  // ─── Group setup token ─────────────────────────────────────────────────────
+
+  private async handleGroupSetupToken(groupId: string, token: string) {
+    const storeId = await this.redis.get(`telegram:store-setup:${token}`);
+    if (!storeId) {
+      await this.telegram.sendConfirmation(groupId, '❌ Link không hợp lệ hoặc đã hết hạn (10 phút). Hãy tạo link mới từ ứng dụng.');
+      return;
+    }
+
+    await this.prisma.store.update({
+      where: { id: storeId },
+      data: { telegramGroupId: groupId },
+    });
+    await this.redis.del(`telegram:store-setup:${token}`);
+
+    this.logger.log(`[handleGroupSetupToken] Linked group ${groupId} → store ${storeId}`);
+
+    await this.telegram.sendConfirmation(
+      groupId,
+      '✅ Nhóm đã kết nối với Glowora!\n\n' +
+      '⚠️ Bước cuối: cấp quyền Admin cho bot để nhận tin nhắn từ khách hàng:\n' +
+      'Thông tin nhóm → Quản trị viên → Thêm bot → tick ✅ Quản lý chủ đề',
+    );
   }
 
   // ─── Link token ────────────────────────────────────────────────────────────

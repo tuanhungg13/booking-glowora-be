@@ -2,13 +2,13 @@ import {
   ForbiddenException,
   Inject,
   Injectable,
+  Logger,
   NotFoundException,
   forwardRef,
 } from '@nestjs/common';
-import { ConversationMode, SenderType } from '@prisma/client';
+import { SenderType } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { RedisService } from '../../../redis/redis.service';
-import { GeminiService } from '../../../ai/gemini.service';
 import { TelegramService } from '../../../telegram/telegram.service';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
@@ -16,7 +16,6 @@ import { UpdateConversationDto } from './dto/update-conversation.dto';
 const TELEGRAM_ACTIVE_TTL = 7200; // 2 hours
 const TOPIC_KEY = (groupId: string, topicId: number) =>
   `telegram:topic:${groupId}:${topicId}`;
-const HISTORY_LIMIT = 10;
 
 const conversationInclude = {
   customer: { select: { id: true, fullName: true, email: true, avatarUrl: true } },
@@ -26,10 +25,11 @@ const conversationInclude = {
 
 @Injectable()
 export class ConversationsService {
+  private readonly logger = new Logger(ConversationsService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly redis: RedisService,
-    private readonly gemini: GeminiService,
     @Inject(forwardRef(() => TelegramService))
     private readonly telegram: TelegramService,
   ) {}
@@ -38,7 +38,7 @@ export class ConversationsService {
     return this.prisma.conversation.upsert({
       where: { customerId_storeId: { customerId: dto.customerId, storeId: dto.storeId } },
       update: {},
-      create: { customerId: dto.customerId, storeId: dto.storeId },
+      create: { customerId: dto.customerId, storeId: dto.storeId, mode: 'HUMAN' },
       include: conversationInclude,
     });
   }
@@ -53,7 +53,7 @@ export class ConversationsService {
         where,
         skip: params?.skip,
         take: params?.take ?? 20,
-        orderBy: { updatedAt: 'desc' },
+        orderBy: { lastMessageAt: { sort: 'desc', nulls: 'last' } },
         include: conversationInclude,
       }),
       this.prisma.conversation.count({ where }),
@@ -102,6 +102,8 @@ export class ConversationsService {
     content: string,
     emitFn: (event: string, data: unknown) => void,
   ) {
+    this.logger.log(`[processMessage] conversationId=${conversationId} senderId=${senderId}`);
+
     const conversation = await this.prisma.conversation.findUnique({
       where: { id: conversationId },
       include: {
@@ -112,6 +114,12 @@ export class ConversationsService {
     });
     if (!conversation) throw new NotFoundException('Conversation not found');
     if (conversation.customerId !== senderId) throw new ForbiddenException();
+
+    this.logger.log(
+      `[processMessage] store.telegramGroupId=${conversation.store.telegramGroupId ?? 'NULL'} ` +
+      `assignedStaff.telegramChatId=${conversation.assignedStaff?.telegramChatId ?? 'NULL'} ` +
+      `telegramTopicId=${conversation.telegramTopicId ?? 'NULL'}`,
+    );
 
     const customerMsg = await this.prisma.$transaction(async (tx) => {
       const msg = await tx.message.create({
@@ -125,31 +133,41 @@ export class ConversationsService {
       return msg;
     });
 
-    emitFn('message_received', customerMsg);
+    this.logger.log(`[processMessage] Message saved to DB, messageId=${customerMsg.id}`);
 
-    if (conversation.mode === ConversationMode.BOT) {
-      await this.handleBotReply(conversation, content, emitFn);
-    } else {
-      await this.forwardToStaff(conversation, content);
-    }
+    emitFn('message_received', customerMsg);
+    this.logger.log(`[processMessage] WebSocket broadcast sent`);
+
+    await this.forwardToStaff(conversation, content);
   }
 
   async handleStaffReply(conversationId: string, telegramChatId: string, content: string) {
+    this.logger.log(`[handleStaffReply] conversationId=${conversationId} senderChatId=${telegramChatId}`);
+
     const staff = await this.prisma.staff.findFirst({
       where: { telegramChatId },
       select: { userId: true },
     });
-    if (!staff) return null;
+
+    if (!staff) {
+      this.logger.warn(`[handleStaffReply] No linked staff found for chatId=${telegramChatId} — message ignored`);
+      return null;
+    }
+    const senderId = staff.userId;
+    this.logger.log(`[handleStaffReply] Sender = linked staff userId=${senderId}`);
 
     return this.prisma.$transaction(async (tx) => {
       const msg = await tx.message.create({
         data: {
           conversationId,
-          senderId: staff.userId,
+          senderId,
           senderType: SenderType.STAFF,
           content,
         },
-        include: { sender: { select: { id: true, fullName: true, avatarUrl: true } } },
+        include: {
+          sender: { select: { id: true, fullName: true, avatarUrl: true } },
+          conversation: { select: { store: { select: { id: true, name: true, logoUrl: true } } } },
+        },
       });
       await tx.conversation.update({
         where: { id: conversationId },
@@ -159,86 +177,46 @@ export class ConversationsService {
     });
   }
 
-  async escalateToHuman(conversationId: string) {
+  async processStaffMessage(
+    conversationId: string,
+    staffUserId: string,
+    content: string,
+    emitFn: (event: string, data: unknown) => void,
+  ) {
     const conversation = await this.prisma.conversation.findUnique({
       where: { id: conversationId },
-      include: {
-        customer: { select: { id: true, fullName: true } },
-        store: { select: { id: true, telegramGroupId: true } },
-        messages: {
-          orderBy: { createdAt: 'desc' },
-          take: 3,
-          select: { content: true, senderType: true },
-        },
-      },
+      select: { id: true, storeId: true },
     });
-    if (!conversation || conversation.mode === ConversationMode.HUMAN) return null;
+    if (!conversation) throw new NotFoundException('Conversation not found');
 
-    const lastMessages = [...conversation.messages].reverse();
-    const groupId = conversation.store.telegramGroupId;
+    const staff = await this.prisma.staff.findFirst({
+      where: { userId: staffUserId, storeId: conversation.storeId, status: 'ACTIVE' },
+      select: { id: true },
+    });
+    if (!staff) throw new ForbiddenException('Not a staff member of this store');
 
-    if (groupId) {
-      // Group mode: tạo topic mới cho conversation này
-      const topicName = `${conversation.customer.fullName} — ${new Date().toLocaleDateString('vi-VN')}`;
-      const topicId = await this.telegram.createGroupTopic(groupId, topicName);
-
-      const updated = await this.prisma.conversation.update({
-        where: { id: conversationId },
+    const msg = await this.prisma.$transaction(async (tx) => {
+      const m = await tx.message.create({
         data: {
-          mode: ConversationMode.HUMAN,
-          telegramTopicId: topicId,
+          conversationId,
+          senderId: staffUserId,
+          senderType: SenderType.STAFF,
+          content,
+        },
+        include: {
+          sender: { select: { id: true, fullName: true, avatarUrl: true } },
+          conversation: { select: { store: { select: { id: true, name: true, logoUrl: true } } } },
         },
       });
-
-      if (topicId) {
-        const preview = lastMessages
-          .map((m) => `${m.senderType === 'BOT' ? '🤖' : '👤'} ${m.content}`)
-          .join('\n');
-        const alertText =
-          `🔔 *Khách hàng cần tư vấn trực tiếp*\n\n` +
-          `👤 Khách: *${conversation.customer.fullName}*\n\n` +
-          (preview ? `📋 Lịch sử:\n${preview}\n\n` : '') +
-          `💬 Reply trong topic này để trả lời khách.`;
-        await this.telegram.sendToGroupTopic(groupId, topicId, alertText);
-        await this.redis.set(TOPIC_KEY(groupId, topicId), conversationId, TELEGRAM_ACTIVE_TTL);
-      }
-
-      return updated;
-    }
-
-    // Fallback: DM tới staff cá nhân
-    const ownerStaff = await this.prisma.staff.findFirst({
-      where: { storeId: conversation.store.id, status: 'ACTIVE', telegramChatId: { not: null } },
-      select: { id: true, telegramChatId: true },
+      await tx.conversation.update({
+        where: { id: conversationId },
+        data: { lastMessageAt: m.createdAt, lastMessageBody: content.slice(0, 200) },
+      });
+      return m;
     });
 
-    const updated = await this.prisma.conversation.update({
-      where: { id: conversationId },
-      data: { mode: ConversationMode.HUMAN, assignedStaffId: ownerStaff?.id ?? null },
-    });
-
-    if (ownerStaff?.telegramChatId) {
-      await this.telegram.sendEscalationAlert(
-        ownerStaff.telegramChatId,
-        conversation.customer.fullName,
-        lastMessages,
-        conversationId,
-      );
-      await this.redis.set(
-        `telegram:active:${ownerStaff.telegramChatId}`,
-        conversationId,
-        TELEGRAM_ACTIVE_TTL,
-      );
-    }
-
-    return updated;
-  }
-
-  async setBotMode(conversationId: string) {
-    return this.prisma.conversation.update({
-      where: { id: conversationId },
-      data: { mode: ConversationMode.BOT, assignedStaffId: null },
-    });
+    emitFn('message_received', msg);
+    return msg;
   }
 
   // ─── Private helpers ───────────────────────────────────────────────────────
@@ -253,68 +231,66 @@ export class ConversationsService {
     },
     content: string,
   ) {
+    this.logger.log(`[forwardToStaff] conversationId=${conversation.id} telegramEnabled=${this.telegram.isEnabled}`);
+
     const groupId = conversation.store.telegramGroupId;
-    const topicId = conversation.telegramTopicId;
 
-    if (groupId && topicId) {
-      const text = `💬 *${conversation.customer.fullName}*:\n${content}`;
-      await this.telegram.sendToGroupTopic(groupId, topicId, text);
-    } else {
-      const chatId = conversation.assignedStaff?.telegramChatId;
-      if (chatId) {
-        await this.telegram.sendNewMessage(chatId, conversation.customer.fullName, content);
+    if (groupId) {
+      this.logger.log(`[forwardToStaff] PATH=GROUP_TOPIC groupId=${groupId}`);
+
+      let topicId = conversation.telegramTopicId ?? null;
+      this.logger.log(`[forwardToStaff] existing telegramTopicId=${topicId ?? 'NULL (will create new)'}`);
+
+      if (!topicId) {
+        const topicName = `${conversation.customer.fullName} — ${new Date().toLocaleDateString('vi-VN')}`;
+        this.logger.log(`[forwardToStaff] Creating new topic: "${topicName}"`);
+        topicId = await this.telegram.createGroupTopic(groupId, topicName);
+        this.logger.log(`[forwardToStaff] createGroupTopic result: topicId=${topicId ?? 'NULL (FAILED)'}`);
+
+        if (topicId) {
+          await this.prisma.conversation.update({
+            where: { id: conversation.id },
+            data: { telegramTopicId: topicId },
+          });
+          await this.redis.set(TOPIC_KEY(groupId, topicId), conversation.id, TELEGRAM_ACTIVE_TTL);
+          this.logger.log(`[forwardToStaff] Saved topicId=${topicId} to DB and Redis`);
+        } else {
+          this.logger.warn(
+            `[forwardToStaff] ❌ Topic creation FAILED — message will NOT be forwarded to Telegram. ` +
+            `Check: (1) bot is admin in group ${groupId}, (2) group has Topics/Forum enabled, ` +
+            `(3) groupId format is correct (should be -100xxxxxxxxxx).`,
+          );
+        }
       }
+
+      if (topicId) {
+        // Refresh TTL mỗi lần có tin nhắn mới, tránh key hết hạn giữa chừng
+        await this.redis.set(TOPIC_KEY(groupId, topicId), conversation.id, TELEGRAM_ACTIVE_TTL);
+        const text = `💬 *${conversation.customer.fullName}*:\n${content}`;
+        this.logger.log(`[forwardToStaff] Sending to group topic groupId=${groupId} topicId=${topicId}`);
+        await this.telegram.sendToGroupTopic(groupId, topicId, text);
+        this.logger.log(`[forwardToStaff] ✅ Message forwarded to Telegram group topic`);
+      } else {
+        this.logger.warn(`[forwardToStaff] ❌ No topicId available — Telegram forwarding skipped`);
+      }
+      return;
+    }
+
+    // Fallback: DM nếu store chưa setup group
+    this.logger.log(`[forwardToStaff] PATH=DM_FALLBACK (store has no telegramGroupId)`);
+    const chatId = conversation.assignedStaff?.telegramChatId;
+    if (chatId) {
+      this.logger.log(`[forwardToStaff] Sending DM to assignedStaff chatId=${chatId}`);
+      // Set key để handleDmReply biết conversationId khi staff reply
+      await this.redis.set(`telegram:active:${chatId}`, conversation.id, TELEGRAM_ACTIVE_TTL);
+      await this.telegram.sendNewMessage(chatId, conversation.customer.fullName, content);
+      this.logger.log(`[forwardToStaff] ✅ DM sent to staff`);
+    } else {
+      this.logger.warn(
+        `[forwardToStaff] ❌ DM_FALLBACK skipped — assignedStaff=${conversation.assignedStaff ? 'exists but telegramChatId=NULL' : 'NULL (no assigned staff)'}. ` +
+        `Message saved to DB but NOT forwarded to Telegram.`,
+      );
     }
   }
 
-  private async handleBotReply(
-    conversation: { id: string; storeId: string; customerId: string },
-    userMessage: string,
-    emitFn: (event: string, data: unknown) => void,
-  ) {
-    const [shopContext, recentMessages] = await Promise.all([
-      this.gemini.buildShopContext(conversation.storeId),
-      this.prisma.message.findMany({
-        where: { conversationId: conversation.id },
-        orderBy: { createdAt: 'desc' },
-        take: HISTORY_LIMIT,
-        select: { content: true, senderType: true },
-      }),
-    ]);
-
-    const history = [...recentMessages]
-      .reverse()
-      .slice(0, -1)
-      .map((m) => ({
-        role: m.senderType === SenderType.CUSTOMER ? ('user' as const) : ('model' as const),
-        content: m.content,
-      }));
-
-    const { reply, escalate } = await this.gemini.chat(history, userMessage, shopContext);
-
-    const botMsg = await this.prisma.$transaction(async (tx) => {
-      const msg = await tx.message.create({
-        data: {
-          conversationId: conversation.id,
-          // bot messages use customerId as senderId (valid FK, senderType=BOT distinguishes them)
-          senderId: conversation.customerId,
-          senderType: SenderType.BOT,
-          content: reply,
-        },
-        include: { sender: { select: { id: true, fullName: true, avatarUrl: true } } },
-      });
-      await tx.conversation.update({
-        where: { id: conversation.id },
-        data: { lastMessageAt: msg.createdAt, lastMessageBody: reply.slice(0, 200) },
-      });
-      return msg;
-    });
-
-    emitFn('message_received', botMsg);
-
-    if (escalate) {
-      await this.escalateToHuman(conversation.id);
-      emitFn('mode_changed', { conversationId: conversation.id, mode: ConversationMode.HUMAN });
-    }
-  }
 }

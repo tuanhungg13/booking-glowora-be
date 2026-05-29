@@ -1,12 +1,11 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import { ConversationMode, SenderType } from '@prisma/client';
+import { SenderType } from '@prisma/client';
 import { ConversationsService } from './conversations.service';
 
-describe('ConversationsService — Phase 6', () => {
+describe('ConversationsService', () => {
   let service: ConversationsService;
   let prisma: any;
   let redis: any;
-  let gemini: any;
   let telegram: any;
   let tx: any;
 
@@ -21,8 +20,9 @@ describe('ConversationsService — Phase 6', () => {
     id: conversationId,
     customerId,
     storeId,
-    mode: ConversationMode.BOT,
+    mode: 'HUMAN',
     assignedStaffId: null,
+    telegramTopicId: null,
     lastMessageAt: null,
     lastMessageBody: null,
     createdAt: new Date(),
@@ -37,6 +37,7 @@ describe('ConversationsService — Phase 6', () => {
     content: 'Xin chào',
     isRead: false,
     createdAt: new Date(),
+    sender: { id: customerId, fullName: 'Test User', avatarUrl: null },
   };
 
   beforeEach(() => {
@@ -52,8 +53,7 @@ describe('ConversationsService — Phase 6', () => {
           ...baseConversation,
           customer: { id: customerId, fullName: 'Test User' },
           assignedStaff: null,
-          messages: [],
-          store: { id: storeId },
+          store: { telegramGroupId: null },
         }),
         findMany: jest.fn().mockResolvedValue([baseConversation]),
         count: jest.fn().mockResolvedValue(1),
@@ -72,23 +72,14 @@ describe('ConversationsService — Phase 6', () => {
       get: jest.fn().mockResolvedValue(null),
     };
 
-    gemini = {
-      buildShopContext: jest.fn().mockResolvedValue({
-        storeName: 'Glowora Test',
-        services: 'Massage',
-        combos: '',
-        workingHours: 'Thứ 2-6: 08:00-20:00',
-      }),
-      chat: jest.fn().mockResolvedValue({ reply: 'Xin chào! Tôi có thể giúp gì?', escalate: false }),
-    };
-
     telegram = {
-      sendEscalationAlert: jest.fn().mockResolvedValue(undefined),
+      createGroupTopic: jest.fn().mockResolvedValue(42),
+      sendToGroupTopic: jest.fn().mockResolvedValue(undefined),
       sendNewMessage: jest.fn().mockResolvedValue(undefined),
       isEnabled: true,
     };
 
-    service = new ConversationsService(prisma, redis, gemini, telegram);
+    service = new ConversationsService(prisma, redis, telegram);
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -96,13 +87,13 @@ describe('ConversationsService — Phase 6', () => {
   // ─── create ───────────────────────────────────────────────────────────────
 
   describe('create', () => {
-    it('upserts conversation (findOrCreate by customerId+storeId)', async () => {
+    it('upserts conversation with HUMAN mode by default', async () => {
       await service.create({ customerId, storeId });
 
       expect(prisma.conversation.upsert).toHaveBeenCalledWith(
         expect.objectContaining({
           where: { customerId_storeId: { customerId, storeId } },
-          create: { customerId, storeId },
+          create: expect.objectContaining({ customerId, storeId, mode: 'HUMAN' }),
         }),
       );
     });
@@ -231,120 +222,54 @@ describe('ConversationsService — Phase 6', () => {
       expect(emitFn).toHaveBeenCalledWith('message_received', expect.anything());
     });
 
-    it('calls GeminiService.chat when conversation mode is BOT', async () => {
-      await service.processMessage(conversationId, customerId, 'Giá massage?', emitFn);
-
-      expect(gemini.chat).toHaveBeenCalled();
-    });
-
-    it('does not call Gemini when conversation mode is HUMAN', async () => {
+    it('creates Telegram topic and saves Redis key on first message when store has groupId', async () => {
       prisma.conversation.findUnique.mockResolvedValue({
         ...baseConversation,
-        mode: ConversationMode.HUMAN,
         customer: { id: customerId, fullName: 'Test User' },
-        assignedStaff: { telegramChatId },
+        assignedStaff: null,
+        store: { telegramGroupId: '-100123' },
       });
 
-      await service.processMessage(conversationId, customerId, 'Hi', emitFn);
+      await service.processMessage(conversationId, customerId, 'Xin chào', emitFn);
 
-      expect(gemini.chat).not.toHaveBeenCalled();
+      expect(telegram.createGroupTopic).toHaveBeenCalled();
+      expect(redis.set).toHaveBeenCalled();
+      expect(telegram.sendToGroupTopic).toHaveBeenCalled();
     });
 
-    it('sends message to staff Telegram when mode is HUMAN and staff has telegramChatId', async () => {
+    it('reuses existing topic on subsequent messages', async () => {
       prisma.conversation.findUnique.mockResolvedValue({
         ...baseConversation,
-        mode: ConversationMode.HUMAN,
+        telegramTopicId: 42,
+        customer: { id: customerId, fullName: 'Test User' },
+        assignedStaff: null,
+        store: { telegramGroupId: '-100123' },
+      });
+
+      await service.processMessage(conversationId, customerId, 'Tin thứ 2', emitFn);
+
+      expect(telegram.createGroupTopic).not.toHaveBeenCalled();
+      expect(telegram.sendToGroupTopic).toHaveBeenCalledWith('-100123', 42, expect.any(String));
+    });
+
+    it('sends DM to assigned staff when no group configured', async () => {
+      prisma.conversation.findUnique.mockResolvedValue({
+        ...baseConversation,
         customer: { id: customerId, fullName: 'Test User' },
         assignedStaff: { telegramChatId },
+        store: { telegramGroupId: null },
       });
 
       await service.processMessage(conversationId, customerId, 'Hi', emitFn);
 
       expect(telegram.sendNewMessage).toHaveBeenCalledWith(telegramChatId, 'Test User', 'Hi');
     });
-  });
 
-  // ─── escalateToHuman ──────────────────────────────────────────────────────
+    it('does not send Telegram when no group and no assigned staff', async () => {
+      await service.processMessage(conversationId, customerId, 'Hi', emitFn);
 
-  describe('escalateToHuman', () => {
-    it('returns null when conversation is already in HUMAN mode', async () => {
-      prisma.conversation.findUnique.mockResolvedValue({
-        ...baseConversation,
-        mode: ConversationMode.HUMAN,
-        customer: { id: customerId, fullName: 'Test User' },
-        store: { id: storeId },
-        messages: [],
-      });
-
-      const result = await service.escalateToHuman(conversationId);
-      expect(result).toBeNull();
-    });
-
-    it('updates conversation mode to HUMAN', async () => {
-      prisma.conversation.findUnique.mockResolvedValue({
-        ...baseConversation,
-        mode: ConversationMode.BOT,
-        customer: { id: customerId, fullName: 'Test User' },
-        store: { id: storeId },
-        messages: [],
-      });
-
-      await service.escalateToHuman(conversationId);
-
-      expect(prisma.conversation.update).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: { id: conversationId },
-          data: expect.objectContaining({ mode: ConversationMode.HUMAN }),
-        }),
-      );
-    });
-
-    it('assigns available staff and saves Redis key when staff has telegramChatId', async () => {
-      prisma.conversation.findUnique.mockResolvedValue({
-        ...baseConversation,
-        mode: ConversationMode.BOT,
-        customer: { id: customerId, fullName: 'Test User' },
-        store: { id: storeId },
-        messages: [],
-      });
-
-      await service.escalateToHuman(conversationId);
-
-      expect(redis.set).toHaveBeenCalledWith(
-        `telegram:active:${telegramChatId}`,
-        conversationId,
-        expect.any(Number),
-      );
-      expect(telegram.sendEscalationAlert).toHaveBeenCalled();
-    });
-
-    it('escalates without Telegram when no staff with telegramChatId found', async () => {
-      prisma.staff.findFirst.mockResolvedValue(null);
-      prisma.conversation.findUnique.mockResolvedValue({
-        ...baseConversation,
-        mode: ConversationMode.BOT,
-        customer: { id: customerId, fullName: 'Test User' },
-        store: { id: storeId },
-        messages: [],
-      });
-
-      await service.escalateToHuman(conversationId);
-
-      expect(telegram.sendEscalationAlert).not.toHaveBeenCalled();
-      expect(prisma.conversation.update).toHaveBeenCalled();
-    });
-  });
-
-  // ─── setBotMode ───────────────────────────────────────────────────────────
-
-  describe('setBotMode', () => {
-    it('updates conversation mode to BOT and clears assignedStaffId', async () => {
-      await service.setBotMode(conversationId);
-
-      expect(prisma.conversation.update).toHaveBeenCalledWith({
-        where: { id: conversationId },
-        data: { mode: ConversationMode.BOT, assignedStaffId: null },
-      });
+      expect(telegram.sendNewMessage).not.toHaveBeenCalled();
+      expect(telegram.sendToGroupTopic).not.toHaveBeenCalled();
     });
   });
 

@@ -14,7 +14,6 @@ import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
-import { CurrentUser, type CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 import { ShopId } from '../../../common/decorators/shop-id.decorator';
 
 @ApiTags('conversations')
@@ -86,24 +85,6 @@ export class ConversationsController {
   @RequirePermissions(Permissions.CONVERSATION.UPDATE)
   update(@Param('id') id: string, @Body() dto: UpdateConversationDto) {
     return this.conversationsService.update(id, dto);
-  }
-
-  @ApiOperation({ summary: 'Chuyển hội thoại sang nhân viên hỗ trợ thủ công' })
-  @ApiParam({ name: 'id', description: 'Conversation ID' })
-  @ApiBearerAuth()
-  @RequirePermissions(Permissions.CONVERSATION.UPDATE)
-  @Patch(':id/escalate')
-  escalate(@Param('id') id: string, @CurrentUser() _user: CurrentUserPayload) {
-    return this.conversationsService.escalateToHuman(id);
-  }
-
-  @ApiOperation({ summary: 'Chuyển hội thoại về chế độ bot tự động' })
-  @ApiParam({ name: 'id', description: 'Conversation ID' })
-  @ApiBearerAuth()
-  @RequirePermissions(Permissions.CONVERSATION.UPDATE)
-  @Patch(':id/bot-mode')
-  setBotMode(@Param('id') id: string) {
-    return this.conversationsService.setBotMode(id);
   }
 
   @ApiOperation({ summary: 'Xóa hội thoại' })

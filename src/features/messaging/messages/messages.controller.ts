@@ -5,12 +5,10 @@ import {
   Get,
   Param,
   Patch,
-  Post,
   Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { MessagesService } from './messages.service';
-import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
@@ -20,18 +18,6 @@ import { Permissions } from '../../../common/constants/permissions';
 @Controller('conversations/:conversationId/messages')
 export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
-
-  @ApiOperation({ summary: 'Gửi tin nhắn trong hội thoại' })
-  @ApiParam({ name: 'conversationId', description: 'Conversation ID' })
-  @ApiResponse({ status: 201, description: 'Gửi thành công' })
-  @Post()
-  @RequirePermissions(Permissions.MESSAGE.CREATE)
-  create(
-    @Param('conversationId') conversationId: string,
-    @Body() dto: Omit<CreateMessageDto, 'conversationId'>,
-  ) {
-    return this.messagesService.create({ ...dto, conversationId });
-  }
 
   @ApiOperation({ summary: 'Lấy danh sách tin nhắn trong hội thoại (phân trang)' })
   @ApiParam({ name: 'conversationId', description: 'Conversation ID' })
