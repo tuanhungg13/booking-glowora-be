@@ -14,6 +14,12 @@ import { AdminStoresService } from './admin-stores.service';
 export class AdminStoresController {
   constructor(private readonly adminStoresService: AdminStoresService) {}
 
+  @ApiOperation({ summary: 'System overview stats for admin' })
+  @Get('stats')
+  getStats() {
+    return this.adminStoresService.getStats();
+  }
+
   @ApiOperation({ summary: 'Admin listing for all stores' })
   @Get()
   findAll(@Query() filter: AdminStoreFilterDto) {
@@ -36,21 +42,21 @@ export class AdminStoresController {
   @ApiOperation({ summary: 'Reject a pending or inactive store' })
   @RequirePermissions(Permissions.STORE.APPROVE)
   @Patch(':id/reject')
-  reject(@Param('id') id: string, @Body() dto: AdminStoreActionDto) {
-    return this.adminStoresService.reject(id, dto);
+  reject(@Param('id') id: string, @Body() dto: AdminStoreActionDto, @CurrentUser() user: CurrentUserPayload) {
+    return this.adminStoresService.reject(id, dto, user.id);
   }
 
   @ApiOperation({ summary: 'Lock an active store' })
   @RequirePermissions(Permissions.STORE.APPROVE)
   @Patch(':id/lock')
-  lock(@Param('id') id: string, @Body() dto: AdminStoreActionDto) {
-    return this.adminStoresService.lock(id, dto);
+  lock(@Param('id') id: string, @Body() dto: AdminStoreActionDto, @CurrentUser() user: CurrentUserPayload) {
+    return this.adminStoresService.lock(id, dto, user.id);
   }
 
   @ApiOperation({ summary: 'Unlock a banned store' })
   @RequirePermissions(Permissions.STORE.APPROVE)
   @Patch(':id/unlock')
-  unlock(@Param('id') id: string) {
-    return this.adminStoresService.unlock(id);
+  unlock(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
+    return this.adminStoresService.unlock(id, user.id);
   }
 }

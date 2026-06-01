@@ -43,18 +43,25 @@ export class UsersService {
     return user;
   }
 
-  async findAll(params?: { status?: UserStatus; skip?: number; take?: number }) {
+  async findAll(params?: { status?: UserStatus; q?: string; skip?: number; take?: number }) {
+    const where: Prisma.UserWhereInput = {}
+    if (params?.status) where.status = params.status
+    if (params?.q) {
+      const q = params.q.trim()
+      where.OR = [
+        { fullName: { contains: q } },
+        { email: { contains: q } },
+      ]
+    }
     const [items, total] = await Promise.all([
       this.prisma.user.findMany({
-        where: params?.status ? { status: params.status } : undefined,
+        where,
         skip: params?.skip,
         take: params?.take ?? 20,
         select: this.selectSafe(),
         orderBy: { createdAt: 'desc' },
       }),
-      this.prisma.user.count({
-        where: params?.status ? { status: params.status } : undefined,
-      }),
+      this.prisma.user.count({ where }),
     ]);
     return { items, total };
   }

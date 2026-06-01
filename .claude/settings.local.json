@@ -6,7 +6,8 @@
       "Bash(npx tsc *)",
       "Bash(pnpm run *)",
       "WebFetch(domain:sepay.vn)",
-      "WebFetch(domain:docs.sepay.vn)"
+      "WebFetch(domain:docs.sepay.vn)",
+      "Bash(pnpm tsc *)"
     ]
   }
 }

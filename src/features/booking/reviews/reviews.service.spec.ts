@@ -82,7 +82,8 @@ describe('ReviewsService — Phase 5', () => {
       $transaction: jest.fn(async (fn: any) => fn(tx)),
     };
 
-    service = new ReviewsService(prisma);
+    const systemLog = { log: jest.fn() };
+    service = new ReviewsService(prisma, systemLog as any);
   });
 
   afterEach(() => jest.clearAllMocks());

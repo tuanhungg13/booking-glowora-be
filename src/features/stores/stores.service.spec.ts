@@ -77,7 +77,8 @@ describe('StoresService - Phase 2 Store owner flow', () => {
       invalidateUser: jest.fn(),
     };
 
-    service = new StoresService(prisma, permissionCache);
+    const systemLog = { log: jest.fn() };
+    service = new StoresService(prisma, permissionCache, systemLog as any);
   });
 
   it('creates a pending store, default working hours, cloned owner role, and owner userRole', async () => {

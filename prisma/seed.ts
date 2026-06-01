@@ -98,6 +98,10 @@ const PERMISSIONS = [
   { code: 'UPDATE_STORE', name: 'Cập nhật cơ sở' },
   { code: 'DELETE_STORE', name: 'Xóa cơ sở' },
   { code: 'APPROVE_STORE', name: 'Phê duyệt cơ sở' },
+  // System Log
+  { code: 'VIEW_LOG', name: 'Xem nhật ký hệ thống' },
+  // Analytics
+  { code: 'VIEW_REPORT', name: 'Xem báo cáo doanh thu' },
 ];
 
 // ─── Permissions theo từng role ───────────────────────────────────────────────
@@ -143,6 +147,7 @@ const SHOP_OWNER_PERMISSIONS = [
   'VIEW_NOTIFICATION', 'CREATE_NOTIFICATION',
   'CREATE_STORE', 'UPDATE_STORE',
   'INVITE_STAFF', 'VIEW_STAFF', 'UPDATE_STAFF', 'REMOVE_STAFF',
+  'VIEW_REPORT',
 ];
 
 async function main() {

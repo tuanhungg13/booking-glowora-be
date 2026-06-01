@@ -4,8 +4,9 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { BookingStatus, Prisma } from '@prisma/client';
+import { BookingStatus, LogType, Prisma } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { SystemLogService } from '../../../system-log/system-log.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReviewFilterDto } from './dto/review-filter.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
@@ -20,7 +21,10 @@ const reviewInclude = {
 
 @Injectable()
 export class ReviewsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly systemLog: SystemLogService,
+  ) {}
 
   async create(dto: CreateReviewDto, customerId?: string, bookingItemIdOverride?: string) {
     const itemId = bookingItemIdOverride ?? dto.bookingItemId;
@@ -185,7 +189,7 @@ export class ReviewsService {
     return { deleted: true };
   }
 
-  async toggleVisibility(id: string, isVisible: boolean) {
+  async toggleVisibility(id: string, isVisible: boolean, actorId?: string) {
     const existing = await this.findOne(id);
     const review = await this.prisma.$transaction(async (tx) => {
       const r = await tx.review.update({
@@ -196,6 +200,7 @@ export class ReviewsService {
       await this.recalculateRatings(existing.storeId, existing.serviceId, existing.staffId, tx);
       return r;
     });
+    this.systemLog.log({ type: isVisible ? LogType.REVIEW_SHOWN : LogType.REVIEW_HIDDEN, actorId, targetId: id, targetType: 'Review', metadata: { storeId: existing.storeId, serviceId: existing.serviceId } });
     return review;
   }
 

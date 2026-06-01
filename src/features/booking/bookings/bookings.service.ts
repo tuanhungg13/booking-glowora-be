@@ -8,6 +8,8 @@ import {
 import { BookingStatus, Prisma, ServiceStatus, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { NotificationsService } from '../../notifications/notifications/notifications.service';
+import { SystemLogService } from '../../../system-log/system-log.service';
+import { LogType } from '@prisma/client';
 import { BookingFilterDto } from './dto/booking-filter.dto';
 import { MyBookingFilterDto } from './dto/my-booking-filter.dto';
 import { CreateBookingDto } from './dto/create-booking.dto';
@@ -34,6 +36,7 @@ export class BookingsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notifications: NotificationsService,
+    private readonly systemLog: SystemLogService,
   ) {}
 
   async create(dto: CreateBookingDto, customerId: string) {
@@ -148,6 +151,8 @@ export class BookingsService {
       })
       .catch(() => undefined);
 
+    this.systemLog.log({ type: LogType.BOOKING_CREATED, actorId: customerId, targetId: booking.id, targetType: 'Booking', metadata: { storeId: booking.storeId, scheduledAt: booking.scheduledAt, totalPrice: Number(booking.totalPrice) } });
+
     return booking;
   }
 
@@ -222,6 +227,12 @@ export class BookingsService {
     const limit = filter.limit ?? 20;
     const skip = (page - 1) * limit;
 
+    const andConditions: Prisma.BookingWhereInput[] = [
+      ...(filter.staffId ? [{ items: { some: { staffId: filter.staffId } } }] : []),
+      ...(filter.serviceId ? [{ items: { some: { serviceId: filter.serviceId } } }] : []),
+      ...(filter.paymentStatus ? [{ payments: { some: { status: filter.paymentStatus } } }] : []),
+    ];
+
     const where: Prisma.BookingWhereInput = {
       storeId,
       ...(filter.status && { status: filter.status }),
@@ -239,11 +250,7 @@ export class BookingsService {
           { id: { contains: filter.search } },
         ],
       }),
-      AND: [
-        ...(filter.staffId ? [{ items: { some: { staffId: filter.staffId } } }] : []),
-        ...(filter.serviceId ? [{ items: { some: { serviceId: filter.serviceId } } }] : []),
-        ...(filter.paymentStatus ? [{ payments: { some: { status: filter.paymentStatus } } }] : []),
-      ],
+      ...(andConditions.length > 0 && { AND: andConditions }),
     };
 
     const [items, total] = await Promise.all([
@@ -310,6 +317,8 @@ export class BookingsService {
       })
       .catch(() => undefined);
 
+    this.systemLog.log({ type: LogType.BOOKING_CONFIRMED, actorId: userId, targetId: id, targetType: 'Booking', metadata: { storeId: updated.storeId, customerId: updated.customerId } });
+
     return updated;
   }
 
@@ -337,6 +346,8 @@ export class BookingsService {
       })
       .catch(() => undefined);
 
+    this.systemLog.log({ type: LogType.BOOKING_REJECTED, actorId: userId, targetId: id, targetType: 'Booking', metadata: { storeId: updated.storeId, customerId: updated.customerId, reason } });
+
     return updated;
   }
 
@@ -362,6 +373,8 @@ export class BookingsService {
         serviceNames: updated.items.map((i) => i.service.name).join(', '),
       })
       .catch(() => undefined);
+
+    this.systemLog.log({ type: LogType.BOOKING_COMPLETED, actorId: userId, targetId: id, targetType: 'Booking', metadata: { storeId: updated.storeId, customerId: updated.customerId } });
 
     return updated;
   }
@@ -406,6 +419,8 @@ export class BookingsService {
         reason,
       })
       .catch(() => undefined);
+
+    this.systemLog.log({ type: LogType.BOOKING_CANCELLED, actorId: userId, targetId: id, targetType: 'Booking', metadata: { storeId: updated.storeId, reason } });
 
     return updated;
   }

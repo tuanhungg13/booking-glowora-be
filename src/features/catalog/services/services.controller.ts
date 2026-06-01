@@ -58,8 +58,15 @@ export class ServicesController {
   @ApiParam({ name: 'id', description: 'Service ID' })
   @Public()
   @Get(':id')
-  findOne(@ShopId() storeId: string, @Param('id') id: string) {
-    return this.servicesService.findOne(id, storeId);
+  findOne(
+    @ShopId() storeId: string,
+    @Param('id') id: string,
+    @Query('userLat') userLat?: string,
+    @Query('userLng') userLng?: string,
+  ) {
+    const lat = userLat != null ? +userLat : undefined;
+    const lng = userLng != null ? +userLng : undefined;
+    return this.servicesService.findOne(id, storeId, lat, lng);
   }
 
   @ApiOperation({ summary: 'Cập nhật dịch vụ' })

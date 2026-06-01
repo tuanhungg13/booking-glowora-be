@@ -13,8 +13,16 @@ const serviceInclude = {
   category: true,
   variants: { where: { status: ServiceStatus.ACTIVE }, orderBy: { sortOrder: 'asc' as const } },
   staffs: { include: { staff: { include: { user: { select: { id: true, fullName: true, email: true, avatarUrl: true } } } } } },
-  store: { select: { id: true, name: true, slug: true, address: true, district: true, logoUrl: true } },
+  store: { select: { id: true, name: true, slug: true, address: true, district: true, logoUrl: true, latitude: true, longitude: true } },
 } as const;
+
+function calcDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return Math.round(6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * 100) / 100;
+}
 
 function slugify(value: string): string {
   return value
@@ -134,7 +142,7 @@ export class ServicesService {
     };
 
     if (params.sort === 'price' || params.sort === 'price-desc') {
-      return this.findPublicSortedByPrice(where, publicInclude, page, limit, params.sort === 'price-desc' ? 'desc' : 'asc');
+      return this.findPublicSortedByPrice(params, publicInclude, page, limit, params.sort === 'price-desc' ? 'desc' : 'asc');
     }
 
     const orderBy: Prisma.ServiceOrderByWithRelationInput =
@@ -151,23 +159,75 @@ export class ServicesService {
   }
 
   private async findPublicSortedByPrice(
-    where: Prisma.ServiceWhereInput,
+    params: PublicServiceParams,
     include: object,
     page: number,
     limit: number,
     direction: 'asc' | 'desc' = 'asc',
   ) {
-    const allIds = await this.prisma.service.findMany({ where, select: { id: true } });
-    const ids = allIds.map((s) => s.id);
+    const offset = (page - 1) * limit;
+    const dir = direction === 'desc' ? Prisma.sql`DESC` : Prisma.sql`ASC`;
 
-    const grouped = await this.prisma.serviceVariant.groupBy({
-      by: ['serviceId'],
-      where: { serviceId: { in: ids }, status: ServiceStatus.ACTIVE },
-      _min: { price: true },
-      orderBy: { _min: { price: direction } },
-    });
+    const conds: Prisma.Sql[] = [
+      Prisma.sql`s.status = 'ACTIVE'`,
+      Prisma.sql`st.status = 'ACTIVE'`,
+    ];
 
-    const paginatedIds = grouped.slice((page - 1) * limit, page * limit).map((g) => g.serviceId);
+    if (params.storeId) conds.push(Prisma.sql`s.shop_id = ${params.storeId}`);
+
+    if (params.categoryId) {
+      conds.push(Prisma.sql`(
+        s.category_id = ${params.categoryId}
+        OR EXISTS (
+          SELECT 1 FROM service_categories sc
+          WHERE sc.id = s.category_id AND sc.parent_id = ${params.categoryId}
+        )
+      )`);
+    }
+
+    if (params.q) {
+      const like = `%${params.q}%`;
+      conds.push(Prisma.sql`(s.name LIKE ${like} OR s.description LIKE ${like})`);
+    }
+
+    if (params.minPrice !== undefined || params.maxPrice !== undefined) {
+      const priceConds: Prisma.Sql[] = [
+        Prisma.sql`pv.service_id = s.id`,
+        Prisma.sql`pv.status = 'ACTIVE'`,
+      ];
+      if (params.minPrice !== undefined) priceConds.push(Prisma.sql`pv.price >= ${params.minPrice}`);
+      if (params.maxPrice !== undefined) priceConds.push(Prisma.sql`pv.price <= ${params.maxPrice}`);
+      conds.push(Prisma.sql`EXISTS (SELECT 1 FROM service_variants pv WHERE ${Prisma.join(priceConds, ' AND ')})`);
+    }
+
+    if (params.minRating !== undefined) conds.push(Prisma.sql`s.avg_rating >= ${params.minRating}`);
+    if (params.maxRating !== undefined) conds.push(Prisma.sql`s.avg_rating <= ${params.maxRating}`);
+
+    const where = Prisma.join(conds, ' AND ');
+
+    const [rows, countRows] = await Promise.all([
+      this.prisma.$queryRaw<{ id: string }[]>(Prisma.sql`
+        SELECT s.id
+        FROM services s
+        INNER JOIN stores st ON st.id = s.shop_id
+        INNER JOIN service_variants sv ON sv.service_id = s.id AND sv.status = 'ACTIVE'
+        WHERE ${where}
+        GROUP BY s.id
+        ORDER BY MIN(sv.price) ${dir}, s.id ASC
+        LIMIT ${limit} OFFSET ${offset}
+      `),
+      this.prisma.$queryRaw<{ total: bigint }[]>(Prisma.sql`
+        SELECT COUNT(DISTINCT s.id) AS total
+        FROM services s
+        INNER JOIN stores st ON st.id = s.shop_id
+        INNER JOIN service_variants sv ON sv.service_id = s.id AND sv.status = 'ACTIVE'
+        WHERE ${where}
+      `),
+    ]);
+
+    const total = Number(countRows[0]?.total ?? 0);
+    const paginatedIds = rows.map((r) => r.id);
+    if (!paginatedIds.length) return { items: [], total, page, limit };
 
     const items = await this.prisma.service.findMany({
       where: { id: { in: paginatedIds } },
@@ -177,10 +237,10 @@ export class ServicesService {
     const order = new Map(paginatedIds.map((id, i) => [id, i]));
     items.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
 
-    return { items, total: ids.length, page, limit };
+    return { items, total, page, limit };
   }
 
-  async findOne(idOrSlug: string, storeId?: string) {
+  async findOne(idOrSlug: string, storeId?: string, userLat?: number, userLng?: number) {
     const service = await this.prisma.service.findFirst({
       where: {
         OR: [{ id: idOrSlug }, { slug: idOrSlug }],
@@ -189,7 +249,14 @@ export class ServicesService {
       include: serviceInclude,
     });
     if (!service) throw new NotFoundException('Service not found');
-    return service;
+
+    const { latitude, longitude, ...storeWithoutCoords } = service.store as typeof service.store & { latitude: number | null; longitude: number | null };
+    const distance =
+      userLat != null && userLng != null && latitude != null && longitude != null
+        ? calcDistance(userLat, userLng, latitude, longitude)
+        : undefined;
+
+    return { ...service, store: { ...storeWithoutCoords, ...(distance !== undefined && { distance }) } };
   }
 
   async update(id: string, storeId: string, dto: UpdateServiceDto) {

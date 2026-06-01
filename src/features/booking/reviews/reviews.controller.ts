@@ -67,16 +67,16 @@ export class ReviewsController {
   @ApiBearerAuth()
   @Patch('admin/reviews/:id/hide')
   @RequirePermissions(Permissions.REVIEW.MANAGE)
-  hide(@Param('id') id: string) {
-    return this.reviewsService.toggleVisibility(id, false);
+  hide(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
+    return this.reviewsService.toggleVisibility(id, false, user.id);
   }
 
   @ApiOperation({ summary: 'Hiện lại review (SUPER_ADMIN)' })
   @ApiBearerAuth()
   @Patch('admin/reviews/:id/show')
   @RequirePermissions(Permissions.REVIEW.MANAGE)
-  show(@Param('id') id: string) {
-    return this.reviewsService.toggleVisibility(id, true);
+  show(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
+    return this.reviewsService.toggleVisibility(id, true, user.id);
   }
 
   // ─── CRUD cơ bản ─────────────────────────────────────────────────────────

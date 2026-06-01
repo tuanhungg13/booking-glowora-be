@@ -52,7 +52,10 @@ describe('AuthService - Phase 1 Auth and RBAC', () => {
       set: jest.fn(),
     };
 
-    service = new AuthService(prisma, jwtService, config, redis);
+    const mail = { sendOtpVerification: jest.fn(), sendPasswordResetOtp: jest.fn() };
+    const systemLog = { log: jest.fn() };
+
+    service = new AuthService(prisma, jwtService, config, redis, mail as any, systemLog as any);
   });
 
   afterEach(() => {
@@ -88,7 +91,7 @@ describe('AuthService - Phase 1 Auth and RBAC', () => {
       },
       select: { id: true, email: true, fullName: true, phone: true, createdAt: true },
     });
-    expect(result.email).toBe('customer@example.com');
+    expect(result.message).toContain('OTP');
   });
 
   it('rejects register when email is already used', async () => {

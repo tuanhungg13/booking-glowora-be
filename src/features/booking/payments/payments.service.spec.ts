@@ -64,7 +64,8 @@ describe('PaymentsService — Phase 5', () => {
       notifyPaymentSuccess: jest.fn().mockResolvedValue(undefined),
     };
 
-    service = new PaymentsService(prisma, config, notifications);
+    const systemLog = { log: jest.fn() };
+    service = new PaymentsService(prisma, config, notifications, systemLog as any);
   });
 
   afterEach(() => jest.clearAllMocks());

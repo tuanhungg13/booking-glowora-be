@@ -35,6 +35,7 @@ export class UsersController {
 
   @ApiOperation({ summary: 'Lấy danh sách user (admin)' })
   @ApiQuery({ name: 'status', enum: UserStatus, required: false, description: 'Lọc theo trạng thái user' })
+  @ApiQuery({ name: 'q', required: false, type: String, description: 'Tìm theo tên hoặc email' })
   @ApiQuery({ name: 'skip', required: false, type: Number, description: 'Số bản ghi bỏ qua' })
   @ApiQuery({ name: 'take', required: false, type: Number, description: 'Số bản ghi lấy về' })
   @ApiResponse({ status: 200, description: 'Danh sách user' })
@@ -42,11 +43,13 @@ export class UsersController {
   @RequirePermissions(Permissions.USER.VIEW)
   findAll(
     @Query('status') status?: UserStatus,
+    @Query('q') q?: string,
     @Query('skip') skip?: string,
     @Query('take') take?: string,
   ) {
     return this.usersService.findAll({
       status,
+      q,
       skip: skip ? Number(skip) : undefined,
       take: take ? Number(take) : undefined,
     });

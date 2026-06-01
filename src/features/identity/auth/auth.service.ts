@@ -19,6 +19,8 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 import { RedisService } from '../../../redis/redis.service';
 import { MailService } from '../../../mail/mail.service';
 import { ALL_PERMISSION_CODES } from '../../../common/constants/permissions';
+import { SystemLogService } from '../../../system-log/system-log.service';
+import { LogType } from '@prisma/client';
 
 const CUSTOMER_ROLE_CODE = 'CUSTOMER';
 
@@ -30,6 +32,7 @@ export class AuthService {
     private readonly config: ConfigService,
     private readonly redis: RedisService,
     private readonly mail: MailService,
+    private readonly systemLog: SystemLogService,
   ) {}
 
   async validateUser(email: string, password: string) {
@@ -54,6 +57,8 @@ export class AuthService {
       where: { id: user.id },
       data: { refreshToken: await bcrypt.hash(refreshToken, 10) },
     });
+
+    this.systemLog.log({ type: LogType.AUTH_LOGIN, actorId: user.id, targetId: user.id, targetType: 'User', metadata: { email: user.email } });
 
     return {
       access_token: accessToken,
@@ -123,6 +128,8 @@ export class AuthService {
 
     await this.redis.del(pendingKey);
 
+    this.systemLog.log({ type: LogType.AUTH_REGISTER, actorId: user.id, targetId: user.id, targetType: 'User', metadata: { email: dto.email } });
+
     return user;
   }
 
@@ -175,6 +182,7 @@ export class AuthService {
       await this.redis.set(`blacklist:refresh:${refreshToken}`, '1', ttl);
     }
     await this.prisma.user.update({ where: { id: userId }, data: { refreshToken: null } });
+    this.systemLog.log({ type: LogType.AUTH_LOGOUT, actorId: userId, targetId: userId, targetType: 'User' });
     return { success: true };
   }
 

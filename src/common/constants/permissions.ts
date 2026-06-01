@@ -118,6 +118,16 @@ export const Permissions = {
     DELETE: 'DELETE_STORE',
     APPROVE: 'APPROVE_STORE',
   },
+
+  // ─── System Log ───
+  LOG: {
+    VIEW: 'VIEW_LOG',
+  },
+
+  // ─── Analytics ───
+  REPORT: {
+    VIEW: 'VIEW_REPORT',
+  },
 } as const;
 
 type PermissionGroup = (typeof Permissions)[keyof typeof Permissions];

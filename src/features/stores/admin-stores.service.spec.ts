@@ -20,7 +20,8 @@ describe('AdminStoresService - Phase 2 approval flow', () => {
       $transaction: jest.fn(async (input: any) => Promise.all(input)),
     };
 
-    service = new AdminStoresService(prisma);
+    const systemLog = { log: jest.fn() };
+    service = new AdminStoresService(prisma, systemLog as any);
   });
 
   it('findAll lists stores for admin with status, city, search and pagination filters', async () => {
@@ -108,7 +109,7 @@ describe('AdminStoresService - Phase 2 approval flow', () => {
   });
 
   it('rejects a pending store and requires a reason', async () => {
-    await expect(service.reject('store-1', { reason: '   ' })).rejects.toBeInstanceOf(BadRequestException);
+    await expect(service.reject('store-1', { reason: '   ' }, 'admin-1')).rejects.toBeInstanceOf(BadRequestException);
 
     prisma.store.findUnique.mockResolvedValue({
       id: 'store-1',
@@ -121,7 +122,7 @@ describe('AdminStoresService - Phase 2 approval flow', () => {
       rejectionReason: 'Missing license',
     });
 
-    const result = await service.reject('store-1', { reason: ' Missing license ' });
+    const result = await service.reject('store-1', { reason: ' Missing license ' }, 'admin-1');
 
     expect(prisma.store.update).toHaveBeenCalledWith({
       where: { id: 'store-1' },
@@ -135,7 +136,7 @@ describe('AdminStoresService - Phase 2 approval flow', () => {
   });
 
   it('locks only active stores and requires a reason', async () => {
-    await expect(service.lock('store-1', { reason: '' })).rejects.toBeInstanceOf(BadRequestException);
+    await expect(service.lock('store-1', { reason: '' }, 'admin-1')).rejects.toBeInstanceOf(BadRequestException);
 
     prisma.store.findUnique.mockResolvedValue({
       id: 'store-1',
@@ -148,7 +149,7 @@ describe('AdminStoresService - Phase 2 approval flow', () => {
       rejectionReason: 'Policy violation',
     });
 
-    const result = await service.lock('store-1', { reason: ' Policy violation ' });
+    const result = await service.lock('store-1', { reason: ' Policy violation ' }, 'admin-1');
 
     expect(prisma.store.update).toHaveBeenCalledWith({
       where: { id: 'store-1' },
@@ -173,7 +174,7 @@ describe('AdminStoresService - Phase 2 approval flow', () => {
       rejectionReason: null,
     });
 
-    const result = await service.unlock('store-1');
+    const result = await service.unlock('store-1', 'admin-1');
 
     expect(prisma.store.update).toHaveBeenCalledWith({
       where: { id: 'store-1' },
@@ -199,13 +200,13 @@ describe('AdminStoresService - Phase 2 approval flow', () => {
       ownerId: 'owner-1',
       status: StoreStatus.PENDING,
     });
-    await expect(service.lock('store-1', { reason: 'Policy violation' })).rejects.toBeInstanceOf(BadRequestException);
+    await expect(service.lock('store-1', { reason: 'Policy violation' }, 'admin-1')).rejects.toBeInstanceOf(BadRequestException);
 
     prisma.store.findUnique.mockResolvedValueOnce({
       id: 'store-1',
       ownerId: 'owner-1',
       status: StoreStatus.ACTIVE,
     });
-    await expect(service.unlock('store-1')).rejects.toBeInstanceOf(BadRequestException);
+    await expect(service.unlock('store-1', 'admin-1')).rejects.toBeInstanceOf(BadRequestException);
   });
 });

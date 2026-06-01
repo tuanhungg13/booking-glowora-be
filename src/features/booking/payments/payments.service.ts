@@ -7,6 +7,8 @@ import { ConfigService } from '@nestjs/config';
 import { BookingStatus, PaymentMethod, PaymentStatus } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { NotificationsService } from '../../notifications/notifications/notifications.service';
+import { SystemLogService } from '../../../system-log/system-log.service';
+import { LogType } from '@prisma/client';
 import {
   buildVnpayUrl,
   getClientIp,
@@ -30,6 +32,7 @@ export class PaymentsService {
     private readonly prisma: PrismaService,
     private readonly config: ConfigService,
     private readonly notifications: NotificationsService,
+    private readonly systemLog: SystemLogService,
   ) {}
 
   async createVnpayPayment(bookingId: string, userId: string, req: unknown) {
@@ -39,8 +42,8 @@ export class PaymentsService {
     });
     if (!booking) throw new NotFoundException('Booking not found');
 
-    if (booking.status !== BookingStatus.COMPLETED) {
-      throw new BadRequestException('Chỉ thanh toán sau khi dịch vụ hoàn thành');
+    if (booking.status !== BookingStatus.CONFIRMED) {
+      throw new BadRequestException('Chỉ thanh toán sau khi lịch hẹn được xác nhận');
     }
 
     const paidPayment = await this.prisma.payment.findFirst({
@@ -142,6 +145,7 @@ export class PaymentsService {
 
     if (vnpParams['vnp_ResponseCode'] === '00' && vnpParams['vnp_TransactionStatus'] === '00') {
       await this.updatePaymentSuccess(payment.id, vnpParams);
+      this.systemLog.log({ type: LogType.PAYMENT_COMPLETED, actorId: payment.customer.id, targetId: payment.id, targetType: 'Payment', metadata: { bookingId: payment.bookingId, amount: Number(payment.amount) } });
       const serviceNames = payment.booking.items.map((i) => i.service.name).join(', ');
       this.notifications
         .notifyPaymentSuccess({
@@ -156,6 +160,7 @@ export class PaymentsService {
         .catch(() => {});
     } else {
       await this.updatePaymentFailed(payment.id, vnpParams);
+      this.systemLog.log({ type: LogType.PAYMENT_FAILED, actorId: payment.customer.id, targetId: payment.id, targetType: 'Payment', metadata: { bookingId: payment.bookingId, responseCode: vnpParams['vnp_ResponseCode'] } });
     }
 
     return { RspCode: '00', Message: 'Confirm Success' };

@@ -144,7 +144,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Glowora Spa 001 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Glowora Spa 001 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '11 Pho Ly Thai To', 'Hoan Kiem', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10105001 AND `province_id` = 1 LIMIT 1), 21.020500, 105.850200, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.56, 27, NOW(), NOW()),
+</div>', '11 Pho Ly Thai To', 'Hoan Kiem', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10105001 AND `province_id` = 1 LIMIT 1), 21.020500, 105.850200, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.56, 27, NOW(), NOW()),
   ('efb697c8-db5b-4115-a703-ea5c8ae66a28', 'an-nhien-spa-002-ha-noi', '5b2dd185-685b-4149-9529-f671367adebb', 'An Nhien Spa 002', '0287100002', 'hello.demo002@glowora.local', 'https://an-nhien-spa-002-ha-noi.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1" alt="An Nhien Spa 002" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>An Nhien Spa 002 - Kh&ocirc;ng gian massage th&#432; gi&atilde;n tr&#7883; li&#7879;u tai Ha Noi</h2>
@@ -163,7 +163,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>An Nhien Spa 002 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i An Nhien Spa 002 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; massage th&#432; gi&atilde;n tr&#7883; li&#7879;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '12 Pho Phan Dinh Phung', 'Ba Dinh', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10101003 AND `province_id` = 1 LIMIT 1), 21.035200, 105.840300, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.57, 30, NOW(), NOW()),
+</div>', '12 Pho Phan Dinh Phung', 'Ba Dinh', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10101003 AND `province_id` = 1 LIMIT 1), 21.035200, 105.840300, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.57, 30, NOW(), NOW()),
   ('7ab7ab9d-b6bb-4d11-b5b7-cb3ccffc45ae', 'lumina-spa-003-ha-noi', 'a1e9561c-12d3-4cd4-8585-36bb5d9d7adc', 'Lumina Spa 003', '0287100003', 'hello.demo003@glowora.local', 'https://lumina-spa-003-ha-noi.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15" alt="Lumina Spa 003" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Lumina Spa 003 - Kh&ocirc;ng gian g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y tai Ha Noi</h2>
@@ -182,7 +182,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Lumina Spa 003 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Lumina Spa 003 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '13 Duong Xuan Thuy', 'Cau Giay', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10113025 AND `province_id` = 1 LIMIT 1), 21.036700, 105.786400, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.58, 33, NOW(), NOW()),
+</div>', '13 Duong Xuan Thuy', 'Cau Giay', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10113025 AND `province_id` = 1 LIMIT 1), 21.036700, 105.786400, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.58, 33, NOW(), NOW()),
   ('e2168941-73e2-474a-95f5-699717045315', 'moc-an-spa-004-ho-chi-minh', '80e57b94-7840-4bd0-a68c-626156548ae2', 'Moc An Spa 004', '0287100004', 'hello.demo004@glowora.local', 'https://moc-an-spa-004-ho-chi-minh.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1600334129128-685c5582fd35" alt="Moc An Spa 004" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Moc An Spa 004 - Kh&ocirc;ng gian ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng tai Ho Chi Minh</h2>
@@ -201,7 +201,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Moc An Spa 004 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Moc An Spa 004 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '14 Duong Nguyen Van Linh', 'Binh Chanh', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70139145 AND `province_id` = 29 LIMIT 1), 10.733800, 106.697000, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.59, 36, NOW(), NOW()),
+</div>', '14 Duong Nguyen Van Linh', 'Binh Chanh', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70139145 AND `province_id` = 29 LIMIT 1), 10.733800, 106.697000, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.59, 36, NOW(), NOW()),
   ('190cd2ab-1e43-4259-aa07-7802334a89aa', 'serene-spa-005-ho-chi-minh', '476ea348-b5a8-4afc-8622-92cf5c60c045', 'Serene Spa 005', '0287100005', 'hello.demo005@glowora.local', 'https://serene-spa-005-ho-chi-minh.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881" alt="Serene Spa 005" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Serene Spa 005 - Kh&ocirc;ng gian tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; tai Ho Chi Minh</h2>
@@ -220,7 +220,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Serene Spa 005 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Serene Spa 005 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '15 Duong Quang Trung', 'Hoc Mon', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70137159 AND `province_id` = 29 LIMIT 1), 10.891500, 106.581700, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 35, 45, 1, 4.60, 39, NOW(), NOW()),
+</div>', '15 Duong Quang Trung', 'Hoc Mon', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70137159 AND `province_id` = 29 LIMIT 1), 10.891500, 106.581700, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 35, 45, 1, 4.60, 39, NOW(), NOW()),
   ('17b43bfc-9f64-44c2-879a-e2b507afec70', 'aurora-spa-006-ho-chi-minh', 'cf852b31-0c15-4cf2-9dc2-6911983b5f55', 'Aurora Spa 006', '0287100006', 'hello.demo006@glowora.local', 'https://aurora-spa-006-ho-chi-minh.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e" alt="Aurora Spa 006" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Aurora Spa 006 - Kh&ocirc;ng gian nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p tai Ho Chi Minh</h2>
@@ -239,7 +239,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Aurora Spa 006 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Aurora Spa 006 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '16 Duong Huynh Tan Phat', 'Nha Be', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70141162 AND `province_id` = 29 LIMIT 1), 10.707700, 106.736400, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 40, 15, 0, 4.61, 42, NOW(), NOW()),
+</div>', '16 Duong Huynh Tan Phat', 'Nha Be', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70141162 AND `province_id` = 29 LIMIT 1), 10.707700, 106.736400, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 40, 15, 0, 4.61, 42, NOW(), NOW()),
   ('0e1ab5c4-d28a-42de-8669-72da7a2fe2f2', 'la-vie-spa-007-da-nang', '71342154-2721-4a16-8112-2877ee4e3263', 'La Vie Spa 007', '0287100007', 'hello.demo007@glowora.local', 'https://la-vie-spa-007-da-nang.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1596178065887-1198b6148b2b" alt="La Vie Spa 007" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>La Vie Spa 007 - Kh&ocirc;ng gian ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u tai Da Nang</h2>
@@ -258,7 +258,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>La Vie Spa 007 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i La Vie Spa 007 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '17 Duong Bach Dang', 'Hai Chau', (SELECT `id` FROM `provinces` WHERE `id` = 21 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 50101001 AND `province_id` = 21 LIMIT 1), 16.055800, 108.220800, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 45, 30, 1, 4.62, 45, NOW(), NOW()),
+</div>', '17 Duong Bach Dang', 'Hai Chau', (SELECT `id` FROM `provinces` WHERE `id` = 21 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 50101001 AND `province_id` = 21 LIMIT 1), 16.055800, 108.220800, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 45, 30, 1, 4.62, 45, NOW(), NOW()),
   ('99ebe364-15d9-4368-801f-d19a31b19e69', 'herbal-spa-008-can-tho', '884a0bc1-0957-4f88-8257-2a57ba464181', 'Herbal Spa 008', '0287100008', 'hello.demo008@glowora.local', 'https://herbal-spa-008-can-tho.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035" alt="Herbal Spa 008" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Herbal Spa 008 - Kh&ocirc;ng gian massage th&#432; gi&atilde;n tr&#7883; li&#7879;u tai Can Tho</h2>
@@ -277,7 +277,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Herbal Spa 008 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Herbal Spa 008 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; massage th&#432; gi&atilde;n tr&#7883; li&#7879;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '18 Duong Hai Ba Trung', 'Ninh Kieu', (SELECT `id` FROM `provinces` WHERE `id` = 33 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81501001 AND `province_id` = 33 LIMIT 1), 10.037200, 105.750900, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 30, 45, 0, 4.63, 48, NOW(), NOW()),
+</div>', '18 Duong Hai Ba Trung', 'Ninh Kieu', (SELECT `id` FROM `provinces` WHERE `id` = 33 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81501001 AND `province_id` = 33 LIMIT 1), 10.037200, 105.750900, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 30, 45, 0, 4.63, 48, NOW(), NOW()),
   ('8e581614-b579-4ca3-b6a8-3dab92f12813', 'bloom-spa-009-khanh-hoa', 'cc73875a-1836-418e-8bd4-b316f02868f6', 'Bloom Spa 009', '0287100009', 'hello.demo009@glowora.local', 'https://bloom-spa-009-khanh-hoa.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1591343395082-e120087004b4" alt="Bloom Spa 009" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Bloom Spa 009 - Kh&ocirc;ng gian g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y tai Khanh Hoa</h2>
@@ -296,7 +296,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Bloom Spa 009 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Bloom Spa 009 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '19 Duong Tran Phu', 'Nha Trang', (SELECT `id` FROM `provinces` WHERE `id` = 23 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60101001 AND `province_id` = 23 LIMIT 1), 12.234800, 109.204700, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 35, 15, 1, 4.64, 51, NOW(), NOW()),
+</div>', '19 Duong Tran Phu', 'Nha Trang', (SELECT `id` FROM `provinces` WHERE `id` = 23 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60101001 AND `province_id` = 23 LIMIT 1), 12.234800, 109.204700, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 35, 15, 1, 4.64, 51, NOW(), NOW()),
   ('884c78d2-e893-4499-b4e4-866070b31e60', 'sakura-spa-010-lam-dong', '13e44658-9076-400b-9901-88dddd88896d', 'Sakura Spa 010', '0287100010', 'hello.demo010@glowora.local', 'https://sakura-spa-010-lam-dong.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9" alt="Sakura Spa 010" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Sakura Spa 010 - Kh&ocirc;ng gian ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng tai Lam Dong</h2>
@@ -315,7 +315,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Sakura Spa 010 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Sakura Spa 010 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '20 Duong Bui Thi Xuan', 'Da Lat', (SELECT `id` FROM `provinces` WHERE `id` = 26 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70301001 AND `province_id` = 26 LIMIT 1), 11.940400, 108.450300, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 40, 30, 0, 4.65, 54, NOW(), NOW()),
+</div>', '20 Duong Bui Thi Xuan', 'Da Lat', (SELECT `id` FROM `provinces` WHERE `id` = 26 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70301001 AND `province_id` = 26 LIMIT 1), 11.940400, 108.450300, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 40, 30, 0, 4.65, 54, NOW(), NOW()),
   ('9053bcb2-d5d9-4f58-aa96-b8be36c3eff5', 'glowora-beauty-lounge-011-dong-nai', '4ce5b4c5-8bbb-4b77-847c-5dda71e99478', 'Glowora Beauty Lounge 011', '0287100011', 'hello.demo011@glowora.local', 'https://glowora-beauty-lounge-011-dong-nai.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874" alt="Glowora Beauty Lounge 011" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Glowora Beauty Lounge 011 - Kh&ocirc;ng gian tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; tai Dong Nai</h2>
@@ -334,7 +334,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Glowora Beauty Lounge 011 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Glowora Beauty Lounge 011 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '21 Duong Vo Thi Sau', 'Bien Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 28 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 71301001 AND `province_id` = 28 LIMIT 1), 10.961400, 106.838600, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 45, 45, 1, 4.66, 57, NOW(), NOW()),
+</div>', '21 Duong Vo Thi Sau', 'Bien Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 28 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 71301001 AND `province_id` = 28 LIMIT 1), 10.961400, 106.838600, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 45, 45, 1, 4.66, 57, NOW(), NOW()),
   ('c3fce4fe-6461-4e7b-b186-41bdb4eb63bb', 'an-nhien-beauty-lounge-012-hai-phong', '3bd1b3b8-9b73-4f54-a2fe-5374ee4e093c', 'An Nhien Beauty Lounge 012', '0287100012', 'hello.demo012@glowora.local', 'https://an-nhien-beauty-lounge-012-hai-phong.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1" alt="An Nhien Beauty Lounge 012" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>An Nhien Beauty Lounge 012 - Kh&ocirc;ng gian nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p tai Hai Phong</h2>
@@ -353,7 +353,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>An Nhien Beauty Lounge 012 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i An Nhien Beauty Lounge 012 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '22 Duong Dien Bien Phu', 'Hong Bang', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10301008 AND `province_id` = 4 LIMIT 1), 20.852900, 106.688100, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 15, 0, 4.67, 60, NOW(), NOW()),
+</div>', '22 Duong Dien Bien Phu', 'Hong Bang', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10301008 AND `province_id` = 4 LIMIT 1), 20.852900, 106.688100, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 15, 0, 4.67, 60, NOW(), NOW()),
   ('4b4d1879-81d2-40e5-a537-ae407f5154d6', 'lumina-beauty-lounge-013-hue', '8e4d06ab-845f-4978-b8b9-c1d915f62a9c', 'Lumina Beauty Lounge 013', '0287100013', 'hello.demo013@glowora.local', 'https://lumina-beauty-lounge-013-hue.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15" alt="Lumina Beauty Lounge 013" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Lumina Beauty Lounge 013 - Kh&ocirc;ng gian ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u tai Hue</h2>
@@ -372,7 +372,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Lumina Beauty Lounge 013 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Lumina Beauty Lounge 013 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '23 Duong Le Loi', 'Thuan Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 20 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40501001 AND `province_id` = 20 LIMIT 1), 16.475700, 107.594900, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.68, 63, NOW(), NOW()),
+</div>', '23 Duong Le Loi', 'Thuan Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 20 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40501001 AND `province_id` = 20 LIMIT 1), 16.475700, 107.594900, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.68, 63, NOW(), NOW()),
   ('8ae323ad-591a-426c-abbe-54aae38d1589', 'moc-an-beauty-lounge-014-nghe-an', '3f8c35c7-c4d8-4ca8-9998-aed8dd83ebac', 'Moc An Beauty Lounge 014', '0287100014', 'hello.demo014@glowora.local', 'https://moc-an-beauty-lounge-014-nghe-an.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1600334129128-685c5582fd35" alt="Moc An Beauty Lounge 014" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Moc An Beauty Lounge 014 - Kh&ocirc;ng gian massage th&#432; gi&atilde;n tr&#7883; li&#7879;u tai Nghe An</h2>
@@ -391,7 +391,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Moc An Beauty Lounge 014 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Moc An Beauty Lounge 014 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; massage th&#432; gi&atilde;n tr&#7883; li&#7879;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '24 Duong Le Mao', 'Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 17 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40301001 AND `province_id` = 17 LIMIT 1), 18.667600, 105.689300, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.69, 66, NOW(), NOW()),
+</div>', '24 Duong Le Mao', 'Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 17 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40301001 AND `province_id` = 17 LIMIT 1), 18.667600, 105.689300, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.69, 66, NOW(), NOW()),
   ('17daaea8-dba3-4823-95ab-365ef5ed4eb3', 'serene-beauty-lounge-015-thanh-hoa', '98a887dc-03f5-40c0-9a3e-c5744740aa19', 'Serene Beauty Lounge 015', '0287100015', 'hello.demo015@glowora.local', 'https://serene-beauty-lounge-015-thanh-hoa.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881" alt="Serene Beauty Lounge 015" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Serene Beauty Lounge 015 - Kh&ocirc;ng gian g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y tai Thanh Hoa</h2>
@@ -410,7 +410,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Serene Beauty Lounge 015 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Serene Beauty Lounge 015 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '25 Dai lo Le Loi', 'Thanh Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 16 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40101001 AND `province_id` = 16 LIMIT 1), 19.798700, 105.777200, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.70, 69, NOW(), NOW()),
+</div>', '25 Dai lo Le Loi', 'Thanh Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 16 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40101001 AND `province_id` = 16 LIMIT 1), 19.798700, 105.777200, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.70, 69, NOW(), NOW()),
   ('0a64bdee-eded-4b57-9e82-46bccd99ce78', 'aurora-beauty-lounge-016-dak-lak', 'b2489ada-d2a4-4883-9821-ccf41353b769', 'Aurora Beauty Lounge 016', '0287100016', 'hello.demo016@glowora.local', 'https://aurora-beauty-lounge-016-dak-lak.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e" alt="Aurora Beauty Lounge 016" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Aurora Beauty Lounge 016 - Kh&ocirc;ng gian ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng tai Dak Lak</h2>
@@ -429,7 +429,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Aurora Beauty Lounge 016 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Aurora Beauty Lounge 016 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '26 Duong Nguyen Tat Thanh', 'Buon Ma Thuot', (SELECT `id` FROM `provinces` WHERE `id` = 25 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60501001 AND `province_id` = 25 LIMIT 1), 12.662200, 108.034200, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.71, 72, NOW(), NOW()),
+</div>', '26 Duong Nguyen Tat Thanh', 'Buon Ma Thuot', (SELECT `id` FROM `provinces` WHERE `id` = 25 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60501001 AND `province_id` = 25 LIMIT 1), 12.662200, 108.034200, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.71, 72, NOW(), NOW()),
   ('263d93c4-c85e-4f4b-974d-d9cb5b89024d', 'la-vie-beauty-lounge-017-an-giang', 'e43083d6-194a-44da-8428-a2a15d6992f8', 'La Vie Beauty Lounge 017', '0287100017', 'hello.demo017@glowora.local', 'https://la-vie-beauty-lounge-017-an-giang.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1596178065887-1198b6148b2b" alt="La Vie Beauty Lounge 017" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>La Vie Beauty Lounge 017 - Kh&ocirc;ng gian tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; tai An Giang</h2>
@@ -448,7 +448,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>La Vie Beauty Lounge 017 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i La Vie Beauty Lounge 017 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '27 Duong Tran Hung Dao', 'Long Xuyen', (SELECT `id` FROM `provinces` WHERE `id` = 32 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 80501001 AND `province_id` = 32 LIMIT 1), 10.386400, 105.435200, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 35, 45, 1, 4.72, 75, NOW(), NOW()),
+</div>', '27 Duong Tran Hung Dao', 'Long Xuyen', (SELECT `id` FROM `provinces` WHERE `id` = 32 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 80501001 AND `province_id` = 32 LIMIT 1), 10.386400, 105.435200, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 35, 45, 1, 4.72, 75, NOW(), NOW()),
   ('c8d45ab7-017c-45c5-8d65-c5d6ed722997', 'herbal-beauty-lounge-018-vinh-long', 'e2311df0-8c9c-495b-8632-3f7702e37262', 'Herbal Beauty Lounge 018', '0287100018', 'hello.demo018@glowora.local', 'https://herbal-beauty-lounge-018-vinh-long.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035" alt="Herbal Beauty Lounge 018" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Herbal Beauty Lounge 018 - Kh&ocirc;ng gian nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p tai Vinh Long</h2>
@@ -467,7 +467,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Herbal Beauty Lounge 018 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Herbal Beauty Lounge 018 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '28 Duong Pham Ngu Lao', 'Tra Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 30 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81701037 AND `province_id` = 30 LIMIT 1), 9.938700, 106.349300, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 40, 15, 0, 4.73, 78, NOW(), NOW()),
+</div>', '28 Duong Pham Ngu Lao', 'Tra Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 30 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81701037 AND `province_id` = 30 LIMIT 1), 9.938700, 106.349300, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 40, 15, 0, 4.73, 78, NOW(), NOW()),
   ('fd964992-a96f-462d-be0b-b31feb707916', 'bloom-beauty-lounge-019-thai-nguyen', 'ee0dccfd-a43c-4734-94f8-32ca76021515', 'Bloom Beauty Lounge 019', '0287100019', 'hello.demo019@glowora.local', 'https://bloom-beauty-lounge-019-thai-nguyen.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1591343395082-e120087004b4" alt="Bloom Beauty Lounge 019" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Bloom Beauty Lounge 019 - Kh&ocirc;ng gian ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u tai Thai Nguyen</h2>
@@ -486,7 +486,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Bloom Beauty Lounge 019 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Bloom Beauty Lounge 019 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '29 Duong Hoang Van Thu', 'Thai Nguyen', (SELECT `id` FROM `provinces` WHERE `id` = 10 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 21501001 AND `province_id` = 10 LIMIT 1), 21.602200, 105.856100, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 45, 30, 1, 4.74, 81, NOW(), NOW()),
+</div>', '29 Duong Hoang Van Thu', 'Thai Nguyen', (SELECT `id` FROM `provinces` WHERE `id` = 10 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 21501001 AND `province_id` = 10 LIMIT 1), 21.602200, 105.856100, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 45, 30, 1, 4.74, 81, NOW(), NOW()),
   ('9d2376fd-9d97-41cc-b14e-d348bd8fd3a7', 'sakura-beauty-lounge-020-hai-phong', 'f25f65ce-0db5-4064-8d94-9d1600c7d026', 'Sakura Beauty Lounge 020', '0287100020', 'hello.demo020@glowora.local', 'https://sakura-beauty-lounge-020-hai-phong.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9" alt="Sakura Beauty Lounge 020" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Sakura Beauty Lounge 020 - Kh&ocirc;ng gian massage th&#432; gi&atilde;n tr&#7883; li&#7879;u tai Hai Phong</h2>
@@ -505,7 +505,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Sakura Beauty Lounge 020 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Sakura Beauty Lounge 020 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; massage th&#432; gi&atilde;n tr&#7883; li&#7879;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '30 Duong Le Hong Phong', 'Ngo Quyen', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10303010 AND `province_id` = 4 LIMIT 1), 20.868100, 106.694200, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 30, 45, 0, 4.75, 84, NOW(), NOW()),
+</div>', '30 Duong Le Hong Phong', 'Ngo Quyen', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10303010 AND `province_id` = 4 LIMIT 1), 20.868100, 106.694200, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 30, 45, 0, 4.75, 84, NOW(), NOW()),
   ('1ef02d2f-c425-40e9-b5f5-2981a5a14be9', 'glowora-wellness-studio-021-ha-noi', 'e497f610-03af-44b5-bc68-9237171bd7c2', 'Glowora Wellness Studio 021', '0287100021', 'hello.demo021@glowora.local', 'https://glowora-wellness-studio-021-ha-noi.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874" alt="Glowora Wellness Studio 021" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Glowora Wellness Studio 021 - Kh&ocirc;ng gian g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y tai Ha Noi</h2>
@@ -524,7 +524,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Glowora Wellness Studio 021 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Glowora Wellness Studio 021 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '31 Pho Ly Thai To', 'Hoan Kiem', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10105001 AND `province_id` = 1 LIMIT 1), 21.016500, 105.850200, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 35, 15, 1, 4.76, 87, NOW(), NOW()),
+</div>', '31 Pho Ly Thai To', 'Hoan Kiem', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10105001 AND `province_id` = 1 LIMIT 1), 21.016500, 105.850200, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 35, 15, 1, 4.76, 87, NOW(), NOW()),
   ('df68a25e-4f9d-4b3f-aa7a-44a5b0d7fb06', 'an-nhien-wellness-studio-022-ha-noi', 'aaee9f50-75bd-4ef1-97a2-20975b844cf2', 'An Nhien Wellness Studio 022', '0287100022', 'hello.demo022@glowora.local', 'https://an-nhien-wellness-studio-022-ha-noi.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1" alt="An Nhien Wellness Studio 022" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>An Nhien Wellness Studio 022 - Kh&ocirc;ng gian ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng tai Ha Noi</h2>
@@ -543,7 +543,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>An Nhien Wellness Studio 022 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i An Nhien Wellness Studio 022 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '32 Pho Phan Dinh Phung', 'Ba Dinh', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10101003 AND `province_id` = 1 LIMIT 1), 21.031200, 105.840300, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 40, 30, 0, 4.77, 90, NOW(), NOW()),
+</div>', '32 Pho Phan Dinh Phung', 'Ba Dinh', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10101003 AND `province_id` = 1 LIMIT 1), 21.031200, 105.840300, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 40, 30, 0, 4.77, 90, NOW(), NOW()),
   ('f622d8d3-02c9-4bbd-ac6f-dd7dac500f4c', 'lumina-wellness-studio-023-ha-noi', '0c3a08c6-3560-4657-902b-c8dfb37a77ef', 'Lumina Wellness Studio 023', '0287100023', 'hello.demo023@glowora.local', 'https://lumina-wellness-studio-023-ha-noi.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15" alt="Lumina Wellness Studio 023" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Lumina Wellness Studio 023 - Kh&ocirc;ng gian tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; tai Ha Noi</h2>
@@ -562,7 +562,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Lumina Wellness Studio 023 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Lumina Wellness Studio 023 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '33 Duong Xuan Thuy', 'Cau Giay', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10113025 AND `province_id` = 1 LIMIT 1), 21.032700, 105.786400, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 45, 45, 1, 4.78, 93, NOW(), NOW()),
+</div>', '33 Duong Xuan Thuy', 'Cau Giay', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10113025 AND `province_id` = 1 LIMIT 1), 21.032700, 105.786400, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 45, 45, 1, 4.78, 93, NOW(), NOW()),
   ('6371fd83-1b7b-4cf1-bc7e-6eb2032df060', 'moc-an-wellness-studio-024-ho-chi-minh', '5f77ebbc-3c4d-4731-81be-9ed8f1f8df26', 'Moc An Wellness Studio 024', '0287100024', 'hello.demo024@glowora.local', 'https://moc-an-wellness-studio-024-ho-chi-minh.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1600334129128-685c5582fd35" alt="Moc An Wellness Studio 024" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Moc An Wellness Studio 024 - Kh&ocirc;ng gian nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p tai Ho Chi Minh</h2>
@@ -581,7 +581,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Moc An Wellness Studio 024 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Moc An Wellness Studio 024 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '34 Duong Nguyen Van Linh', 'Binh Chanh', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70139145 AND `province_id` = 29 LIMIT 1), 10.729800, 106.697000, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 15, 0, 4.79, 96, NOW(), NOW()),
+</div>', '34 Duong Nguyen Van Linh', 'Binh Chanh', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70139145 AND `province_id` = 29 LIMIT 1), 10.729800, 106.697000, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 15, 0, 4.79, 96, NOW(), NOW()),
   ('35f259bf-5585-46ae-a71c-265e97ed6e3b', 'serene-wellness-studio-025-ho-chi-minh', '18665d9d-83b7-4d1f-bddb-b6dec8c7c504', 'Serene Wellness Studio 025', '0287100025', 'hello.demo025@glowora.local', 'https://serene-wellness-studio-025-ho-chi-minh.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881" alt="Serene Wellness Studio 025" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Serene Wellness Studio 025 - Kh&ocirc;ng gian ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u tai Ho Chi Minh</h2>
@@ -600,7 +600,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Serene Wellness Studio 025 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Serene Wellness Studio 025 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '35 Duong Quang Trung', 'Hoc Mon', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70137159 AND `province_id` = 29 LIMIT 1), 10.887500, 106.581700, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.80, 99, NOW(), NOW()),
+</div>', '35 Duong Quang Trung', 'Hoc Mon', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70137159 AND `province_id` = 29 LIMIT 1), 10.887500, 106.581700, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.80, 99, NOW(), NOW()),
   ('ab4a0bfb-235a-4120-9c0d-a9a1ab4d33a4', 'aurora-wellness-studio-026-ho-chi-minh', 'bfaf5c25-85b0-4d7b-9ddd-5ddb2a84628c', 'Aurora Wellness Studio 026', '0287100026', 'hello.demo026@glowora.local', 'https://aurora-wellness-studio-026-ho-chi-minh.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e" alt="Aurora Wellness Studio 026" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Aurora Wellness Studio 026 - Kh&ocirc;ng gian massage th&#432; gi&atilde;n tr&#7883; li&#7879;u tai Ho Chi Minh</h2>
@@ -619,7 +619,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Aurora Wellness Studio 026 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Aurora Wellness Studio 026 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; massage th&#432; gi&atilde;n tr&#7883; li&#7879;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '36 Duong Huynh Tan Phat', 'Nha Be', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70141162 AND `province_id` = 29 LIMIT 1), 10.703700, 106.736400, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.81, 102, NOW(), NOW()),
+</div>', '36 Duong Huynh Tan Phat', 'Nha Be', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70141162 AND `province_id` = 29 LIMIT 1), 10.703700, 106.736400, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.81, 102, NOW(), NOW()),
   ('56fb0f65-e44a-40b1-aac8-4e5531cf0e10', 'la-vie-wellness-studio-027-da-nang', 'bbf5cdb2-1974-48a8-bb50-b88559417a3f', 'La Vie Wellness Studio 027', '0287100027', 'hello.demo027@glowora.local', 'https://la-vie-wellness-studio-027-da-nang.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1596178065887-1198b6148b2b" alt="La Vie Wellness Studio 027" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>La Vie Wellness Studio 027 - Kh&ocirc;ng gian g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y tai Da Nang</h2>
@@ -638,7 +638,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>La Vie Wellness Studio 027 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i La Vie Wellness Studio 027 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '37 Duong Bach Dang', 'Hai Chau', (SELECT `id` FROM `provinces` WHERE `id` = 21 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 50101001 AND `province_id` = 21 LIMIT 1), 16.079800, 108.220800, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.82, 105, NOW(), NOW()),
+</div>', '37 Duong Bach Dang', 'Hai Chau', (SELECT `id` FROM `provinces` WHERE `id` = 21 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 50101001 AND `province_id` = 21 LIMIT 1), 16.079800, 108.220800, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.82, 105, NOW(), NOW()),
   ('07bdcd21-fb5f-4c63-8efb-8ce362503ec1', 'herbal-wellness-studio-028-can-tho', 'e9eac8ac-5a73-4b77-83fa-2139b4f14948', 'Herbal Wellness Studio 028', '0287100028', 'hello.demo028@glowora.local', 'https://herbal-wellness-studio-028-can-tho.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035" alt="Herbal Wellness Studio 028" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Herbal Wellness Studio 028 - Kh&ocirc;ng gian ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng tai Can Tho</h2>
@@ -657,7 +657,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Herbal Wellness Studio 028 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Herbal Wellness Studio 028 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '38 Duong Hai Ba Trung', 'Ninh Kieu', (SELECT `id` FROM `provinces` WHERE `id` = 33 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81501001 AND `province_id` = 33 LIMIT 1), 10.033200, 105.750900, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.83, 108, NOW(), NOW()),
+</div>', '38 Duong Hai Ba Trung', 'Ninh Kieu', (SELECT `id` FROM `provinces` WHERE `id` = 33 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81501001 AND `province_id` = 33 LIMIT 1), 10.033200, 105.750900, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.83, 108, NOW(), NOW()),
   ('5e8897da-b18a-46fb-971c-754214f39536', 'bloom-wellness-studio-029-khanh-hoa', '9d05589c-314e-4c2c-8b81-526ed4352ec9', 'Bloom Wellness Studio 029', '0287100029', 'hello.demo029@glowora.local', 'https://bloom-wellness-studio-029-khanh-hoa.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1591343395082-e120087004b4" alt="Bloom Wellness Studio 029" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Bloom Wellness Studio 029 - Kh&ocirc;ng gian tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; tai Khanh Hoa</h2>
@@ -676,7 +676,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Bloom Wellness Studio 029 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Bloom Wellness Studio 029 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '39 Duong Tran Phu', 'Nha Trang', (SELECT `id` FROM `provinces` WHERE `id` = 23 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60101001 AND `province_id` = 23 LIMIT 1), 12.230800, 109.204700, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 35, 45, 1, 4.84, 111, NOW(), NOW()),
+</div>', '39 Duong Tran Phu', 'Nha Trang', (SELECT `id` FROM `provinces` WHERE `id` = 23 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60101001 AND `province_id` = 23 LIMIT 1), 12.230800, 109.204700, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 35, 45, 1, 4.84, 111, NOW(), NOW()),
   ('56ca8cb9-bbeb-4c67-aadb-8de25669a5a2', 'sakura-wellness-studio-030-lam-dong', '19aa2220-2d28-475d-bcbc-d999c95cf7cf', 'Sakura Wellness Studio 030', '0287100030', 'hello.demo030@glowora.local', 'https://sakura-wellness-studio-030-lam-dong.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9" alt="Sakura Wellness Studio 030" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Sakura Wellness Studio 030 - Kh&ocirc;ng gian nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p tai Lam Dong</h2>
@@ -695,7 +695,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Sakura Wellness Studio 030 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Sakura Wellness Studio 030 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '40 Duong Bui Thi Xuan', 'Da Lat', (SELECT `id` FROM `provinces` WHERE `id` = 26 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70301001 AND `province_id` = 26 LIMIT 1), 11.936400, 108.450300, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 40, 15, 0, 4.85, 114, NOW(), NOW()),
+</div>', '40 Duong Bui Thi Xuan', 'Da Lat', (SELECT `id` FROM `provinces` WHERE `id` = 26 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70301001 AND `province_id` = 26 LIMIT 1), 11.936400, 108.450300, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 40, 15, 0, 4.85, 114, NOW(), NOW()),
   ('fd9a6e59-7bd7-4ebd-bf08-184b5d1648ce', 'glowora-skin-clinic-031-dong-nai', '3054e3b7-2597-4385-a25d-7f823b8db33f', 'Glowora Skin Clinic 031', '0287100031', 'hello.demo031@glowora.local', 'https://glowora-skin-clinic-031-dong-nai.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874" alt="Glowora Skin Clinic 031" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Glowora Skin Clinic 031 - Kh&ocirc;ng gian ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u tai Dong Nai</h2>
@@ -714,7 +714,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Glowora Skin Clinic 031 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Glowora Skin Clinic 031 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '41 Duong Vo Thi Sau', 'Bien Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 28 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 71301001 AND `province_id` = 28 LIMIT 1), 10.957400, 106.838600, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 45, 30, 1, 4.86, 117, NOW(), NOW()),
+</div>', '41 Duong Vo Thi Sau', 'Bien Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 28 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 71301001 AND `province_id` = 28 LIMIT 1), 10.957400, 106.838600, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 45, 30, 1, 4.86, 117, NOW(), NOW()),
   ('2015bebb-75cb-4a8a-b2a5-a92e4aeadc54', 'an-nhien-skin-clinic-032-hai-phong', '7915050a-90ae-47a1-b40f-77f46f6bc30c', 'An Nhien Skin Clinic 032', '0287100032', 'hello.demo032@glowora.local', 'https://an-nhien-skin-clinic-032-hai-phong.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1" alt="An Nhien Skin Clinic 032" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>An Nhien Skin Clinic 032 - Kh&ocirc;ng gian massage th&#432; gi&atilde;n tr&#7883; li&#7879;u tai Hai Phong</h2>
@@ -733,7 +733,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>An Nhien Skin Clinic 032 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i An Nhien Skin Clinic 032 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; massage th&#432; gi&atilde;n tr&#7883; li&#7879;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '42 Duong Dien Bien Phu', 'Hong Bang', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10301008 AND `province_id` = 4 LIMIT 1), 20.848900, 106.688100, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 30, 45, 0, 4.87, 120, NOW(), NOW()),
+</div>', '42 Duong Dien Bien Phu', 'Hong Bang', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10301008 AND `province_id` = 4 LIMIT 1), 20.848900, 106.688100, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 30, 45, 0, 4.87, 120, NOW(), NOW()),
   ('63b77a86-2fed-460b-8849-501f6b2ffd9c', 'lumina-skin-clinic-033-hue', 'e631d0ec-17b3-4c53-9538-f92c26a757ce', 'Lumina Skin Clinic 033', '0287100033', 'hello.demo033@glowora.local', 'https://lumina-skin-clinic-033-hue.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15" alt="Lumina Skin Clinic 033" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Lumina Skin Clinic 033 - Kh&ocirc;ng gian g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y tai Hue</h2>
@@ -752,7 +752,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Lumina Skin Clinic 033 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Lumina Skin Clinic 033 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '43 Duong Le Loi', 'Thuan Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 20 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40501001 AND `province_id` = 20 LIMIT 1), 16.471700, 107.594900, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 35, 15, 1, 4.88, 123, NOW(), NOW()),
+</div>', '43 Duong Le Loi', 'Thuan Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 20 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40501001 AND `province_id` = 20 LIMIT 1), 16.471700, 107.594900, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 35, 15, 1, 4.88, 123, NOW(), NOW()),
   ('34b52994-da28-4060-9601-d8529ecf2cca', 'moc-an-skin-clinic-034-nghe-an', 'acddba7c-9ab8-414e-a830-422497fe28cb', 'Moc An Skin Clinic 034', '0287100034', 'hello.demo034@glowora.local', 'https://moc-an-skin-clinic-034-nghe-an.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1600334129128-685c5582fd35" alt="Moc An Skin Clinic 034" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Moc An Skin Clinic 034 - Kh&ocirc;ng gian ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng tai Nghe An</h2>
@@ -771,7 +771,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Moc An Skin Clinic 034 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Moc An Skin Clinic 034 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '44 Duong Le Mao', 'Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 17 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40301001 AND `province_id` = 17 LIMIT 1), 18.691600, 105.689300, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 40, 30, 0, 4.89, 126, NOW(), NOW()),
+</div>', '44 Duong Le Mao', 'Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 17 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40301001 AND `province_id` = 17 LIMIT 1), 18.691600, 105.689300, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 40, 30, 0, 4.89, 126, NOW(), NOW()),
   ('6cd34565-98ec-4391-a9fc-9036eb22c803', 'serene-skin-clinic-035-thanh-hoa', '9ce3ad3e-bd75-4492-9c86-b9171aa5354b', 'Serene Skin Clinic 035', '0287100035', 'hello.demo035@glowora.local', 'https://serene-skin-clinic-035-thanh-hoa.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881" alt="Serene Skin Clinic 035" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Serene Skin Clinic 035 - Kh&ocirc;ng gian tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; tai Thanh Hoa</h2>
@@ -790,7 +790,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Serene Skin Clinic 035 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Serene Skin Clinic 035 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '45 Dai lo Le Loi', 'Thanh Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 16 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40101001 AND `province_id` = 16 LIMIT 1), 19.794700, 105.777200, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 45, 45, 1, 4.90, 129, NOW(), NOW()),
+</div>', '45 Dai lo Le Loi', 'Thanh Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 16 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40101001 AND `province_id` = 16 LIMIT 1), 19.794700, 105.777200, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 45, 45, 1, 4.90, 129, NOW(), NOW()),
   ('6e46c406-5443-49ef-ab3c-bf53c3c1bc6e', 'aurora-skin-clinic-036-dak-lak', '11020eb4-2ae3-4cf3-9d8b-89160e6001ae', 'Aurora Skin Clinic 036', '0287100036', 'hello.demo036@glowora.local', 'https://aurora-skin-clinic-036-dak-lak.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e" alt="Aurora Skin Clinic 036" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Aurora Skin Clinic 036 - Kh&ocirc;ng gian nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p tai Dak Lak</h2>
@@ -809,7 +809,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Aurora Skin Clinic 036 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Aurora Skin Clinic 036 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '46 Duong Nguyen Tat Thanh', 'Buon Ma Thuot', (SELECT `id` FROM `provinces` WHERE `id` = 25 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60501001 AND `province_id` = 25 LIMIT 1), 12.658200, 108.034200, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 15, 0, 4.91, 132, NOW(), NOW()),
+</div>', '46 Duong Nguyen Tat Thanh', 'Buon Ma Thuot', (SELECT `id` FROM `provinces` WHERE `id` = 25 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60501001 AND `province_id` = 25 LIMIT 1), 12.658200, 108.034200, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 15, 0, 4.91, 132, NOW(), NOW()),
   ('6d4ddbb6-4f33-496b-896d-5c26a6a7a128', 'la-vie-skin-clinic-037-an-giang', '54597b90-7b2f-4277-ab32-ec56fb55d9b1', 'La Vie Skin Clinic 037', '0287100037', 'hello.demo037@glowora.local', 'https://la-vie-skin-clinic-037-an-giang.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1596178065887-1198b6148b2b" alt="La Vie Skin Clinic 037" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>La Vie Skin Clinic 037 - Kh&ocirc;ng gian ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u tai An Giang</h2>
@@ -828,7 +828,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>La Vie Skin Clinic 037 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i La Vie Skin Clinic 037 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '47 Duong Tran Hung Dao', 'Long Xuyen', (SELECT `id` FROM `provinces` WHERE `id` = 32 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 80501001 AND `province_id` = 32 LIMIT 1), 10.382400, 105.435200, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.92, 135, NOW(), NOW()),
+</div>', '47 Duong Tran Hung Dao', 'Long Xuyen', (SELECT `id` FROM `provinces` WHERE `id` = 32 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 80501001 AND `province_id` = 32 LIMIT 1), 10.382400, 105.435200, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.92, 135, NOW(), NOW()),
   ('0c73f667-20c2-407c-ad42-0ef962703632', 'herbal-skin-clinic-038-vinh-long', '5717a339-49bd-4da1-b15d-cd56e0cfb6b4', 'Herbal Skin Clinic 038', '0287100038', 'hello.demo038@glowora.local', 'https://herbal-skin-clinic-038-vinh-long.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035" alt="Herbal Skin Clinic 038" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Herbal Skin Clinic 038 - Kh&ocirc;ng gian massage th&#432; gi&atilde;n tr&#7883; li&#7879;u tai Vinh Long</h2>
@@ -847,7 +847,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Herbal Skin Clinic 038 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Herbal Skin Clinic 038 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; massage th&#432; gi&atilde;n tr&#7883; li&#7879;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '48 Duong Pham Ngu Lao', 'Tra Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 30 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81701037 AND `province_id` = 30 LIMIT 1), 9.934700, 106.349300, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.93, 138, NOW(), NOW()),
+</div>', '48 Duong Pham Ngu Lao', 'Tra Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 30 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81701037 AND `province_id` = 30 LIMIT 1), 9.934700, 106.349300, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.93, 138, NOW(), NOW()),
   ('49df1442-f215-4687-bb3a-cf0937d83c9b', 'bloom-skin-clinic-039-thai-nguyen', '6b3de7a8-a471-420d-bc6c-f1e6dd60bbf2', 'Bloom Skin Clinic 039', '0287100039', 'hello.demo039@glowora.local', 'https://bloom-skin-clinic-039-thai-nguyen.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1591343395082-e120087004b4" alt="Bloom Skin Clinic 039" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Bloom Skin Clinic 039 - Kh&ocirc;ng gian g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y tai Thai Nguyen</h2>
@@ -866,7 +866,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Bloom Skin Clinic 039 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Bloom Skin Clinic 039 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '49 Duong Hoang Van Thu', 'Thai Nguyen', (SELECT `id` FROM `provinces` WHERE `id` = 10 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 21501001 AND `province_id` = 10 LIMIT 1), 21.598200, 105.856100, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.94, 141, NOW(), NOW()),
+</div>', '49 Duong Hoang Van Thu', 'Thai Nguyen', (SELECT `id` FROM `provinces` WHERE `id` = 10 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 21501001 AND `province_id` = 10 LIMIT 1), 21.598200, 105.856100, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.94, 141, NOW(), NOW()),
   ('514d83f1-3493-428c-84f8-63dc006f14db', 'sakura-skin-clinic-040-hai-phong', '1a2fc528-b6ab-49f0-9e8d-c9fd192bda9a', 'Sakura Skin Clinic 040', '0287100040', 'hello.demo040@glowora.local', 'https://sakura-skin-clinic-040-hai-phong.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9" alt="Sakura Skin Clinic 040" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Sakura Skin Clinic 040 - Kh&ocirc;ng gian ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng tai Hai Phong</h2>
@@ -885,7 +885,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Sakura Skin Clinic 040 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Sakura Skin Clinic 040 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '50 Duong Le Hong Phong', 'Ngo Quyen', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10303010 AND `province_id` = 4 LIMIT 1), 20.864100, 106.694200, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.55, 144, NOW(), NOW()),
+</div>', '50 Duong Le Hong Phong', 'Ngo Quyen', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10303010 AND `province_id` = 4 LIMIT 1), 20.864100, 106.694200, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.55, 144, NOW(), NOW()),
   ('af5c81f5-80e8-4919-a0a9-b2012c293b49', 'glowora-care-house-041-ha-noi', '8f213d85-e68a-4d9e-bbd0-8c7799df233c', 'Glowora Care House 041', '0287100041', 'hello.demo041@glowora.local', 'https://glowora-care-house-041-ha-noi.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874" alt="Glowora Care House 041" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Glowora Care House 041 - Kh&ocirc;ng gian tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; tai Ha Noi</h2>
@@ -904,7 +904,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Glowora Care House 041 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Glowora Care House 041 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '51 Pho Ly Thai To', 'Hoan Kiem', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10105001 AND `province_id` = 1 LIMIT 1), 21.040500, 105.850200, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 35, 45, 1, 4.56, 147, NOW(), NOW()),
+</div>', '51 Pho Ly Thai To', 'Hoan Kiem', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10105001 AND `province_id` = 1 LIMIT 1), 21.040500, 105.850200, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 35, 45, 1, 4.56, 147, NOW(), NOW()),
   ('a64662d6-6188-4851-88a6-ed98bd892ef6', 'an-nhien-care-house-042-ha-noi', '02dfb142-d80a-49db-b41c-af21e1a41d8c', 'An Nhien Care House 042', '0287100042', 'hello.demo042@glowora.local', 'https://an-nhien-care-house-042-ha-noi.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1" alt="An Nhien Care House 042" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>An Nhien Care House 042 - Kh&ocirc;ng gian nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p tai Ha Noi</h2>
@@ -923,7 +923,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>An Nhien Care House 042 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i An Nhien Care House 042 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '52 Pho Phan Dinh Phung', 'Ba Dinh', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10101003 AND `province_id` = 1 LIMIT 1), 21.027200, 105.840300, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 40, 15, 0, 4.57, 150, NOW(), NOW()),
+</div>', '52 Pho Phan Dinh Phung', 'Ba Dinh', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10101003 AND `province_id` = 1 LIMIT 1), 21.027200, 105.840300, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 40, 15, 0, 4.57, 150, NOW(), NOW()),
   ('4a174efe-9060-4e6c-911c-0d4ecb1f5679', 'lumina-care-house-043-ha-noi', '3d87225c-4a84-4973-9fe5-adcd1346f83c', 'Lumina Care House 043', '0287100043', 'hello.demo043@glowora.local', 'https://lumina-care-house-043-ha-noi.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15" alt="Lumina Care House 043" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Lumina Care House 043 - Kh&ocirc;ng gian ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u tai Ha Noi</h2>
@@ -942,7 +942,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Lumina Care House 043 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Lumina Care House 043 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '53 Duong Xuan Thuy', 'Cau Giay', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10113025 AND `province_id` = 1 LIMIT 1), 21.028700, 105.786400, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 45, 30, 1, 4.58, 153, NOW(), NOW()),
+</div>', '53 Duong Xuan Thuy', 'Cau Giay', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10113025 AND `province_id` = 1 LIMIT 1), 21.028700, 105.786400, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 45, 30, 1, 4.58, 153, NOW(), NOW()),
   ('a55d8d1f-66bb-4709-a6b5-9ff3193c0419', 'moc-an-care-house-044-ho-chi-minh', '1db6d02c-25cb-46d8-93e7-c2ae9c71d9da', 'Moc An Care House 044', '0287100044', 'hello.demo044@glowora.local', 'https://moc-an-care-house-044-ho-chi-minh.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1600334129128-685c5582fd35" alt="Moc An Care House 044" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Moc An Care House 044 - Kh&ocirc;ng gian massage th&#432; gi&atilde;n tr&#7883; li&#7879;u tai Ho Chi Minh</h2>
@@ -961,7 +961,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Moc An Care House 044 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Moc An Care House 044 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; massage th&#432; gi&atilde;n tr&#7883; li&#7879;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '54 Duong Nguyen Van Linh', 'Binh Chanh', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70139145 AND `province_id` = 29 LIMIT 1), 10.725800, 106.697000, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 30, 45, 0, 4.59, 156, NOW(), NOW()),
+</div>', '54 Duong Nguyen Van Linh', 'Binh Chanh', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70139145 AND `province_id` = 29 LIMIT 1), 10.725800, 106.697000, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 30, 45, 0, 4.59, 156, NOW(), NOW()),
   ('d8822fb6-10d9-40ac-979e-c95496075b9b', 'serene-care-house-045-ho-chi-minh', 'b5b198a8-975a-46a8-aaec-4b1b8cca9be3', 'Serene Care House 045', '0287100045', 'hello.demo045@glowora.local', 'https://serene-care-house-045-ho-chi-minh.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881" alt="Serene Care House 045" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Serene Care House 045 - Kh&ocirc;ng gian g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y tai Ho Chi Minh</h2>
@@ -980,7 +980,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Serene Care House 045 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Serene Care House 045 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '55 Duong Quang Trung', 'Hoc Mon', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70137159 AND `province_id` = 29 LIMIT 1), 10.883500, 106.581700, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 35, 15, 1, 4.60, 159, NOW(), NOW()),
+</div>', '55 Duong Quang Trung', 'Hoc Mon', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70137159 AND `province_id` = 29 LIMIT 1), 10.883500, 106.581700, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 35, 15, 1, 4.60, 159, NOW(), NOW()),
   ('6d3b4a33-8b9c-4c67-914a-b947b7d1ba60', 'aurora-care-house-046-ho-chi-minh', '6978a393-398f-4ca0-ad62-a8043fc4df46', 'Aurora Care House 046', '0287100046', 'hello.demo046@glowora.local', 'https://aurora-care-house-046-ho-chi-minh.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e" alt="Aurora Care House 046" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Aurora Care House 046 - Kh&ocirc;ng gian ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng tai Ho Chi Minh</h2>
@@ -999,7 +999,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Aurora Care House 046 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Aurora Care House 046 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '56 Duong Huynh Tan Phat', 'Nha Be', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70141162 AND `province_id` = 29 LIMIT 1), 10.699700, 106.736400, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 40, 30, 0, 4.61, 162, NOW(), NOW()),
+</div>', '56 Duong Huynh Tan Phat', 'Nha Be', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70141162 AND `province_id` = 29 LIMIT 1), 10.699700, 106.736400, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 40, 30, 0, 4.61, 162, NOW(), NOW()),
   ('e00a22a5-80f0-44bd-8473-68d6f29a7dd9', 'la-vie-care-house-047-da-nang', '06545e23-8aa2-49b2-8ce6-0c14f323e505', 'La Vie Care House 047', '0287100047', 'hello.demo047@glowora.local', 'https://la-vie-care-house-047-da-nang.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1596178065887-1198b6148b2b" alt="La Vie Care House 047" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>La Vie Care House 047 - Kh&ocirc;ng gian tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; tai Da Nang</h2>
@@ -1018,7 +1018,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>La Vie Care House 047 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i La Vie Care House 047 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '57 Duong Bach Dang', 'Hai Chau', (SELECT `id` FROM `provinces` WHERE `id` = 21 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 50101001 AND `province_id` = 21 LIMIT 1), 16.075800, 108.220800, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 45, 45, 1, 4.62, 165, NOW(), NOW()),
+</div>', '57 Duong Bach Dang', 'Hai Chau', (SELECT `id` FROM `provinces` WHERE `id` = 21 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 50101001 AND `province_id` = 21 LIMIT 1), 16.075800, 108.220800, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 45, 45, 1, 4.62, 165, NOW(), NOW()),
   ('02051708-cc64-44e2-b8cb-24d505673183', 'herbal-care-house-048-can-tho', 'b7d62b81-776b-49a2-b591-8bfa2ba65a81', 'Herbal Care House 048', '0287100048', 'hello.demo048@glowora.local', 'https://herbal-care-house-048-can-tho.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035" alt="Herbal Care House 048" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Herbal Care House 048 - Kh&ocirc;ng gian nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p tai Can Tho</h2>
@@ -1037,7 +1037,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Herbal Care House 048 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Herbal Care House 048 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '58 Duong Hai Ba Trung', 'Ninh Kieu', (SELECT `id` FROM `provinces` WHERE `id` = 33 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81501001 AND `province_id` = 33 LIMIT 1), 10.057200, 105.750900, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 15, 0, 4.63, 168, NOW(), NOW()),
+</div>', '58 Duong Hai Ba Trung', 'Ninh Kieu', (SELECT `id` FROM `provinces` WHERE `id` = 33 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81501001 AND `province_id` = 33 LIMIT 1), 10.057200, 105.750900, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 15, 0, 4.63, 168, NOW(), NOW()),
   ('c41e849b-03e8-4bd6-a8a2-2b0e43db7b22', 'bloom-care-house-049-khanh-hoa', '5b6c2c09-b064-4b96-9d12-393b0ed769ed', 'Bloom Care House 049', '0287100049', 'hello.demo049@glowora.local', 'https://bloom-care-house-049-khanh-hoa.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1591343395082-e120087004b4" alt="Bloom Care House 049" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Bloom Care House 049 - Kh&ocirc;ng gian ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u tai Khanh Hoa</h2>
@@ -1056,7 +1056,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Bloom Care House 049 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Bloom Care House 049 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '59 Duong Tran Phu', 'Nha Trang', (SELECT `id` FROM `provinces` WHERE `id` = 23 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60101001 AND `province_id` = 23 LIMIT 1), 12.226800, 109.204700, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.64, 171, NOW(), NOW()),
+</div>', '59 Duong Tran Phu', 'Nha Trang', (SELECT `id` FROM `provinces` WHERE `id` = 23 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60101001 AND `province_id` = 23 LIMIT 1), 12.226800, 109.204700, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.64, 171, NOW(), NOW()),
   ('bbe663c9-ab7f-4782-8007-c890fc4ca1a4', 'sakura-care-house-050-lam-dong', 'fe66fb5d-f76b-4c4c-8a3c-0641806c7626', 'Sakura Care House 050', '0287100050', 'hello.demo050@glowora.local', 'https://sakura-care-house-050-lam-dong.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9" alt="Sakura Care House 050" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Sakura Care House 050 - Kh&ocirc;ng gian massage th&#432; gi&atilde;n tr&#7883; li&#7879;u tai Lam Dong</h2>
@@ -1075,7 +1075,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Sakura Care House 050 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Sakura Care House 050 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; massage th&#432; gi&atilde;n tr&#7883; li&#7879;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '60 Duong Bui Thi Xuan', 'Da Lat', (SELECT `id` FROM `provinces` WHERE `id` = 26 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70301001 AND `province_id` = 26 LIMIT 1), 11.932400, 108.450300, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.65, 174, NOW(), NOW()),
+</div>', '60 Duong Bui Thi Xuan', 'Da Lat', (SELECT `id` FROM `provinces` WHERE `id` = 26 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70301001 AND `province_id` = 26 LIMIT 1), 11.932400, 108.450300, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.65, 174, NOW(), NOW()),
   ('1274da9f-9cdf-41c9-a60a-250ac5245630', 'glowora-therapy-center-051-dong-nai', 'c0418ece-ecca-496b-be42-ce5089637690', 'Glowora Therapy Center 051', '0287100051', 'hello.demo051@glowora.local', 'https://glowora-therapy-center-051-dong-nai.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874" alt="Glowora Therapy Center 051" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Glowora Therapy Center 051 - Kh&ocirc;ng gian g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y tai Dong Nai</h2>
@@ -1094,7 +1094,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Glowora Therapy Center 051 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Glowora Therapy Center 051 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '61 Duong Vo Thi Sau', 'Bien Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 28 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 71301001 AND `province_id` = 28 LIMIT 1), 10.953400, 106.838600, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.66, 177, NOW(), NOW()),
+</div>', '61 Duong Vo Thi Sau', 'Bien Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 28 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 71301001 AND `province_id` = 28 LIMIT 1), 10.953400, 106.838600, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.66, 177, NOW(), NOW()),
   ('8ad2f65b-4fcb-4721-87b1-28619c95a611', 'an-nhien-therapy-center-052-hai-phong', 'e5345114-7be9-46d8-942d-dc2d75b824b5', 'An Nhien Therapy Center 052', '0287100052', 'hello.demo052@glowora.local', 'https://an-nhien-therapy-center-052-hai-phong.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1" alt="An Nhien Therapy Center 052" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>An Nhien Therapy Center 052 - Kh&ocirc;ng gian ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng tai Hai Phong</h2>
@@ -1113,7 +1113,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>An Nhien Therapy Center 052 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i An Nhien Therapy Center 052 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '62 Duong Dien Bien Phu', 'Hong Bang', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10301008 AND `province_id` = 4 LIMIT 1), 20.844900, 106.688100, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.67, 180, NOW(), NOW()),
+</div>', '62 Duong Dien Bien Phu', 'Hong Bang', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10301008 AND `province_id` = 4 LIMIT 1), 20.844900, 106.688100, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.67, 180, NOW(), NOW()),
   ('94385bc4-c502-4222-bbb4-bac23b64d2d1', 'lumina-therapy-center-053-hue', 'bb9c14fe-42ee-4a3c-9f4c-18ecb0d7f924', 'Lumina Therapy Center 053', '0287100053', 'hello.demo053@glowora.local', 'https://lumina-therapy-center-053-hue.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15" alt="Lumina Therapy Center 053" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Lumina Therapy Center 053 - Kh&ocirc;ng gian tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; tai Hue</h2>
@@ -1132,7 +1132,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Lumina Therapy Center 053 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Lumina Therapy Center 053 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '63 Duong Le Loi', 'Thuan Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 20 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40501001 AND `province_id` = 20 LIMIT 1), 16.467700, 107.594900, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 35, 45, 1, 4.68, 183, NOW(), NOW()),
+</div>', '63 Duong Le Loi', 'Thuan Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 20 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40501001 AND `province_id` = 20 LIMIT 1), 16.467700, 107.594900, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 35, 45, 1, 4.68, 183, NOW(), NOW()),
   ('cc404825-e5e7-4850-8f68-230b22de89f6', 'moc-an-therapy-center-054-nghe-an', '2195617b-16a9-498e-a45c-8199a1bbbcc7', 'Moc An Therapy Center 054', '0287100054', 'hello.demo054@glowora.local', 'https://moc-an-therapy-center-054-nghe-an.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1600334129128-685c5582fd35" alt="Moc An Therapy Center 054" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Moc An Therapy Center 054 - Kh&ocirc;ng gian nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p tai Nghe An</h2>
@@ -1151,7 +1151,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Moc An Therapy Center 054 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Moc An Therapy Center 054 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '64 Duong Le Mao', 'Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 17 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40301001 AND `province_id` = 17 LIMIT 1), 18.687600, 105.689300, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 40, 15, 0, 4.69, 186, NOW(), NOW()),
+</div>', '64 Duong Le Mao', 'Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 17 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40301001 AND `province_id` = 17 LIMIT 1), 18.687600, 105.689300, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 40, 15, 0, 4.69, 186, NOW(), NOW()),
   ('ffbb5b58-8301-46a6-8368-91faa679b196', 'serene-therapy-center-055-thanh-hoa', '4a369b0d-de2f-40c2-9fea-477058390203', 'Serene Therapy Center 055', '0287100055', 'hello.demo055@glowora.local', 'https://serene-therapy-center-055-thanh-hoa.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881" alt="Serene Therapy Center 055" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Serene Therapy Center 055 - Kh&ocirc;ng gian ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u tai Thanh Hoa</h2>
@@ -1170,7 +1170,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Serene Therapy Center 055 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Serene Therapy Center 055 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '65 Dai lo Le Loi', 'Thanh Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 16 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40101001 AND `province_id` = 16 LIMIT 1), 19.818700, 105.777200, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 45, 30, 1, 4.70, 189, NOW(), NOW()),
+</div>', '65 Dai lo Le Loi', 'Thanh Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 16 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40101001 AND `province_id` = 16 LIMIT 1), 19.818700, 105.777200, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 45, 30, 1, 4.70, 189, NOW(), NOW()),
   ('938ffd1a-a154-464d-b61c-cfba0d7ec8bf', 'aurora-therapy-center-056-dak-lak', 'a0b9e055-d678-468b-bd68-642aa48e62b5', 'Aurora Therapy Center 056', '0287100056', 'hello.demo056@glowora.local', 'https://aurora-therapy-center-056-dak-lak.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e" alt="Aurora Therapy Center 056" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Aurora Therapy Center 056 - Kh&ocirc;ng gian massage th&#432; gi&atilde;n tr&#7883; li&#7879;u tai Dak Lak</h2>
@@ -1189,7 +1189,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Aurora Therapy Center 056 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Aurora Therapy Center 056 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; massage th&#432; gi&atilde;n tr&#7883; li&#7879;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '66 Duong Nguyen Tat Thanh', 'Buon Ma Thuot', (SELECT `id` FROM `provinces` WHERE `id` = 25 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60501001 AND `province_id` = 25 LIMIT 1), 12.654200, 108.034200, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 30, 45, 0, 4.71, 192, NOW(), NOW()),
+</div>', '66 Duong Nguyen Tat Thanh', 'Buon Ma Thuot', (SELECT `id` FROM `provinces` WHERE `id` = 25 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60501001 AND `province_id` = 25 LIMIT 1), 12.654200, 108.034200, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 30, 45, 0, 4.71, 192, NOW(), NOW()),
   ('28e3d9ea-2ad4-4c63-bab0-df00aec86e57', 'la-vie-therapy-center-057-an-giang', 'c0236ee1-792d-4d03-9749-8e11fc763124', 'La Vie Therapy Center 057', '0287100057', 'hello.demo057@glowora.local', 'https://la-vie-therapy-center-057-an-giang.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1596178065887-1198b6148b2b" alt="La Vie Therapy Center 057" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>La Vie Therapy Center 057 - Kh&ocirc;ng gian g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y tai An Giang</h2>
@@ -1208,7 +1208,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>La Vie Therapy Center 057 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i La Vie Therapy Center 057 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '67 Duong Tran Hung Dao', 'Long Xuyen', (SELECT `id` FROM `provinces` WHERE `id` = 32 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 80501001 AND `province_id` = 32 LIMIT 1), 10.378400, 105.435200, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 35, 15, 1, 4.72, 195, NOW(), NOW()),
+</div>', '67 Duong Tran Hung Dao', 'Long Xuyen', (SELECT `id` FROM `provinces` WHERE `id` = 32 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 80501001 AND `province_id` = 32 LIMIT 1), 10.378400, 105.435200, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 35, 15, 1, 4.72, 195, NOW(), NOW()),
   ('5d4d08ba-dc79-448e-bcf9-c3ecd6ab02a6', 'herbal-therapy-center-058-vinh-long', '65958aa4-ef39-420c-b347-cd331b916651', 'Herbal Therapy Center 058', '0287100058', 'hello.demo058@glowora.local', 'https://herbal-therapy-center-058-vinh-long.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035" alt="Herbal Therapy Center 058" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Herbal Therapy Center 058 - Kh&ocirc;ng gian ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng tai Vinh Long</h2>
@@ -1227,7 +1227,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Herbal Therapy Center 058 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Herbal Therapy Center 058 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '68 Duong Pham Ngu Lao', 'Tra Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 30 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81701037 AND `province_id` = 30 LIMIT 1), 9.930700, 106.349300, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 40, 30, 0, 4.73, 198, NOW(), NOW()),
+</div>', '68 Duong Pham Ngu Lao', 'Tra Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 30 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81701037 AND `province_id` = 30 LIMIT 1), 9.930700, 106.349300, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 40, 30, 0, 4.73, 198, NOW(), NOW()),
   ('12c2cf83-fc39-421a-8179-0ff93139c967', 'bloom-therapy-center-059-thai-nguyen', 'd3106a40-1c5a-4c5a-adb0-f277877e2ca8', 'Bloom Therapy Center 059', '0287100059', 'hello.demo059@glowora.local', 'https://bloom-therapy-center-059-thai-nguyen.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1591343395082-e120087004b4" alt="Bloom Therapy Center 059" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Bloom Therapy Center 059 - Kh&ocirc;ng gian tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; tai Thai Nguyen</h2>
@@ -1246,7 +1246,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Bloom Therapy Center 059 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Bloom Therapy Center 059 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '69 Duong Hoang Van Thu', 'Thai Nguyen', (SELECT `id` FROM `provinces` WHERE `id` = 10 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 21501001 AND `province_id` = 10 LIMIT 1), 21.594200, 105.856100, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 45, 45, 1, 4.74, 201, NOW(), NOW()),
+</div>', '69 Duong Hoang Van Thu', 'Thai Nguyen', (SELECT `id` FROM `provinces` WHERE `id` = 10 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 21501001 AND `province_id` = 10 LIMIT 1), 21.594200, 105.856100, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 45, 45, 1, 4.74, 201, NOW(), NOW()),
   ('f5e330ab-854d-49af-9947-049f9842197d', 'sakura-therapy-center-060-hai-phong', '50aff71b-ce76-4206-97b2-007c8789e354', 'Sakura Therapy Center 060', '0287100060', 'hello.demo060@glowora.local', 'https://sakura-therapy-center-060-hai-phong.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9" alt="Sakura Therapy Center 060" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Sakura Therapy Center 060 - Kh&ocirc;ng gian nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p tai Hai Phong</h2>
@@ -1265,7 +1265,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Sakura Therapy Center 060 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Sakura Therapy Center 060 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '70 Duong Le Hong Phong', 'Ngo Quyen', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10303010 AND `province_id` = 4 LIMIT 1), 20.860100, 106.694200, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 15, 0, 4.75, 204, NOW(), NOW()),
+</div>', '70 Duong Le Hong Phong', 'Ngo Quyen', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10303010 AND `province_id` = 4 LIMIT 1), 20.860100, 106.694200, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 15, 0, 4.75, 204, NOW(), NOW()),
   ('66a6b64d-c8de-4be5-8f6f-679d5ff1bfe2', 'glowora-nail-and-spa-061-ha-noi', 'ba20d932-6fa6-414e-8a18-2bb6f8e2c57e', 'Glowora Nail And Spa 061', '0287100061', 'hello.demo061@glowora.local', 'https://glowora-nail-and-spa-061-ha-noi.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874" alt="Glowora Nail And Spa 061" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Glowora Nail And Spa 061 - Kh&ocirc;ng gian ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u tai Ha Noi</h2>
@@ -1284,7 +1284,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Glowora Nail And Spa 061 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Glowora Nail And Spa 061 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '71 Pho Ly Thai To', 'Hoan Kiem', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10105001 AND `province_id` = 1 LIMIT 1), 21.036500, 105.850200, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.76, 207, NOW(), NOW()),
+</div>', '71 Pho Ly Thai To', 'Hoan Kiem', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10105001 AND `province_id` = 1 LIMIT 1), 21.036500, 105.850200, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.76, 207, NOW(), NOW()),
   ('afd8e6dc-fdc3-4703-bd0e-769f44d443c7', 'an-nhien-nail-and-spa-062-ha-noi', '9ee391c9-846e-4941-bea0-adad66626cd8', 'An Nhien Nail And Spa 062', '0287100062', 'hello.demo062@glowora.local', 'https://an-nhien-nail-and-spa-062-ha-noi.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1" alt="An Nhien Nail And Spa 062" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>An Nhien Nail And Spa 062 - Kh&ocirc;ng gian massage th&#432; gi&atilde;n tr&#7883; li&#7879;u tai Ha Noi</h2>
@@ -1303,7 +1303,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>An Nhien Nail And Spa 062 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i An Nhien Nail And Spa 062 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; massage th&#432; gi&atilde;n tr&#7883; li&#7879;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '72 Pho Phan Dinh Phung', 'Ba Dinh', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10101003 AND `province_id` = 1 LIMIT 1), 21.051200, 105.840300, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.77, 210, NOW(), NOW()),
+</div>', '72 Pho Phan Dinh Phung', 'Ba Dinh', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10101003 AND `province_id` = 1 LIMIT 1), 21.051200, 105.840300, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.77, 210, NOW(), NOW()),
   ('e9449c6a-1b27-41d4-b471-d38bf06be74d', 'lumina-nail-and-spa-063-ha-noi', 'a594c847-d71a-4cd0-ba3d-67533e404780', 'Lumina Nail And Spa 063', '0287100063', 'hello.demo063@glowora.local', 'https://lumina-nail-and-spa-063-ha-noi.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15" alt="Lumina Nail And Spa 063" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Lumina Nail And Spa 063 - Kh&ocirc;ng gian g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y tai Ha Noi</h2>
@@ -1322,7 +1322,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Lumina Nail And Spa 063 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Lumina Nail And Spa 063 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '73 Duong Xuan Thuy', 'Cau Giay', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10113025 AND `province_id` = 1 LIMIT 1), 21.024700, 105.786400, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.78, 213, NOW(), NOW()),
+</div>', '73 Duong Xuan Thuy', 'Cau Giay', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10113025 AND `province_id` = 1 LIMIT 1), 21.024700, 105.786400, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.78, 213, NOW(), NOW()),
   ('3757b15b-b702-4648-b4be-79bd9c410908', 'moc-an-nail-and-spa-064-ho-chi-minh', '461a3838-27a2-40d0-a607-f84b2171f13d', 'Moc An Nail And Spa 064', '0287100064', 'hello.demo064@glowora.local', 'https://moc-an-nail-and-spa-064-ho-chi-minh.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1600334129128-685c5582fd35" alt="Moc An Nail And Spa 064" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Moc An Nail And Spa 064 - Kh&ocirc;ng gian ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng tai Ho Chi Minh</h2>
@@ -1341,7 +1341,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Moc An Nail And Spa 064 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Moc An Nail And Spa 064 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '74 Duong Nguyen Van Linh', 'Binh Chanh', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70139145 AND `province_id` = 29 LIMIT 1), 10.721800, 106.697000, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.79, 216, NOW(), NOW()),
+</div>', '74 Duong Nguyen Van Linh', 'Binh Chanh', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70139145 AND `province_id` = 29 LIMIT 1), 10.721800, 106.697000, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.79, 216, NOW(), NOW()),
   ('02f868fb-4f14-44be-a223-a22fe62ea48d', 'serene-nail-and-spa-065-ho-chi-minh', '369a1f4c-1ed8-4aad-bef1-ee0ed47e78a4', 'Serene Nail And Spa 065', '0287100065', 'hello.demo065@glowora.local', 'https://serene-nail-and-spa-065-ho-chi-minh.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881" alt="Serene Nail And Spa 065" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Serene Nail And Spa 065 - Kh&ocirc;ng gian tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; tai Ho Chi Minh</h2>
@@ -1360,7 +1360,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Serene Nail And Spa 065 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Serene Nail And Spa 065 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '75 Duong Quang Trung', 'Hoc Mon', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70137159 AND `province_id` = 29 LIMIT 1), 10.879500, 106.581700, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 35, 45, 1, 4.80, 219, NOW(), NOW()),
+</div>', '75 Duong Quang Trung', 'Hoc Mon', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70137159 AND `province_id` = 29 LIMIT 1), 10.879500, 106.581700, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 35, 45, 1, 4.80, 219, NOW(), NOW()),
   ('fbd5158d-5bdc-4928-8fe3-52b14f142c3d', 'aurora-nail-and-spa-066-ho-chi-minh', 'b1ca3f31-9024-46bf-954f-a24682c54043', 'Aurora Nail And Spa 066', '0287100066', 'hello.demo066@glowora.local', 'https://aurora-nail-and-spa-066-ho-chi-minh.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e" alt="Aurora Nail And Spa 066" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Aurora Nail And Spa 066 - Kh&ocirc;ng gian nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p tai Ho Chi Minh</h2>
@@ -1379,7 +1379,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Aurora Nail And Spa 066 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Aurora Nail And Spa 066 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '76 Duong Huynh Tan Phat', 'Nha Be', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70141162 AND `province_id` = 29 LIMIT 1), 10.695700, 106.736400, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 40, 15, 0, 4.81, 222, NOW(), NOW()),
+</div>', '76 Duong Huynh Tan Phat', 'Nha Be', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70141162 AND `province_id` = 29 LIMIT 1), 10.695700, 106.736400, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 40, 15, 0, 4.81, 222, NOW(), NOW()),
   ('e33c644f-d09a-4eef-aade-a82932377db4', 'la-vie-nail-and-spa-067-da-nang', '2704c781-1e4c-4e33-9817-f3591e976974', 'La Vie Nail And Spa 067', '0287100067', 'hello.demo067@glowora.local', 'https://la-vie-nail-and-spa-067-da-nang.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1596178065887-1198b6148b2b" alt="La Vie Nail And Spa 067" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>La Vie Nail And Spa 067 - Kh&ocirc;ng gian ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u tai Da Nang</h2>
@@ -1398,7 +1398,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>La Vie Nail And Spa 067 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i La Vie Nail And Spa 067 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '77 Duong Bach Dang', 'Hai Chau', (SELECT `id` FROM `provinces` WHERE `id` = 21 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 50101001 AND `province_id` = 21 LIMIT 1), 16.071800, 108.220800, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 45, 30, 1, 4.82, 225, NOW(), NOW()),
+</div>', '77 Duong Bach Dang', 'Hai Chau', (SELECT `id` FROM `provinces` WHERE `id` = 21 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 50101001 AND `province_id` = 21 LIMIT 1), 16.071800, 108.220800, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 45, 30, 1, 4.82, 225, NOW(), NOW()),
   ('172fcddd-717b-4433-bcc6-e93880184991', 'herbal-nail-and-spa-068-can-tho', '8e9ea621-3702-4449-ae16-350ed2102057', 'Herbal Nail And Spa 068', '0287100068', 'hello.demo068@glowora.local', 'https://herbal-nail-and-spa-068-can-tho.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035" alt="Herbal Nail And Spa 068" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Herbal Nail And Spa 068 - Kh&ocirc;ng gian massage th&#432; gi&atilde;n tr&#7883; li&#7879;u tai Can Tho</h2>
@@ -1417,7 +1417,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Herbal Nail And Spa 068 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Herbal Nail And Spa 068 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; massage th&#432; gi&atilde;n tr&#7883; li&#7879;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '78 Duong Hai Ba Trung', 'Ninh Kieu', (SELECT `id` FROM `provinces` WHERE `id` = 33 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81501001 AND `province_id` = 33 LIMIT 1), 10.053200, 105.750900, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 30, 45, 0, 4.83, 228, NOW(), NOW()),
+</div>', '78 Duong Hai Ba Trung', 'Ninh Kieu', (SELECT `id` FROM `provinces` WHERE `id` = 33 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81501001 AND `province_id` = 33 LIMIT 1), 10.053200, 105.750900, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 30, 45, 0, 4.83, 228, NOW(), NOW()),
   ('6b0d767f-54d2-4b45-99bf-f37979409130', 'bloom-nail-and-spa-069-khanh-hoa', '79c4ce52-ab49-43ce-afea-a4bae00c055e', 'Bloom Nail And Spa 069', '0287100069', 'hello.demo069@glowora.local', 'https://bloom-nail-and-spa-069-khanh-hoa.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1591343395082-e120087004b4" alt="Bloom Nail And Spa 069" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Bloom Nail And Spa 069 - Kh&ocirc;ng gian g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y tai Khanh Hoa</h2>
@@ -1436,7 +1436,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Bloom Nail And Spa 069 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Bloom Nail And Spa 069 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '79 Duong Tran Phu', 'Nha Trang', (SELECT `id` FROM `provinces` WHERE `id` = 23 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60101001 AND `province_id` = 23 LIMIT 1), 12.250800, 109.204700, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 35, 15, 1, 4.84, 231, NOW(), NOW()),
+</div>', '79 Duong Tran Phu', 'Nha Trang', (SELECT `id` FROM `provinces` WHERE `id` = 23 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60101001 AND `province_id` = 23 LIMIT 1), 12.250800, 109.204700, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 35, 15, 1, 4.84, 231, NOW(), NOW()),
   ('cc0a994a-7466-4738-9bea-cf7cb8e2d0b1', 'sakura-nail-and-spa-070-lam-dong', 'f0b9c4f5-5f5d-42c2-a90e-5b8193925c3f', 'Sakura Nail And Spa 070', '0287100070', 'hello.demo070@glowora.local', 'https://sakura-nail-and-spa-070-lam-dong.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9" alt="Sakura Nail And Spa 070" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Sakura Nail And Spa 070 - Kh&ocirc;ng gian ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng tai Lam Dong</h2>
@@ -1455,7 +1455,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Sakura Nail And Spa 070 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Sakura Nail And Spa 070 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '80 Duong Bui Thi Xuan', 'Da Lat', (SELECT `id` FROM `provinces` WHERE `id` = 26 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70301001 AND `province_id` = 26 LIMIT 1), 11.928400, 108.450300, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 40, 30, 0, 4.85, 234, NOW(), NOW()),
+</div>', '80 Duong Bui Thi Xuan', 'Da Lat', (SELECT `id` FROM `provinces` WHERE `id` = 26 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70301001 AND `province_id` = 26 LIMIT 1), 11.928400, 108.450300, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 40, 30, 0, 4.85, 234, NOW(), NOW()),
   ('37a6e4cc-935f-49c5-9b6b-2c6b3f4e959c', 'glowora-duong-sinh-071-dong-nai', '3de96435-6721-4151-9294-bbf2df227263', 'Glowora Duong Sinh 071', '0287100071', 'hello.demo071@glowora.local', 'https://glowora-duong-sinh-071-dong-nai.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874" alt="Glowora Duong Sinh 071" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Glowora Duong Sinh 071 - Kh&ocirc;ng gian tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; tai Dong Nai</h2>
@@ -1474,7 +1474,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Glowora Duong Sinh 071 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Glowora Duong Sinh 071 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '81 Duong Vo Thi Sau', 'Bien Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 28 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 71301001 AND `province_id` = 28 LIMIT 1), 10.949400, 106.838600, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 45, 45, 1, 4.86, 237, NOW(), NOW()),
+</div>', '81 Duong Vo Thi Sau', 'Bien Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 28 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 71301001 AND `province_id` = 28 LIMIT 1), 10.949400, 106.838600, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 45, 45, 1, 4.86, 237, NOW(), NOW()),
   ('57d04ea6-3106-47ca-a4a8-d0b32a3f82e4', 'an-nhien-duong-sinh-072-hai-phong', '37175107-e483-4d61-ae06-587f16a41984', 'An Nhien Duong Sinh 072', '0287100072', 'hello.demo072@glowora.local', 'https://an-nhien-duong-sinh-072-hai-phong.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1" alt="An Nhien Duong Sinh 072" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>An Nhien Duong Sinh 072 - Kh&ocirc;ng gian nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p tai Hai Phong</h2>
@@ -1493,7 +1493,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>An Nhien Duong Sinh 072 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i An Nhien Duong Sinh 072 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '82 Duong Dien Bien Phu', 'Hong Bang', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10301008 AND `province_id` = 4 LIMIT 1), 20.840900, 106.688100, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 15, 0, 4.87, 240, NOW(), NOW()),
+</div>', '82 Duong Dien Bien Phu', 'Hong Bang', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10301008 AND `province_id` = 4 LIMIT 1), 20.840900, 106.688100, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 15, 0, 4.87, 240, NOW(), NOW()),
   ('2a39f074-dae4-4ba5-9c78-9ff99e9ee34d', 'lumina-duong-sinh-073-hue', 'b61d57fc-61fc-49bd-b000-b8a7c5994eeb', 'Lumina Duong Sinh 073', '0287100073', 'hello.demo073@glowora.local', 'https://lumina-duong-sinh-073-hue.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15" alt="Lumina Duong Sinh 073" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Lumina Duong Sinh 073 - Kh&ocirc;ng gian ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u tai Hue</h2>
@@ -1512,7 +1512,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Lumina Duong Sinh 073 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Lumina Duong Sinh 073 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '83 Duong Le Loi', 'Thuan Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 20 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40501001 AND `province_id` = 20 LIMIT 1), 16.463700, 107.594900, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.88, 243, NOW(), NOW()),
+</div>', '83 Duong Le Loi', 'Thuan Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 20 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40501001 AND `province_id` = 20 LIMIT 1), 16.463700, 107.594900, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.88, 243, NOW(), NOW()),
   ('f24b10e6-5b6e-4c85-9cc8-d37adb8bf944', 'moc-an-duong-sinh-074-nghe-an', 'ca57bf08-ea93-4bdb-9ae9-c6e84c473010', 'Moc An Duong Sinh 074', '0287100074', 'hello.demo074@glowora.local', 'https://moc-an-duong-sinh-074-nghe-an.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1600334129128-685c5582fd35" alt="Moc An Duong Sinh 074" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Moc An Duong Sinh 074 - Kh&ocirc;ng gian massage th&#432; gi&atilde;n tr&#7883; li&#7879;u tai Nghe An</h2>
@@ -1531,7 +1531,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Moc An Duong Sinh 074 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Moc An Duong Sinh 074 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; massage th&#432; gi&atilde;n tr&#7883; li&#7879;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '84 Duong Le Mao', 'Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 17 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40301001 AND `province_id` = 17 LIMIT 1), 18.683600, 105.689300, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.89, 246, NOW(), NOW()),
+</div>', '84 Duong Le Mao', 'Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 17 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40301001 AND `province_id` = 17 LIMIT 1), 18.683600, 105.689300, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.89, 246, NOW(), NOW()),
   ('cebb32c9-3293-4192-af42-2f71fb16fb68', 'serene-duong-sinh-075-thanh-hoa', '46c2086e-92f2-4e7d-98c4-5f390a355af4', 'Serene Duong Sinh 075', '0287100075', 'hello.demo075@glowora.local', 'https://serene-duong-sinh-075-thanh-hoa.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881" alt="Serene Duong Sinh 075" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Serene Duong Sinh 075 - Kh&ocirc;ng gian g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y tai Thanh Hoa</h2>
@@ -1550,7 +1550,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Serene Duong Sinh 075 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Serene Duong Sinh 075 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '85 Dai lo Le Loi', 'Thanh Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 16 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40101001 AND `province_id` = 16 LIMIT 1), 19.814700, 105.777200, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.90, 249, NOW(), NOW()),
+</div>', '85 Dai lo Le Loi', 'Thanh Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 16 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40101001 AND `province_id` = 16 LIMIT 1), 19.814700, 105.777200, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.90, 249, NOW(), NOW()),
   ('39b0bc70-af79-47a3-b8a1-50dc0a4b1db7', 'aurora-duong-sinh-076-dak-lak', '1ca134aa-f371-4339-8632-16dedab070df', 'Aurora Duong Sinh 076', '0287100076', 'hello.demo076@glowora.local', 'https://aurora-duong-sinh-076-dak-lak.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e" alt="Aurora Duong Sinh 076" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Aurora Duong Sinh 076 - Kh&ocirc;ng gian ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng tai Dak Lak</h2>
@@ -1569,7 +1569,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Aurora Duong Sinh 076 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Aurora Duong Sinh 076 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '86 Duong Nguyen Tat Thanh', 'Buon Ma Thuot', (SELECT `id` FROM `provinces` WHERE `id` = 25 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60501001 AND `province_id` = 25 LIMIT 1), 12.678200, 108.034200, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.91, 252, NOW(), NOW()),
+</div>', '86 Duong Nguyen Tat Thanh', 'Buon Ma Thuot', (SELECT `id` FROM `provinces` WHERE `id` = 25 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60501001 AND `province_id` = 25 LIMIT 1), 12.678200, 108.034200, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.91, 252, NOW(), NOW()),
   ('53416ad3-dd6b-4ec6-a760-803b41a86086', 'la-vie-duong-sinh-077-an-giang', '21ee528d-96bd-41e4-bc59-8156c2bc61a9', 'La Vie Duong Sinh 077', '0287100077', 'hello.demo077@glowora.local', 'https://la-vie-duong-sinh-077-an-giang.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1596178065887-1198b6148b2b" alt="La Vie Duong Sinh 077" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>La Vie Duong Sinh 077 - Kh&ocirc;ng gian tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; tai An Giang</h2>
@@ -1588,7 +1588,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>La Vie Duong Sinh 077 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i La Vie Duong Sinh 077 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '87 Duong Tran Hung Dao', 'Long Xuyen', (SELECT `id` FROM `provinces` WHERE `id` = 32 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 80501001 AND `province_id` = 32 LIMIT 1), 10.374400, 105.435200, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 35, 45, 1, 4.92, 255, NOW(), NOW()),
+</div>', '87 Duong Tran Hung Dao', 'Long Xuyen', (SELECT `id` FROM `provinces` WHERE `id` = 32 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 80501001 AND `province_id` = 32 LIMIT 1), 10.374400, 105.435200, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 35, 45, 1, 4.92, 255, NOW(), NOW()),
   ('958d3b67-b239-4656-b00d-e698d5103f41', 'herbal-duong-sinh-078-vinh-long', '1d780fd0-9e82-4c12-8d99-41b66d45b5fd', 'Herbal Duong Sinh 078', '0287100078', 'hello.demo078@glowora.local', 'https://herbal-duong-sinh-078-vinh-long.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035" alt="Herbal Duong Sinh 078" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Herbal Duong Sinh 078 - Kh&ocirc;ng gian nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p tai Vinh Long</h2>
@@ -1607,7 +1607,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Herbal Duong Sinh 078 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Herbal Duong Sinh 078 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '88 Duong Pham Ngu Lao', 'Tra Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 30 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81701037 AND `province_id` = 30 LIMIT 1), 9.926700, 106.349300, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 40, 15, 0, 4.93, 258, NOW(), NOW()),
+</div>', '88 Duong Pham Ngu Lao', 'Tra Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 30 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81701037 AND `province_id` = 30 LIMIT 1), 9.926700, 106.349300, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 40, 15, 0, 4.93, 258, NOW(), NOW()),
   ('127cffb9-1fd4-4046-95a3-e2e42280f4fc', 'bloom-duong-sinh-079-thai-nguyen', '979639bb-2ced-4908-b176-8063b5dbd1d2', 'Bloom Duong Sinh 079', '0287100079', 'hello.demo079@glowora.local', 'https://bloom-duong-sinh-079-thai-nguyen.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1591343395082-e120087004b4" alt="Bloom Duong Sinh 079" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Bloom Duong Sinh 079 - Kh&ocirc;ng gian ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u tai Thai Nguyen</h2>
@@ -1626,7 +1626,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Bloom Duong Sinh 079 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Bloom Duong Sinh 079 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '89 Duong Hoang Van Thu', 'Thai Nguyen', (SELECT `id` FROM `provinces` WHERE `id` = 10 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 21501001 AND `province_id` = 10 LIMIT 1), 21.590200, 105.856100, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 45, 30, 1, 4.94, 261, NOW(), NOW()),
+</div>', '89 Duong Hoang Van Thu', 'Thai Nguyen', (SELECT `id` FROM `provinces` WHERE `id` = 10 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 21501001 AND `province_id` = 10 LIMIT 1), 21.590200, 105.856100, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 45, 30, 1, 4.94, 261, NOW(), NOW()),
   ('04a669ad-6a78-4623-a737-5a3ed97206fe', 'sakura-duong-sinh-080-hai-phong', 'f26afeda-0b9d-48b2-b1de-ed4cb3324499', 'Sakura Duong Sinh 080', '0287100080', 'hello.demo080@glowora.local', 'https://sakura-duong-sinh-080-hai-phong.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9" alt="Sakura Duong Sinh 080" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Sakura Duong Sinh 080 - Kh&ocirc;ng gian massage th&#432; gi&atilde;n tr&#7883; li&#7879;u tai Hai Phong</h2>
@@ -1645,7 +1645,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Sakura Duong Sinh 080 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Sakura Duong Sinh 080 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; massage th&#432; gi&atilde;n tr&#7883; li&#7879;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '90 Duong Le Hong Phong', 'Ngo Quyen', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10303010 AND `province_id` = 4 LIMIT 1), 20.856100, 106.694200, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 30, 45, 0, 4.55, 264, NOW(), NOW()),
+</div>', '90 Duong Le Hong Phong', 'Ngo Quyen', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10303010 AND `province_id` = 4 LIMIT 1), 20.856100, 106.694200, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 30, 45, 0, 4.55, 264, NOW(), NOW()),
   ('9e434013-1211-4989-a137-4cbaa782c319', 'glowora-beauty-lab-081-ha-noi', 'ff55080b-f93e-4abf-ad3c-5d09cdfe2b58', 'Glowora Beauty Lab 081', '0287100081', 'hello.demo081@glowora.local', 'https://glowora-beauty-lab-081-ha-noi.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874" alt="Glowora Beauty Lab 081" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Glowora Beauty Lab 081 - Kh&ocirc;ng gian g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y tai Ha Noi</h2>
@@ -1664,7 +1664,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Glowora Beauty Lab 081 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Glowora Beauty Lab 081 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '91 Pho Ly Thai To', 'Hoan Kiem', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10105001 AND `province_id` = 1 LIMIT 1), 21.032500, 105.850200, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 35, 15, 1, 4.56, 267, NOW(), NOW()),
+</div>', '91 Pho Ly Thai To', 'Hoan Kiem', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10105001 AND `province_id` = 1 LIMIT 1), 21.032500, 105.850200, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 35, 15, 1, 4.56, 267, NOW(), NOW()),
   ('e753f8aa-3d27-434c-a2ec-dbfc79eac605', 'an-nhien-beauty-lab-082-ha-noi', 'b598c9fa-b8f0-40e3-a555-e6f22a4b2ade', 'An Nhien Beauty Lab 082', '0287100082', 'hello.demo082@glowora.local', 'https://an-nhien-beauty-lab-082-ha-noi.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1" alt="An Nhien Beauty Lab 082" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>An Nhien Beauty Lab 082 - Kh&ocirc;ng gian ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng tai Ha Noi</h2>
@@ -1683,7 +1683,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>An Nhien Beauty Lab 082 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i An Nhien Beauty Lab 082 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '92 Pho Phan Dinh Phung', 'Ba Dinh', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10101003 AND `province_id` = 1 LIMIT 1), 21.047200, 105.840300, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 40, 30, 0, 4.57, 270, NOW(), NOW()),
+</div>', '92 Pho Phan Dinh Phung', 'Ba Dinh', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10101003 AND `province_id` = 1 LIMIT 1), 21.047200, 105.840300, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 40, 30, 0, 4.57, 270, NOW(), NOW()),
   ('c283407b-0c0c-4eec-b080-8daaf281b61d', 'lumina-beauty-lab-083-ha-noi', '629ef2b3-32be-4feb-9bab-2b1eaaf25012', 'Lumina Beauty Lab 083', '0287100083', 'hello.demo083@glowora.local', 'https://lumina-beauty-lab-083-ha-noi.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15" alt="Lumina Beauty Lab 083" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Lumina Beauty Lab 083 - Kh&ocirc;ng gian tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; tai Ha Noi</h2>
@@ -1702,7 +1702,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Lumina Beauty Lab 083 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Lumina Beauty Lab 083 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '93 Duong Xuan Thuy', 'Cau Giay', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10113025 AND `province_id` = 1 LIMIT 1), 21.048700, 105.786400, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 45, 45, 1, 4.58, 273, NOW(), NOW()),
+</div>', '93 Duong Xuan Thuy', 'Cau Giay', (SELECT `id` FROM `provinces` WHERE `id` = 1 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10113025 AND `province_id` = 1 LIMIT 1), 21.048700, 105.786400, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 45, 45, 1, 4.58, 273, NOW(), NOW()),
   ('33a16b8c-c0f8-4a41-a742-9cd851dd5eef', 'moc-an-beauty-lab-084-ho-chi-minh', '006f6adc-659f-4ac5-8ace-3507f72c4c92', 'Moc An Beauty Lab 084', '0287100084', 'hello.demo084@glowora.local', 'https://moc-an-beauty-lab-084-ho-chi-minh.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1600334129128-685c5582fd35" alt="Moc An Beauty Lab 084" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Moc An Beauty Lab 084 - Kh&ocirc;ng gian nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p tai Ho Chi Minh</h2>
@@ -1721,7 +1721,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Moc An Beauty Lab 084 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Moc An Beauty Lab 084 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '94 Duong Nguyen Van Linh', 'Binh Chanh', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70139145 AND `province_id` = 29 LIMIT 1), 10.717800, 106.697000, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 15, 0, 4.59, 276, NOW(), NOW()),
+</div>', '94 Duong Nguyen Van Linh', 'Binh Chanh', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70139145 AND `province_id` = 29 LIMIT 1), 10.717800, 106.697000, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 15, 0, 4.59, 276, NOW(), NOW()),
   ('747aae12-cbcc-419f-898e-8cc7c0aca2c5', 'serene-beauty-lab-085-ho-chi-minh', 'b51aac2d-0913-45d2-a8fb-d6ace5e66baa', 'Serene Beauty Lab 085', '0287100085', 'hello.demo085@glowora.local', 'https://serene-beauty-lab-085-ho-chi-minh.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881" alt="Serene Beauty Lab 085" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Serene Beauty Lab 085 - Kh&ocirc;ng gian ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u tai Ho Chi Minh</h2>
@@ -1740,7 +1740,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Serene Beauty Lab 085 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Serene Beauty Lab 085 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '95 Duong Quang Trung', 'Hoc Mon', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70137159 AND `province_id` = 29 LIMIT 1), 10.875500, 106.581700, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.60, 279, NOW(), NOW()),
+</div>', '95 Duong Quang Trung', 'Hoc Mon', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70137159 AND `province_id` = 29 LIMIT 1), 10.875500, 106.581700, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.60, 279, NOW(), NOW()),
   ('0b59cc14-a779-4fd0-ac6e-fbc11973f30f', 'aurora-beauty-lab-086-ho-chi-minh', '93b2a598-0250-4d75-88f9-bcee0122e739', 'Aurora Beauty Lab 086', '0287100086', 'hello.demo086@glowora.local', 'https://aurora-beauty-lab-086-ho-chi-minh.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e" alt="Aurora Beauty Lab 086" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Aurora Beauty Lab 086 - Kh&ocirc;ng gian massage th&#432; gi&atilde;n tr&#7883; li&#7879;u tai Ho Chi Minh</h2>
@@ -1759,7 +1759,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Aurora Beauty Lab 086 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Aurora Beauty Lab 086 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; massage th&#432; gi&atilde;n tr&#7883; li&#7879;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '96 Duong Huynh Tan Phat', 'Nha Be', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70141162 AND `province_id` = 29 LIMIT 1), 10.691700, 106.736400, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.61, 282, NOW(), NOW()),
+</div>', '96 Duong Huynh Tan Phat', 'Nha Be', (SELECT `id` FROM `provinces` WHERE `id` = 29 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70141162 AND `province_id` = 29 LIMIT 1), 10.691700, 106.736400, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.61, 282, NOW(), NOW()),
   ('7a354731-a919-49fa-97d3-e1b6260b550c', 'la-vie-beauty-lab-087-da-nang', 'd6a33b3d-61fb-4809-970d-de59bba6102b', 'La Vie Beauty Lab 087', '0287100087', 'hello.demo087@glowora.local', 'https://la-vie-beauty-lab-087-da-nang.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1596178065887-1198b6148b2b" alt="La Vie Beauty Lab 087" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>La Vie Beauty Lab 087 - Kh&ocirc;ng gian g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y tai Da Nang</h2>
@@ -1778,7 +1778,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>La Vie Beauty Lab 087 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i La Vie Beauty Lab 087 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '97 Duong Bach Dang', 'Hai Chau', (SELECT `id` FROM `provinces` WHERE `id` = 21 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 50101001 AND `province_id` = 21 LIMIT 1), 16.067800, 108.220800, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.62, 285, NOW(), NOW()),
+</div>', '97 Duong Bach Dang', 'Hai Chau', (SELECT `id` FROM `provinces` WHERE `id` = 21 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 50101001 AND `province_id` = 21 LIMIT 1), 16.067800, 108.220800, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.62, 285, NOW(), NOW()),
   ('556e0fb4-677b-4336-9d8f-f8d72deb4112', 'herbal-beauty-lab-088-can-tho', '27a1cba5-7d1a-4785-9302-093ac12a3b28', 'Herbal Beauty Lab 088', '0287100088', 'hello.demo088@glowora.local', 'https://herbal-beauty-lab-088-can-tho.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035" alt="Herbal Beauty Lab 088" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Herbal Beauty Lab 088 - Kh&ocirc;ng gian ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng tai Can Tho</h2>
@@ -1797,7 +1797,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Herbal Beauty Lab 088 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Herbal Beauty Lab 088 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '98 Duong Hai Ba Trung', 'Ninh Kieu', (SELECT `id` FROM `provinces` WHERE `id` = 33 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81501001 AND `province_id` = 33 LIMIT 1), 10.049200, 105.750900, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.63, 288, NOW(), NOW()),
+</div>', '98 Duong Hai Ba Trung', 'Ninh Kieu', (SELECT `id` FROM `provinces` WHERE `id` = 33 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81501001 AND `province_id` = 33 LIMIT 1), 10.049200, 105.750900, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.63, 288, NOW(), NOW()),
   ('ee297485-7ff1-4edc-b2d9-c5de11b452e4', 'bloom-beauty-lab-089-khanh-hoa', 'd27686cf-dcb7-4794-94e5-f7f930a3078a', 'Bloom Beauty Lab 089', '0287100089', 'hello.demo089@glowora.local', 'https://bloom-beauty-lab-089-khanh-hoa.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1591343395082-e120087004b4" alt="Bloom Beauty Lab 089" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Bloom Beauty Lab 089 - Kh&ocirc;ng gian tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; tai Khanh Hoa</h2>
@@ -1816,7 +1816,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Bloom Beauty Lab 089 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Bloom Beauty Lab 089 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '99 Duong Tran Phu', 'Nha Trang', (SELECT `id` FROM `provinces` WHERE `id` = 23 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60101001 AND `province_id` = 23 LIMIT 1), 12.246800, 109.204700, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 35, 45, 1, 4.64, 291, NOW(), NOW()),
+</div>', '99 Duong Tran Phu', 'Nha Trang', (SELECT `id` FROM `provinces` WHERE `id` = 23 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60101001 AND `province_id` = 23 LIMIT 1), 12.246800, 109.204700, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 35, 45, 1, 4.64, 291, NOW(), NOW()),
   ('5adf5091-da20-4f61-b174-d88dabfe5ec5', 'sakura-beauty-lab-090-lam-dong', 'b15b6767-50aa-4471-82da-be7a8ec3781c', 'Sakura Beauty Lab 090', '0287100090', 'hello.demo090@glowora.local', 'https://sakura-beauty-lab-090-lam-dong.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9" alt="Sakura Beauty Lab 090" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Sakura Beauty Lab 090 - Kh&ocirc;ng gian nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p tai Lam Dong</h2>
@@ -1835,7 +1835,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Sakura Beauty Lab 090 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Sakura Beauty Lab 090 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '100 Duong Bui Thi Xuan', 'Da Lat', (SELECT `id` FROM `provinces` WHERE `id` = 26 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70301001 AND `province_id` = 26 LIMIT 1), 11.952400, 108.450300, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 40, 15, 0, 4.65, 294, NOW(), NOW()),
+</div>', '100 Duong Bui Thi Xuan', 'Da Lat', (SELECT `id` FROM `provinces` WHERE `id` = 26 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 70301001 AND `province_id` = 26 LIMIT 1), 11.952400, 108.450300, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 40, 15, 0, 4.65, 294, NOW(), NOW()),
   ('1a7be8e2-4390-4fa5-9c58-b579907979c7', 'glowora-relax-home-091-dong-nai', '5736c729-0e7d-4c27-be0f-f7124e38b336', 'Glowora Relax Home 091', '0287100091', 'hello.demo091@glowora.local', 'https://glowora-relax-home-091-dong-nai.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874" alt="Glowora Relax Home 091" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Glowora Relax Home 091 - Kh&ocirc;ng gian ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u tai Dong Nai</h2>
@@ -1854,7 +1854,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Glowora Relax Home 091 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Glowora Relax Home 091 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '101 Duong Vo Thi Sau', 'Bien Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 28 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 71301001 AND `province_id` = 28 LIMIT 1), 10.945400, 106.838600, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 45, 30, 1, 4.66, 297, NOW(), NOW()),
+</div>', '101 Duong Vo Thi Sau', 'Bien Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 28 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 71301001 AND `province_id` = 28 LIMIT 1), 10.945400, 106.838600, 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 45, 30, 1, 4.66, 297, NOW(), NOW()),
   ('d7cde823-c79a-4819-8313-45992166548e', 'an-nhien-relax-home-092-hai-phong', 'e6e6c97d-17af-442f-8b83-200239d2a669', 'An Nhien Relax Home 092', '0287100092', 'hello.demo092@glowora.local', 'https://an-nhien-relax-home-092-hai-phong.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1" alt="An Nhien Relax Home 092" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>An Nhien Relax Home 092 - Kh&ocirc;ng gian massage th&#432; gi&atilde;n tr&#7883; li&#7879;u tai Hai Phong</h2>
@@ -1873,7 +1873,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>An Nhien Relax Home 092 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i An Nhien Relax Home 092 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; massage th&#432; gi&atilde;n tr&#7883; li&#7879;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '102 Duong Dien Bien Phu', 'Hong Bang', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10301008 AND `province_id` = 4 LIMIT 1), 20.836900, 106.688100, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 30, 45, 0, 4.67, 300, NOW(), NOW()),
+</div>', '102 Duong Dien Bien Phu', 'Hong Bang', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10301008 AND `province_id` = 4 LIMIT 1), 20.836900, 106.688100, 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 30, 45, 0, 4.67, 300, NOW(), NOW()),
   ('a74ae309-43d6-4d4c-9fcd-4bca499582e7', 'lumina-relax-home-093-hue', '26b820ce-faa3-4e13-b70b-f2d821b1fb0f', 'Lumina Relax Home 093', '0287100093', 'hello.demo093@glowora.local', 'https://lumina-relax-home-093-hue.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15" alt="Lumina Relax Home 093" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Lumina Relax Home 093 - Kh&ocirc;ng gian g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y tai Hue</h2>
@@ -1892,7 +1892,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Lumina Relax Home 093 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Lumina Relax Home 093 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '103 Duong Le Loi', 'Thuan Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 20 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40501001 AND `province_id` = 20 LIMIT 1), 16.459700, 107.594900, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 35, 15, 1, 4.68, 303, NOW(), NOW()),
+</div>', '103 Duong Le Loi', 'Thuan Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 20 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40501001 AND `province_id` = 20 LIMIT 1), 16.459700, 107.594900, 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 35, 15, 1, 4.68, 303, NOW(), NOW()),
   ('411e9a56-1afa-4e6b-83bf-296ab77ab948', 'moc-an-relax-home-094-nghe-an', '3546bc07-c9ff-4741-a97b-20ed41944fe3', 'Moc An Relax Home 094', '0287100094', 'hello.demo094@glowora.local', 'https://moc-an-relax-home-094-nghe-an.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1600334129128-685c5582fd35" alt="Moc An Relax Home 094" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Moc An Relax Home 094 - Kh&ocirc;ng gian ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng tai Nghe An</h2>
@@ -1911,7 +1911,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Moc An Relax Home 094 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Moc An Relax Home 094 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '104 Duong Le Mao', 'Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 17 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40301001 AND `province_id` = 17 LIMIT 1), 18.679600, 105.689300, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 40, 30, 0, 4.69, 306, NOW(), NOW()),
+</div>', '104 Duong Le Mao', 'Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 17 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40301001 AND `province_id` = 17 LIMIT 1), 18.679600, 105.689300, 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 40, 30, 0, 4.69, 306, NOW(), NOW()),
   ('006dd726-8f44-483b-a925-00b22f8071f5', 'serene-relax-home-095-thanh-hoa', '29e1b451-ee75-4694-a3c5-87b83861f168', 'Serene Relax Home 095', '0287100095', 'hello.demo095@glowora.local', 'https://serene-relax-home-095-thanh-hoa.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881" alt="Serene Relax Home 095" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Serene Relax Home 095 - Kh&ocirc;ng gian tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; tai Thanh Hoa</h2>
@@ -1930,7 +1930,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Serene Relax Home 095 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Serene Relax Home 095 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865; &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '105 Dai lo Le Loi', 'Thanh Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 16 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40101001 AND `province_id` = 16 LIMIT 1), 19.810700, 105.777200, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 45, 45, 1, 4.70, 309, NOW(), NOW()),
+</div>', '105 Dai lo Le Loi', 'Thanh Hoa', (SELECT `id` FROM `provinces` WHERE `id` = 16 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 40101001 AND `province_id` = 16 LIMIT 1), 19.810700, 105.777200, 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 45, 45, 1, 4.70, 309, NOW(), NOW()),
   ('061e0550-52f6-4791-b519-b395a66bcc8c', 'aurora-relax-home-096-dak-lak', 'f34ce8c4-b0aa-40e0-b4e4-92ac8865fcfb', 'Aurora Relax Home 096', '0287100096', 'hello.demo096@glowora.local', 'https://aurora-relax-home-096-dak-lak.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e" alt="Aurora Relax Home 096" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Aurora Relax Home 096 - Kh&ocirc;ng gian nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p tai Dak Lak</h2>
@@ -1949,7 +1949,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Aurora Relax Home 096 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Aurora Relax Home 096 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; nail, mi v&agrave; ch&#259;m s&oacute;c s&#7855;c &#273;&#7865;p &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '106 Duong Nguyen Tat Thanh', 'Buon Ma Thuot', (SELECT `id` FROM `provinces` WHERE `id` = 25 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60501001 AND `province_id` = 25 LIMIT 1), 12.674200, 108.034200, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 15, 0, 4.71, 312, NOW(), NOW()),
+</div>', '106 Duong Nguyen Tat Thanh', 'Buon Ma Thuot', (SELECT `id` FROM `provinces` WHERE `id` = 25 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 60501001 AND `province_id` = 25 LIMIT 1), 12.674200, 108.034200, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 15, 0, 4.71, 312, NOW(), NOW()),
   ('a69c501a-ee94-4672-99c9-9e0a358cf4e8', 'la-vie-relax-home-097-an-giang', '5b20e399-640d-46b2-b75d-e5e4d0bba440', 'La Vie Relax Home 097', '0287100097', 'hello.demo097@glowora.local', 'https://la-vie-relax-home-097-an-giang.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1596178065887-1198b6148b2b" alt="La Vie Relax Home 097" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>La Vie Relax Home 097 - Kh&ocirc;ng gian ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u tai An Giang</h2>
@@ -1968,7 +1968,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>La Vie Relax Home 097 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i La Vie Relax Home 097 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '107 Duong Tran Hung Dao', 'Long Xuyen', (SELECT `id` FROM `provinces` WHERE `id` = 32 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 80501001 AND `province_id` = 32 LIMIT 1), 10.398400, 105.435200, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.72, 315, NOW(), NOW()),
+</div>', '107 Duong Tran Hung Dao', 'Long Xuyen', (SELECT `id` FROM `provinces` WHERE `id` = 32 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 80501001 AND `province_id` = 32 LIMIT 1), 10.398400, 105.435200, 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 35, 30, 1, 4.72, 315, NOW(), NOW()),
   ('dcf9a01d-10a7-492e-b585-2fbb3faafab4', 'herbal-relax-home-098-vinh-long', 'c1ffdf5a-4f48-4e80-9250-a90206fbc669', 'Herbal Relax Home 098', '0287100098', 'hello.demo098@glowora.local', 'https://herbal-relax-home-098-vinh-long.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035" alt="Herbal Relax Home 098" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Herbal Relax Home 098 - Kh&ocirc;ng gian massage th&#432; gi&atilde;n tr&#7883; li&#7879;u tai Vinh Long</h2>
@@ -1987,7 +1987,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Herbal Relax Home 098 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Herbal Relax Home 098 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; massage th&#432; gi&atilde;n tr&#7883; li&#7879;u &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '108 Duong Pham Ngu Lao', 'Tra Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 30 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81701037 AND `province_id` = 30 LIMIT 1), 9.922700, 106.349300, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.73, 318, NOW(), NOW()),
+</div>', '108 Duong Pham Ngu Lao', 'Tra Vinh', (SELECT `id` FROM `provinces` WHERE `id` = 30 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 81701037 AND `province_id` = 30 LIMIT 1), 9.922700, 106.349300, 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 4, 40, 45, 0, 4.73, 318, NOW(), NOW()),
   ('c1354340-81ad-4d47-83cf-c527f9f3b717', 'bloom-relax-home-099-thai-nguyen', '21f95eb5-33b2-43c0-8613-8612c7f09760', 'Bloom Relax Home 099', '0287100099', 'hello.demo099@glowora.local', 'https://bloom-relax-home-099-thai-nguyen.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1591343395082-e120087004b4" alt="Bloom Relax Home 099" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Bloom Relax Home 099 - Kh&ocirc;ng gian g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y tai Thai Nguyen</h2>
@@ -2006,7 +2006,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Bloom Relax Home 099 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Bloom Relax Home 099 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '109 Duong Hoang Van Thu', 'Thai Nguyen', (SELECT `id` FROM `provinces` WHERE `id` = 10 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 21501001 AND `province_id` = 10 LIMIT 1), 21.586200, 105.856100, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.74, 321, NOW(), NOW()),
+</div>', '109 Duong Hoang Van Thu', 'Thai Nguyen', (SELECT `id` FROM `provinces` WHERE `id` = 10 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 21501001 AND `province_id` = 10 LIMIT 1), 21.586200, 105.856100, 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 45, 15, 1, 4.74, 321, NOW(), NOW()),
   ('c6c4ec9c-0085-48e6-a388-38c0bfa9d146', 'sakura-relax-home-100-hai-phong', 'f5f27652-8c7c-48c1-a583-39da67bf22bb', 'Sakura Relax Home 100', '0287100100', 'hello.demo100@glowora.local', 'https://sakura-relax-home-100-hai-phong.glowora.local', '<div class="shop-description">
   <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9" alt="Sakura Relax Home 100" style="width:100%; border-radius:16px; object-fit:cover; max-height:360px;" />
   <h2>Sakura Relax Home 100 - Kh&ocirc;ng gian ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng tai Hai Phong</h2>
@@ -2025,7 +2025,7 @@ INSERT INTO `stores` (`id`, `slug`, `owner_id`, `name`, `phone`, `email`, `websi
   <p>Sakura Relax Home 100 uu tien ve sinh dung cu, kh&ocirc;ng gian yen tinh, bang gia cong khai va thai do phuc vu tan tam. H&#7891; s&#417; d&#7883;ch v&#7909; &#273;&#432;&#7907;c l&#432;u l&#7841;i &#273;&#7875; nh&#7919;ng l&#7847;n ch&#259;m s&oacute;c sau nh&#7845;t qu&aacute;n h&#417;n.</p>
   <blockquote>&#272;&#7865;p h&#417;n m&#7895;i ng&agrave;y, th&#432; gi&atilde;n h&#417;n m&#7895;i l&#7847;n gh&eacute; th&#259;m.</blockquote>
   <p>H&atilde;y &#273;&#7863;t l&#7883;ch t&#7841;i Sakura Relax Home 100 &#273;&#7875; tr&#7843;i nghi&#7879;m d&#7883;ch v&#7909; ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng &#273;&#432;&#7907;c c&aacute; nh&acirc;n h&oacute;a cho nhu c&#7847;u c&#7911;a b&#7841;n.</p>
-</div>', '110 Duong Le Hong Phong', 'Ngo Quyen', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10303010 AND `province_id` = 4 LIMIT 1), 20.852100, 106.694200, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.75, 324, NOW(), NOW())
+</div>', '110 Duong Le Hong Phong', 'Ngo Quyen', (SELECT `id` FROM `provinces` WHERE `id` = 4 LIMIT 1), (SELECT `id` FROM `wards` WHERE `id` = 10303010 AND `province_id` = 4 LIMIT 1), 20.852100, 106.694200, 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=240&q=80', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1400&q=80"]', 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 3, 30, 30, 0, 4.75, 324, NOW(), NOW())
 ON DUPLICATE KEY UPDATE `owner_id` = VALUES(`owner_id`), `name` = VALUES(`name`), `phone` = VALUES(`phone`), `email` = VALUES(`email`), `website` = VALUES(`website`), `description` = VALUES(`description`), `address` = VALUES(`address`), `district` = VALUES(`district`), `province_id` = VALUES(`province_id`), `ward_id` = VALUES(`ward_id`), `latitude` = VALUES(`latitude`), `longitude` = VALUES(`longitude`), `logo_url` = VALUES(`logo_url`), `banner_url` = VALUES(`banner_url`), `status` = VALUES(`status`), `approved_at` = VALUES(`approved_at`), `timezone` = VALUES(`timezone`), `slot_interval_mins` = VALUES(`slot_interval_mins`), `cancel_before_hours` = VALUES(`cancel_before_hours`), `max_advance_days` = VALUES(`max_advance_days`), `booking_buffer_mins` = VALUES(`booking_buffer_mins`), `auto_confirm` = VALUES(`auto_confirm`), `avg_rating` = VALUES(`avg_rating`), `total_reviews` = VALUES(`total_reviews`), `updated_at` = NOW();
 
 -- Store-scoped owner and staff roles.
@@ -3954,7 +3954,7 @@ INSERT INTO `staff` (`id`, `user_id`, `store_id`, `specialty`, `bio`, `rating`, 
 ON DUPLICATE KEY UPDATE `user_id` = VALUES(`user_id`), `store_id` = VALUES(`store_id`), `specialty` = VALUES(`specialty`), `bio` = VALUES(`bio`), `rating` = VALUES(`rating`), `total_reviews` = VALUES(`total_reviews`), `status` = VALUES(`status`), `updated_at` = NOW();
 
 -- Five active services per store, each service has three variants.
-INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `description`, `image_url`, `status`, `avg_rating`, `created_at`, `updated_at`) VALUES
+INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `description`, `image_urls`, `status`, `avg_rating`, `created_at`, `updated_at`) VALUES
   ('92592650-afcb-496f-9458-b9246cf1825c', 'd910320a-dc8a-40e2-b5e0-9f5555285b3e', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Cham soc da mat sach sau va cap am phuc hoi', 'cham-soc-da-mat-sach-sau-va-cap-am-phuc-hoi-001', '<div class="service-description">
   <h3>Cham soc da mat sach sau va cap am phuc hoi</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Spa 001 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -3964,7 +3964,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.51, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.51, NOW(), NOW()),
   ('3b832e46-780c-43cd-a919-99a8d544e9e0', 'd910320a-dc8a-40e2-b5e0-9f5555285b3e', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-001', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Spa 001 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -3974,7 +3974,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.52, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.52, NOW(), NOW()),
   ('c329c3db-395c-41df-b8b6-89f073840bd7', 'd910320a-dc8a-40e2-b5e0-9f5555285b3e', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-001', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Spa 001 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -3984,7 +3984,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.53, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.53, NOW(), NOW()),
   ('0586b292-e4d5-4427-84e4-931559441da8', 'd910320a-dc8a-40e2-b5e0-9f5555285b3e', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-001', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Spa 001 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -3994,7 +3994,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.54, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.54, NOW(), NOW()),
   ('6c0ddf52-e95b-4fee-b84e-6da09e3361e1', 'd910320a-dc8a-40e2-b5e0-9f5555285b3e', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-001', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Spa 001 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4004,7 +4004,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.55, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.55, NOW(), NOW()),
   ('d758a386-a96d-4168-8b14-5bad55d1cddc', 'efb697c8-db5b-4115-a703-ea5c8ae66a28', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-002', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Spa 002 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4014,7 +4014,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.52, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.52, NOW(), NOW()),
   ('2ec76d52-7b4f-4f95-a124-befc5665400f', 'efb697c8-db5b-4115-a703-ea5c8ae66a28', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-002', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Spa 002 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4024,7 +4024,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.53, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.53, NOW(), NOW()),
   ('7ce88892-6224-473b-a36f-2ca2ac6cbcb7', 'efb697c8-db5b-4115-a703-ea5c8ae66a28', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-002', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Spa 002 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4034,7 +4034,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.54, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.54, NOW(), NOW()),
   ('779131cf-557f-4fb7-995a-d7055f7ac3d4', 'efb697c8-db5b-4115-a703-ea5c8ae66a28', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-002', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Spa 002 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4044,7 +4044,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.55, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.55, NOW(), NOW()),
   ('9a2f8121-67da-4ec9-81ed-6a11ae804def', 'efb697c8-db5b-4115-a703-ea5c8ae66a28', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-002', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Spa 002 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4054,7 +4054,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.56, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.56, NOW(), NOW()),
   ('5b04e29b-f4b3-45bb-a877-61690d388d24', '7ab7ab9d-b6bb-4d11-b5b7-cb3ccffc45ae', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-003', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Spa 003 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4064,7 +4064,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.53, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.53, NOW(), NOW()),
   ('5208c39b-e965-4263-b3c5-51ca70c3827b', '7ab7ab9d-b6bb-4d11-b5b7-cb3ccffc45ae', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-003', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Spa 003 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4074,7 +4074,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.54, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.54, NOW(), NOW()),
   ('b37654b6-63c9-4b36-ae5e-5f2d3101f0ab', '7ab7ab9d-b6bb-4d11-b5b7-cb3ccffc45ae', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-003', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Spa 003 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4084,7 +4084,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.55, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.55, NOW(), NOW()),
   ('6225ef40-7a9f-4cf9-8661-ef07ea7aba53', '7ab7ab9d-b6bb-4d11-b5b7-cb3ccffc45ae', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-003', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Spa 003 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4094,7 +4094,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.56, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.56, NOW(), NOW()),
   ('bcff18a5-a864-44ec-9198-5a0b82791c88', '7ab7ab9d-b6bb-4d11-b5b7-cb3ccffc45ae', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-003', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Spa 003 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4104,7 +4104,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.57, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.57, NOW(), NOW()),
   ('2803a2b4-dd27-4fb2-9e29-caab6d7555db', 'e2168941-73e2-474a-95f5-699717045315', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-004', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Spa 004 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4114,7 +4114,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.54, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.54, NOW(), NOW()),
   ('97b6a665-e571-451c-8dd4-9c1b0290eee3', 'e2168941-73e2-474a-95f5-699717045315', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-004', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Spa 004 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4124,7 +4124,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.55, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.55, NOW(), NOW()),
   ('bb55878b-c16c-4102-86d9-b1791a9a80d1', 'e2168941-73e2-474a-95f5-699717045315', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-004', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Spa 004 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4134,7 +4134,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.56, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.56, NOW(), NOW()),
   ('bfcfd413-3f53-4372-aada-eb639feffd11', 'e2168941-73e2-474a-95f5-699717045315', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-004', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Spa 004 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4144,7 +4144,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.57, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.57, NOW(), NOW()),
   ('2a136be4-446f-4458-92cd-3c4b8ce82e6d', 'e2168941-73e2-474a-95f5-699717045315', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-004', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Spa 004 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4154,7 +4154,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.58, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.58, NOW(), NOW()),
   ('835aa034-11a5-49ad-b7ea-7e0d4f5f3aae', '190cd2ab-1e43-4259-aa07-7802334a89aa', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-005', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Spa 005 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4164,7 +4164,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.55, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.55, NOW(), NOW()),
   ('8eb4bf79-461c-42d1-b130-1aea99e16672', '190cd2ab-1e43-4259-aa07-7802334a89aa', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-005', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Spa 005 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4174,7 +4174,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.56, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.56, NOW(), NOW()),
   ('a667dab0-cae6-4e72-8cc3-9131e1b5bad2', '190cd2ab-1e43-4259-aa07-7802334a89aa', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-005', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Spa 005 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4184,7 +4184,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.57, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.57, NOW(), NOW()),
   ('213a93cd-b05f-4cb8-9ec9-0d1e6624f52c', '190cd2ab-1e43-4259-aa07-7802334a89aa', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-005', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Spa 005 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4194,7 +4194,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.58, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.58, NOW(), NOW()),
   ('e4ca60b8-d8ec-47e5-9efd-25aa8f554ec1', '190cd2ab-1e43-4259-aa07-7802334a89aa', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-005', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Spa 005 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4204,7 +4204,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.59, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.59, NOW(), NOW()),
   ('d92ab919-cfee-4729-9609-74843cd2940d', '17b43bfc-9f64-44c2-879a-e2b507afec70', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Noi mi tu nhien va cham soc mong gel', 'noi-mi-tu-nhien-va-cham-soc-mong-gel-006', '<div class="service-description">
   <h3>Noi mi tu nhien va cham soc mong gel</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Spa 006 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4214,7 +4214,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.56, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.56, NOW(), NOW()),
   ('294bacde-ad05-471f-ac51-5964cad58270', '17b43bfc-9f64-44c2-879a-e2b507afec70', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-006', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Spa 006 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4224,7 +4224,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.57, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.57, NOW(), NOW()),
   ('5b391a43-40ae-4c66-a9ac-fdce033d5929', '17b43bfc-9f64-44c2-879a-e2b507afec70', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-006', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Spa 006 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4234,7 +4234,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.58, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.58, NOW(), NOW()),
   ('6d48ff90-c729-4174-9376-893ca88e59a2', '17b43bfc-9f64-44c2-879a-e2b507afec70', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-006', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Spa 006 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4244,7 +4244,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.59, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.59, NOW(), NOW()),
   ('14cfb280-e7aa-43e8-bafa-13e4e956a396', '17b43bfc-9f64-44c2-879a-e2b507afec70', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-006', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Spa 006 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4254,7 +4254,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.60, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.60, NOW(), NOW()),
   ('3ef93269-11db-4e9d-9880-e9c562c5b067', '0e1ab5c4-d28a-42de-8669-72da7a2fe2f2', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Cham soc da mat sach sau va cap am phuc hoi', 'cham-soc-da-mat-sach-sau-va-cap-am-phuc-hoi-007', '<div class="service-description">
   <h3>Cham soc da mat sach sau va cap am phuc hoi</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Spa 007 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4264,7 +4264,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.57, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.57, NOW(), NOW()),
   ('e1535899-63b4-40b3-a0df-b5bf979d044d', '0e1ab5c4-d28a-42de-8669-72da7a2fe2f2', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-007', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Spa 007 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4274,7 +4274,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.58, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.58, NOW(), NOW()),
   ('05ff51dd-361d-4898-b2ba-591851af6bdb', '0e1ab5c4-d28a-42de-8669-72da7a2fe2f2', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-007', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Spa 007 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4284,7 +4284,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.59, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.59, NOW(), NOW()),
   ('ea20af12-3aaa-46b7-84dd-67f1d8ed3836', '0e1ab5c4-d28a-42de-8669-72da7a2fe2f2', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-007', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Spa 007 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4294,7 +4294,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.60, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.60, NOW(), NOW()),
   ('b1849de4-72e7-43a9-b3a9-b315c5a5f9b5', '0e1ab5c4-d28a-42de-8669-72da7a2fe2f2', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-007', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Spa 007 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4304,7 +4304,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.61, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.61, NOW(), NOW()),
   ('4ec6da51-6955-491a-b2db-24f842ca21e6', '99ebe364-15d9-4368-801f-d19a31b19e69', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-008', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Spa 008 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4314,7 +4314,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.58, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.58, NOW(), NOW()),
   ('1d3241f2-1490-4f07-89d1-abd5281a1536', '99ebe364-15d9-4368-801f-d19a31b19e69', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-008', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Spa 008 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4324,7 +4324,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.59, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.59, NOW(), NOW()),
   ('2a1a008e-840f-4d6d-ac03-86578d54fdd0', '99ebe364-15d9-4368-801f-d19a31b19e69', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-008', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Spa 008 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4334,7 +4334,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.60, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.60, NOW(), NOW()),
   ('2d5d0c06-f051-49e0-afaa-28839b4739bc', '99ebe364-15d9-4368-801f-d19a31b19e69', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-008', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Spa 008 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4344,7 +4344,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.61, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.61, NOW(), NOW()),
   ('f67e2dbf-c290-45b3-a4fd-640fa4589692', '99ebe364-15d9-4368-801f-d19a31b19e69', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-008', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Spa 008 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4354,7 +4354,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.62, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.62, NOW(), NOW()),
   ('1a46cdfb-fa04-448b-8dce-444c56501b45', '8e581614-b579-4ca3-b6a8-3dab92f12813', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-009', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Spa 009 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4364,7 +4364,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.59, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.59, NOW(), NOW()),
   ('b8d8f8af-a1c0-4f68-973a-f43305afc2cb', '8e581614-b579-4ca3-b6a8-3dab92f12813', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-009', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Spa 009 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4374,7 +4374,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.60, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.60, NOW(), NOW()),
   ('7fb8994f-ea3f-49dd-97b7-bdca6b853708', '8e581614-b579-4ca3-b6a8-3dab92f12813', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-009', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Spa 009 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4384,7 +4384,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.61, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.61, NOW(), NOW()),
   ('a9325373-b908-4044-8fd8-e3d5a11d36ee', '8e581614-b579-4ca3-b6a8-3dab92f12813', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-009', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Spa 009 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4394,7 +4394,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.62, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.62, NOW(), NOW()),
   ('e06b140f-11b1-4a08-a732-51befb97cebc', '8e581614-b579-4ca3-b6a8-3dab92f12813', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-009', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Spa 009 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4404,7 +4404,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.63, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.63, NOW(), NOW()),
   ('b1ed22d3-67cb-4467-aba7-9f0a5232d74e', '884c78d2-e893-4499-b4e4-866070b31e60', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-010', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Spa 010 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4414,7 +4414,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.60, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.60, NOW(), NOW()),
   ('63d15e7a-81c9-4227-9755-a7d054274f62', '884c78d2-e893-4499-b4e4-866070b31e60', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-010', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Spa 010 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4424,7 +4424,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.61, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.61, NOW(), NOW()),
   ('b4cbd202-b9d1-44fe-bafb-7877ddbdf835', '884c78d2-e893-4499-b4e4-866070b31e60', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-010', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Spa 010 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4434,7 +4434,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.62, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.62, NOW(), NOW()),
   ('10640cdf-8f19-4142-a76f-212342c3954b', '884c78d2-e893-4499-b4e4-866070b31e60', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-010', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Spa 010 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4444,7 +4444,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.63, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.63, NOW(), NOW()),
   ('78bb1be5-1d82-4815-a7c8-ea99625a75c5', '884c78d2-e893-4499-b4e4-866070b31e60', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-010', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Spa 010 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4454,7 +4454,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.64, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.64, NOW(), NOW()),
   ('5abeceaa-a902-4ea2-9cf3-837fb387b667', '9053bcb2-d5d9-4f58-aa96-b8be36c3eff5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-011', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Beauty Lounge 011 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4464,7 +4464,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.61, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.61, NOW(), NOW()),
   ('b38187fb-eb86-46b4-a3c8-b94fb21ac70c', '9053bcb2-d5d9-4f58-aa96-b8be36c3eff5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-011', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Beauty Lounge 011 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4474,7 +4474,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.62, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.62, NOW(), NOW()),
   ('0f388d30-62a4-4613-9781-af404bb02b8a', '9053bcb2-d5d9-4f58-aa96-b8be36c3eff5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-011', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Beauty Lounge 011 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4484,7 +4484,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.63, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.63, NOW(), NOW()),
   ('0c9f82c9-e184-40c0-8336-5376f45a03f2', '9053bcb2-d5d9-4f58-aa96-b8be36c3eff5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-011', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Beauty Lounge 011 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4494,7 +4494,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.64, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.64, NOW(), NOW()),
   ('1debaab8-36d7-4dfc-8d47-ff58571e3724', '9053bcb2-d5d9-4f58-aa96-b8be36c3eff5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-011', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Beauty Lounge 011 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4504,7 +4504,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.65, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.65, NOW(), NOW()),
   ('47bf450d-462d-48d2-b811-df2d467ad218', 'c3fce4fe-6461-4e7b-b186-41bdb4eb63bb', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Noi mi tu nhien va cham soc mong gel', 'noi-mi-tu-nhien-va-cham-soc-mong-gel-012', '<div class="service-description">
   <h3>Noi mi tu nhien va cham soc mong gel</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Beauty Lounge 012 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4514,7 +4514,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.62, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.62, NOW(), NOW()),
   ('036dd15a-396e-46e3-b1e2-37afd1b20276', 'c3fce4fe-6461-4e7b-b186-41bdb4eb63bb', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-012', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Beauty Lounge 012 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4524,7 +4524,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.63, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.63, NOW(), NOW()),
   ('9c3ba3d2-44b5-4951-9716-ce847ecfdd74', 'c3fce4fe-6461-4e7b-b186-41bdb4eb63bb', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-012', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Beauty Lounge 012 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4534,7 +4534,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.64, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.64, NOW(), NOW()),
   ('09820b2d-7f8e-4060-b1cc-e6e102ba253f', 'c3fce4fe-6461-4e7b-b186-41bdb4eb63bb', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-012', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Beauty Lounge 012 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4544,7 +4544,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.65, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.65, NOW(), NOW()),
   ('a29bd412-bb32-4551-93d7-95bd8e792728', 'c3fce4fe-6461-4e7b-b186-41bdb4eb63bb', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-012', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Beauty Lounge 012 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4554,7 +4554,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.66, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.66, NOW(), NOW()),
   ('faeb6cda-a6d6-416d-bf12-6828f1362923', '4b4d1879-81d2-40e5-a537-ae407f5154d6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Cham soc da mat sach sau va cap am phuc hoi', 'cham-soc-da-mat-sach-sau-va-cap-am-phuc-hoi-013', '<div class="service-description">
   <h3>Cham soc da mat sach sau va cap am phuc hoi</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Beauty Lounge 013 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4564,7 +4564,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.63, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.63, NOW(), NOW()),
   ('045a08bd-47b0-45d9-bcc6-4874a592886f', '4b4d1879-81d2-40e5-a537-ae407f5154d6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-013', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Beauty Lounge 013 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4574,7 +4574,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.64, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.64, NOW(), NOW()),
   ('ce7f413f-7d90-4227-97fe-c245f21cc6af', '4b4d1879-81d2-40e5-a537-ae407f5154d6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-013', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Beauty Lounge 013 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4584,7 +4584,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.65, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.65, NOW(), NOW()),
   ('e2175f42-a7ee-4588-b781-0387f42e2aa3', '4b4d1879-81d2-40e5-a537-ae407f5154d6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-013', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Beauty Lounge 013 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4594,7 +4594,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.66, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.66, NOW(), NOW()),
   ('9d3f0122-cd99-42da-88bd-5362bfd7bc1a', '4b4d1879-81d2-40e5-a537-ae407f5154d6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-013', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Beauty Lounge 013 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4604,7 +4604,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.67, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.67, NOW(), NOW()),
   ('5aa22ad2-da61-4fcd-b32a-bc0f35b2e799', '8ae323ad-591a-426c-abbe-54aae38d1589', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-014', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Beauty Lounge 014 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4614,7 +4614,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.64, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.64, NOW(), NOW()),
   ('643deaeb-8903-47f3-a959-b286b2a4cdb8', '8ae323ad-591a-426c-abbe-54aae38d1589', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-014', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Beauty Lounge 014 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4624,7 +4624,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.65, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.65, NOW(), NOW()),
   ('bd8bd2bd-b8a4-4c2c-9536-48f50caa45aa', '8ae323ad-591a-426c-abbe-54aae38d1589', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-014', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Beauty Lounge 014 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4634,7 +4634,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.66, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.66, NOW(), NOW()),
   ('f5d494c9-b3ed-4bd2-8c1f-c057a47cc68e', '8ae323ad-591a-426c-abbe-54aae38d1589', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-014', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Beauty Lounge 014 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4644,7 +4644,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.67, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.67, NOW(), NOW()),
   ('41c4ce9b-c6ad-43d9-93da-e457e7129af0', '8ae323ad-591a-426c-abbe-54aae38d1589', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-014', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Beauty Lounge 014 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4654,7 +4654,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.68, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.68, NOW(), NOW()),
   ('e6936f1b-a8ab-4b6a-950b-d6e5e6cb9e3f', '17daaea8-dba3-4823-95ab-365ef5ed4eb3', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-015', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Beauty Lounge 015 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4664,7 +4664,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.65, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.65, NOW(), NOW()),
   ('8d7fbc4e-ea92-426f-a6b6-4d72e46bb5ef', '17daaea8-dba3-4823-95ab-365ef5ed4eb3', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-015', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Beauty Lounge 015 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4674,7 +4674,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.66, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.66, NOW(), NOW()),
   ('c1e5c34e-2cb5-4a8f-a01a-efa6d5469b3b', '17daaea8-dba3-4823-95ab-365ef5ed4eb3', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-015', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Beauty Lounge 015 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4684,7 +4684,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.67, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.67, NOW(), NOW()),
   ('0b8078c9-51a1-43d7-aeba-cb54e3bd33fd', '17daaea8-dba3-4823-95ab-365ef5ed4eb3', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-015', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Beauty Lounge 015 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4694,7 +4694,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.68, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.68, NOW(), NOW()),
   ('b9ca4a70-1e46-4957-8d64-5dca9e92b114', '17daaea8-dba3-4823-95ab-365ef5ed4eb3', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-015', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Beauty Lounge 015 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4704,7 +4704,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.69, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.69, NOW(), NOW()),
   ('35b12bb4-e5af-4359-9fac-69f45e93f310', '0a64bdee-eded-4b57-9e82-46bccd99ce78', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-016', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Beauty Lounge 016 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4714,7 +4714,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.66, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.66, NOW(), NOW()),
   ('5dc343cd-1e0c-40d6-9ab6-b55c11d26c77', '0a64bdee-eded-4b57-9e82-46bccd99ce78', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-016', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Beauty Lounge 016 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4724,7 +4724,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.67, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.67, NOW(), NOW()),
   ('e83b84cd-53ce-434e-8ff1-78f1c23ad14f', '0a64bdee-eded-4b57-9e82-46bccd99ce78', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-016', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Beauty Lounge 016 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4734,7 +4734,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.68, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.68, NOW(), NOW()),
   ('2527167f-8293-4b82-9d42-4ccce5d47cc4', '0a64bdee-eded-4b57-9e82-46bccd99ce78', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-016', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Beauty Lounge 016 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4744,7 +4744,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.69, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.69, NOW(), NOW()),
   ('90af7fcf-721b-46af-a0a4-4971148b2d8a', '0a64bdee-eded-4b57-9e82-46bccd99ce78', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-016', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Beauty Lounge 016 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4754,7 +4754,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.70, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.70, NOW(), NOW()),
   ('efc122bc-e2cb-4d71-8eee-891a126479c2', '263d93c4-c85e-4f4b-974d-d9cb5b89024d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-017', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Beauty Lounge 017 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4764,7 +4764,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.67, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.67, NOW(), NOW()),
   ('b677f275-1e05-4727-82a2-18828e9cbd84', '263d93c4-c85e-4f4b-974d-d9cb5b89024d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-017', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Beauty Lounge 017 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4774,7 +4774,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.68, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.68, NOW(), NOW()),
   ('42d1934b-0db0-41b3-9922-78a9c4eafc88', '263d93c4-c85e-4f4b-974d-d9cb5b89024d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-017', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Beauty Lounge 017 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4784,7 +4784,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.69, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.69, NOW(), NOW()),
   ('7e8963fd-33a4-49a3-bb5b-eb06f44c3bf4', '263d93c4-c85e-4f4b-974d-d9cb5b89024d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-017', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Beauty Lounge 017 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4794,7 +4794,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.70, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.70, NOW(), NOW()),
   ('9ffa0362-9bcb-4171-abd4-8cee2c833179', '263d93c4-c85e-4f4b-974d-d9cb5b89024d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-017', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Beauty Lounge 017 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4804,7 +4804,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.71, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.71, NOW(), NOW()),
   ('69f3cdea-4a02-41d1-9ce7-6615027a8dde', 'c8d45ab7-017c-45c5-8d65-c5d6ed722997', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Noi mi tu nhien va cham soc mong gel', 'noi-mi-tu-nhien-va-cham-soc-mong-gel-018', '<div class="service-description">
   <h3>Noi mi tu nhien va cham soc mong gel</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Beauty Lounge 018 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4814,7 +4814,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.68, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.68, NOW(), NOW()),
   ('037d94bd-e136-4890-8b9a-aa09fd5df467', 'c8d45ab7-017c-45c5-8d65-c5d6ed722997', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-018', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Beauty Lounge 018 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4824,7 +4824,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.69, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.69, NOW(), NOW()),
   ('e839d83b-ec07-4a53-9880-8490b91c1aad', 'c8d45ab7-017c-45c5-8d65-c5d6ed722997', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-018', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Beauty Lounge 018 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4834,7 +4834,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.70, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.70, NOW(), NOW()),
   ('950c69d3-6d2d-4a30-8dce-7aef802d59a8', 'c8d45ab7-017c-45c5-8d65-c5d6ed722997', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-018', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Beauty Lounge 018 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4844,7 +4844,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.71, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.71, NOW(), NOW()),
   ('362b2a2c-a13b-4e7a-8e75-1b105cd4605a', 'c8d45ab7-017c-45c5-8d65-c5d6ed722997', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-018', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Beauty Lounge 018 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4854,7 +4854,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.72, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.72, NOW(), NOW()),
   ('68be3299-74d9-409d-a40a-9ea6a59931c2', 'fd964992-a96f-462d-be0b-b31feb707916', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Cham soc da mat sach sau va cap am phuc hoi', 'cham-soc-da-mat-sach-sau-va-cap-am-phuc-hoi-019', '<div class="service-description">
   <h3>Cham soc da mat sach sau va cap am phuc hoi</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Beauty Lounge 019 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4864,7 +4864,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.69, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.69, NOW(), NOW()),
   ('3cf215c6-d3c0-4bfb-b5e2-ff0ce83938f2', 'fd964992-a96f-462d-be0b-b31feb707916', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-019', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Beauty Lounge 019 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4874,7 +4874,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.70, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.70, NOW(), NOW()),
   ('dbcb44f1-cb2f-46a4-9227-8d1790d7e8cb', 'fd964992-a96f-462d-be0b-b31feb707916', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-019', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Beauty Lounge 019 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4884,7 +4884,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.71, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.71, NOW(), NOW()),
   ('65f84aa5-aeb1-488b-a41c-33c00c69e633', 'fd964992-a96f-462d-be0b-b31feb707916', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-019', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Beauty Lounge 019 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4894,7 +4894,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.72, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.72, NOW(), NOW()),
   ('fcf49bc1-071b-4609-9e61-f0ee7eac621d', 'fd964992-a96f-462d-be0b-b31feb707916', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-019', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Beauty Lounge 019 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4904,7 +4904,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.73, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.73, NOW(), NOW()),
   ('1b623e56-b645-4000-8db2-47870a25fe67', '9d2376fd-9d97-41cc-b14e-d348bd8fd3a7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-020', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Beauty Lounge 020 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4914,7 +4914,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.70, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.70, NOW(), NOW()),
   ('0a4be165-cde5-43fc-a48f-85374ccc1568', '9d2376fd-9d97-41cc-b14e-d348bd8fd3a7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-020', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Beauty Lounge 020 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4924,7 +4924,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.71, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.71, NOW(), NOW()),
   ('0476b638-ed97-44e5-83b7-bfd428359255', '9d2376fd-9d97-41cc-b14e-d348bd8fd3a7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-020', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Beauty Lounge 020 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4934,7 +4934,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.72, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.72, NOW(), NOW()),
   ('064f879a-3933-4f13-b4a1-0f630e3fa960', '9d2376fd-9d97-41cc-b14e-d348bd8fd3a7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-020', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Beauty Lounge 020 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4944,7 +4944,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.73, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.73, NOW(), NOW()),
   ('8fff5e3b-cba6-4dbf-bdcd-10365c2c1c29', '9d2376fd-9d97-41cc-b14e-d348bd8fd3a7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-020', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Beauty Lounge 020 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4954,7 +4954,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.74, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.74, NOW(), NOW()),
   ('f2fb21a0-b83e-4df0-9eb8-7259df1ba453', '1ef02d2f-c425-40e9-b5f5-2981a5a14be9', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-021', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Wellness Studio 021 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4964,7 +4964,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.71, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.71, NOW(), NOW()),
   ('97c3b8de-c9ac-4edc-a947-aef4591f890e', '1ef02d2f-c425-40e9-b5f5-2981a5a14be9', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-021', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Wellness Studio 021 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4974,7 +4974,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.72, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.72, NOW(), NOW()),
   ('4bec1107-3f55-46c1-8589-9f9ba03bcb01', '1ef02d2f-c425-40e9-b5f5-2981a5a14be9', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-021', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Wellness Studio 021 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4984,7 +4984,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.73, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.73, NOW(), NOW()),
   ('8da38484-8aba-41c6-bd30-9383c8693e5e', '1ef02d2f-c425-40e9-b5f5-2981a5a14be9', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-021', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Wellness Studio 021 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -4994,7 +4994,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.74, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.74, NOW(), NOW()),
   ('4fbc78c2-565b-4ad6-9a83-039ef097197b', '1ef02d2f-c425-40e9-b5f5-2981a5a14be9', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-021', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Wellness Studio 021 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5004,7 +5004,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.75, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.75, NOW(), NOW()),
   ('e1053ad5-aa35-43ca-ace2-4748fa4b950d', 'df68a25e-4f9d-4b3f-aa7a-44a5b0d7fb06', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-022', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Wellness Studio 022 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5014,7 +5014,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.72, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.72, NOW(), NOW()),
   ('0303d0c5-8dd8-4039-85b9-3be9a632284b', 'df68a25e-4f9d-4b3f-aa7a-44a5b0d7fb06', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-022', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Wellness Studio 022 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5024,7 +5024,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.73, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.73, NOW(), NOW()),
   ('68e26e9b-a8cf-4d7f-ab8b-fdb5a66d998c', 'df68a25e-4f9d-4b3f-aa7a-44a5b0d7fb06', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-022', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Wellness Studio 022 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5034,7 +5034,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.74, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.74, NOW(), NOW()),
   ('bb9f7bec-59dc-40e1-a910-a3dd04c9a64f', 'df68a25e-4f9d-4b3f-aa7a-44a5b0d7fb06', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-022', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Wellness Studio 022 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5044,7 +5044,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.75, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.75, NOW(), NOW()),
   ('0972b47e-1dac-4cdf-81e4-788c6a487db7', 'df68a25e-4f9d-4b3f-aa7a-44a5b0d7fb06', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-022', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Wellness Studio 022 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5054,7 +5054,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.76, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.76, NOW(), NOW()),
   ('855409bc-1f92-4173-ba80-64db0ddc0f59', 'f622d8d3-02c9-4bbd-ac6f-dd7dac500f4c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-023', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Wellness Studio 023 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5064,7 +5064,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.73, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.73, NOW(), NOW()),
   ('3a089661-abf5-4740-9874-b0a136366d53', 'f622d8d3-02c9-4bbd-ac6f-dd7dac500f4c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-023', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Wellness Studio 023 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5074,7 +5074,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.74, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.74, NOW(), NOW()),
   ('e083edc5-b30c-4b3d-b825-1fecd950da50', 'f622d8d3-02c9-4bbd-ac6f-dd7dac500f4c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-023', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Wellness Studio 023 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5084,7 +5084,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.75, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.75, NOW(), NOW()),
   ('e6054855-9e8f-452c-baf7-41a1e4e86bec', 'f622d8d3-02c9-4bbd-ac6f-dd7dac500f4c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-023', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Wellness Studio 023 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5094,7 +5094,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.76, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.76, NOW(), NOW()),
   ('6acee2a8-7d06-4227-9986-4656575b1a17', 'f622d8d3-02c9-4bbd-ac6f-dd7dac500f4c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-023', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Wellness Studio 023 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5104,7 +5104,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.77, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.77, NOW(), NOW()),
   ('9fd27344-1214-403c-8ec0-58c2bc930255', '6371fd83-1b7b-4cf1-bc7e-6eb2032df060', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Noi mi tu nhien va cham soc mong gel', 'noi-mi-tu-nhien-va-cham-soc-mong-gel-024', '<div class="service-description">
   <h3>Noi mi tu nhien va cham soc mong gel</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Wellness Studio 024 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5114,7 +5114,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.74, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.74, NOW(), NOW()),
   ('c2855f1d-8ae1-422b-8948-ab8c474aebf5', '6371fd83-1b7b-4cf1-bc7e-6eb2032df060', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-024', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Wellness Studio 024 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5124,7 +5124,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.75, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.75, NOW(), NOW()),
   ('7ce3d123-4086-4780-8acb-6faf822aabf2', '6371fd83-1b7b-4cf1-bc7e-6eb2032df060', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-024', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Wellness Studio 024 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5134,7 +5134,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.76, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.76, NOW(), NOW()),
   ('6027c82f-e3ec-4118-8c4e-f0cc82100865', '6371fd83-1b7b-4cf1-bc7e-6eb2032df060', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-024', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Wellness Studio 024 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5144,7 +5144,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.77, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.77, NOW(), NOW()),
   ('57e7552e-d3e0-4709-99eb-5288c9c92175', '6371fd83-1b7b-4cf1-bc7e-6eb2032df060', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-024', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Wellness Studio 024 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5154,7 +5154,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.78, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.78, NOW(), NOW()),
   ('dda58578-d207-464f-b704-650218831067', '35f259bf-5585-46ae-a71c-265e97ed6e3b', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Cham soc da mat sach sau va cap am phuc hoi', 'cham-soc-da-mat-sach-sau-va-cap-am-phuc-hoi-025', '<div class="service-description">
   <h3>Cham soc da mat sach sau va cap am phuc hoi</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Wellness Studio 025 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5164,7 +5164,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.75, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.75, NOW(), NOW()),
   ('054b74f0-50b5-45e6-9505-5ef6d2d8cae4', '35f259bf-5585-46ae-a71c-265e97ed6e3b', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-025', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Wellness Studio 025 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5174,7 +5174,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.76, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.76, NOW(), NOW()),
   ('01e58c07-9de6-4867-858f-8551647675fc', '35f259bf-5585-46ae-a71c-265e97ed6e3b', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-025', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Wellness Studio 025 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5184,7 +5184,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.77, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.77, NOW(), NOW()),
   ('0393d92d-8dd7-4319-b8b7-5fbbe37dd47b', '35f259bf-5585-46ae-a71c-265e97ed6e3b', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-025', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Wellness Studio 025 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5194,7 +5194,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.78, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.78, NOW(), NOW()),
   ('0e914c46-9b3b-4f13-971e-ee422482d9a2', '35f259bf-5585-46ae-a71c-265e97ed6e3b', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-025', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Wellness Studio 025 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5204,7 +5204,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.79, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.79, NOW(), NOW()),
   ('de850dae-4017-4972-a7c7-7556478df4f6', 'ab4a0bfb-235a-4120-9c0d-a9a1ab4d33a4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-026', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Wellness Studio 026 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5214,7 +5214,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.76, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.76, NOW(), NOW()),
   ('b2a56caf-7cde-49dd-8f2c-e1ed4988d790', 'ab4a0bfb-235a-4120-9c0d-a9a1ab4d33a4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-026', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Wellness Studio 026 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5224,7 +5224,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.77, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.77, NOW(), NOW()),
   ('925f2fbe-e182-451e-b580-f49db0135f51', 'ab4a0bfb-235a-4120-9c0d-a9a1ab4d33a4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-026', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Wellness Studio 026 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5234,7 +5234,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.78, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.78, NOW(), NOW()),
   ('bc7e9c14-a015-461b-99fd-d489547223d5', 'ab4a0bfb-235a-4120-9c0d-a9a1ab4d33a4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-026', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Wellness Studio 026 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5244,7 +5244,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.79, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.79, NOW(), NOW()),
   ('24e6529f-626f-4561-8fba-4f486ee1e054', 'ab4a0bfb-235a-4120-9c0d-a9a1ab4d33a4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-026', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Wellness Studio 026 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5254,7 +5254,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.80, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.80, NOW(), NOW()),
   ('c8419675-bc3c-4b20-a036-cab85ad0cad5', '56fb0f65-e44a-40b1-aac8-4e5531cf0e10', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-027', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Wellness Studio 027 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5264,7 +5264,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.77, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.77, NOW(), NOW()),
   ('be392515-5266-4d6a-9465-d152c814c293', '56fb0f65-e44a-40b1-aac8-4e5531cf0e10', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-027', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Wellness Studio 027 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5274,7 +5274,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.78, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.78, NOW(), NOW()),
   ('ae202e18-597b-4797-995e-bd403fee940f', '56fb0f65-e44a-40b1-aac8-4e5531cf0e10', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-027', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Wellness Studio 027 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5284,7 +5284,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.79, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.79, NOW(), NOW()),
   ('fc645a02-238f-48f5-b3a3-4624939921b7', '56fb0f65-e44a-40b1-aac8-4e5531cf0e10', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-027', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Wellness Studio 027 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5294,7 +5294,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.80, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.80, NOW(), NOW()),
   ('d91ea51c-b2df-445e-948a-d849b47956f1', '56fb0f65-e44a-40b1-aac8-4e5531cf0e10', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-027', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Wellness Studio 027 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5304,7 +5304,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.81, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.81, NOW(), NOW()),
   ('c2d8b55f-5a1c-415e-aff4-c6b358ce36e6', '07bdcd21-fb5f-4c63-8efb-8ce362503ec1', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-028', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Wellness Studio 028 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5314,7 +5314,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.78, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.78, NOW(), NOW()),
   ('4440303b-8877-40b5-8cdc-ea489ccd3431', '07bdcd21-fb5f-4c63-8efb-8ce362503ec1', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-028', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Wellness Studio 028 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5324,7 +5324,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.79, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.79, NOW(), NOW()),
   ('63425a42-a936-4dc9-9d7c-2ea664240739', '07bdcd21-fb5f-4c63-8efb-8ce362503ec1', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-028', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Wellness Studio 028 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5334,7 +5334,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.80, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.80, NOW(), NOW()),
   ('1c8ecdc7-a6c0-4445-ab8e-d97b442afe00', '07bdcd21-fb5f-4c63-8efb-8ce362503ec1', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-028', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Wellness Studio 028 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5344,7 +5344,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.81, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.81, NOW(), NOW()),
   ('55e7c785-ec46-40f9-b67d-0b26b5e2cec3', '07bdcd21-fb5f-4c63-8efb-8ce362503ec1', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-028', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Wellness Studio 028 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5354,7 +5354,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.82, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.82, NOW(), NOW()),
   ('75967085-4b43-4bc9-819b-a801f55885ba', '5e8897da-b18a-46fb-971c-754214f39536', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-029', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Wellness Studio 029 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5364,7 +5364,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.79, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.79, NOW(), NOW()),
   ('357dbf8f-0a0a-4862-ae8e-00a83d01b997', '5e8897da-b18a-46fb-971c-754214f39536', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-029', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Wellness Studio 029 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5374,7 +5374,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.80, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.80, NOW(), NOW()),
   ('928da71f-e79a-4fee-b160-482d8d90ed0a', '5e8897da-b18a-46fb-971c-754214f39536', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-029', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Wellness Studio 029 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5384,7 +5384,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.81, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.81, NOW(), NOW()),
   ('79822e14-6308-44a5-bfe8-f97669a9df45', '5e8897da-b18a-46fb-971c-754214f39536', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-029', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Wellness Studio 029 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5394,7 +5394,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.82, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.82, NOW(), NOW()),
   ('c149f66d-8c81-4c84-a497-ba46ddd4c803', '5e8897da-b18a-46fb-971c-754214f39536', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-029', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Wellness Studio 029 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5404,7 +5404,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.83, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.83, NOW(), NOW()),
   ('7c9829f2-b98c-413e-a2b5-bbc363fa2d67', '56ca8cb9-bbeb-4c67-aadb-8de25669a5a2', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Noi mi tu nhien va cham soc mong gel', 'noi-mi-tu-nhien-va-cham-soc-mong-gel-030', '<div class="service-description">
   <h3>Noi mi tu nhien va cham soc mong gel</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Wellness Studio 030 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5414,7 +5414,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.80, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.80, NOW(), NOW()),
   ('b550fbd0-502a-44b6-8131-6012a5ea4341', '56ca8cb9-bbeb-4c67-aadb-8de25669a5a2', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-030', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Wellness Studio 030 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5424,7 +5424,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.81, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.81, NOW(), NOW()),
   ('f00a3bb2-0b81-4837-a792-35cecf6c5eea', '56ca8cb9-bbeb-4c67-aadb-8de25669a5a2', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-030', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Wellness Studio 030 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5434,7 +5434,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.82, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.82, NOW(), NOW()),
   ('be03f0f7-13d5-482b-95ad-8f42e3b875c4', '56ca8cb9-bbeb-4c67-aadb-8de25669a5a2', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-030', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Wellness Studio 030 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5444,7 +5444,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.83, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.83, NOW(), NOW()),
   ('8dfb1d26-e9c8-4474-861f-40bc3f08db17', '56ca8cb9-bbeb-4c67-aadb-8de25669a5a2', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-030', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Wellness Studio 030 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5454,7 +5454,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.84, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.84, NOW(), NOW()),
   ('575160fb-1116-477d-a799-4189c5aee8bd', 'fd9a6e59-7bd7-4ebd-bf08-184b5d1648ce', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Cham soc da mat sach sau va cap am phuc hoi', 'cham-soc-da-mat-sach-sau-va-cap-am-phuc-hoi-031', '<div class="service-description">
   <h3>Cham soc da mat sach sau va cap am phuc hoi</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Skin Clinic 031 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5464,7 +5464,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.81, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.81, NOW(), NOW()),
   ('3328fa00-6560-4d8e-a9da-1175afd1fa53', 'fd9a6e59-7bd7-4ebd-bf08-184b5d1648ce', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-031', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Skin Clinic 031 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5474,7 +5474,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.82, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.82, NOW(), NOW()),
   ('4ed41cb4-fda5-47fc-9efb-a4357fec8e7e', 'fd9a6e59-7bd7-4ebd-bf08-184b5d1648ce', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-031', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Skin Clinic 031 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5484,7 +5484,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.83, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.83, NOW(), NOW()),
   ('d2bcfbf3-be09-4227-90f4-6940da740f85', 'fd9a6e59-7bd7-4ebd-bf08-184b5d1648ce', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-031', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Skin Clinic 031 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5494,7 +5494,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.84, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.84, NOW(), NOW()),
   ('b44982e7-ba17-4d7b-8d1e-ef366ea6f4d0', 'fd9a6e59-7bd7-4ebd-bf08-184b5d1648ce', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-031', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Skin Clinic 031 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5504,7 +5504,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.85, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.85, NOW(), NOW()),
   ('2a73551a-388f-405f-80b1-183b8dc74ea6', '2015bebb-75cb-4a8a-b2a5-a92e4aeadc54', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-032', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Skin Clinic 032 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5514,7 +5514,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.82, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.82, NOW(), NOW()),
   ('616224ac-aa63-432d-aa70-98e3e3107f46', '2015bebb-75cb-4a8a-b2a5-a92e4aeadc54', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-032', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Skin Clinic 032 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5524,7 +5524,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.83, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.83, NOW(), NOW()),
   ('e77d8e07-ca60-4433-ad76-c1f181482806', '2015bebb-75cb-4a8a-b2a5-a92e4aeadc54', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-032', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Skin Clinic 032 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5534,7 +5534,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.84, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.84, NOW(), NOW()),
   ('4ae1fbe9-3589-4d6a-aa1c-c84bef8b01d1', '2015bebb-75cb-4a8a-b2a5-a92e4aeadc54', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-032', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Skin Clinic 032 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5544,7 +5544,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.85, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.85, NOW(), NOW()),
   ('4da10a48-219b-4ab0-86bb-c344b27af125', '2015bebb-75cb-4a8a-b2a5-a92e4aeadc54', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-032', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Skin Clinic 032 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5554,7 +5554,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.86, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.86, NOW(), NOW()),
   ('0db7c99d-c99e-463a-ad0c-4eb808253229', '63b77a86-2fed-460b-8849-501f6b2ffd9c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-033', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Skin Clinic 033 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5564,7 +5564,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.83, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.83, NOW(), NOW()),
   ('86e3cd07-69ca-4403-82f8-5ce691e309a1', '63b77a86-2fed-460b-8849-501f6b2ffd9c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-033', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Skin Clinic 033 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5574,7 +5574,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.84, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.84, NOW(), NOW()),
   ('02e654fb-1f03-421f-be6f-b70f638ab230', '63b77a86-2fed-460b-8849-501f6b2ffd9c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-033', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Skin Clinic 033 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5584,7 +5584,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.85, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.85, NOW(), NOW()),
   ('0fd3f6ec-23c9-45eb-85b3-d4c154af6206', '63b77a86-2fed-460b-8849-501f6b2ffd9c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-033', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Skin Clinic 033 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5594,7 +5594,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.86, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.86, NOW(), NOW()),
   ('770ee609-1e45-4268-83bc-d1fa37221a85', '63b77a86-2fed-460b-8849-501f6b2ffd9c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-033', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Skin Clinic 033 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5604,7 +5604,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.87, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.87, NOW(), NOW()),
   ('dbc9d300-c303-4e05-9c93-a60cde1bfc53', '34b52994-da28-4060-9601-d8529ecf2cca', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-034', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Skin Clinic 034 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5614,7 +5614,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.84, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.84, NOW(), NOW()),
   ('1cd12980-7973-4a40-b5ab-5ff9e26b5f2f', '34b52994-da28-4060-9601-d8529ecf2cca', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-034', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Skin Clinic 034 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5624,7 +5624,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.85, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.85, NOW(), NOW()),
   ('f7ef32ef-23bd-40f0-9c5a-6b5d9494df9b', '34b52994-da28-4060-9601-d8529ecf2cca', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-034', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Skin Clinic 034 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5634,7 +5634,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.86, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.86, NOW(), NOW()),
   ('6f082dcf-7156-4845-9d0d-6e5b064895be', '34b52994-da28-4060-9601-d8529ecf2cca', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-034', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Skin Clinic 034 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5644,7 +5644,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.87, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.87, NOW(), NOW()),
   ('4078841c-5dde-44fc-a0f6-ae1b535bb439', '34b52994-da28-4060-9601-d8529ecf2cca', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-034', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Skin Clinic 034 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5654,7 +5654,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.88, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.88, NOW(), NOW()),
   ('f4edb9a6-c5c5-48cc-9482-5a34460e39b4', '6cd34565-98ec-4391-a9fc-9036eb22c803', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-035', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Skin Clinic 035 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5664,7 +5664,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.85, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.85, NOW(), NOW()),
   ('e4232708-db98-49f0-a366-3bbd032a33c9', '6cd34565-98ec-4391-a9fc-9036eb22c803', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-035', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Skin Clinic 035 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5674,7 +5674,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.86, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.86, NOW(), NOW()),
   ('2b7b49d0-03af-4c4a-99f2-3e567c801a5e', '6cd34565-98ec-4391-a9fc-9036eb22c803', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-035', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Skin Clinic 035 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5684,7 +5684,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.87, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.87, NOW(), NOW()),
   ('a8bc1c6e-2580-40d0-babe-3a085fcc6c06', '6cd34565-98ec-4391-a9fc-9036eb22c803', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-035', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Skin Clinic 035 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5694,7 +5694,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.88, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.88, NOW(), NOW()),
   ('5a67c8b3-d74d-43c0-916b-b85ac446d9be', '6cd34565-98ec-4391-a9fc-9036eb22c803', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-035', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Skin Clinic 035 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5704,7 +5704,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.89, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.89, NOW(), NOW()),
   ('c26e85ca-d7d8-4602-ad91-c371264ada96', '6e46c406-5443-49ef-ab3c-bf53c3c1bc6e', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Noi mi tu nhien va cham soc mong gel', 'noi-mi-tu-nhien-va-cham-soc-mong-gel-036', '<div class="service-description">
   <h3>Noi mi tu nhien va cham soc mong gel</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Skin Clinic 036 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5714,7 +5714,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.86, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.86, NOW(), NOW()),
   ('1e4e0406-3c96-4c19-a1d5-66eaddb0dfc5', '6e46c406-5443-49ef-ab3c-bf53c3c1bc6e', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-036', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Skin Clinic 036 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5724,7 +5724,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.87, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.87, NOW(), NOW()),
   ('f5d2a60f-578c-47e0-ac2b-7a4e528d5436', '6e46c406-5443-49ef-ab3c-bf53c3c1bc6e', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-036', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Skin Clinic 036 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5734,7 +5734,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.88, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.88, NOW(), NOW()),
   ('583c8fab-1ae3-4986-aaa7-a0b27258a5bc', '6e46c406-5443-49ef-ab3c-bf53c3c1bc6e', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-036', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Skin Clinic 036 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5744,7 +5744,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.89, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.89, NOW(), NOW()),
   ('6d890104-0371-44e6-acb0-f4636de1a22e', '6e46c406-5443-49ef-ab3c-bf53c3c1bc6e', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-036', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Skin Clinic 036 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5754,7 +5754,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.90, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.90, NOW(), NOW()),
   ('e1788b56-a805-4179-9037-bec4fc5c4246', '6d4ddbb6-4f33-496b-896d-5c26a6a7a128', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Cham soc da mat sach sau va cap am phuc hoi', 'cham-soc-da-mat-sach-sau-va-cap-am-phuc-hoi-037', '<div class="service-description">
   <h3>Cham soc da mat sach sau va cap am phuc hoi</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Skin Clinic 037 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5764,7 +5764,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.87, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.87, NOW(), NOW()),
   ('a20e7530-7dfd-4e29-bf7b-2fee9a2138fb', '6d4ddbb6-4f33-496b-896d-5c26a6a7a128', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-037', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Skin Clinic 037 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5774,7 +5774,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.88, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.88, NOW(), NOW()),
   ('9a16ed2b-ee6b-4f7f-9c97-079d3d655e32', '6d4ddbb6-4f33-496b-896d-5c26a6a7a128', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-037', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Skin Clinic 037 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5784,7 +5784,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.89, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.89, NOW(), NOW()),
   ('1999e2aa-6608-4c91-bc08-89eebf308d34', '6d4ddbb6-4f33-496b-896d-5c26a6a7a128', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-037', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Skin Clinic 037 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5794,7 +5794,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.90, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.90, NOW(), NOW()),
   ('6b3c24d9-f950-4f28-9841-f2c568e8e208', '6d4ddbb6-4f33-496b-896d-5c26a6a7a128', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-037', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Skin Clinic 037 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5804,7 +5804,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.91, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.91, NOW(), NOW()),
   ('17e54393-5822-4693-bf2b-bbb41b42e5e6', '0c73f667-20c2-407c-ad42-0ef962703632', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-038', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Skin Clinic 038 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5814,7 +5814,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.88, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.88, NOW(), NOW()),
   ('ad62ea60-ca19-4e56-ba2d-8fc08767d0df', '0c73f667-20c2-407c-ad42-0ef962703632', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-038', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Skin Clinic 038 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5824,7 +5824,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.89, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.89, NOW(), NOW()),
   ('65c68608-55a1-4d7a-9fc6-93dc4af003d7', '0c73f667-20c2-407c-ad42-0ef962703632', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-038', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Skin Clinic 038 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5834,7 +5834,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.90, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.90, NOW(), NOW()),
   ('cf94c68f-7328-49d6-93dc-67e5eba78be2', '0c73f667-20c2-407c-ad42-0ef962703632', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-038', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Skin Clinic 038 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5844,7 +5844,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.91, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.91, NOW(), NOW()),
   ('ced13c9d-697b-4115-a546-c3d528207803', '0c73f667-20c2-407c-ad42-0ef962703632', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-038', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Skin Clinic 038 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5854,7 +5854,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.92, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.92, NOW(), NOW()),
   ('d5b9349f-d0a5-4636-8427-e65d6bbaa6ec', '49df1442-f215-4687-bb3a-cf0937d83c9b', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-039', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Skin Clinic 039 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5864,7 +5864,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.89, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.89, NOW(), NOW()),
   ('5a196100-ef1e-490d-811f-9d8868c54001', '49df1442-f215-4687-bb3a-cf0937d83c9b', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-039', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Skin Clinic 039 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5874,7 +5874,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.90, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.90, NOW(), NOW()),
   ('0daf2489-a7e9-4f8d-8535-fa1596083cfa', '49df1442-f215-4687-bb3a-cf0937d83c9b', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-039', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Skin Clinic 039 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5884,7 +5884,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.91, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.91, NOW(), NOW()),
   ('54f06d50-f0e5-49ed-a429-af9f59660c64', '49df1442-f215-4687-bb3a-cf0937d83c9b', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-039', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Skin Clinic 039 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5894,7 +5894,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.92, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.92, NOW(), NOW()),
   ('09d017ae-6870-4059-a129-aff52baf2164', '49df1442-f215-4687-bb3a-cf0937d83c9b', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-039', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Skin Clinic 039 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5904,7 +5904,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.93, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.93, NOW(), NOW()),
   ('023ec787-568c-4cef-8aec-233ebbeec945', '514d83f1-3493-428c-84f8-63dc006f14db', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-040', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Skin Clinic 040 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5914,7 +5914,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.90, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.90, NOW(), NOW()),
   ('73838261-b602-46e9-87c6-1c654722e261', '514d83f1-3493-428c-84f8-63dc006f14db', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-040', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Skin Clinic 040 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5924,7 +5924,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.91, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.91, NOW(), NOW()),
   ('e673a4d4-597e-4dca-944d-2375dd8eeaba', '514d83f1-3493-428c-84f8-63dc006f14db', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-040', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Skin Clinic 040 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5934,7 +5934,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.92, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.92, NOW(), NOW()),
   ('cfd5ca90-a450-4f5a-9730-38e77152c3b6', '514d83f1-3493-428c-84f8-63dc006f14db', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-040', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Skin Clinic 040 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5944,7 +5944,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.93, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.93, NOW(), NOW()),
   ('af4f3c3d-8798-41e5-a0d4-e1e7e1ffa4c0', '514d83f1-3493-428c-84f8-63dc006f14db', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-040', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Skin Clinic 040 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5954,7 +5954,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.94, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.94, NOW(), NOW()),
   ('1e4a2d6c-9232-46ca-814e-48d2ccfc66f5', 'af5c81f5-80e8-4919-a0a9-b2012c293b49', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-041', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Care House 041 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5964,7 +5964,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.91, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.91, NOW(), NOW()),
   ('d13dcaf6-7607-4dee-a843-ec6fe3ec6736', 'af5c81f5-80e8-4919-a0a9-b2012c293b49', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-041', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Care House 041 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5974,7 +5974,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.92, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.92, NOW(), NOW()),
   ('5e3b66e2-6345-4792-8135-bd34dc6c7354', 'af5c81f5-80e8-4919-a0a9-b2012c293b49', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-041', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Care House 041 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5984,7 +5984,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.93, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.93, NOW(), NOW()),
   ('0b98f89e-4469-4103-be91-19384e13ed2a', 'af5c81f5-80e8-4919-a0a9-b2012c293b49', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-041', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Care House 041 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -5994,7 +5994,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.94, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.94, NOW(), NOW()),
   ('0eeb20a0-f7b3-4663-88f8-d0ecdc961b9c', 'af5c81f5-80e8-4919-a0a9-b2012c293b49', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-041', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Care House 041 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6004,7 +6004,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.50, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.50, NOW(), NOW()),
   ('df834e75-cd38-4400-89f7-5aab83136c8e', 'a64662d6-6188-4851-88a6-ed98bd892ef6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Noi mi tu nhien va cham soc mong gel', 'noi-mi-tu-nhien-va-cham-soc-mong-gel-042', '<div class="service-description">
   <h3>Noi mi tu nhien va cham soc mong gel</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Care House 042 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6014,7 +6014,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.92, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.92, NOW(), NOW()),
   ('067ba194-3dfd-487f-8a46-1f3271f36953', 'a64662d6-6188-4851-88a6-ed98bd892ef6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-042', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Care House 042 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6024,7 +6024,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.93, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.93, NOW(), NOW()),
   ('cb83bc6f-72f4-40a6-9aef-9c8ebb39349e', 'a64662d6-6188-4851-88a6-ed98bd892ef6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-042', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Care House 042 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6034,7 +6034,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.94, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.94, NOW(), NOW()),
   ('91b6d623-9843-459c-b01c-3c95ee2a6918', 'a64662d6-6188-4851-88a6-ed98bd892ef6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-042', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Care House 042 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6044,7 +6044,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.50, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.50, NOW(), NOW()),
   ('e77587f5-ab9e-4209-a9a6-d7bb7d919b37', 'a64662d6-6188-4851-88a6-ed98bd892ef6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-042', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Care House 042 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6054,7 +6054,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.51, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.51, NOW(), NOW()),
   ('0efc3995-5d35-4930-8405-392a25ab7741', '4a174efe-9060-4e6c-911c-0d4ecb1f5679', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Cham soc da mat sach sau va cap am phuc hoi', 'cham-soc-da-mat-sach-sau-va-cap-am-phuc-hoi-043', '<div class="service-description">
   <h3>Cham soc da mat sach sau va cap am phuc hoi</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Care House 043 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6064,7 +6064,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.93, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.93, NOW(), NOW()),
   ('22bb95bd-299e-41f9-bc9d-9c7c8bf9e6b4', '4a174efe-9060-4e6c-911c-0d4ecb1f5679', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-043', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Care House 043 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6074,7 +6074,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.94, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.94, NOW(), NOW()),
   ('6964d8e7-0f9a-45af-beea-f95fd8ada608', '4a174efe-9060-4e6c-911c-0d4ecb1f5679', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-043', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Care House 043 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6084,7 +6084,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.50, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.50, NOW(), NOW()),
   ('9d949170-e202-4acb-bc4d-5dbcb2ab6e21', '4a174efe-9060-4e6c-911c-0d4ecb1f5679', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-043', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Care House 043 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6094,7 +6094,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.51, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.51, NOW(), NOW()),
   ('d12b914f-b635-49d4-acf7-a837926ec576', '4a174efe-9060-4e6c-911c-0d4ecb1f5679', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-043', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Care House 043 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6104,7 +6104,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.52, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.52, NOW(), NOW()),
   ('94026b26-f980-4f20-b643-71d6bf482e8d', 'a55d8d1f-66bb-4709-a6b5-9ff3193c0419', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-044', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Care House 044 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6114,7 +6114,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.94, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.94, NOW(), NOW()),
   ('11b9186e-3838-49ef-b4d9-5f78b30839d3', 'a55d8d1f-66bb-4709-a6b5-9ff3193c0419', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-044', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Care House 044 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6124,7 +6124,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.50, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.50, NOW(), NOW()),
   ('3024626b-2a9c-4a83-8b11-9f437910bfaa', 'a55d8d1f-66bb-4709-a6b5-9ff3193c0419', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-044', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Care House 044 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6134,7 +6134,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.51, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.51, NOW(), NOW()),
   ('d1cffe0f-56b5-4327-9ea4-53b64d15338c', 'a55d8d1f-66bb-4709-a6b5-9ff3193c0419', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-044', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Care House 044 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6144,7 +6144,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.52, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.52, NOW(), NOW()),
   ('022873f0-947d-4db9-ae97-cf44a8d1260d', 'a55d8d1f-66bb-4709-a6b5-9ff3193c0419', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-044', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Care House 044 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6154,7 +6154,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.53, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.53, NOW(), NOW()),
   ('98484d2c-9475-4c98-b4d9-1b6a6b207592', 'd8822fb6-10d9-40ac-979e-c95496075b9b', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-045', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Care House 045 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6164,7 +6164,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.50, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.50, NOW(), NOW()),
   ('c46a3afe-61ba-4700-bbda-5deb9bcab234', 'd8822fb6-10d9-40ac-979e-c95496075b9b', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-045', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Care House 045 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6174,7 +6174,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.51, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.51, NOW(), NOW()),
   ('b6b7e7e4-0e3b-420b-a669-02c90dcfce76', 'd8822fb6-10d9-40ac-979e-c95496075b9b', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-045', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Care House 045 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6184,7 +6184,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.52, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.52, NOW(), NOW()),
   ('4a0ed3ed-7997-4af1-8ade-ab131eedaa27', 'd8822fb6-10d9-40ac-979e-c95496075b9b', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-045', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Care House 045 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6194,7 +6194,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.53, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.53, NOW(), NOW()),
   ('734d90f3-8b21-4708-a358-2a6d8997b704', 'd8822fb6-10d9-40ac-979e-c95496075b9b', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-045', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Care House 045 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6204,7 +6204,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.54, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.54, NOW(), NOW()),
   ('8fbd0543-bddd-45a0-9193-632f67ec19c8', '6d3b4a33-8b9c-4c67-914a-b947b7d1ba60', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-046', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Care House 046 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6214,7 +6214,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.51, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.51, NOW(), NOW()),
   ('97105e70-ec48-46cf-8c07-59552bfeae60', '6d3b4a33-8b9c-4c67-914a-b947b7d1ba60', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-046', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Care House 046 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6224,7 +6224,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.52, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.52, NOW(), NOW()),
   ('4aecdfb6-f878-47dc-9566-f879b8dc4ed9', '6d3b4a33-8b9c-4c67-914a-b947b7d1ba60', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-046', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Care House 046 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6234,7 +6234,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.53, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.53, NOW(), NOW()),
   ('5ee43072-0157-44ed-98e8-c211e1d63ade', '6d3b4a33-8b9c-4c67-914a-b947b7d1ba60', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-046', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Care House 046 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6244,7 +6244,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.54, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.54, NOW(), NOW()),
   ('c02bc2db-8936-49df-8f14-695d9216b711', '6d3b4a33-8b9c-4c67-914a-b947b7d1ba60', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-046', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Care House 046 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6254,7 +6254,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.55, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.55, NOW(), NOW()),
   ('150e2ffe-b7d6-4894-8c98-e8eac737beb6', 'e00a22a5-80f0-44bd-8473-68d6f29a7dd9', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-047', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Care House 047 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6264,7 +6264,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.52, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.52, NOW(), NOW()),
   ('2a336f03-32f8-4f6f-b41e-24b4dc6c885b', 'e00a22a5-80f0-44bd-8473-68d6f29a7dd9', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-047', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Care House 047 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6274,7 +6274,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.53, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.53, NOW(), NOW()),
   ('61ccb80f-2377-495e-a9a9-4312a45b959d', 'e00a22a5-80f0-44bd-8473-68d6f29a7dd9', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-047', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Care House 047 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6284,7 +6284,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.54, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.54, NOW(), NOW()),
   ('080feeb8-b36f-4193-8662-b26da2a550a6', 'e00a22a5-80f0-44bd-8473-68d6f29a7dd9', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-047', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Care House 047 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6294,7 +6294,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.55, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.55, NOW(), NOW()),
   ('b0b4e6c6-fb25-4650-aa38-a4f08c1ebea6', 'e00a22a5-80f0-44bd-8473-68d6f29a7dd9', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-047', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Care House 047 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6304,7 +6304,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.56, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.56, NOW(), NOW()),
   ('a2a67498-e6f7-4d4a-b440-bec8aa2be021', '02051708-cc64-44e2-b8cb-24d505673183', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Noi mi tu nhien va cham soc mong gel', 'noi-mi-tu-nhien-va-cham-soc-mong-gel-048', '<div class="service-description">
   <h3>Noi mi tu nhien va cham soc mong gel</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Care House 048 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6314,7 +6314,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.53, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.53, NOW(), NOW()),
   ('1309c044-3517-4e68-9d32-848bf29a43cf', '02051708-cc64-44e2-b8cb-24d505673183', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-048', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Care House 048 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6324,7 +6324,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.54, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.54, NOW(), NOW()),
   ('c7d93e45-cf6b-403f-8e00-e8efababd8ec', '02051708-cc64-44e2-b8cb-24d505673183', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-048', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Care House 048 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6334,7 +6334,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.55, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.55, NOW(), NOW()),
   ('87fb77e6-9ff0-499e-b42d-287f7f13fafe', '02051708-cc64-44e2-b8cb-24d505673183', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-048', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Care House 048 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6344,7 +6344,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.56, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.56, NOW(), NOW()),
   ('dec6e377-d39b-44db-98df-3a924a7cf591', '02051708-cc64-44e2-b8cb-24d505673183', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-048', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Care House 048 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6354,7 +6354,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.57, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.57, NOW(), NOW()),
   ('1db82ac5-d4a9-4d2b-8db4-91bda8da515e', 'c41e849b-03e8-4bd6-a8a2-2b0e43db7b22', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Cham soc da mat sach sau va cap am phuc hoi', 'cham-soc-da-mat-sach-sau-va-cap-am-phuc-hoi-049', '<div class="service-description">
   <h3>Cham soc da mat sach sau va cap am phuc hoi</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Care House 049 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6364,7 +6364,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.54, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.54, NOW(), NOW()),
   ('09ac4b3f-e13d-4cc9-a3ec-babab5efc796', 'c41e849b-03e8-4bd6-a8a2-2b0e43db7b22', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-049', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Care House 049 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6374,7 +6374,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.55, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.55, NOW(), NOW()),
   ('08138829-4095-4bc0-b92d-72145f3e6c1f', 'c41e849b-03e8-4bd6-a8a2-2b0e43db7b22', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-049', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Care House 049 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6384,7 +6384,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.56, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.56, NOW(), NOW()),
   ('c708e05a-0bab-4b79-b2a7-bc2908a5a842', 'c41e849b-03e8-4bd6-a8a2-2b0e43db7b22', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-049', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Care House 049 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6394,7 +6394,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.57, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.57, NOW(), NOW()),
   ('68ffa863-c9ad-4b59-98b5-22fcf9847f95', 'c41e849b-03e8-4bd6-a8a2-2b0e43db7b22', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-049', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Care House 049 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6404,7 +6404,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.58, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.58, NOW(), NOW()),
   ('123a9b39-2554-467e-aeae-bb022200e6f6', 'bbe663c9-ab7f-4782-8007-c890fc4ca1a4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-050', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Care House 050 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6414,7 +6414,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.55, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.55, NOW(), NOW()),
   ('eb1c9b47-cfd6-43c5-9c0b-6e259212de8f', 'bbe663c9-ab7f-4782-8007-c890fc4ca1a4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-050', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Care House 050 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6424,7 +6424,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.56, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.56, NOW(), NOW()),
   ('baa073cd-8902-4253-b34f-db77a47ee095', 'bbe663c9-ab7f-4782-8007-c890fc4ca1a4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-050', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Care House 050 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6434,7 +6434,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.57, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.57, NOW(), NOW()),
   ('0514e5a6-8fb4-40d1-b910-4dc069b00dd5', 'bbe663c9-ab7f-4782-8007-c890fc4ca1a4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-050', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Care House 050 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6444,7 +6444,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.58, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.58, NOW(), NOW()),
   ('0495da79-b94c-4946-a515-cf84d17e5545', 'bbe663c9-ab7f-4782-8007-c890fc4ca1a4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-050', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Care House 050 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6454,7 +6454,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.59, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.59, NOW(), NOW()),
   ('f95e2db5-a050-4e94-b62a-bdb8754cdaa5', '1274da9f-9cdf-41c9-a60a-250ac5245630', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-051', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Therapy Center 051 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6464,7 +6464,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.56, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.56, NOW(), NOW()),
   ('09bec9e7-b2d5-46b1-9ade-32e0ff9cde66', '1274da9f-9cdf-41c9-a60a-250ac5245630', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-051', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Therapy Center 051 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6474,7 +6474,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.57, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.57, NOW(), NOW()),
   ('e4238728-b885-4f31-92f3-53d313ffef3f', '1274da9f-9cdf-41c9-a60a-250ac5245630', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-051', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Therapy Center 051 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6484,7 +6484,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.58, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.58, NOW(), NOW()),
   ('16878757-4e90-41e9-8dd6-82e4c5166530', '1274da9f-9cdf-41c9-a60a-250ac5245630', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-051', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Therapy Center 051 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6494,7 +6494,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.59, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.59, NOW(), NOW()),
   ('24bc9454-5850-4996-8924-729bac1ba5ce', '1274da9f-9cdf-41c9-a60a-250ac5245630', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-051', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Therapy Center 051 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6504,7 +6504,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.60, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.60, NOW(), NOW()),
   ('5be37db4-dbd4-4261-b9d9-50cb001756ea', '8ad2f65b-4fcb-4721-87b1-28619c95a611', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-052', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Therapy Center 052 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6514,7 +6514,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.57, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.57, NOW(), NOW()),
   ('8ff6308f-216e-46d2-94c7-322b10b364c2', '8ad2f65b-4fcb-4721-87b1-28619c95a611', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-052', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Therapy Center 052 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6524,7 +6524,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.58, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.58, NOW(), NOW()),
   ('f24ea2e1-a293-4276-91e4-2b8c325a5100', '8ad2f65b-4fcb-4721-87b1-28619c95a611', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-052', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Therapy Center 052 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6534,7 +6534,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.59, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.59, NOW(), NOW()),
   ('50724fd1-75b6-4c15-b117-7233bdca0360', '8ad2f65b-4fcb-4721-87b1-28619c95a611', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-052', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Therapy Center 052 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6544,7 +6544,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.60, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.60, NOW(), NOW()),
   ('33639d6a-df68-4b74-9bd5-87ded5e475ae', '8ad2f65b-4fcb-4721-87b1-28619c95a611', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-052', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Therapy Center 052 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6554,7 +6554,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.61, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.61, NOW(), NOW()),
   ('1f3cef68-d827-421d-bdd7-a05603e8d4cf', '94385bc4-c502-4222-bbb4-bac23b64d2d1', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-053', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Therapy Center 053 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6564,7 +6564,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.58, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.58, NOW(), NOW()),
   ('8a6fd437-fd34-4c19-a6a7-9fea240543b7', '94385bc4-c502-4222-bbb4-bac23b64d2d1', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-053', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Therapy Center 053 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6574,7 +6574,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.59, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.59, NOW(), NOW()),
   ('aaf3c85e-b07c-47ba-8b15-1df5a5072785', '94385bc4-c502-4222-bbb4-bac23b64d2d1', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-053', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Therapy Center 053 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6584,7 +6584,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.60, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.60, NOW(), NOW()),
   ('5d93bbc2-d2d8-4a44-b799-c8e26627ad6f', '94385bc4-c502-4222-bbb4-bac23b64d2d1', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-053', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Therapy Center 053 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6594,7 +6594,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.61, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.61, NOW(), NOW()),
   ('fa994af4-943c-4d3a-bda1-beb27321a614', '94385bc4-c502-4222-bbb4-bac23b64d2d1', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-053', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Therapy Center 053 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6604,7 +6604,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.62, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.62, NOW(), NOW()),
   ('5ebf3d21-7859-44c5-bd1f-5ec7141c1b13', 'cc404825-e5e7-4850-8f68-230b22de89f6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Noi mi tu nhien va cham soc mong gel', 'noi-mi-tu-nhien-va-cham-soc-mong-gel-054', '<div class="service-description">
   <h3>Noi mi tu nhien va cham soc mong gel</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Therapy Center 054 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6614,7 +6614,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.59, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.59, NOW(), NOW()),
   ('c24bfc81-c806-4111-bbac-029cd9d2781b', 'cc404825-e5e7-4850-8f68-230b22de89f6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-054', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Therapy Center 054 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6624,7 +6624,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.60, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.60, NOW(), NOW()),
   ('afb75adc-f23e-47bd-9a42-a931028d8f07', 'cc404825-e5e7-4850-8f68-230b22de89f6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-054', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Therapy Center 054 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6634,7 +6634,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.61, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.61, NOW(), NOW()),
   ('679b51ff-810a-439e-832b-dd97f045db73', 'cc404825-e5e7-4850-8f68-230b22de89f6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-054', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Therapy Center 054 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6644,7 +6644,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.62, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.62, NOW(), NOW()),
   ('ec61d501-092f-4a47-89e0-618d97d07276', 'cc404825-e5e7-4850-8f68-230b22de89f6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-054', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Therapy Center 054 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6654,7 +6654,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.63, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.63, NOW(), NOW()),
   ('ba43febb-4387-48eb-81eb-6a9122d99647', 'ffbb5b58-8301-46a6-8368-91faa679b196', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Cham soc da mat sach sau va cap am phuc hoi', 'cham-soc-da-mat-sach-sau-va-cap-am-phuc-hoi-055', '<div class="service-description">
   <h3>Cham soc da mat sach sau va cap am phuc hoi</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Therapy Center 055 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6664,7 +6664,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.60, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.60, NOW(), NOW()),
   ('accb5934-2e42-4f0b-9b54-c05661cd1711', 'ffbb5b58-8301-46a6-8368-91faa679b196', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-055', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Therapy Center 055 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6674,7 +6674,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.61, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.61, NOW(), NOW()),
   ('a65cd2cb-b213-4c8a-93a3-72641b362b66', 'ffbb5b58-8301-46a6-8368-91faa679b196', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-055', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Therapy Center 055 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6684,7 +6684,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.62, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.62, NOW(), NOW()),
   ('0db4b86a-a167-4ecf-8b95-9fe90a264938', 'ffbb5b58-8301-46a6-8368-91faa679b196', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-055', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Therapy Center 055 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6694,7 +6694,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.63, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.63, NOW(), NOW()),
   ('456e6f84-1b98-4355-a33c-5e80653d4e72', 'ffbb5b58-8301-46a6-8368-91faa679b196', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-055', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Therapy Center 055 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6704,7 +6704,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.64, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.64, NOW(), NOW()),
   ('06bcd41c-6163-487e-bb32-ae3c0c0cd956', '938ffd1a-a154-464d-b61c-cfba0d7ec8bf', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-056', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Therapy Center 056 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6714,7 +6714,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.61, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.61, NOW(), NOW()),
   ('a4161d84-3047-40de-949b-bb37e97ea924', '938ffd1a-a154-464d-b61c-cfba0d7ec8bf', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-056', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Therapy Center 056 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6724,7 +6724,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.62, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.62, NOW(), NOW()),
   ('0efc0ffd-2b48-45e1-8a41-abe004bf4a1c', '938ffd1a-a154-464d-b61c-cfba0d7ec8bf', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-056', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Therapy Center 056 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6734,7 +6734,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.63, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.63, NOW(), NOW()),
   ('c069dc5f-e203-4e29-85fc-c325a4fb08b4', '938ffd1a-a154-464d-b61c-cfba0d7ec8bf', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-056', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Therapy Center 056 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6744,7 +6744,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.64, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.64, NOW(), NOW()),
   ('4d7f4285-556a-40bd-aea7-cc4feed87118', '938ffd1a-a154-464d-b61c-cfba0d7ec8bf', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-056', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Therapy Center 056 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6754,7 +6754,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.65, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.65, NOW(), NOW()),
   ('596d4082-f25b-41d9-a592-5f89585438c8', '28e3d9ea-2ad4-4c63-bab0-df00aec86e57', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-057', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Therapy Center 057 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6764,7 +6764,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.62, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.62, NOW(), NOW()),
   ('fe538310-c96f-4441-a54d-f073cb2e3959', '28e3d9ea-2ad4-4c63-bab0-df00aec86e57', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-057', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Therapy Center 057 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6774,7 +6774,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.63, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.63, NOW(), NOW()),
   ('5f091590-ff4a-487d-a8e6-293b431652d4', '28e3d9ea-2ad4-4c63-bab0-df00aec86e57', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-057', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Therapy Center 057 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6784,7 +6784,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.64, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.64, NOW(), NOW()),
   ('32dd94f3-9d5e-44cf-b055-548cee8a6a78', '28e3d9ea-2ad4-4c63-bab0-df00aec86e57', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-057', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Therapy Center 057 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6794,7 +6794,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.65, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.65, NOW(), NOW()),
   ('ba5a62e9-a7ce-4722-b5cd-6ded56dd88eb', '28e3d9ea-2ad4-4c63-bab0-df00aec86e57', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-057', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Therapy Center 057 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6804,7 +6804,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.66, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.66, NOW(), NOW()),
   ('11e387a8-69ca-41ea-b702-95e975d51078', '5d4d08ba-dc79-448e-bcf9-c3ecd6ab02a6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-058', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Therapy Center 058 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6814,7 +6814,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.63, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.63, NOW(), NOW()),
   ('9c57cfeb-637b-4e14-8bde-ad5be2ed10e9', '5d4d08ba-dc79-448e-bcf9-c3ecd6ab02a6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-058', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Therapy Center 058 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6824,7 +6824,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.64, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.64, NOW(), NOW()),
   ('e6363b99-0ec4-42c8-be55-5afe06c75a65', '5d4d08ba-dc79-448e-bcf9-c3ecd6ab02a6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-058', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Therapy Center 058 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6834,7 +6834,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.65, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.65, NOW(), NOW()),
   ('436eeeac-8faa-4b19-9d41-c886b9305929', '5d4d08ba-dc79-448e-bcf9-c3ecd6ab02a6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-058', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Therapy Center 058 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6844,7 +6844,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.66, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.66, NOW(), NOW()),
   ('5fd8357e-9efa-4acc-b682-86f3e6d9d287', '5d4d08ba-dc79-448e-bcf9-c3ecd6ab02a6', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-058', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Therapy Center 058 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6854,7 +6854,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.67, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.67, NOW(), NOW()),
   ('5152612d-3241-4538-bbda-08ee094d516f', '12c2cf83-fc39-421a-8179-0ff93139c967', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-059', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Therapy Center 059 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6864,7 +6864,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.64, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.64, NOW(), NOW()),
   ('2f04c9a2-00e0-497b-9ec8-a34c61e06861', '12c2cf83-fc39-421a-8179-0ff93139c967', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-059', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Therapy Center 059 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6874,7 +6874,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.65, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.65, NOW(), NOW()),
   ('45316ce7-115e-4e52-b350-c635ca3a67bf', '12c2cf83-fc39-421a-8179-0ff93139c967', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-059', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Therapy Center 059 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6884,7 +6884,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.66, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.66, NOW(), NOW()),
   ('fc35515f-bdd5-409a-b773-30f98f38914c', '12c2cf83-fc39-421a-8179-0ff93139c967', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-059', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Therapy Center 059 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6894,7 +6894,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.67, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.67, NOW(), NOW()),
   ('b470a1b6-dbb5-4e06-a8f5-911d50609d6e', '12c2cf83-fc39-421a-8179-0ff93139c967', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-059', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Therapy Center 059 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6904,7 +6904,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.68, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.68, NOW(), NOW()),
   ('4e597cd8-a3bc-45ab-9a86-7df2536e5da2', 'f5e330ab-854d-49af-9947-049f9842197d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Noi mi tu nhien va cham soc mong gel', 'noi-mi-tu-nhien-va-cham-soc-mong-gel-060', '<div class="service-description">
   <h3>Noi mi tu nhien va cham soc mong gel</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Therapy Center 060 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6914,7 +6914,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.65, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.65, NOW(), NOW()),
   ('c3d1a09f-cba6-4523-9636-1bb5ba6bdb09', 'f5e330ab-854d-49af-9947-049f9842197d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-060', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Therapy Center 060 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6924,7 +6924,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.66, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.66, NOW(), NOW()),
   ('03444a3a-88ca-489e-943c-9ad310d53fd3', 'f5e330ab-854d-49af-9947-049f9842197d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-060', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Therapy Center 060 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6934,7 +6934,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.67, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.67, NOW(), NOW()),
   ('33d500a5-1624-4e1f-b199-3327f14142b0', 'f5e330ab-854d-49af-9947-049f9842197d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-060', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Therapy Center 060 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6944,7 +6944,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.68, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.68, NOW(), NOW()),
   ('c852f327-235c-472b-a5a0-fed8a69975df', 'f5e330ab-854d-49af-9947-049f9842197d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-060', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Therapy Center 060 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6954,7 +6954,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.69, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.69, NOW(), NOW()),
   ('84733fae-9a61-4d6f-987d-a1e2f9f6989b', '66a6b64d-c8de-4be5-8f6f-679d5ff1bfe2', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Cham soc da mat sach sau va cap am phuc hoi', 'cham-soc-da-mat-sach-sau-va-cap-am-phuc-hoi-061', '<div class="service-description">
   <h3>Cham soc da mat sach sau va cap am phuc hoi</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Nail And Spa 061 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6964,7 +6964,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.66, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.66, NOW(), NOW()),
   ('a15e659f-d60c-4d01-b599-686f322398c5', '66a6b64d-c8de-4be5-8f6f-679d5ff1bfe2', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-061', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Nail And Spa 061 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6974,7 +6974,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.67, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.67, NOW(), NOW()),
   ('642da1c7-c10a-4a4d-b49a-1b07348f41ad', '66a6b64d-c8de-4be5-8f6f-679d5ff1bfe2', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-061', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Nail And Spa 061 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6984,7 +6984,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.68, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.68, NOW(), NOW()),
   ('6092d424-7d82-4281-a401-6dc9b362affa', '66a6b64d-c8de-4be5-8f6f-679d5ff1bfe2', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-061', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Nail And Spa 061 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -6994,7 +6994,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.69, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.69, NOW(), NOW()),
   ('5d559456-88c1-4498-ae7d-a64934e43a91', '66a6b64d-c8de-4be5-8f6f-679d5ff1bfe2', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-061', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Nail And Spa 061 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7004,7 +7004,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.70, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.70, NOW(), NOW()),
   ('749e61c5-d7e6-4036-b4d0-bed272495c55', 'afd8e6dc-fdc3-4703-bd0e-769f44d443c7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-062', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Nail And Spa 062 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7014,7 +7014,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.67, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.67, NOW(), NOW()),
   ('b3405701-1554-42dc-af69-ca825c3cf769', 'afd8e6dc-fdc3-4703-bd0e-769f44d443c7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-062', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Nail And Spa 062 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7024,7 +7024,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.68, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.68, NOW(), NOW()),
   ('2167a627-1e0c-4237-84d8-1e5450fc1461', 'afd8e6dc-fdc3-4703-bd0e-769f44d443c7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-062', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Nail And Spa 062 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7034,7 +7034,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.69, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.69, NOW(), NOW()),
   ('e09e3bd1-11a4-4553-b7c7-2f56326e47e6', 'afd8e6dc-fdc3-4703-bd0e-769f44d443c7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-062', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Nail And Spa 062 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7044,7 +7044,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.70, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.70, NOW(), NOW()),
   ('2f701ae4-423a-419a-ad4f-d6ebe9db0a6b', 'afd8e6dc-fdc3-4703-bd0e-769f44d443c7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-062', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Nail And Spa 062 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7054,7 +7054,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.71, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.71, NOW(), NOW()),
   ('0219e765-2d1a-46fa-abf8-6cda19be185c', 'e9449c6a-1b27-41d4-b471-d38bf06be74d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-063', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Nail And Spa 063 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7064,7 +7064,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.68, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.68, NOW(), NOW()),
   ('93d6d32b-59a1-43a4-948e-8899f787e8b2', 'e9449c6a-1b27-41d4-b471-d38bf06be74d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-063', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Nail And Spa 063 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7074,7 +7074,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.69, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.69, NOW(), NOW()),
   ('47756f4b-f2c3-440b-b7e3-c704f500a528', 'e9449c6a-1b27-41d4-b471-d38bf06be74d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-063', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Nail And Spa 063 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7084,7 +7084,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.70, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.70, NOW(), NOW()),
   ('6106ba6e-aeb7-403b-a8ed-d826269ecc6a', 'e9449c6a-1b27-41d4-b471-d38bf06be74d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-063', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Nail And Spa 063 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7094,7 +7094,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.71, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.71, NOW(), NOW()),
   ('ed6cfb03-79e3-490c-bc20-0721c41e5e89', 'e9449c6a-1b27-41d4-b471-d38bf06be74d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-063', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Nail And Spa 063 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7104,7 +7104,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.72, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.72, NOW(), NOW()),
   ('93b15609-b50e-45f7-a46a-75175dcd1fae', '3757b15b-b702-4648-b4be-79bd9c410908', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-064', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Nail And Spa 064 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7114,7 +7114,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.69, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.69, NOW(), NOW()),
   ('a08ebca9-fd88-430b-af66-a9cd880fd71b', '3757b15b-b702-4648-b4be-79bd9c410908', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-064', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Nail And Spa 064 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7124,7 +7124,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.70, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.70, NOW(), NOW()),
   ('e9de1819-3350-4b46-9014-7ac3c595725c', '3757b15b-b702-4648-b4be-79bd9c410908', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-064', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Nail And Spa 064 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7134,7 +7134,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.71, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.71, NOW(), NOW()),
   ('0ba52e31-f0f2-4103-919d-708457de40d4', '3757b15b-b702-4648-b4be-79bd9c410908', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-064', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Nail And Spa 064 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7144,7 +7144,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.72, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.72, NOW(), NOW()),
   ('c19f1593-8313-4517-ab31-9f3c268cf7d6', '3757b15b-b702-4648-b4be-79bd9c410908', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-064', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Nail And Spa 064 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7154,7 +7154,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.73, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.73, NOW(), NOW()),
   ('3b59ab9a-1cf8-4fd1-92b3-480f25efe8df', '02f868fb-4f14-44be-a223-a22fe62ea48d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-065', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Nail And Spa 065 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7164,7 +7164,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.70, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.70, NOW(), NOW()),
   ('b0e240c8-4964-4225-a53c-c00eda976f18', '02f868fb-4f14-44be-a223-a22fe62ea48d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-065', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Nail And Spa 065 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7174,7 +7174,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.71, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.71, NOW(), NOW()),
   ('a259dce4-6b4b-4399-a7b6-98f4f1e8e818', '02f868fb-4f14-44be-a223-a22fe62ea48d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-065', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Nail And Spa 065 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7184,7 +7184,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.72, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.72, NOW(), NOW()),
   ('f0987dc5-1544-4e7a-ac93-50d1a41b3e52', '02f868fb-4f14-44be-a223-a22fe62ea48d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-065', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Nail And Spa 065 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7194,7 +7194,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.73, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.73, NOW(), NOW()),
   ('8b89b35c-01d6-4343-82d3-2d3e9a980740', '02f868fb-4f14-44be-a223-a22fe62ea48d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-065', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Nail And Spa 065 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7204,7 +7204,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.74, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.74, NOW(), NOW()),
   ('572800f8-45e6-4df9-a713-a028fc5d3cc4', 'fbd5158d-5bdc-4928-8fe3-52b14f142c3d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Noi mi tu nhien va cham soc mong gel', 'noi-mi-tu-nhien-va-cham-soc-mong-gel-066', '<div class="service-description">
   <h3>Noi mi tu nhien va cham soc mong gel</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Nail And Spa 066 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7214,7 +7214,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.71, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.71, NOW(), NOW()),
   ('18ed3b61-19b7-4c5a-8814-642394ba934b', 'fbd5158d-5bdc-4928-8fe3-52b14f142c3d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-066', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Nail And Spa 066 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7224,7 +7224,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.72, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.72, NOW(), NOW()),
   ('4cf1fbc8-cb8c-44be-8309-6aa5d5fa0e46', 'fbd5158d-5bdc-4928-8fe3-52b14f142c3d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-066', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Nail And Spa 066 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7234,7 +7234,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.73, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.73, NOW(), NOW()),
   ('6d01342b-ee7d-4d01-81f5-79991d0e61fb', 'fbd5158d-5bdc-4928-8fe3-52b14f142c3d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-066', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Nail And Spa 066 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7244,7 +7244,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.74, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.74, NOW(), NOW()),
   ('0a13b081-3805-4dfe-adf0-124731546652', 'fbd5158d-5bdc-4928-8fe3-52b14f142c3d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-066', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Nail And Spa 066 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7254,7 +7254,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.75, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.75, NOW(), NOW()),
   ('fb7a5040-c5da-4a39-84ec-c43ef924799e', 'e33c644f-d09a-4eef-aade-a82932377db4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Cham soc da mat sach sau va cap am phuc hoi', 'cham-soc-da-mat-sach-sau-va-cap-am-phuc-hoi-067', '<div class="service-description">
   <h3>Cham soc da mat sach sau va cap am phuc hoi</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Nail And Spa 067 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7264,7 +7264,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.72, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.72, NOW(), NOW()),
   ('40337373-189d-42b6-bb80-620731ef897b', 'e33c644f-d09a-4eef-aade-a82932377db4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-067', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Nail And Spa 067 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7274,7 +7274,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.73, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.73, NOW(), NOW()),
   ('5fc52ab6-7b3f-48c6-9ddc-3fd185c6ab61', 'e33c644f-d09a-4eef-aade-a82932377db4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-067', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Nail And Spa 067 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7284,7 +7284,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.74, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.74, NOW(), NOW()),
   ('802b9b3d-e15c-4545-aad0-2a3484cc6326', 'e33c644f-d09a-4eef-aade-a82932377db4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-067', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Nail And Spa 067 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7294,7 +7294,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.75, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.75, NOW(), NOW()),
   ('1edbd57e-9f04-4e3b-ab92-0d80c9972f00', 'e33c644f-d09a-4eef-aade-a82932377db4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-067', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Nail And Spa 067 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7304,7 +7304,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.76, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.76, NOW(), NOW()),
   ('43edf5ea-7fd0-465d-80e5-0c51ea3cfe10', '172fcddd-717b-4433-bcc6-e93880184991', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-068', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Nail And Spa 068 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7314,7 +7314,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.73, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.73, NOW(), NOW()),
   ('03e1d2d7-2e1d-4b7e-b2ce-3a489dd420de', '172fcddd-717b-4433-bcc6-e93880184991', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-068', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Nail And Spa 068 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7324,7 +7324,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.74, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.74, NOW(), NOW()),
   ('0cc1b390-b8e4-4a94-8cf4-d91c08cb9d00', '172fcddd-717b-4433-bcc6-e93880184991', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-068', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Nail And Spa 068 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7334,7 +7334,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.75, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.75, NOW(), NOW()),
   ('80a16a6f-4ec7-4053-8788-fc8b28f82a1f', '172fcddd-717b-4433-bcc6-e93880184991', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-068', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Nail And Spa 068 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7344,7 +7344,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.76, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.76, NOW(), NOW()),
   ('1b6f0d36-0497-46b1-ab9d-cba24ec47a91', '172fcddd-717b-4433-bcc6-e93880184991', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-068', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Nail And Spa 068 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7354,7 +7354,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.77, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.77, NOW(), NOW()),
   ('76bf5f63-0e6b-4055-8a52-76e3d884040f', '6b0d767f-54d2-4b45-99bf-f37979409130', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-069', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Nail And Spa 069 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7364,7 +7364,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.74, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.74, NOW(), NOW()),
   ('2f7becbc-a5ef-450c-a1f7-2fcff85e8a4e', '6b0d767f-54d2-4b45-99bf-f37979409130', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-069', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Nail And Spa 069 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7374,7 +7374,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.75, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.75, NOW(), NOW()),
   ('e9c16cf4-2967-4ec7-a0c8-7dffdb67d829', '6b0d767f-54d2-4b45-99bf-f37979409130', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-069', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Nail And Spa 069 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7384,7 +7384,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.76, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.76, NOW(), NOW()),
   ('8ee66d78-dccd-4e04-9021-f4c769d15db6', '6b0d767f-54d2-4b45-99bf-f37979409130', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-069', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Nail And Spa 069 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7394,7 +7394,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.77, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.77, NOW(), NOW()),
   ('f00f7532-3c0a-4d59-87d9-93aed1caacbc', '6b0d767f-54d2-4b45-99bf-f37979409130', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-069', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Nail And Spa 069 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7404,7 +7404,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.78, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.78, NOW(), NOW()),
   ('bc2af907-9fa8-4b95-9f7a-6ae741e7058b', 'cc0a994a-7466-4738-9bea-cf7cb8e2d0b1', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-070', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Nail And Spa 070 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7414,7 +7414,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.75, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.75, NOW(), NOW()),
   ('10a362b8-3286-4fa0-927e-a39434d8709b', 'cc0a994a-7466-4738-9bea-cf7cb8e2d0b1', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-070', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Nail And Spa 070 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7424,7 +7424,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.76, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.76, NOW(), NOW()),
   ('a9d0ce82-9b8c-4140-841c-3499554d5333', 'cc0a994a-7466-4738-9bea-cf7cb8e2d0b1', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-070', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Nail And Spa 070 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7434,7 +7434,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.77, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.77, NOW(), NOW()),
   ('c4e0739a-8a37-445d-bc20-876361f496d1', 'cc0a994a-7466-4738-9bea-cf7cb8e2d0b1', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-070', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Nail And Spa 070 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7444,7 +7444,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.78, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.78, NOW(), NOW()),
   ('e99805a1-407e-448c-9a37-3b7b540afd21', 'cc0a994a-7466-4738-9bea-cf7cb8e2d0b1', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-070', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Nail And Spa 070 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7454,7 +7454,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.79, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.79, NOW(), NOW()),
   ('db5f51eb-70f6-4cd6-b48d-9bdf54eaf5d4', '37a6e4cc-935f-49c5-9b6b-2c6b3f4e959c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-071', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Duong Sinh 071 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7464,7 +7464,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.76, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.76, NOW(), NOW()),
   ('bd9f0e46-45c6-4275-9ada-28679c5d0bb5', '37a6e4cc-935f-49c5-9b6b-2c6b3f4e959c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-071', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Duong Sinh 071 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7474,7 +7474,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.77, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.77, NOW(), NOW()),
   ('c36def66-9588-4556-9b34-fa6687d33609', '37a6e4cc-935f-49c5-9b6b-2c6b3f4e959c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-071', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Duong Sinh 071 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7484,7 +7484,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.78, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.78, NOW(), NOW()),
   ('fcb6ca03-13a9-4bca-930f-8718cee4f9cd', '37a6e4cc-935f-49c5-9b6b-2c6b3f4e959c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-071', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Duong Sinh 071 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7494,7 +7494,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.79, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.79, NOW(), NOW()),
   ('a76f4488-3e57-4e9c-8e2f-f30e916037ee', '37a6e4cc-935f-49c5-9b6b-2c6b3f4e959c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-071', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Duong Sinh 071 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7504,7 +7504,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.80, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.80, NOW(), NOW()),
   ('e389701a-2cfa-4e52-b6a1-cb2b8185f016', '57d04ea6-3106-47ca-a4a8-d0b32a3f82e4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Noi mi tu nhien va cham soc mong gel', 'noi-mi-tu-nhien-va-cham-soc-mong-gel-072', '<div class="service-description">
   <h3>Noi mi tu nhien va cham soc mong gel</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Duong Sinh 072 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7514,7 +7514,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.77, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.77, NOW(), NOW()),
   ('49187b9c-0ca1-4b06-8833-914424f882c8', '57d04ea6-3106-47ca-a4a8-d0b32a3f82e4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-072', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Duong Sinh 072 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7524,7 +7524,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.78, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.78, NOW(), NOW()),
   ('a466041f-de20-481c-909c-306d981d85aa', '57d04ea6-3106-47ca-a4a8-d0b32a3f82e4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-072', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Duong Sinh 072 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7534,7 +7534,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.79, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.79, NOW(), NOW()),
   ('074e3b27-f991-4589-8145-7fa913833fc9', '57d04ea6-3106-47ca-a4a8-d0b32a3f82e4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-072', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Duong Sinh 072 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7544,7 +7544,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.80, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.80, NOW(), NOW()),
   ('5698c3d0-deed-4a77-a693-70fc2de6f396', '57d04ea6-3106-47ca-a4a8-d0b32a3f82e4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-072', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Duong Sinh 072 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7554,7 +7554,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.81, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.81, NOW(), NOW()),
   ('65374575-e98d-404f-a6e8-b15ade56ec08', '2a39f074-dae4-4ba5-9c78-9ff99e9ee34d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Cham soc da mat sach sau va cap am phuc hoi', 'cham-soc-da-mat-sach-sau-va-cap-am-phuc-hoi-073', '<div class="service-description">
   <h3>Cham soc da mat sach sau va cap am phuc hoi</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Duong Sinh 073 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7564,7 +7564,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.78, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.78, NOW(), NOW()),
   ('180f0427-4e1c-4638-a900-552912c4f8cf', '2a39f074-dae4-4ba5-9c78-9ff99e9ee34d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-073', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Duong Sinh 073 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7574,7 +7574,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.79, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.79, NOW(), NOW()),
   ('aa659289-28c2-4c9d-8de4-3f30f86a93fb', '2a39f074-dae4-4ba5-9c78-9ff99e9ee34d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-073', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Duong Sinh 073 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7584,7 +7584,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.80, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.80, NOW(), NOW()),
   ('c6d03f57-a3aa-4da9-ba65-7a18f216839c', '2a39f074-dae4-4ba5-9c78-9ff99e9ee34d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-073', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Duong Sinh 073 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7594,7 +7594,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.81, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.81, NOW(), NOW()),
   ('9815ec96-9bdc-494d-9f99-3d382838dcdd', '2a39f074-dae4-4ba5-9c78-9ff99e9ee34d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-073', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Duong Sinh 073 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7604,7 +7604,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.82, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.82, NOW(), NOW()),
   ('51e16ed0-dc6e-4a47-9e28-2d59de779d3b', 'f24b10e6-5b6e-4c85-9cc8-d37adb8bf944', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-074', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Duong Sinh 074 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7614,7 +7614,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.79, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.79, NOW(), NOW()),
   ('29fbb845-7ed5-41be-af74-389fa24a2ea3', 'f24b10e6-5b6e-4c85-9cc8-d37adb8bf944', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-074', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Duong Sinh 074 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7624,7 +7624,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.80, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.80, NOW(), NOW()),
   ('262c3286-69ce-4f0f-874d-da0d43c5f493', 'f24b10e6-5b6e-4c85-9cc8-d37adb8bf944', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-074', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Duong Sinh 074 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7634,7 +7634,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.81, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.81, NOW(), NOW()),
   ('34462de8-683a-4975-ad8c-6525da3a8984', 'f24b10e6-5b6e-4c85-9cc8-d37adb8bf944', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-074', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Duong Sinh 074 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7644,7 +7644,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.82, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.82, NOW(), NOW()),
   ('24b8abd6-978b-41fa-959c-3f48860b18a1', 'f24b10e6-5b6e-4c85-9cc8-d37adb8bf944', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-074', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Duong Sinh 074 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7654,7 +7654,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.83, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.83, NOW(), NOW()),
   ('196c9c9b-a01e-47c2-9a53-94691f94d9bb', 'cebb32c9-3293-4192-af42-2f71fb16fb68', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-075', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Duong Sinh 075 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7664,7 +7664,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.80, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.80, NOW(), NOW()),
   ('a03abf9b-19f5-474b-a159-9a32959b4a4c', 'cebb32c9-3293-4192-af42-2f71fb16fb68', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-075', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Duong Sinh 075 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7674,7 +7674,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.81, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.81, NOW(), NOW()),
   ('f00bb0c8-c6e3-4d2e-b690-4b261bd4585e', 'cebb32c9-3293-4192-af42-2f71fb16fb68', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-075', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Duong Sinh 075 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7684,7 +7684,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.82, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.82, NOW(), NOW()),
   ('c11f617e-5da8-4ef9-95e3-ee627e00742a', 'cebb32c9-3293-4192-af42-2f71fb16fb68', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-075', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Duong Sinh 075 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7694,7 +7694,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.83, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.83, NOW(), NOW()),
   ('9a079d3c-23a9-4dc4-8b16-8450e67c01eb', 'cebb32c9-3293-4192-af42-2f71fb16fb68', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-075', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Duong Sinh 075 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7704,7 +7704,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.84, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.84, NOW(), NOW()),
   ('26044a4c-dbc5-405c-ba2f-7182eb973cb4', '39b0bc70-af79-47a3-b8a1-50dc0a4b1db7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-076', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Duong Sinh 076 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7714,7 +7714,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.81, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.81, NOW(), NOW()),
   ('e3ab64fe-9c55-4180-bd89-a9a3d81db3e9', '39b0bc70-af79-47a3-b8a1-50dc0a4b1db7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-076', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Duong Sinh 076 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7724,7 +7724,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.82, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.82, NOW(), NOW()),
   ('0568bfdf-33eb-4c7f-9ba4-68295d1699da', '39b0bc70-af79-47a3-b8a1-50dc0a4b1db7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-076', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Duong Sinh 076 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7734,7 +7734,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.83, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.83, NOW(), NOW()),
   ('fb51caf5-c696-4c8c-88c7-1d0af881a534', '39b0bc70-af79-47a3-b8a1-50dc0a4b1db7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-076', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Duong Sinh 076 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7744,7 +7744,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.84, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.84, NOW(), NOW()),
   ('0307a476-7e8d-4e43-8214-a8ccb663006b', '39b0bc70-af79-47a3-b8a1-50dc0a4b1db7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-076', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Duong Sinh 076 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7754,7 +7754,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.85, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.85, NOW(), NOW()),
   ('973e604e-d798-4f8b-9504-809d6a3026c1', '53416ad3-dd6b-4ec6-a760-803b41a86086', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-077', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Duong Sinh 077 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7764,7 +7764,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.82, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.82, NOW(), NOW()),
   ('574a205e-0499-461b-97ba-3e97cccd9f99', '53416ad3-dd6b-4ec6-a760-803b41a86086', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-077', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Duong Sinh 077 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7774,7 +7774,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.83, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.83, NOW(), NOW()),
   ('13eaec54-2a78-4ee9-827e-d0d6c25cb279', '53416ad3-dd6b-4ec6-a760-803b41a86086', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-077', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Duong Sinh 077 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7784,7 +7784,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.84, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.84, NOW(), NOW()),
   ('5410f70e-cf02-40f1-bfe7-d2a56a1fc45e', '53416ad3-dd6b-4ec6-a760-803b41a86086', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-077', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Duong Sinh 077 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7794,7 +7794,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.85, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.85, NOW(), NOW()),
   ('25cf2855-68c5-4239-9b81-50263f74b64e', '53416ad3-dd6b-4ec6-a760-803b41a86086', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-077', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Duong Sinh 077 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7804,7 +7804,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.86, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.86, NOW(), NOW()),
   ('254f50aa-2fc4-446c-b7b1-5d814e3de1b5', '958d3b67-b239-4656-b00d-e698d5103f41', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Noi mi tu nhien va cham soc mong gel', 'noi-mi-tu-nhien-va-cham-soc-mong-gel-078', '<div class="service-description">
   <h3>Noi mi tu nhien va cham soc mong gel</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Duong Sinh 078 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7814,7 +7814,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.83, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.83, NOW(), NOW()),
   ('e656ada9-df83-49c6-8cd9-17cb5ea90b2d', '958d3b67-b239-4656-b00d-e698d5103f41', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-078', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Duong Sinh 078 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7824,7 +7824,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.84, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.84, NOW(), NOW()),
   ('6047156c-94b3-4af5-904d-907da9879bd4', '958d3b67-b239-4656-b00d-e698d5103f41', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-078', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Duong Sinh 078 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7834,7 +7834,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.85, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.85, NOW(), NOW()),
   ('a712d26d-005f-45bd-aa36-03b037d962a3', '958d3b67-b239-4656-b00d-e698d5103f41', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-078', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Duong Sinh 078 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7844,7 +7844,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.86, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.86, NOW(), NOW()),
   ('e934befc-7b2f-4ebe-a7e1-04a074346efe', '958d3b67-b239-4656-b00d-e698d5103f41', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-078', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Duong Sinh 078 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7854,7 +7854,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.87, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.87, NOW(), NOW()),
   ('34351ca8-46be-43c7-9cf1-024dc636aa39', '127cffb9-1fd4-4046-95a3-e2e42280f4fc', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Cham soc da mat sach sau va cap am phuc hoi', 'cham-soc-da-mat-sach-sau-va-cap-am-phuc-hoi-079', '<div class="service-description">
   <h3>Cham soc da mat sach sau va cap am phuc hoi</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Duong Sinh 079 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7864,7 +7864,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.84, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.84, NOW(), NOW()),
   ('ea84e4c7-84d6-4663-b214-ac3563aa3d10', '127cffb9-1fd4-4046-95a3-e2e42280f4fc', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-079', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Duong Sinh 079 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7874,7 +7874,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.85, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.85, NOW(), NOW()),
   ('6768d6b7-228a-41da-978d-269e7197e42b', '127cffb9-1fd4-4046-95a3-e2e42280f4fc', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-079', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Duong Sinh 079 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7884,7 +7884,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.86, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.86, NOW(), NOW()),
   ('405c1ade-9acd-4cce-876f-bcc733b84d89', '127cffb9-1fd4-4046-95a3-e2e42280f4fc', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-079', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Duong Sinh 079 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7894,7 +7894,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.87, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.87, NOW(), NOW()),
   ('c13a00d1-9b34-49a3-be75-edaf9be1d33d', '127cffb9-1fd4-4046-95a3-e2e42280f4fc', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-079', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Duong Sinh 079 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7904,7 +7904,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.88, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.88, NOW(), NOW()),
   ('6482f239-b14a-4bf0-bd52-1212bed07c83', '04a669ad-6a78-4623-a737-5a3ed97206fe', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-080', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Duong Sinh 080 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7914,7 +7914,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.85, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.85, NOW(), NOW()),
   ('8fa59d70-edad-475f-a410-8eb6e964964a', '04a669ad-6a78-4623-a737-5a3ed97206fe', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-080', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Duong Sinh 080 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7924,7 +7924,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.86, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.86, NOW(), NOW()),
   ('01d21e9f-c5c6-4480-9d7d-91d5b519d3c9', '04a669ad-6a78-4623-a737-5a3ed97206fe', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-080', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Duong Sinh 080 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7934,7 +7934,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.87, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.87, NOW(), NOW()),
   ('50512953-d117-42da-8054-a65475ae585e', '04a669ad-6a78-4623-a737-5a3ed97206fe', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-080', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Duong Sinh 080 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7944,7 +7944,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.88, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.88, NOW(), NOW()),
   ('33dea3e6-d006-4dad-8281-01506b5ed91c', '04a669ad-6a78-4623-a737-5a3ed97206fe', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-080', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Duong Sinh 080 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7954,7 +7954,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.89, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.89, NOW(), NOW()),
   ('532dcad8-143c-44a4-81d7-263f6bcb025e', '9e434013-1211-4989-a137-4cbaa782c319', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-081', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Beauty Lab 081 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7964,7 +7964,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.86, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.86, NOW(), NOW()),
   ('3d8b1614-d2da-4f53-9b51-943666be2505', '9e434013-1211-4989-a137-4cbaa782c319', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-081', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Beauty Lab 081 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7974,7 +7974,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.87, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.87, NOW(), NOW()),
   ('ff12cdb5-497a-4cd4-bd69-d6effbbba50c', '9e434013-1211-4989-a137-4cbaa782c319', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-081', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Beauty Lab 081 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7984,7 +7984,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.88, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.88, NOW(), NOW()),
   ('feb5ef32-ad67-4181-aea7-113fb5d4a376', '9e434013-1211-4989-a137-4cbaa782c319', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-081', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Beauty Lab 081 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -7994,7 +7994,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.89, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.89, NOW(), NOW()),
   ('b20aab17-cd0c-4255-8983-a2fac24affff', '9e434013-1211-4989-a137-4cbaa782c319', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-081', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Beauty Lab 081 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8004,7 +8004,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.90, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.90, NOW(), NOW()),
   ('fe2ce885-8f82-46f5-ad93-a5b30008e570', 'e753f8aa-3d27-434c-a2ec-dbfc79eac605', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-082', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Beauty Lab 082 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8014,7 +8014,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.87, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.87, NOW(), NOW()),
   ('b4501ea4-8929-4a80-b5ba-b2e12a9b5b75', 'e753f8aa-3d27-434c-a2ec-dbfc79eac605', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-082', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Beauty Lab 082 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8024,7 +8024,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.88, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.88, NOW(), NOW()),
   ('d6d6964a-bd33-44ce-996a-973b478506b5', 'e753f8aa-3d27-434c-a2ec-dbfc79eac605', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-082', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Beauty Lab 082 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8034,7 +8034,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.89, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.89, NOW(), NOW()),
   ('392018c7-b9b8-4dcd-b86e-26c7e9d841bc', 'e753f8aa-3d27-434c-a2ec-dbfc79eac605', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-082', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Beauty Lab 082 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8044,7 +8044,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.90, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.90, NOW(), NOW()),
   ('e41fab6c-b34f-418b-9999-8ceb17cd4d69', 'e753f8aa-3d27-434c-a2ec-dbfc79eac605', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-082', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Beauty Lab 082 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8054,7 +8054,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.91, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.91, NOW(), NOW()),
   ('aa2456d7-53b3-4dc0-ac1b-3f3f2d673f32', 'c283407b-0c0c-4eec-b080-8daaf281b61d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-083', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Beauty Lab 083 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8064,7 +8064,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.88, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.88, NOW(), NOW()),
   ('d7cf1578-c8bc-4cf3-8732-44d97679ee82', 'c283407b-0c0c-4eec-b080-8daaf281b61d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-083', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Beauty Lab 083 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8074,7 +8074,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.89, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.89, NOW(), NOW()),
   ('57ea90f1-31ee-4fc5-a6af-569828c9b070', 'c283407b-0c0c-4eec-b080-8daaf281b61d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-083', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Beauty Lab 083 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8084,7 +8084,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.90, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.90, NOW(), NOW()),
   ('ef6fb8b6-d396-4b4e-bcb0-fd424071a780', 'c283407b-0c0c-4eec-b080-8daaf281b61d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-083', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Beauty Lab 083 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8094,7 +8094,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.91, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.91, NOW(), NOW()),
   ('d085b5d4-9bcf-4f53-a004-bdeb71c671a5', 'c283407b-0c0c-4eec-b080-8daaf281b61d', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-083', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Beauty Lab 083 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8104,7 +8104,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.92, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.92, NOW(), NOW()),
   ('56bebc1d-efc3-4700-be19-584224bd6e73', '33a16b8c-c0f8-4a41-a742-9cd851dd5eef', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Noi mi tu nhien va cham soc mong gel', 'noi-mi-tu-nhien-va-cham-soc-mong-gel-084', '<div class="service-description">
   <h3>Noi mi tu nhien va cham soc mong gel</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Beauty Lab 084 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8114,7 +8114,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.89, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.89, NOW(), NOW()),
   ('103c8d2c-933a-4dc6-b3e8-b8527ef4716f', '33a16b8c-c0f8-4a41-a742-9cd851dd5eef', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-084', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Beauty Lab 084 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8124,7 +8124,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.90, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.90, NOW(), NOW()),
   ('25e60f1e-c7e5-472e-b5ee-5b867a58f9db', '33a16b8c-c0f8-4a41-a742-9cd851dd5eef', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-084', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Beauty Lab 084 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8134,7 +8134,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.91, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.91, NOW(), NOW()),
   ('fcad1994-8466-4c6c-a689-3b51c20d8ae9', '33a16b8c-c0f8-4a41-a742-9cd851dd5eef', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-084', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Beauty Lab 084 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8144,7 +8144,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.92, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.92, NOW(), NOW()),
   ('f86e4c93-3615-4e45-b3a7-46bbc0de5d15', '33a16b8c-c0f8-4a41-a742-9cd851dd5eef', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-084', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Beauty Lab 084 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8154,7 +8154,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.93, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.93, NOW(), NOW()),
   ('c535d689-f4f2-44e8-ab89-717eccc9bb02', '747aae12-cbcc-419f-898e-8cc7c0aca2c5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Cham soc da mat sach sau va cap am phuc hoi', 'cham-soc-da-mat-sach-sau-va-cap-am-phuc-hoi-085', '<div class="service-description">
   <h3>Cham soc da mat sach sau va cap am phuc hoi</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Beauty Lab 085 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8164,7 +8164,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.90, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.90, NOW(), NOW()),
   ('4ebc9ae2-d532-42c4-8c05-496716ff781b', '747aae12-cbcc-419f-898e-8cc7c0aca2c5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-085', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Beauty Lab 085 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8174,7 +8174,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.91, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.91, NOW(), NOW()),
   ('9aea179e-2b5f-48f8-86a8-991bc9ff33c0', '747aae12-cbcc-419f-898e-8cc7c0aca2c5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-085', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Beauty Lab 085 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8184,7 +8184,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.92, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.92, NOW(), NOW()),
   ('8f2a43fa-3193-4b92-8ced-650cef23d12a', '747aae12-cbcc-419f-898e-8cc7c0aca2c5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-085', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Beauty Lab 085 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8194,7 +8194,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.93, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.93, NOW(), NOW()),
   ('07aca638-7a04-4075-9b35-30d441607269', '747aae12-cbcc-419f-898e-8cc7c0aca2c5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-085', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Beauty Lab 085 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8204,7 +8204,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.94, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.94, NOW(), NOW()),
   ('b6a03d41-2796-46fd-8144-ba95283f732b', '0b59cc14-a779-4fd0-ac6e-fbc11973f30f', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-086', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Beauty Lab 086 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8214,7 +8214,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.91, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.91, NOW(), NOW()),
   ('3755faca-7ad7-41fd-ba4b-1bbc63832247', '0b59cc14-a779-4fd0-ac6e-fbc11973f30f', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-086', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Beauty Lab 086 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8224,7 +8224,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.92, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.92, NOW(), NOW()),
   ('1d95e5c9-b9a1-425b-beaa-d4a44f035d50', '0b59cc14-a779-4fd0-ac6e-fbc11973f30f', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-086', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Beauty Lab 086 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8234,7 +8234,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.93, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.93, NOW(), NOW()),
   ('9901523f-8559-4a0d-bed0-5ea8ba4f2c8b', '0b59cc14-a779-4fd0-ac6e-fbc11973f30f', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-086', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Beauty Lab 086 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8244,7 +8244,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.94, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.94, NOW(), NOW()),
   ('cc7eae70-89ac-456d-8954-5fb10a7e87ff', '0b59cc14-a779-4fd0-ac6e-fbc11973f30f', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-086', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Beauty Lab 086 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8254,7 +8254,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.50, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.50, NOW(), NOW()),
   ('000f6571-0f6c-4feb-9738-12939e1b76bc', '7a354731-a919-49fa-97d3-e1b6260b550c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-087', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Beauty Lab 087 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8264,7 +8264,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.92, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.92, NOW(), NOW()),
   ('8c313a0e-ea50-44a0-9de6-6ac85dd540e7', '7a354731-a919-49fa-97d3-e1b6260b550c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-087', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Beauty Lab 087 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8274,7 +8274,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.93, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.93, NOW(), NOW()),
   ('977320bd-f6ec-4964-8f5b-4e4e43ed030f', '7a354731-a919-49fa-97d3-e1b6260b550c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-087', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Beauty Lab 087 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8284,7 +8284,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.94, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.94, NOW(), NOW()),
   ('3d6f1354-cfb6-4ea5-98bf-b5bc15d4eece', '7a354731-a919-49fa-97d3-e1b6260b550c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-087', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Beauty Lab 087 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8294,7 +8294,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.50, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.50, NOW(), NOW()),
   ('aa0b909a-c7cc-42ff-880e-2118be8ec734', '7a354731-a919-49fa-97d3-e1b6260b550c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-087', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Beauty Lab 087 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8304,7 +8304,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.51, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.51, NOW(), NOW()),
   ('d7cf4dcc-a68b-40bf-9665-a079e54ca670', '556e0fb4-677b-4336-9d8f-f8d72deb4112', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-088', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Beauty Lab 088 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8314,7 +8314,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.93, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.93, NOW(), NOW()),
   ('0de47ae1-f4c1-4759-be6d-297161b027eb', '556e0fb4-677b-4336-9d8f-f8d72deb4112', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-088', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Beauty Lab 088 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8324,7 +8324,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.94, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.94, NOW(), NOW()),
   ('66f1e56f-7787-4744-9927-17b0ae3be0d6', '556e0fb4-677b-4336-9d8f-f8d72deb4112', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-088', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Beauty Lab 088 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8334,7 +8334,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.50, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.50, NOW(), NOW()),
   ('c773647e-5f0c-476c-ae16-26b81e1261e7', '556e0fb4-677b-4336-9d8f-f8d72deb4112', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-088', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Beauty Lab 088 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8344,7 +8344,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.51, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.51, NOW(), NOW()),
   ('ea8f5e99-b23c-430b-8265-4f68bce473c2', '556e0fb4-677b-4336-9d8f-f8d72deb4112', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-088', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Beauty Lab 088 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8354,7 +8354,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.52, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.52, NOW(), NOW()),
   ('8aa68e25-9519-4008-bfc4-73add1735d60', 'ee297485-7ff1-4edc-b2d9-c5de11b452e4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-089', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Beauty Lab 089 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8364,7 +8364,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.94, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.94, NOW(), NOW()),
   ('3c0fe130-ae05-4747-a186-a59aff4f3645', 'ee297485-7ff1-4edc-b2d9-c5de11b452e4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-089', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Beauty Lab 089 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8374,7 +8374,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.50, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.50, NOW(), NOW()),
   ('1ce575c6-55af-451c-aae0-72a4ca3b06bf', 'ee297485-7ff1-4edc-b2d9-c5de11b452e4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-089', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Beauty Lab 089 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8384,7 +8384,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.51, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.51, NOW(), NOW()),
   ('d50e9f71-b117-4232-b613-1ae606a0c47f', 'ee297485-7ff1-4edc-b2d9-c5de11b452e4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-089', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Beauty Lab 089 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8394,7 +8394,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.52, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.52, NOW(), NOW()),
   ('10e98036-9966-4ec5-9125-4c5d06ad20be', 'ee297485-7ff1-4edc-b2d9-c5de11b452e4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-089', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Beauty Lab 089 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8404,7 +8404,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.53, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.53, NOW(), NOW()),
   ('da867c4b-798c-4b41-bc8e-b127f5934304', '5adf5091-da20-4f61-b174-d88dabfe5ec5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Noi mi tu nhien va cham soc mong gel', 'noi-mi-tu-nhien-va-cham-soc-mong-gel-090', '<div class="service-description">
   <h3>Noi mi tu nhien va cham soc mong gel</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Beauty Lab 090 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8414,7 +8414,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.50, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.50, NOW(), NOW()),
   ('70dbe938-67df-47aa-bfc0-272484bee4f0', '5adf5091-da20-4f61-b174-d88dabfe5ec5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-090', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Beauty Lab 090 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8424,7 +8424,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.51, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.51, NOW(), NOW()),
   ('c6b36c75-5838-43b7-acd2-52d82736170e', '5adf5091-da20-4f61-b174-d88dabfe5ec5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-090', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Beauty Lab 090 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8434,7 +8434,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.52, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.52, NOW(), NOW()),
   ('1f7abff9-0d0e-4ef1-aa3c-76eba40943c9', '5adf5091-da20-4f61-b174-d88dabfe5ec5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-090', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Beauty Lab 090 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8444,7 +8444,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.53, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.53, NOW(), NOW()),
   ('cf65bec7-d424-41f4-8d87-3ba93e9e5864', '5adf5091-da20-4f61-b174-d88dabfe5ec5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-090', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Beauty Lab 090 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8454,7 +8454,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.54, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.54, NOW(), NOW()),
   ('a43591a2-cce1-4983-bcde-bc9cb1d36d1c', '1a7be8e2-4390-4fa5-9c58-b579907979c7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Cham soc da mat sach sau va cap am phuc hoi', 'cham-soc-da-mat-sach-sau-va-cap-am-phuc-hoi-091', '<div class="service-description">
   <h3>Cham soc da mat sach sau va cap am phuc hoi</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Relax Home 091 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8464,7 +8464,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.51, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.51, NOW(), NOW()),
   ('87990c63-e01e-4bdb-9052-5382fc0cea4a', '1a7be8e2-4390-4fa5-9c58-b579907979c7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-091', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Relax Home 091 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8474,7 +8474,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.52, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.52, NOW(), NOW()),
   ('39a48acf-8670-4413-bc5e-9e39e696db80', '1a7be8e2-4390-4fa5-9c58-b579907979c7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-091', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Relax Home 091 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8484,7 +8484,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.53, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.53, NOW(), NOW()),
   ('2833e153-6015-417e-ac1b-9fd305fc444a', '1a7be8e2-4390-4fa5-9c58-b579907979c7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-091', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Relax Home 091 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8494,7 +8494,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.54, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.54, NOW(), NOW()),
   ('a0f96f7c-df8d-4efe-9c22-950d6a5027e3', '1a7be8e2-4390-4fa5-9c58-b579907979c7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-091', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Glowora Relax Home 091 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8504,7 +8504,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.55, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.55, NOW(), NOW()),
   ('3077bc62-360e-400a-bc9f-5e39cac545a0', 'd7cde823-c79a-4819-8313-45992166548e', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-092', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Relax Home 092 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8514,7 +8514,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.52, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.52, NOW(), NOW()),
   ('15f772e2-71d3-4de5-8a1a-5589991d19a2', 'd7cde823-c79a-4819-8313-45992166548e', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-092', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Relax Home 092 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8524,7 +8524,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.53, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.53, NOW(), NOW()),
   ('fdddf320-7f92-4019-b124-5234485e92b8', 'd7cde823-c79a-4819-8313-45992166548e', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-092', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Relax Home 092 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8534,7 +8534,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.54, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.54, NOW(), NOW()),
   ('93a3f566-382d-4983-ab9a-f1e56fe9a3d6', 'd7cde823-c79a-4819-8313-45992166548e', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-092', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Relax Home 092 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8544,7 +8544,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.55, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.55, NOW(), NOW()),
   ('cd7b20b7-e1b1-40ee-93c9-f59a1e9defee', 'd7cde823-c79a-4819-8313-45992166548e', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-092', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i An Nhien Relax Home 092 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8554,7 +8554,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.56, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.56, NOW(), NOW()),
   ('24c9604f-8554-4c2d-be9a-886970253529', 'a74ae309-43d6-4d4c-9fcd-4bca499582e7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-093', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Relax Home 093 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8564,7 +8564,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.53, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.53, NOW(), NOW()),
   ('fa1e3061-b3bf-4bec-bc32-9f46df5731d9', 'a74ae309-43d6-4d4c-9fcd-4bca499582e7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-093', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Relax Home 093 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8574,7 +8574,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.54, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.54, NOW(), NOW()),
   ('7bde0911-0ed0-4524-aef3-3f296f3b3d0c', 'a74ae309-43d6-4d4c-9fcd-4bca499582e7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-093', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Relax Home 093 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8584,7 +8584,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.55, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.55, NOW(), NOW()),
   ('e3f4edc4-c357-4c5d-933c-6c62e89c9f2e', 'a74ae309-43d6-4d4c-9fcd-4bca499582e7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-093', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Relax Home 093 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8594,7 +8594,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.56, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.56, NOW(), NOW()),
   ('5680a9d3-0ed0-44df-a529-2a5f4317b38a', 'a74ae309-43d6-4d4c-9fcd-4bca499582e7', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-093', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Lumina Relax Home 093 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8604,7 +8604,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.57, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.57, NOW(), NOW()),
   ('62a94d05-ba6d-4335-9fea-a73b4d1da3ea', '411e9a56-1afa-4e6b-83bf-296ab77ab948', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-094', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Relax Home 094 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8614,7 +8614,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.54, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.54, NOW(), NOW()),
   ('474bbb4b-0386-47d5-b313-d844367dba91', '411e9a56-1afa-4e6b-83bf-296ab77ab948', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-094', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Relax Home 094 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8624,7 +8624,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.55, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.55, NOW(), NOW()),
   ('adb54d97-df57-45c1-960a-7fbefb3562a4', '411e9a56-1afa-4e6b-83bf-296ab77ab948', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-094', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Relax Home 094 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8634,7 +8634,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.56, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.56, NOW(), NOW()),
   ('224b7114-8e03-4815-bf0d-f8e000facccb', '411e9a56-1afa-4e6b-83bf-296ab77ab948', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-094', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Relax Home 094 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8644,7 +8644,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.57, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.57, NOW(), NOW()),
   ('a1f977d4-6357-42fb-b675-b20a65155670', '411e9a56-1afa-4e6b-83bf-296ab77ab948', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-094', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Moc An Relax Home 094 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8654,7 +8654,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.58, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.58, NOW(), NOW()),
   ('55d59594-1859-4b89-96b4-42384c4fa88e', '006dd726-8f44-483b-a925-00b22f8071f5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-095', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Relax Home 095 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8664,7 +8664,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.55, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.55, NOW(), NOW()),
   ('fe240e8e-4621-4f11-80be-1e0c1a9539ff', '006dd726-8f44-483b-a925-00b22f8071f5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-095', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Relax Home 095 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8674,7 +8674,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.56, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.56, NOW(), NOW()),
   ('22f2f969-54ad-4ab5-9367-58f5b5e5595d', '006dd726-8f44-483b-a925-00b22f8071f5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-095', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Relax Home 095 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8684,7 +8684,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.57, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.57, NOW(), NOW()),
   ('7d9a8525-9443-4ca3-b708-909a78ba5f44', '006dd726-8f44-483b-a925-00b22f8071f5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-095', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Relax Home 095 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8694,7 +8694,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.58, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.58, NOW(), NOW()),
   ('7778bab4-ebfa-43a1-97fc-494d35f5f634', '006dd726-8f44-483b-a925-00b22f8071f5', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-095', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Serene Relax Home 095 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8704,7 +8704,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.59, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.59, NOW(), NOW()),
   ('1f543267-1318-46ce-95b2-b3c6ca486ac4', '061e0550-52f6-4791-b519-b395a66bcc8c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Noi mi tu nhien va cham soc mong gel', 'noi-mi-tu-nhien-va-cham-soc-mong-gel-096', '<div class="service-description">
   <h3>Noi mi tu nhien va cham soc mong gel</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Relax Home 096 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8714,7 +8714,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.56, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.56, NOW(), NOW()),
   ('ed8750ca-75a6-43f7-9ac3-51b442e9e96d', '061e0550-52f6-4791-b519-b395a66bcc8c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-096', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Relax Home 096 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8724,7 +8724,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.57, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.57, NOW(), NOW()),
   ('5d3b3546-640f-4714-a9b1-b7646333919a', '061e0550-52f6-4791-b519-b395a66bcc8c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-096', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Relax Home 096 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8734,7 +8734,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.58, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.58, NOW(), NOW()),
   ('99aeea06-301f-4df5-89c6-8af038d0dde5', '061e0550-52f6-4791-b519-b395a66bcc8c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-096', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Relax Home 096 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8744,7 +8744,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.59, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.59, NOW(), NOW()),
   ('243b9d81-2f51-4751-8371-8ec04964108a', '061e0550-52f6-4791-b519-b395a66bcc8c', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-096', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Aurora Relax Home 096 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8754,7 +8754,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.60, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.60, NOW(), NOW()),
   ('0ab8439e-8a01-44b7-9ffb-4ae73f052e07', 'a69c501a-ee94-4672-99c9-9e0a358cf4e8', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Cham soc da mat sach sau va cap am phuc hoi', 'cham-soc-da-mat-sach-sau-va-cap-am-phuc-hoi-097', '<div class="service-description">
   <h3>Cham soc da mat sach sau va cap am phuc hoi</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Relax Home 097 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8764,7 +8764,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.57, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.57, NOW(), NOW()),
   ('b705d929-d5d0-4b65-86dc-80ea50f0219d', 'a69c501a-ee94-4672-99c9-9e0a358cf4e8', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-097', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Relax Home 097 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8774,7 +8774,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.58, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.58, NOW(), NOW()),
   ('a8ff7f83-4dc5-4372-ac2e-c6db176fe17d', 'a69c501a-ee94-4672-99c9-9e0a358cf4e8', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-097', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Relax Home 097 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8784,7 +8784,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.59, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.59, NOW(), NOW()),
   ('01912faf-1ff3-45d7-a554-43ae2ba32b16', 'a69c501a-ee94-4672-99c9-9e0a358cf4e8', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-097', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Relax Home 097 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8794,7 +8794,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.60, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.60, NOW(), NOW()),
   ('db9058b0-4094-4f13-9875-8ad5712b96cb', 'a69c501a-ee94-4672-99c9-9e0a358cf4e8', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-097', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i La Vie Relax Home 097 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8804,7 +8804,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.61, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.61, NOW(), NOW()),
   ('b061f834-3a6b-4297-995c-15453c3e5bcb', 'dcf9a01d-10a7-492e-b585-2fbb3faafab4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-098', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Relax Home 098 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8814,7 +8814,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.58, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1591343395082-e120087004b4?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.58, NOW(), NOW()),
   ('b800a3ef-419d-4137-8342-f269eb16ab68', 'dcf9a01d-10a7-492e-b585-2fbb3faafab4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-098', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Relax Home 098 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8824,7 +8824,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.59, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.59, NOW(), NOW()),
   ('37058555-e9ec-4516-b612-3ebfe7e6c3a6', 'dcf9a01d-10a7-492e-b585-2fbb3faafab4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-098', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Relax Home 098 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8834,7 +8834,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.60, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.60, NOW(), NOW()),
   ('d91fae93-31f9-4630-a4b9-a1a767685adf', 'dcf9a01d-10a7-492e-b585-2fbb3faafab4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-098', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Relax Home 098 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8844,7 +8844,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.61, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.61, NOW(), NOW()),
   ('52ea6372-42dd-42be-9ee2-172dc20681e8', 'dcf9a01d-10a7-492e-b585-2fbb3faafab4', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-098', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Herbal Relax Home 098 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8854,7 +8854,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.62, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.62, NOW(), NOW()),
   ('26885348-5773-4f88-b808-075612963068', 'c1354340-81ad-4d47-83cf-c527f9f3b717', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-099', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Relax Home 099 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8864,7 +8864,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.59, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.59, NOW(), NOW()),
   ('bb6d22e4-56d3-46ec-98ac-4e0723c1b423', 'c1354340-81ad-4d47-83cf-c527f9f3b717', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-099', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Relax Home 099 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8874,7 +8874,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.60, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.60, NOW(), NOW()),
   ('ecdb28bc-fb83-4404-9046-43423c9d1436', 'c1354340-81ad-4d47-83cf-c527f9f3b717', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-099', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Relax Home 099 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8884,7 +8884,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.61, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.61, NOW(), NOW()),
   ('a29f1375-0961-4919-88ec-13d01b5ac918', 'c1354340-81ad-4d47-83cf-c527f9f3b717', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-099', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Relax Home 099 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8894,7 +8894,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.62, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.62, NOW(), NOW()),
   ('d7bad5e4-2176-42cc-8286-75636215457d', 'c1354340-81ad-4d47-83cf-c527f9f3b717', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-099', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Bloom Relax Home 099 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8904,7 +8904,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.63, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.63, NOW(), NOW()),
   ('a649b413-f002-428c-b8d5-d6695479dca4', 'c6c4ec9c-0085-48e6-a388-38c0bfa9d146', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-da-mat' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-100', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Relax Home 100 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c da chuy&ecirc;n s&acirc;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8914,7 +8914,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.60, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.60, NOW(), NOW()),
   ('0bb5e114-55fc-49c3-8840-ba227c5e182f', 'c6c4ec9c-0085-48e6-a388-38c0bfa9d146', (SELECT `id` FROM `service_categories` WHERE `slug` = 'spa-massage' LIMIT 1), 'Massage body thu gian huong tinh dau', 'massage-body-thu-gian-huong-tinh-dau-100', '<div class="service-description">
   <h3>Massage body thu gian huong tinh dau</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Relax Home 100 t&#7853;p trung v&agrave;o massage th&#432; gi&atilde;n tr&#7883; li&#7879;u, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8924,7 +8924,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.61, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.61, NOW(), NOW()),
   ('0742048b-9367-41b2-8c7e-391b3dde7590', 'c6c4ec9c-0085-48e6-a388-38c0bfa9d146', (SELECT `id` FROM `service_categories` WHERE `slug` = 'duong-sinh' LIMIT 1), 'G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay', 'goi-dau-duong-sinh-thao-moc-co-vai-gay-100', '<div class="service-description">
   <h3>G&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh th&#7843;o m&#7897;c co vai gay</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Relax Home 100 t&#7853;p trung v&agrave;o g&#7897;i &#273;&#7847;u d&#432;&#7905;ng sinh v&agrave; c&#7893; vai g&aacute;y, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8934,7 +8934,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.62, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.62, NOW(), NOW()),
   ('73dd6b5a-c5c7-4db9-94ca-4edad6623c14', 'c6c4ec9c-0085-48e6-a388-38c0bfa9d146', (SELECT `id` FROM `service_categories` WHERE `slug` = 'cham-soc-co-the' LIMIT 1), 'Tay te bao chet va u duong body', 'tay-te-bao-chet-va-u-duong-body-100', '<div class="service-description">
   <h3>Tay te bao chet va u duong body</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Relax Home 100 t&#7853;p trung v&agrave;o ch&#259;m s&oacute;c body v&agrave; ph&#7909;c h&#7891;i n&#259;ng l&#432;&#7907;ng, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8944,7 +8944,7 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.63, NOW(), NOW()),
+</div>', '["https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.63, NOW(), NOW()),
   ('66c53522-a861-42ea-976c-8d985dd1680f', 'c6c4ec9c-0085-48e6-a388-38c0bfa9d146', (SELECT `id` FROM `service_categories` WHERE `slug` = 'triet-long' LIMIT 1), 'Triet long cong nghe lanh vung nho', 'triet-long-cong-nghe-lanh-vung-nho-100', '<div class="service-description">
   <h3>Triet long cong nghe lanh vung nho</h3>
   <p>Li&#7879;u tr&igrave;nh t&#7841;i Sakura Relax Home 100 t&#7853;p trung v&agrave;o tri&#7879;t l&ocirc;ng v&agrave; waxing d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p cho kh&aacute;ch mu&#7889;n ch&#259;m s&oacute;c &#273;&#7883;nh k&#7923; nh&#432;ng v&#7851;n c&#7847;n c&#7843;m gi&aacute;c th&#432; gi&atilde;n r&otilde; r&agrave;ng.</p>
@@ -8954,8 +8954,8 @@ INSERT INTO `services` (`id`, `shop_id`, `category_id`, `name`, `slug`, `descrip
     <li>S&#7917; d&#7909;ng s&#7843;n ph&#7849;m d&#7883;u nh&#7865;, ph&ugrave; h&#7907;p &#273;a s&#7889; n&#7873;n da</li>
     <li>H&#432;&#7899;ng d&#7851;n ch&#259;m s&oacute;c sau d&#7883;ch v&#7909;</li>
   </ul>
-</div>', 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80', 'ACTIVE', 4.64, NOW(), NOW())
-ON DUPLICATE KEY UPDATE `category_id` = VALUES(`category_id`), `name` = VALUES(`name`), `description` = VALUES(`description`), `image_url` = VALUES(`image_url`), `status` = VALUES(`status`), `avg_rating` = VALUES(`avg_rating`), `updated_at` = NOW();
+</div>', '["https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80"]', 'ACTIVE', 4.64, NOW(), NOW())
+ON DUPLICATE KEY UPDATE `category_id` = VALUES(`category_id`), `name` = VALUES(`name`), `description` = VALUES(`description`), `image_urls` = VALUES(`image_urls`), `status` = VALUES(`status`), `avg_rating` = VALUES(`avg_rating`), `updated_at` = NOW();
 
 INSERT INTO `service_variants` (`id`, `service_id`, `name`, `description`, `duration`, `price`, `cost_price`, `sort_order`, `status`, `created_at`, `updated_at`) VALUES
   ('490b856d-eff3-4174-9595-dee55731655b', '92592650-afcb-496f-9458-b9246cf1825c', 'Goi co ban', '<p>Th&#7901;i l&#432;&#7907;ng 45 ph&uacute;t, phu hop cho khach muon tr&#7843;i nghi&#7879;m nhanh tai Glowora Spa 001.</p>', 45, '290000.00', '121800.00', 0, 'ACTIVE', NOW(), NOW()),

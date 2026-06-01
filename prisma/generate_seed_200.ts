@@ -1110,7 +1110,7 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
       const category = categories.find((item) => item.key === template.categoryKey) ?? categories[0];
 
       serviceRows.push(
-        `(${sql(randomUUID())}, ${subStore(store.slug)}, ${subShopCategory(category.name, store.slug)}, ${sql(serviceName)}, ${sql(serviceSlug)}, ${sql(buildServiceDescription(store, serviceName, template, category.name))}, ${sql(template.imageUrl)}, 'ACTIVE', ${(4.15 + localRand() * 0.75).toFixed(2)}, NOW(), NOW())`,
+        `(${sql(randomUUID())}, ${subStore(store.slug)}, ${subShopCategory(category.name, store.slug)}, ${sql(serviceName)}, ${sql(serviceSlug)}, ${sql(buildServiceDescription(store, serviceName, template, category.name))}, ${sql(JSON.stringify([template.imageUrl]))}, 'ACTIVE', ${(4.15 + localRand() * 0.75).toFixed(2)}, NOW(), NOW())`,
       );
 
       const variantCount = serviceIndex <= 10 ? randInt(2, 4, localRand) : randInt(1, 2, localRand);
@@ -1263,10 +1263,10 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
 
   sqlLines.push('-- SECTION 10: Services');
   sqlLines.push(
-    ...batchInsert(serviceRows, 'services', ['id', 'shop_id', 'category_id', 'name', 'slug', 'description', 'image_url', 'status', 'avg_rating', 'created_at', 'updated_at'], {
+    ...batchInsert(serviceRows, 'services', ['id', 'shop_id', 'category_id', 'name', 'slug', 'description', 'image_urls', 'status', 'avg_rating', 'created_at', 'updated_at'], {
       batchSize: 25,
       suffix:
-        'ON DUPLICATE KEY UPDATE `category_id` = VALUES(`category_id`), `name` = VALUES(`name`), `description` = VALUES(`description`), `image_url` = VALUES(`image_url`), `status` = VALUES(`status`), `avg_rating` = VALUES(`avg_rating`), `updated_at` = NOW();',
+        'ON DUPLICATE KEY UPDATE `category_id` = VALUES(`category_id`), `name` = VALUES(`name`), `description` = VALUES(`description`), `image_urls` = VALUES(`image_urls`), `status` = VALUES(`status`), `avg_rating` = VALUES(`avg_rating`), `updated_at` = NOW();',
     }),
   );
 

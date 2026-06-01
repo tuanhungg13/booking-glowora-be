@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { NotificationType, Prisma, StoreStatus } from '@prisma/client';
+import { BookingStatus, LogType, NotificationType, Prisma, StoreStatus, UserStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { SystemLogService } from '../../system-log/system-log.service';
 import { AdminStoreActionDto } from './dto/admin-store-action.dto';
 import { AdminStoreFilterDto } from './dto/store-filter.dto';
 
@@ -13,7 +14,49 @@ const adminStoreInclude = {
 
 @Injectable()
 export class AdminStoresService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly systemLog: SystemLogService,
+  ) {}
+
+  async getStats() {
+    const [
+      totalStores,
+      pendingStores,
+      activeStores,
+      bannedStores,
+      totalUsers,
+      bannedUsers,
+      totalBookings,
+      pendingBookings,
+    ] = await Promise.all([
+      this.prisma.store.count(),
+      this.prisma.store.count({ where: { status: StoreStatus.PENDING } }),
+      this.prisma.store.count({ where: { status: StoreStatus.ACTIVE } }),
+      this.prisma.store.count({ where: { status: StoreStatus.BANNED } }),
+      this.prisma.user.count(),
+      this.prisma.user.count({ where: { status: UserStatus.BANNED } }),
+      this.prisma.booking.count(),
+      this.prisma.booking.count({ where: { status: BookingStatus.PENDING } }),
+    ]);
+
+    return {
+      stores: {
+        total: totalStores,
+        pending: pendingStores,
+        active: activeStores,
+        banned: bannedStores,
+      },
+      users: {
+        total: totalUsers,
+        banned: bannedUsers,
+      },
+      appointments: {
+        total: totalBookings,
+        pending: pendingBookings,
+      },
+    };
+  }
 
   async findAll(filter: AdminStoreFilterDto) {
     const page = filter.page ?? 1;
@@ -84,10 +127,11 @@ export class AdminStoresService {
       },
     });
 
+    this.systemLog.log({ type: LogType.STORE_APPROVED, actorId: adminId, targetId: id, targetType: 'Store', metadata: { storeName: store.name } });
     return updated;
   }
 
-  async reject(id: string, dto: AdminStoreActionDto) {
+  async reject(id: string, dto: AdminStoreActionDto, adminId: string) {
     if (!dto.reason?.trim()) {
       throw new BadRequestException('Reject reason is required');
     }
@@ -116,10 +160,11 @@ export class AdminStoresService {
       },
     });
 
+    this.systemLog.log({ type: LogType.STORE_REJECTED, actorId: adminId, targetId: id, targetType: 'Store', metadata: { storeName: store.name, reason: dto.reason } });
     return updated;
   }
 
-  async lock(id: string, dto: AdminStoreActionDto) {
+  async lock(id: string, dto: AdminStoreActionDto, adminId: string) {
     if (!dto.reason?.trim()) {
       throw new BadRequestException('Lock reason is required');
     }
@@ -148,16 +193,17 @@ export class AdminStoresService {
       },
     });
 
+    this.systemLog.log({ type: LogType.STORE_BANNED, actorId: adminId, targetId: id, targetType: 'Store', metadata: { storeName: store.name, reason: dto.reason } });
     return updated;
   }
 
-  async unlock(id: string) {
+  async unlock(id: string, adminId: string) {
     const store = await this.findOne(id);
     if (store.status !== StoreStatus.BANNED) {
       throw new BadRequestException('Only banned stores can be unlocked');
     }
 
-    return this.prisma.store.update({
+    const updated = await this.prisma.store.update({
       where: { id },
       data: {
         status: StoreStatus.ACTIVE,
@@ -165,5 +211,8 @@ export class AdminStoresService {
       },
       include: adminStoreInclude,
     });
+
+    this.systemLog.log({ type: LogType.STORE_UNLOCKED, actorId: adminId, targetId: id, targetType: 'Store', metadata: { storeName: store.name } });
+    return updated;
   }
 }
