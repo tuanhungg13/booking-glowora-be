@@ -3,6 +3,7 @@ import {
   ConflictException,
   UnauthorizedException,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -11,7 +12,12 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { UserStatus } from '@prisma/client';
 import { RegisterDto } from './dto/register.dto';
+import { VerifyOtpDto } from './dto/verify-otp.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { RedisService } from '../../../redis/redis.service';
+import { MailService } from '../../../mail/mail.service';
 import { ALL_PERMISSION_CODES } from '../../../common/constants/permissions';
 
 const CUSTOMER_ROLE_CODE = 'CUSTOMER';
@@ -23,6 +29,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
     private readonly redis: RedisService,
+    private readonly mail: MailService,
   ) {}
 
   async validateUser(email: string, password: string) {
@@ -32,7 +39,7 @@ export class AuthService {
         userRoles: { include: { role: { select: { name: true, code: true } } } },
       },
     });
-    if (!user || user.status !== UserStatus.ACTIVE) return null;
+    if (!user || user.status !== UserStatus.ACTIVE || !user.password) return null;
     const ok = await bcrypt.compare(password, user.password);
     if (!ok) return null;
     const { password: _, ...rest } = user;
@@ -59,7 +66,43 @@ export class AuthService {
     const existing = await this.prisma.user.findUnique({ where: { email: dto.email } });
     if (existing) throw new ConflictException('Email already registered');
 
-    const hashed = await bcrypt.hash(dto.password, 10);
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+
+    const pendingKey = `otp:register:${dto.email}`;
+    await this.redis.set(
+      pendingKey,
+      JSON.stringify({
+        otp,
+        hashedPassword,
+        fullName: dto.fullName ?? '',
+        phone: dto.phone ?? null,
+      }),
+      600,
+    );
+
+    await this.mail.sendOtpVerification(dto.email, otp, dto.fullName);
+
+    return { message: 'OTP đã được gửi đến email của bạn. Vui lòng xác nhận trong 10 phút.' };
+  }
+
+  async verifyRegisterOtp(dto: VerifyOtpDto) {
+    const pendingKey = `otp:register:${dto.email}`;
+    const raw = await this.redis.get(pendingKey);
+
+    if (!raw) throw new BadRequestException('OTP không hợp lệ hoặc đã hết hạn');
+
+    const pending = JSON.parse(raw) as {
+      otp: string;
+      hashedPassword: string;
+      fullName: string;
+      phone: string | null;
+    };
+
+    if (pending.otp !== dto.otp) throw new BadRequestException('OTP không chính xác');
+
+    const existing = await this.prisma.user.findUnique({ where: { email: dto.email } });
+    if (existing) throw new ConflictException('Email already registered');
 
     const customerRole = await this.prisma.role.findFirst({
       where: { code: CUSTOMER_ROLE_CODE, shopId: null },
@@ -68,15 +111,17 @@ export class AuthService {
     const user = await this.prisma.user.create({
       data: {
         email: dto.email,
-        password: hashed,
-        fullName: dto.fullName ?? '',
-        phone: dto.phone,
+        password: pending.hashedPassword,
+        fullName: pending.fullName,
+        phone: pending.phone ?? undefined,
         ...(customerRole
           ? { userRoles: { create: { roleId: customerRole.id, shopId: null } } }
           : {}),
       },
       select: { id: true, email: true, fullName: true, phone: true, createdAt: true },
     });
+
+    await this.redis.del(pendingKey);
 
     return user;
   }
@@ -196,6 +241,71 @@ export class AuthService {
       shopId: userRole.shopId,
       permissionMatrix,
     };
+  }
+
+  async forgotPassword(dto: ForgotPasswordDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+      select: { id: true, email: true, fullName: true, status: true },
+    });
+
+    if (!user) throw new NotFoundException('Email không tồn tại trong hệ thống');
+    if (user.status !== UserStatus.ACTIVE) throw new BadRequestException('Tài khoản đã bị khóa');
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    await this.redis.set(`otp:reset:${dto.email}`, otp, 600);
+
+    await this.mail.sendPasswordResetOtp(dto.email, otp, user.fullName ?? undefined);
+
+    return { message: 'OTP đã được gửi đến email của bạn. Vui lòng xác nhận trong 10 phút.' };
+  }
+
+  async resetPassword(dto: ResetPasswordDto) {
+    const storedOtp = await this.redis.get(`otp:reset:${dto.email}`);
+
+    if (!storedOtp) throw new BadRequestException('OTP không hợp lệ hoặc đã hết hạn');
+    if (storedOtp !== dto.otp) throw new BadRequestException('OTP không chính xác');
+
+    const user = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+      select: { id: true, status: true },
+    });
+    if (!user || user.status !== UserStatus.ACTIVE) {
+      throw new NotFoundException('Tài khoản không tồn tại hoặc đã bị khóa');
+    }
+
+    const hashedPassword = await bcrypt.hash(dto.newPassword, 10);
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { password: hashedPassword, refreshToken: null },
+    });
+
+    await this.redis.del(`otp:reset:${dto.email}`);
+
+    return { message: 'Đặt lại mật khẩu thành công. Vui lòng đăng nhập lại.' };
+  }
+
+  async changePassword(userId: string, dto: ChangePasswordDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, password: true },
+    });
+    if (!user) throw new NotFoundException('User not found');
+
+    const isMatch = await bcrypt.compare(dto.currentPassword, user.password ?? '');
+    if (!isMatch) throw new BadRequestException('Mật khẩu hiện tại không chính xác');
+
+    if (dto.currentPassword === dto.newPassword) {
+      throw new BadRequestException('Mật khẩu mới phải khác mật khẩu hiện tại');
+    }
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { password: await bcrypt.hash(dto.newPassword, 10) },
+    });
+
+    return { message: 'Đổi mật khẩu thành công.' };
   }
 
   private _signAccess(userId: string, email: string): string {

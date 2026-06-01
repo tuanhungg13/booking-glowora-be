@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { BookingStatus } from '@prisma/client';
+import { BookingStatus, PaymentStatus } from '@prisma/client';
 import { Type } from 'class-transformer';
 import { IsDateString, IsEnum, IsInt, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
 
@@ -24,7 +24,17 @@ export class BookingFilterDto {
   @IsUUID()
   staffId?: string;
 
-  @ApiPropertyOptional({ description: 'Tìm kiếm theo tên khách hàng hoặc mã lịch hẹn' })
+  @ApiPropertyOptional({ description: 'Lọc theo ID dịch vụ', example: 'uuid-service-id' })
+  @IsOptional()
+  @IsUUID()
+  serviceId?: string;
+
+  @ApiPropertyOptional({ enum: PaymentStatus, description: 'Lọc theo trạng thái thanh toán' })
+  @IsOptional()
+  @IsEnum(PaymentStatus)
+  paymentStatus?: PaymentStatus;
+
+  @ApiPropertyOptional({ description: 'Tìm kiếm theo tên, email, SĐT khách hàng hoặc mã lịch hẹn' })
   @IsOptional()
   @IsString()
   search?: string;

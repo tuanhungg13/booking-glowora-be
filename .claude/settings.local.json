@@ -3,7 +3,10 @@
     "allow": [
       "Bash(docker start glowora_mysql *)",
       "Bash(npx prisma *)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(pnpm run *)",
+      "WebFetch(domain:sepay.vn)",
+      "WebFetch(domain:docs.sepay.vn)"
     ]
   }
 }

@@ -3,6 +3,7 @@ import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CreateShopCategoryDto } from './dto/create-shop-category.dto';
+import { UpdateShopCategoryDto } from './dto/update-shop-category.dto';
 
 function slugify(value: string): string {
   return value
@@ -96,6 +97,17 @@ export class CategoriesService {
         parent: { select: { id: true, name: true, slug: true, iconUrl: true } },
         _count: { select: { services: true, combos: true } },
       },
+    });
+  }
+
+  async updateShopCategory(id: string, shopId: string, dto: UpdateShopCategoryDto) {
+    const category = await this.prisma.serviceCategory.findFirst({ where: { id, shopId } });
+    if (!category) throw new NotFoundException('Danh mục không tồn tại');
+
+    return this.prisma.serviceCategory.update({
+      where: { id },
+      data: { name: dto.name, description: dto.description },
+      include: { parent: { select: { id: true, name: true, slug: true, iconUrl: true } } },
     });
   }
 

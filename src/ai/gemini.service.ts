@@ -19,6 +19,7 @@ export interface PlatformServiceSuggestion {
   name: string;
   slug: string | null;
   imageUrl: string | null;
+  imageUrls: string[];
   avgRating: number;
   storeId: string;
   storeName: string;
@@ -92,7 +93,7 @@ export class GeminiService {
         id: true,
         name: true,
         slug: true,
-        imageUrl: true,
+        imageUrls: true,
         avgRating: true,
         shopId: true,
         store: { select: { name: true } },
@@ -111,7 +112,8 @@ export class GeminiService {
       id: s.id,
       name: s.name,
       slug: s.slug,
-      imageUrl: s.imageUrl,
+      imageUrls: Array.isArray(s.imageUrls) ? (s.imageUrls as string[]) : [],
+      imageUrl: Array.isArray(s.imageUrls) ? ((s.imageUrls as string[])[0] ?? null) : null,
       avgRating: Number(s.avgRating),
       storeId: s.shopId,
       storeName: s.store.name,

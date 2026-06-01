@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma, ServiceStatus, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { CloudinaryService } from '../../../cloudinary/cloudinary.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { CreateServiceVariantDto, UpdateServiceVariantDto } from './dto/service-variant.dto';
@@ -26,9 +27,14 @@ function slugify(value: string): string {
     .replace(/(^-|-$)/g, '');
 }
 
+const MAX_IMAGES = 5;
+
 @Injectable()
 export class ServicesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly cloudinary: CloudinaryService,
+  ) {}
 
   async create(storeId: string, dto: CreateServiceDto) {
     const slug = await this.generateUniqueSlug(dto.name, storeId);
@@ -187,8 +193,16 @@ export class ServicesService {
   }
 
   async update(id: string, storeId: string, dto: UpdateServiceDto) {
-    await this.findOne(id, storeId);
+    const service = await this.findOne(id, storeId);
     const slug = dto.name ? await this.generateUniqueSlug(dto.name, storeId, id) : undefined;
+
+    if (dto.imageUrls !== undefined) {
+      const current = Array.isArray(service.imageUrls) ? (service.imageUrls as string[]) : [];
+      const removed = current.filter((url) => !dto.imageUrls!.includes(url));
+      await Promise.allSettled(
+        removed.map((url) => this.cloudinary.deleteImage(this.cloudinary.extractPublicId(url))),
+      );
+    }
 
     await this.prisma.service.update({
       where: { id },
@@ -198,6 +212,7 @@ export class ServicesService {
         description: dto.description,
         status: dto.status,
         categoryId: dto.categoryId,
+        ...(dto.imageUrls !== undefined && { imageUrls: dto.imageUrls }),
       },
     });
 
@@ -266,6 +281,44 @@ export class ServicesService {
     });
     return this.prisma.service.findUnique({
       where: { id: service.id },
+      include: serviceInclude,
+    });
+  }
+
+  async uploadImages(id: string, storeId: string, files: Express.Multer.File[]) {
+    const service = await this.findOne(id, storeId);
+    const current = Array.isArray(service.imageUrls) ? (service.imageUrls as string[]) : [];
+
+    if (current.length + files.length > MAX_IMAGES) {
+      throw new BadRequestException(
+        `Dịch vụ không được có quá ${MAX_IMAGES} hình ảnh (hiện có ${current.length})`,
+      );
+    }
+
+    const uploaded = await Promise.all(
+      files.map((f) => this.cloudinary.uploadImage(f, `glowora/services/${storeId}`)),
+    );
+
+    return this.prisma.service.update({
+      where: { id },
+      data: { imageUrls: [...current, ...uploaded] },
+      include: serviceInclude,
+    });
+  }
+
+  async removeImage(id: string, storeId: string, url: string) {
+    const service = await this.findOne(id, storeId);
+    const current = Array.isArray(service.imageUrls) ? (service.imageUrls as string[]) : [];
+
+    if (!current.includes(url)) {
+      throw new BadRequestException('Ảnh không tồn tại trong dịch vụ');
+    }
+
+    await this.cloudinary.deleteImage(this.cloudinary.extractPublicId(url));
+
+    return this.prisma.service.update({
+      where: { id },
+      data: { imageUrls: current.filter((u) => u !== url) },
       include: serviceInclude,
     });
   }

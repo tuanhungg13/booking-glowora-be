@@ -183,21 +183,68 @@ export class StoresService {
   async findAll(filter: StoreFilterDto) {
     const page = filter.page ?? 1;
     const limit = filter.limit ?? 12;
-    const where = this.buildPublicWhere(filter);
+    const hasLocation = filter.userLat != null && filter.userLng != null;
+
+    if (!hasLocation) {
+      const where = this.buildPublicWhere(filter);
+      const orderBy = this.buildOrderBy(filter.sort);
+      const [items, total] = await this.prisma.$transaction([
+        this.prisma.store.findMany({ where, orderBy, skip: (page - 1) * limit, take: limit, include: storeListInclude }),
+        this.prisma.store.count({ where }),
+      ]);
+      return { items, total, page, limit };
+    }
+
+    const radius = filter.radius ?? 10;
+    const nearby = await this.getStoresWithinRadius(filter.userLat!, filter.userLng!, radius);
+
+    if (nearby.length === 0) {
+      return { items: [], total: 0, page, limit };
+    }
+
+    const distanceMap = new Map(nearby.map((r) => [r.id, r.distance]));
+    const nearbyIds = nearby.map((r) => r.id);
+    const baseWhere = { ...this.buildPublicWhere(filter), id: { in: nearbyIds } };
+
+    if (filter.sort === 'distance') {
+      // Lọc theo các điều kiện khác trước để có đúng tập kết quả, rồi paginate theo thứ tự distance
+      const matched = await this.prisma.store.findMany({ where: baseWhere, select: { id: true } });
+      const matchedSet = new Set(matched.map((s) => s.id));
+      const filteredNearby = nearby.filter((r) => matchedSet.has(r.id));
+      const total = filteredNearby.length;
+      const pageSlice = filteredNearby.slice((page - 1) * limit, page * limit);
+      const pageIds = pageSlice.map((r) => r.id);
+      const pageItems = await this.prisma.store.findMany({ where: { id: { in: pageIds } }, include: storeListInclude });
+      const items = pageIds.map((id) => ({ ...pageItems.find((s) => s.id === id)!, distance: distanceMap.get(id) }));
+      return { items, total, page, limit };
+    }
+
     const orderBy = this.buildOrderBy(filter.sort);
-
-    const [items, total] = await this.prisma.$transaction([
-      this.prisma.store.findMany({
-        where,
-        orderBy,
-        skip: (page - 1) * limit,
-        take: limit,
-        include: storeListInclude,
-      }),
-      this.prisma.store.count({ where }),
+    const [rawItems, total] = await this.prisma.$transaction([
+      this.prisma.store.findMany({ where: baseWhere, orderBy, skip: (page - 1) * limit, take: limit, include: storeListInclude }),
+      this.prisma.store.count({ where: baseWhere }),
     ]);
-
+    const items = rawItems.map((s) => ({ ...s, distance: distanceMap.get(s.id) }));
     return { items, total, page, limit };
+  }
+
+  private async getStoresWithinRadius(lat: number, lng: number, radius: number) {
+    return this.prisma.$queryRaw<{ id: string; distance: number }[]>`
+      SELECT id,
+        ROUND(
+          6371 * ACOS(
+            LEAST(1, COS(RADIANS(${lat})) * COS(RADIANS(latitude)) *
+            COS(RADIANS(longitude) - RADIANS(${lng})) +
+            SIN(RADIANS(${lat})) * SIN(RADIANS(latitude)))
+          ), 2
+        ) AS distance
+      FROM stores
+      WHERE status = 'ACTIVE'
+        AND latitude IS NOT NULL
+        AND longitude IS NOT NULL
+      HAVING distance <= ${radius}
+      ORDER BY distance ASC
+    `;
   }
 
   async findOne(idOrSlug: string) {
@@ -362,7 +409,7 @@ export class StoresService {
   private buildOrderBy(sort?: StoreFilterDto['sort']): Prisma.StoreOrderByWithRelationInput {
     if (sort === 'newest') return { createdAt: 'desc' };
     if (sort === 'name') return { name: 'asc' };
-    return { avgRating: 'desc' }; // default + 'avgRating'
+    return { avgRating: 'desc' };
   }
 
   private async generateUniqueSlug(name: string, provinceId?: number) {

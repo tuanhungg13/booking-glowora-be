@@ -4,6 +4,7 @@ import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CreateShopCategoryDto } from './dto/create-shop-category.dto';
+import { UpdateShopCategoryDto } from './dto/update-shop-category.dto';
 import { Public } from '../../../common/decorators/public.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
@@ -77,6 +78,20 @@ export class CategoriesController {
   @RequirePermissions(Permissions.CATEGORY.VIEW)
   findShopCategories(@ShopId() shopId: string) {
     return this.categoriesService.findShopCategories(shopId);
+  }
+
+  @ApiOperation({ summary: 'Cập nhật danh mục của shop (shop owner)' })
+  @ApiHeader({ name: 'x-shop-id', required: true })
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id' })
+  @Patch('shop/:id')
+  @RequirePermissions(Permissions.CATEGORY.UPDATE)
+  updateShopCategory(
+    @ShopId() shopId: string,
+    @Param('id') id: string,
+    @Body() dto: UpdateShopCategoryDto,
+  ) {
+    return this.categoriesService.updateShopCategory(id, shopId, dto);
   }
 
   @ApiOperation({ summary: 'Xóa danh mục của shop (shop owner)' })

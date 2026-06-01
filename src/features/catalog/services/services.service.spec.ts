@@ -56,7 +56,7 @@ describe('ServicesService — Phase 3 Catalog', () => {
       },
       $transaction: jest.fn(async (fn: any) => fn(tx)),
     };
-    service = new ServicesService(prisma);
+    service = new ServicesService(prisma, {} as any);
   });
 
   afterEach(() => jest.clearAllMocks());

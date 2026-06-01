@@ -405,7 +405,7 @@ model Service {
   name        String        @db.VarChar(150)
   slug        String?       @db.VarChar(200)
   description String?       @db.Text
-  imageUrl    String?       @map("image_url")
+  imageUrls   Json?         @default("[]") @map("image_urls")
   status      ServiceStatus @default(ACTIVE)
   avgRating   Decimal       @default(0.00) @map("avg_rating") @db.Decimal(3, 2)
   createdAt   DateTime      @default(now()) @map("created_at")

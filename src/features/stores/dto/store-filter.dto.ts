@@ -44,10 +44,34 @@ export class StoreFilterDto {
   @Max(5)
   maxRating?: number;
 
-  @ApiPropertyOptional({ enum: ['avgRating', 'newest', 'name'], example: 'avgRating' })
+  @ApiPropertyOptional({ enum: ['avgRating', 'newest', 'name', 'distance'], example: 'avgRating' })
   @IsOptional()
-  @IsIn(['avgRating', 'newest', 'name'])
-  sort?: 'avgRating' | 'newest' | 'name';
+  @IsIn(['avgRating', 'newest', 'name', 'distance'])
+  sort?: 'avgRating' | 'newest' | 'name' | 'distance';
+
+  @ApiPropertyOptional({ example: 10.762622, description: 'Vĩ độ vị trí user (dùng để lọc theo khoảng cách)' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(-90)
+  @Max(90)
+  userLat?: number;
+
+  @ApiPropertyOptional({ example: 106.660172, description: 'Kinh độ vị trí user (dùng để lọc theo khoảng cách)' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(-180)
+  @Max(180)
+  userLng?: number;
+
+  @ApiPropertyOptional({ example: 10, minimum: 1, maximum: 100, description: 'Bán kính tìm kiếm (km), mặc định 10km' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(1)
+  @Max(100)
+  radius?: number;
 
   @ApiPropertyOptional({ example: 1, minimum: 1 })
   @IsOptional()

@@ -9,6 +9,7 @@ import { BookingStatus, Prisma, ServiceStatus, StoreStatus } from '@prisma/clien
 import { PrismaService } from '../../../prisma/prisma.service';
 import { NotificationsService } from '../../notifications/notifications/notifications.service';
 import { BookingFilterDto } from './dto/booking-filter.dto';
+import { MyBookingFilterDto } from './dto/my-booking-filter.dto';
 import { CreateBookingDto } from './dto/create-booking.dto';
 
 const bookingInclude = {
@@ -186,27 +187,19 @@ export class BookingsService {
     return { items, total };
   }
 
-  findMy(customerId: string, status?: BookingStatus) {
-    return this.findAll({ customerId, status });
-  }
-
-  async findStoreBookings(storeId: string, filter: BookingFilterDto) {
+  async findMy(customerId: string, filter: MyBookingFilterDto) {
     const page = filter.page ?? 1;
     const limit = filter.limit ?? 20;
     const skip = (page - 1) * limit;
 
     const where: Prisma.BookingWhereInput = {
-      storeId,
+      customerId,
       ...(filter.status && { status: filter.status }),
-      ...(filter.staffId && { items: { some: { staffId: filter.staffId } } }),
       ...((filter.from || filter.to) && {
         scheduledAt: {
           ...(filter.from && { gte: new Date(filter.from) }),
           ...(filter.to && { lte: new Date(filter.to) }),
         },
-      }),
-      ...(filter.search && {
-        customer: { fullName: { contains: filter.search } },
       }),
     };
 
@@ -224,13 +217,61 @@ export class BookingsService {
     return { items, total, page, limit };
   }
 
-  async findCalendar(storeId: string, month: string) {
+  async findStoreBookings(storeId: string, filter: BookingFilterDto) {
+    const page = filter.page ?? 1;
+    const limit = filter.limit ?? 20;
+    const skip = (page - 1) * limit;
+
+    const where: Prisma.BookingWhereInput = {
+      storeId,
+      ...(filter.status && { status: filter.status }),
+      ...((filter.from || filter.to) && {
+        scheduledAt: {
+          ...(filter.from && { gte: new Date(filter.from) }),
+          ...(filter.to && { lte: new Date(filter.to) }),
+        },
+      }),
+      ...(filter.search && {
+        OR: [
+          { customer: { fullName: { contains: filter.search } } },
+          { customer: { email: { contains: filter.search } } },
+          { customer: { phone: { contains: filter.search } } },
+          { id: { contains: filter.search } },
+        ],
+      }),
+      AND: [
+        ...(filter.staffId ? [{ items: { some: { staffId: filter.staffId } } }] : []),
+        ...(filter.serviceId ? [{ items: { some: { serviceId: filter.serviceId } } }] : []),
+        ...(filter.paymentStatus ? [{ payments: { some: { status: filter.paymentStatus } } }] : []),
+      ],
+    };
+
+    const [items, total] = await Promise.all([
+      this.prisma.booking.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { scheduledAt: 'desc' },
+        include: bookingInclude,
+      }),
+      this.prisma.booking.count({ where }),
+    ]);
+
+    return { items, total, page, limit };
+  }
+
+  async findCalendar(storeId: string, month: string, status?: BookingStatus, staffId?: string) {
     const [y, m] = month.split('-').map(Number);
     const start = new Date(Date.UTC(y, m - 1, 1));
     const end = new Date(Date.UTC(y, m, 1));
 
     return this.prisma.booking.findMany({
-      where: { storeId, scheduledAt: { gte: start, lt: end } },
+      where: {
+        storeId,
+        scheduledAt: { gte: start, lt: end },
+        ...(status && { status }),
+        ...(staffId && { items: { some: { staffId } } }),
+      },
       orderBy: { scheduledAt: 'asc' },
       include: bookingInclude,
     });

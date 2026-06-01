@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -7,12 +8,17 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiHeader, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
+import { ApiBearerAuth, ApiConsumes, ApiHeader, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ServicesService } from './services.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { AssignStaffDto } from './dto/assign-staff.dto';
+import { RemoveServiceImageDto } from './dto/service-image.dto';
 import { CreateServiceVariantDto, UpdateServiceVariantDto } from './dto/service-variant.dto';
 import { PublicServiceQueryDto, ServiceQueryDto } from './dto/service-filter.dto';
 import { Public } from '../../../common/decorators/public.decorator';
@@ -122,6 +128,35 @@ export class ServicesController {
     @Body() dto: AssignStaffDto,
   ) {
     return this.servicesService.assignStaff(id, storeId, dto.staffIds);
+  }
+
+  @ApiOperation({ summary: 'Upload ảnh cho dịch vụ (tối đa 5 ảnh, field: files)' })
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id', description: 'Service ID' })
+  @ApiConsumes('multipart/form-data')
+  @Post(':id/images')
+  @RequirePermissions(Permissions.SERVICE.UPDATE)
+  @UseInterceptors(FilesInterceptor('files', 5, { storage: memoryStorage() }))
+  uploadImages(
+    @ShopId() storeId: string,
+    @Param('id') id: string,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    if (!files?.length) throw new BadRequestException('Không có ảnh nào được tải lên');
+    return this.servicesService.uploadImages(id, storeId, files);
+  }
+
+  @ApiOperation({ summary: 'Xóa một ảnh của dịch vụ' })
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id', description: 'Service ID' })
+  @Delete(':id/images')
+  @RequirePermissions(Permissions.SERVICE.UPDATE)
+  removeImage(
+    @ShopId() storeId: string,
+    @Param('id') id: string,
+    @Body() dto: RemoveServiceImageDto,
+  ) {
+    return this.servicesService.removeImage(id, storeId, dto.url);
   }
 
   @ApiOperation({ summary: 'Xóa dịch vụ' })

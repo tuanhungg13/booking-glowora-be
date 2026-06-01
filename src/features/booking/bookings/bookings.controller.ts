@@ -1,7 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Query } from '@nestjs/common';
 import { Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { BookingStatus } from '@prisma/client';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
@@ -9,6 +8,7 @@ import { Permissions } from '../../../common/constants/permissions';
 import { BookingsService } from './bookings.service';
 import { CancelBookingDto } from './dto/cancel-booking.dto';
 import { CreateBookingDto } from './dto/create-booking.dto';
+import { MyBookingFilterDto } from './dto/my-booking-filter.dto';
 
 @ApiTags('bookings')
 @ApiBearerAuth()
@@ -29,11 +29,10 @@ export class BookingsController {
   // MUST be before :id to avoid route conflict
   @Get('my')
   @RequirePermissions(Permissions.APPOINTMENT.VIEW)
-  @ApiOperation({ summary: 'Lấy danh sách lịch hẹn của tôi', description: 'Trả về tất cả lịch hẹn của người dùng đang đăng nhập, có thể lọc theo trạng thái.' })
-  @ApiQuery({ name: 'status', enum: BookingStatus, required: false, description: 'Lọc theo trạng thái' })
+  @ApiOperation({ summary: 'Lấy danh sách lịch hẹn của tôi', description: 'Trả về lịch hẹn của người dùng đang đăng nhập, có thể lọc theo trạng thái, khoảng ngày và phân trang.' })
   @ApiResponse({ status: 200, description: 'Danh sách lịch hẹn của người dùng' })
-  findMy(@CurrentUser() user: CurrentUserPayload, @Query('status') status?: BookingStatus) {
-    return this.bookingsService.findMy(user.id, status);
+  findMy(@CurrentUser() user: CurrentUserPayload, @Query() filter: MyBookingFilterDto) {
+    return this.bookingsService.findMy(user.id, filter);
   }
 
   @Get(':id')

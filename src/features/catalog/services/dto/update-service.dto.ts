@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsArray, IsEnum, IsOptional, IsString, IsUrl, IsUUID, ArrayMaxSize } from 'class-validator';
 import { ServiceStatus } from '@prisma/client';
 
 export class UpdateServiceDto {
@@ -22,4 +22,15 @@ export class UpdateServiceDto {
   @IsOptional()
   @IsEnum(ServiceStatus)
   status?: ServiceStatus;
+
+  @ApiPropertyOptional({
+    type: [String],
+    description: 'Danh sách URL ảnh mới (tối đa 5). Ảnh bị loại khỏi danh sách sẽ bị xoá trên Cloudinary.',
+    maxItems: 5,
+  })
+  @IsOptional()
+  @IsArray()
+  @ArrayMaxSize(5)
+  @IsUrl({}, { each: true })
+  imageUrls?: string[];
 }

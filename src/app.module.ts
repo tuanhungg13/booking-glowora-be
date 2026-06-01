@@ -19,10 +19,12 @@ import { StoreStaffModule } from './features/stores/staff/store-staff.module';
 import { AiModule } from './ai/ai.module';
 import { TelegramModule } from './telegram/telegram.module';
 import { GatewaysModule } from './gateways/gateways.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    CloudinaryModule,
     PrismaModule,
     RedisModule,
     IdentityModule,

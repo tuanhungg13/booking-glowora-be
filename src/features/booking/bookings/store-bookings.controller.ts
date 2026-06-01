@@ -24,7 +24,7 @@ export class StoreBookingsController {
   @ApiResponse({ status: 400, description: 'Tháng không đúng định dạng YYYY-MM' })
   @ApiResponse({ status: 403, description: 'Không có quyền xem lịch hẹn' })
   getCalendar(@ShopId() storeId: string, @Query() query: CalendarQueryDto) {
-    return this.bookingsService.findCalendar(storeId, query.month);
+    return this.bookingsService.findCalendar(storeId, query.month, query.status, query.staffId);
   }
 
   @Get()

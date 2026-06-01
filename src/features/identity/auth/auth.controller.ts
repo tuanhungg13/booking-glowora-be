@@ -3,6 +3,10 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
+import { VerifyOtpDto } from './dto/verify-otp.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { Public } from '../../../common/decorators/public.decorator';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { LocalAuthGuard } from './guards/local-auth.guard';
@@ -42,11 +46,18 @@ export class AuthController {
     return result;
   }
 
-  @ApiOperation({ summary: 'Đăng ký tài khoản (tự động gán role CUSTOMER)' })
+  @ApiOperation({ summary: 'Bước 1: Đăng ký — gửi OTP về email để xác nhận' })
   @Public()
   @Post('register')
   async register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
+  }
+
+  @ApiOperation({ summary: 'Bước 2: Xác nhận OTP — hoàn tất đăng ký tài khoản' })
+  @Public()
+  @Post('verify-otp')
+  async verifyOtp(@Body() dto: VerifyOtpDto) {
+    return this.authService.verifyRegisterOtp(dto);
   }
 
   @ApiOperation({ summary: 'Làm mới access token bằng refresh token' })
@@ -65,6 +76,20 @@ export class AuthController {
     return result;
   }
 
+  @ApiOperation({ summary: 'Bước 1: Quên mật khẩu — gửi OTP về email để xác nhận' })
+  @Public()
+  @Post('forgot-password')
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(dto);
+  }
+
+  @ApiOperation({ summary: 'Bước 2: Đặt lại mật khẩu — xác nhận OTP và cập nhật mật khẩu mới' })
+  @Public()
+  @Post('reset-password')
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    return this.authService.resetPassword(dto);
+  }
+
   @ApiOperation({ summary: 'Đăng xuất, blacklist refresh token' })
   @ApiBearerAuth()
   @Post('logout')
@@ -80,6 +105,16 @@ export class AuthController {
     res.clearCookie('refresh_token', COOKIE_BASE);
 
     return { success: true };
+  }
+
+  @ApiOperation({ summary: 'Đổi mật khẩu (yêu cầu đăng nhập)' })
+  @ApiBearerAuth()
+  @Post('change-password')
+  async changePassword(
+    @CurrentUser() user: CurrentUserPayload,
+    @Body() dto: ChangePasswordDto,
+  ) {
+    return this.authService.changePassword(user.id, dto);
   }
 
   @ApiOperation({ summary: 'Lấy thông tin user hiện tại kèm roles' })
