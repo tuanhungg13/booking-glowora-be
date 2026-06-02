@@ -4,8 +4,20 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+function convertDecimals(value: unknown): unknown {
+  if (Prisma.Decimal.isDecimal(value)) return (value as Prisma.Decimal).toNumber();
+  if (Array.isArray(value)) return value.map(convertDecimals);
+  if (value !== null && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>).map(([k, v]) => [k, convertDecimals(v)]),
+    );
+  }
+  return value;
+}
 
 @Injectable()
 export class TransformResponseInterceptor implements NestInterceptor {
@@ -27,7 +39,7 @@ export class TransformResponseInterceptor implements NestInterceptor {
           return {
             success: true,
             message: 'Thành công',
-            data: items,
+            data: convertDecimals(items),
             meta: {
               total,
               page: page ?? 1,
@@ -40,7 +52,7 @@ export class TransformResponseInterceptor implements NestInterceptor {
         return {
           success: true,
           message: 'Thành công',
-          data,
+          data: convertDecimals(data),
         };
       }),
     );

@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, Max, Min } from 'class-validator';
+import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class ReviewFilterDto {
@@ -8,6 +8,10 @@ export class ReviewFilterDto {
   @Max(5)
   @Type(() => Number)
   rating?: number;
+
+  @IsOptional()
+  @IsString()
+  serviceId?: string;
 
   @IsOptional()
   @IsInt()

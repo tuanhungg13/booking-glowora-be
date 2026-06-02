@@ -6,7 +6,7 @@ import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { CreateServiceVariantDto, UpdateServiceVariantDto } from './dto/service-variant.dto';
 
-type ServiceParams = { storeId?: string; status?: ServiceStatus; categoryId?: string; page?: number; limit?: number };
+type ServiceParams = { storeId?: string; status?: ServiceStatus; categoryId?: string; sort?: 'name' | 'name-desc' | 'price' | 'price-desc' | 'avgRating' | 'avgRating-asc'; page?: number; limit?: number };
 type PublicServiceParams = { storeId?: string; categoryId?: string; q?: string; minPrice?: number; maxPrice?: number; minRating?: number; maxRating?: number; sort?: 'avgRating' | 'price' | 'price-desc' | 'newest'; page?: number; limit?: number };
 
 const serviceInclude = {
@@ -44,7 +44,20 @@ export class ServicesService {
     private readonly cloudinary: CloudinaryService,
   ) {}
 
+  private async checkDuplicateName(name: string, storeId: string, excludeId?: string) {
+    const existing = await this.prisma.service.findFirst({
+      where: {
+        shopId: storeId,
+        name: { equals: name },
+        ...(excludeId && { id: { not: excludeId } }),
+      },
+      select: { id: true },
+    });
+    if (existing) throw new BadRequestException(`Dịch vụ "${name}" đã tồn tại trong cửa hàng`);
+  }
+
   async create(storeId: string, dto: CreateServiceDto) {
+    await this.checkDuplicateName(dto.name, storeId);
     const slug = await this.generateUniqueSlug(dto.name, storeId);
     return this.prisma.service.create({
       data: {
@@ -73,26 +86,78 @@ export class ServicesService {
   async findAll(params?: ServiceParams) {
     const page = params?.page ?? 1;
     const limit = params?.limit ?? 20;
-    const where = {
+    const where: Prisma.ServiceWhereInput = {
       ...(params?.storeId && { shopId: params.storeId }),
       ...(params?.status && { status: params.status }),
       ...(params?.categoryId && { categoryId: params.categoryId }),
     };
 
+    if (params?.sort === 'price' || params?.sort === 'price-desc') {
+      return this.findAllSortedByPrice(params, page, limit, params.sort === 'price-desc' ? 'desc' : 'asc');
+    }
+
+    const orderBy: Prisma.ServiceOrderByWithRelationInput =
+      params?.sort === 'name-desc' ? { name: 'desc' } :
+      params?.sort === 'avgRating' ? { avgRating: 'desc' } :
+      params?.sort === 'avgRating-asc' ? { avgRating: 'asc' } :
+      { name: 'asc' };
+
+    const ownerInclude = {
+      category: true,
+      variants: { where: { status: ServiceStatus.ACTIVE }, orderBy: { sortOrder: 'asc' as const } },
+      _count: { select: { staffs: true, bookingItems: true } },
+    };
+
     const [items, total] = await Promise.all([
-      this.prisma.service.findMany({
-        where,
-        orderBy: { name: 'asc' },
-        skip: (page - 1) * limit,
-        take: limit,
-        include: {
-          category: true,
-          variants: { where: { status: ServiceStatus.ACTIVE }, orderBy: { sortOrder: 'asc' } },
-          _count: { select: { staffs: true, bookingItems: true } },
-        },
-      }),
+      this.prisma.service.findMany({ where, orderBy, skip: (page - 1) * limit, take: limit, include: ownerInclude }),
       this.prisma.service.count({ where }),
     ]);
+
+    return { items, total, page, limit };
+  }
+
+  private async findAllSortedByPrice(params: ServiceParams, page: number, limit: number, direction: 'asc' | 'desc') {
+    const offset = (page - 1) * limit;
+    const dir = direction === 'desc' ? Prisma.sql`DESC` : Prisma.sql`ASC`;
+
+    const conds: Prisma.Sql[] = [Prisma.sql`sv.status = 'ACTIVE'`];
+    if (params.storeId) conds.push(Prisma.sql`s.shop_id = ${params.storeId}`);
+    if (params.status) conds.push(Prisma.sql`s.status = ${params.status}`);
+    if (params.categoryId) conds.push(Prisma.sql`s.category_id = ${params.categoryId}`);
+
+    const whereClause = Prisma.join(conds, ' AND ');
+
+    const [rows, countRows] = await Promise.all([
+      this.prisma.$queryRaw<{ id: string }[]>(Prisma.sql`
+        SELECT s.id
+        FROM services s
+        INNER JOIN service_variants sv ON sv.service_id = s.id
+        WHERE ${whereClause}
+        GROUP BY s.id
+        ORDER BY MIN(sv.price) ${dir}, s.id ASC
+        LIMIT ${limit} OFFSET ${offset}
+      `),
+      this.prisma.$queryRaw<{ total: bigint }[]>(Prisma.sql`
+        SELECT COUNT(DISTINCT s.id) AS total
+        FROM services s
+        INNER JOIN service_variants sv ON sv.service_id = s.id
+        WHERE ${whereClause}
+      `),
+    ]);
+
+    const total = Number(countRows[0]?.total ?? 0);
+    const ids = rows.map((r) => r.id);
+    if (!ids.length) return { items: [], total, page, limit };
+
+    const ownerInclude = {
+      category: true,
+      variants: { where: { status: ServiceStatus.ACTIVE }, orderBy: { sortOrder: 'asc' as const } },
+      _count: { select: { staffs: true, bookingItems: true } },
+    };
+
+    const items = await this.prisma.service.findMany({ where: { id: { in: ids } }, include: ownerInclude });
+    const order = new Map(ids.map((id, i) => [id, i]));
+    items.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
 
     return { items, total, page, limit };
   }
@@ -261,6 +326,7 @@ export class ServicesService {
 
   async update(id: string, storeId: string, dto: UpdateServiceDto) {
     const service = await this.findOne(id, storeId);
+    if (dto.name) await this.checkDuplicateName(dto.name, storeId, id);
     const slug = dto.name ? await this.generateUniqueSlug(dto.name, storeId, id) : undefined;
 
     if (dto.imageUrls !== undefined) {

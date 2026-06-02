@@ -100,6 +100,7 @@ export class ReviewsService {
       storeId,
       isVisible: true,
       ...(filter.rating ? { rating: filter.rating } : {}),
+      ...(filter.serviceId ? { serviceId: filter.serviceId } : {}),
     };
 
     const [items, total, breakdown] = await Promise.all([

@@ -320,11 +320,24 @@ export class StoresService {
   }
 
   async update(id: string, ownerId: string, dto: UpdateStoreDto) {
-    await this.checkOwnership(id, ownerId);
+    const store = await this.checkOwnership(id, ownerId);
+
+    if (dto.name && dto.name !== store.name) {
+      const duplicate = await this.prisma.store.findFirst({
+        where: { ownerId, name: { equals: dto.name }, id: { not: id } },
+        select: { id: true },
+      });
+      if (duplicate) throw new ConflictException(`Bạn đã có cửa hàng tên "${dto.name}" rồi`);
+    }
+
+    const slug = dto.name && dto.name !== store.name
+      ? await this.generateUniqueSlug(dto.name, dto.provinceId ?? store.provinceId ?? undefined)
+      : undefined;
+
     return this.mapStoreOwnerView(
       await this.prisma.store.update({
         where: { id },
-        data: dto,
+        data: { ...dto, ...(slug && { slug }) },
         include: storeListInclude,
       }),
     );
