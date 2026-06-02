@@ -24,33 +24,33 @@ import { PublicServiceQueryDto, ServiceQueryDto } from './dto/service-filter.dto
 import { Public } from '../../../common/decorators/public.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
-import { ShopId } from '../../../common/decorators/shop-id.decorator';
+import { StoreId } from '../../../common/decorators/store-id.decorator';
 
 @ApiTags('services')
-@ApiHeader({ name: 'x-shop-id', description: 'ID của shop', required: true })
+@ApiHeader({ name: 'x-store-id', description: 'ID của store', required: true })
 @Controller('services')
 export class ServicesController {
-  constructor(private readonly servicesService: ServicesService) {}
+  constructor(private readonly servicesService: ServicesService) { }
 
   @ApiOperation({ summary: 'Tạo dịch vụ mới' })
   @ApiBearerAuth()
   @Post()
   @RequirePermissions(Permissions.SERVICE.CREATE)
-  create(@ShopId() storeId: string, @Body() dto: CreateServiceDto) {
+  create(@StoreId() storeId: string, @Body() dto: CreateServiceDto) {
     return this.servicesService.create(storeId, dto);
   }
 
-  @ApiOperation({ summary: 'Khám phá dịch vụ công khai từ nhiều shop (public)' })
+  @ApiOperation({ summary: 'Khám phá dịch vụ công khai từ nhiều store (public)' })
   @Public()
   @Get('explore')
   findPublic(@Query() query: PublicServiceQueryDto) {
     return this.servicesService.findPublic(query);
   }
 
-  @ApiOperation({ summary: 'Lấy danh sách dịch vụ của shop (public, yêu cầu x-shop-id)' })
+  @ApiOperation({ summary: 'Lấy danh sách dịch vụ của store (public, yêu cầu x-store-id)' })
   @Public()
   @Get()
-  findAll(@ShopId() storeId: string, @Query() query: ServiceQueryDto) {
+  findAll(@StoreId() storeId: string, @Query() query: ServiceQueryDto) {
     return this.servicesService.findAll({ storeId, ...query });
   }
 
@@ -59,7 +59,7 @@ export class ServicesController {
   @Public()
   @Get(':id')
   findOne(
-    @ShopId() storeId: string,
+    @StoreId() storeId: string,
     @Param('id') id: string,
     @Query('userLat') userLat?: string,
     @Query('userLng') userLng?: string,
@@ -75,7 +75,7 @@ export class ServicesController {
   @Patch(':id')
   @RequirePermissions(Permissions.SERVICE.UPDATE)
   update(
-    @ShopId() storeId: string,
+    @StoreId() storeId: string,
     @Param('id') id: string,
     @Body() dto: UpdateServiceDto,
   ) {
@@ -88,7 +88,7 @@ export class ServicesController {
   @Post(':id/variants')
   @RequirePermissions(Permissions.SERVICE.UPDATE)
   addVariant(
-    @ShopId() storeId: string,
+    @StoreId() storeId: string,
     @Param('id') serviceId: string,
     @Body() dto: CreateServiceVariantDto,
   ) {
@@ -102,7 +102,7 @@ export class ServicesController {
   @Patch(':id/variants/:variantId')
   @RequirePermissions(Permissions.SERVICE.UPDATE)
   updateVariant(
-    @ShopId() storeId: string,
+    @StoreId() storeId: string,
     @Param('id') serviceId: string,
     @Param('variantId') variantId: string,
     @Body() dto: UpdateServiceVariantDto,
@@ -117,7 +117,7 @@ export class ServicesController {
   @Delete(':id/variants/:variantId')
   @RequirePermissions(Permissions.SERVICE.UPDATE)
   removeVariant(
-    @ShopId() storeId: string,
+    @StoreId() storeId: string,
     @Param('id') serviceId: string,
     @Param('variantId') variantId: string,
   ) {
@@ -130,7 +130,7 @@ export class ServicesController {
   @Patch(':id/staff')
   @RequirePermissions(Permissions.SERVICE.UPDATE)
   assignStaff(
-    @ShopId() storeId: string,
+    @StoreId() storeId: string,
     @Param('id') id: string,
     @Body() dto: AssignStaffDto,
   ) {
@@ -145,7 +145,7 @@ export class ServicesController {
   @RequirePermissions(Permissions.SERVICE.UPDATE)
   @UseInterceptors(FilesInterceptor('files', 5, { storage: memoryStorage() }))
   uploadImages(
-    @ShopId() storeId: string,
+    @StoreId() storeId: string,
     @Param('id') id: string,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
@@ -159,7 +159,7 @@ export class ServicesController {
   @Delete(':id/images')
   @RequirePermissions(Permissions.SERVICE.UPDATE)
   removeImage(
-    @ShopId() storeId: string,
+    @StoreId() storeId: string,
     @Param('id') id: string,
     @Body() dto: RemoveServiceImageDto,
   ) {
@@ -171,7 +171,7 @@ export class ServicesController {
   @ApiParam({ name: 'id', description: 'Service ID' })
   @Delete(':id')
   @RequirePermissions(Permissions.SERVICE.DELETE)
-  remove(@ShopId() storeId: string, @Param('id') id: string) {
+  remove(@StoreId() storeId: string, @Param('id') id: string) {
     return this.servicesService.remove(id, storeId);
   }
 }

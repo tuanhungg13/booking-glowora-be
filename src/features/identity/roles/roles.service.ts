@@ -14,17 +14,17 @@ export class RolesService {
 
   async create(dto: CreateRoleDto) {
     const existing = await this.prisma.role.findFirst({
-      where: { code: dto.code, shopId: dto.shopId ?? null },
+      where: { code: dto.code, storeId: dto.storeId ?? null },
     });
     if (existing) {
-      throw new ConflictException('Role code already exists for this shop');
+      throw new ConflictException('Role code already exists for this store');
     }
     return this.prisma.role.create({
       data: {
         name: dto.name,
         code: dto.code,
         description: dto.description,
-        shopId: dto.shopId,
+        storeId: dto.storeId,
         permissions: dto.permissionIds?.length
           ? { create: dto.permissionIds.map((id) => ({ permissionId: id })) }
           : undefined,
@@ -52,22 +52,22 @@ export class RolesService {
   async update(id: string, dto: UpdateRoleDto) {
     const current = await this.findOne(id);
     if (dto.code) {
-      const shopId = dto.shopId !== undefined ? dto.shopId : current.shopId;
+      const storeId = dto.storeId !== undefined ? dto.storeId : current.storeId;
       const existing = await this.prisma.role.findFirst({
-        where: { code: dto.code, shopId: shopId ?? null, NOT: { id } },
+        where: { code: dto.code, storeId: storeId ?? null, NOT: { id } },
       });
-      if (existing) throw new ConflictException('Role code already exists for this shop');
+      if (existing) throw new ConflictException('Role code already exists for this store');
     }
     const data: Prisma.RoleUpdateInput = {
       name: dto.name,
       code: dto.code,
       description: dto.description,
-      shop:
-        dto.shopId === undefined
+      store:
+        dto.storeId === undefined
           ? undefined
-          : dto.shopId === null
+          : dto.storeId === null
             ? { disconnect: true }
-            : { connect: { id: dto.shopId } },
+            : { connect: { id: dto.storeId } },
     };
     if (dto.permissionIds !== undefined) {
       data.permissions = {

@@ -181,9 +181,9 @@ Nhân viên gõ vào topic → Telegram gửi webhook đến server
 
 ### Checklist cho từng Nhân viên
 
-- [ ] Được invite vào shop (nhận `telegramLinkToken`)
+- [ ] Được invite vào store (nhận `telegramLinkToken`)
 - [ ] Chat với bot, gõ `/start <token>` để link Telegram cá nhân
-- [ ] Được add vào Telegram Group của shop
+- [ ] Được add vào Telegram Group của store
 
 ---
 

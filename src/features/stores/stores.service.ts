@@ -16,7 +16,7 @@ import { UpdateStoreDto } from './dto/update-store.dto';
 import { UpdateWorkingHoursDto } from './dto/update-working-hours.dto';
 
 const SHOP_OWNER_ROLE_CODE = 'SHOP_OWNER';
-const MAX_SHOP_ROLES_PER_USER = 3;
+const MAX_STORE_ROLES_PER_USER = 3;
 
 const storeListInclude = {
   workingHours: { orderBy: { dayOfWeek: 'asc' as const } },
@@ -68,7 +68,7 @@ export class StoresService {
     private readonly prisma: PrismaService,
     private readonly permissionCache: PermissionCacheService,
     private readonly systemLog: SystemLogService,
-  ) {}
+  ) { }
 
   async create(dto: CreateStoreDto, ownerId: string) {
     if (dto.provinceId) {
@@ -90,15 +90,15 @@ export class StoresService {
       throw new ConflictException('Store already exists for this owner and address');
     }
 
-    const shopRoleCount = await this.prisma.userRole.count({
-      where: { userId: ownerId, shopId: { not: null } },
+    const storeRoleCount = await this.prisma.userRole.count({
+      where: { userId: ownerId, storeId: { not: null } },
     });
-    if (shopRoleCount >= MAX_SHOP_ROLES_PER_USER) {
-      throw new BadRequestException('User has reached the maximum of 3 shop roles');
+    if (storeRoleCount >= MAX_STORE_ROLES_PER_USER) {
+      throw new BadRequestException('User has reached the maximum of 3 store roles');
     }
 
     const templateRole = await this.prisma.role.findFirst({
-      where: { code: SHOP_OWNER_ROLE_CODE, shopId: null },
+      where: { code: SHOP_OWNER_ROLE_CODE, storeId: null },
       include: { permissions: true },
     });
     if (!templateRole) {
@@ -142,7 +142,7 @@ export class StoresService {
           code: templateRole.code,
           description: templateRole.description,
           isSystem: false,
-          shopId: createdStore.id,
+          storeId: createdStore.id,
         },
       });
 
@@ -160,7 +160,7 @@ export class StoresService {
         data: {
           userId: ownerId,
           roleId: ownerRole.id,
-          shopId: createdStore.id,
+          storeId: createdStore.id,
         },
       });
 
@@ -254,7 +254,7 @@ export class StoresService {
       conditions.push(Prisma.sql`EXISTS (
         SELECT 1 FROM services srv
         LEFT JOIN service_categories cat ON srv.category_id = cat.id
-        WHERE srv.shop_id = s.id
+        WHERE srv.store_id = s.id
           AND srv.status = 'ACTIVE'
           AND (srv.category_id = ${filter.categoryId} OR cat.parent_id = ${filter.categoryId})
       )`);
@@ -292,12 +292,12 @@ export class StoresService {
     return stores.map((s) => this.mapStoreOwnerView(s));
   }
 
-  async findMyShops(userId: string) {
+  async findMyStores(userId: string) {
     const memberships = await this.prisma.userRole.findMany({
-      where: { userId, shopId: { not: null } },
+      where: { userId, storeId: { not: null } },
       include: {
         role: { select: { id: true, name: true, code: true } },
-        shop: {
+        store: {
           select: { id: true, name: true, slug: true, logoUrl: true, status: true },
         },
       },
@@ -305,13 +305,13 @@ export class StoresService {
     });
 
     return memberships
-      .filter((m) => m.shop !== null)
+      .filter((m) => m.store !== null)
       .map((m) => ({
-        shopId: m.shop!.id,
-        name: m.shop!.name,
-        slug: m.shop!.slug,
-        logoUrl: m.shop!.logoUrl,
-        status: m.shop!.status,
+        storeId: m.store!.id,
+        name: m.store!.name,
+        slug: m.store!.slug,
+        logoUrl: m.store!.logoUrl,
+        status: m.store!.status,
         roleId: m.role.id,
         roleCode: m.role.code,
         roleName: m.role.name,

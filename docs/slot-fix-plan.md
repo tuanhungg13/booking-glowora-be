@@ -1,8 +1,8 @@
 # Kế hoạch fix API lấy Slot hợp lệ
 
-## Trả lời câu hỏi: Có nên cấu hình `bookingBufferMins` theo từng shop không?
+## Trả lời câu hỏi: Có nên cấu hình `bookingBufferMins` theo từng store không?
 
-**Trả lời: Có — nên cấu hình theo shop.**
+**Trả lời: Có — nên cấu hình theo store.**
 
 **Lý do:** Store đã có pattern configurable cho các tham số tương tự:
 - `slotIntervalMins` — khoảng cách giữa các slot (mặc định 30 phút)
@@ -157,7 +157,7 @@ Ngoài ra bổ sung validation ở tầng DTO/schema khi tạo/cập nhật stor
 
 ---
 
-### Fix 5 — `BOOKING_BUFFER_MINS` hardcode → cấu hình theo shop
+### Fix 5 — `BOOKING_BUFFER_MINS` hardcode → cấu hình theo store
 
 **Files cần thay đổi:**
 - `prisma/schema.prisma` — thêm field vào model `Store`
@@ -165,7 +165,7 @@ Ngoài ra bổ sung validation ở tầng DTO/schema khi tạo/cập nhật stor
 
 **Nguyên nhân:**
 ```typescript
-const BOOKING_BUFFER_MINS = 30; // hardcode, không thay đổi được theo shop
+const BOOKING_BUFFER_MINS = 30; // hardcode, không thay đổi được theo store
 ```
 
 **Bước 1 — Thêm vào schema:**

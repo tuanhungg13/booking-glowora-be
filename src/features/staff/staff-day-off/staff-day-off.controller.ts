@@ -14,14 +14,14 @@ import { CreateStaffDayOffDto } from './dto/create-staff-day-off.dto';
 import { UpdateStaffDayOffDto } from './dto/update-staff-day-off.dto';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
-import { ShopId } from '../../../common/decorators/shop-id.decorator';
+import { StoreId } from '../../../common/decorators/store-id.decorator';
 
 @ApiTags('staff / day-off')
 @ApiBearerAuth()
-@ApiHeader({ name: 'x-shop-id', description: 'ID của shop', required: true })
+@ApiHeader({ name: 'x-store-id', description: 'ID của store', required: true })
 @Controller('staff/:staffId/day-off')
 export class StaffDayOffController {
-  constructor(private readonly staffDayOffService: StaffDayOffService) {}
+  constructor(private readonly staffDayOffService: StaffDayOffService) { }
 
   @ApiOperation({ summary: 'Đăng ký ngày nghỉ cho nhân viên' })
   @ApiParam({ name: 'staffId', description: 'Staff ID' })
@@ -29,7 +29,7 @@ export class StaffDayOffController {
   @Post()
   @RequirePermissions(Permissions.STAFF_DAY_OFF.CREATE)
   create(
-    @ShopId() storeId: string,
+    @StoreId() storeId: string,
     @Param('staffId') staffId: string,
     @Body() dto: CreateStaffDayOffDto,
   ) {
@@ -44,7 +44,7 @@ export class StaffDayOffController {
   @Get()
   @RequirePermissions(Permissions.STAFF_DAY_OFF.VIEW)
   findAll(
-    @ShopId() storeId: string,
+    @StoreId() storeId: string,
     @Param('staffId') staffId: string,
     @Query('from') from?: string,
     @Query('to') to?: string,
@@ -62,8 +62,12 @@ export class StaffDayOffController {
   @ApiResponse({ status: 404, description: 'Không tìm thấy' })
   @Get(':id')
   @RequirePermissions(Permissions.STAFF_DAY_OFF.VIEW)
-  findOne(@Param('id') id: string) {
-    return this.staffDayOffService.findOne(id);
+  findOne(
+    @StoreId() storeId: string,
+    @Param('staffId') staffId: string,
+    @Param('id') id: string,
+  ) {
+    return this.staffDayOffService.findOne(id, storeId, staffId);
   }
 
   @ApiOperation({ summary: 'Cập nhật ngày nghỉ' })
@@ -72,8 +76,13 @@ export class StaffDayOffController {
   @ApiResponse({ status: 200, description: 'Cập nhật thành công' })
   @Patch(':id')
   @RequirePermissions(Permissions.STAFF_DAY_OFF.UPDATE)
-  update(@Param('id') id: string, @Body() dto: UpdateStaffDayOffDto) {
-    return this.staffDayOffService.update(id, dto);
+  update(
+    @StoreId() storeId: string,
+    @Param('staffId') staffId: string,
+    @Param('id') id: string,
+    @Body() dto: UpdateStaffDayOffDto,
+  ) {
+    return this.staffDayOffService.update(id, storeId, staffId, dto);
   }
 
   @ApiOperation({ summary: 'Hủy ngày nghỉ' })
@@ -82,7 +91,11 @@ export class StaffDayOffController {
   @ApiResponse({ status: 200, description: 'Xóa thành công' })
   @Delete(':id')
   @RequirePermissions(Permissions.STAFF_DAY_OFF.DELETE)
-  remove(@Param('id') id: string) {
-    return this.staffDayOffService.remove(id);
+  remove(
+    @StoreId() storeId: string,
+    @Param('staffId') staffId: string,
+    @Param('id') id: string,
+  ) {
+    return this.staffDayOffService.remove(id, storeId, staffId);
   }
 }

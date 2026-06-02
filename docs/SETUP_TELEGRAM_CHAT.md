@@ -1,9 +1,9 @@
 # Hướng dẫn cấu hình Telegram Chat cho Glowora
 
-Tính năng chat cho phép khách hàng nhắn tin với shop qua giao diện web.
+Tính năng chat cho phép khách hàng nhắn tin với store qua giao diện web.
 AI (Gemini) sẽ tự trả lời; khi không xử lý được, hệ thống tự escalate lên nhân viên qua Telegram.
 
-Mỗi shop được liên kết với **1 Telegram Supergroup** (có Topics).
+Mỗi store được liên kết với **1 Telegram Supergroup** (có Topics).
 Mỗi cuộc hội thoại với khách = 1 Thread riêng trong group đó.
 
 ---
@@ -20,7 +20,7 @@ Khách nhắn tin (WebSocket)
    (hoặc [ESCALATE])
         │ Yes
         ▼
-  Tạo topic mới trong Telegram Group của shop
+  Tạo topic mới trong Telegram Group của store
   ──────────────────────────────────────────
   Group "Glowora Spa Hà Nội"
   ├── 📌 Nguyễn Văn A — 20/05   ← thread mới
@@ -83,7 +83,7 @@ Sau đó **restart server** để webhook được đăng ký lại với Telegr
 
 ---
 
-## Phần 3 — Tạo Telegram Group cho shop
+## Phần 3 — Tạo Telegram Group cho store
 
 ### 3.1 Tạo supergroup với Topics
 
@@ -117,9 +117,9 @@ Tìm `"chat": { "id": -1001234567890 }` trong response.
 
 ---
 
-## Phần 4 — Liên kết group với shop (API)
+## Phần 4 — Liên kết group với store (API)
 
-Sau khi có `telegramGroupId`, gọi API với tài khoản **shop owner**:
+Sau khi có `telegramGroupId`, gọi API với tài khoản **store owner**:
 
 ```http
 PATCH /stores/:storeId/telegram-group
@@ -154,7 +154,7 @@ Authorization: Bearer <access_token>
 ## Phần 5 — Nhân viên link tài khoản Telegram cá nhân (tùy chọn)
 
 > Bước này **không bắt buộc** nếu đã dùng Group mode (Phần 3–4).
-> Chỉ cần khi shop chưa setup group — khi đó hệ thống fallback DM cho nhân viên đầu tiên có `telegramChatId`.
+> Chỉ cần khi store chưa setup group — khi đó hệ thống fallback DM cho nhân viên đầu tiên có `telegramChatId`.
 
 1. Nhân viên đăng nhập hệ thống → gọi API:
    ```http
@@ -163,7 +163,7 @@ Authorization: Bearer <access_token>
    ```
    Response trả về `{ "token": "abc123..." }`
 
-2. Nhân viên mở Telegram → tìm bot của shop → nhắn:
+2. Nhân viên mở Telegram → tìm bot của store → nhắn:
    ```
    /start abc123...
    ```

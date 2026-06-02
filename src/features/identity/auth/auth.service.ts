@@ -33,7 +33,7 @@ export class AuthService {
     private readonly redis: RedisService,
     private readonly mail: MailService,
     private readonly systemLog: SystemLogService,
-  ) {}
+  ) { }
 
   async validateUser(email: string, password: string) {
     const user = await this.prisma.user.findUnique({
@@ -110,7 +110,7 @@ export class AuthService {
     if (existing) throw new ConflictException('Email already registered');
 
     const customerRole = await this.prisma.role.findFirst({
-      where: { code: CUSTOMER_ROLE_CODE, shopId: null },
+      where: { code: CUSTOMER_ROLE_CODE, storeId: null },
     });
 
     const user = await this.prisma.user.create({
@@ -120,7 +120,7 @@ export class AuthService {
         fullName: pending.fullName,
         phone: pending.phone ?? undefined,
         ...(customerRole
-          ? { userRoles: { create: { roleId: customerRole.id, shopId: null } } }
+          ? { userRoles: { create: { roleId: customerRole.id, storeId: null } } }
           : {}),
       },
       select: { id: true, email: true, fullName: true, phone: true, createdAt: true },
@@ -199,7 +199,7 @@ export class AuthService {
         createdAt: true,
         userRoles: {
           select: {
-            shopId: true,
+            storeId: true,
             role: { select: { id: true, code: true, name: true } },
           },
         },
@@ -211,20 +211,20 @@ export class AuthService {
       roles: user.userRoles.map((ur) => ({
         code: ur.role.code,
         name: ur.role.name,
-        shopId: ur.shopId,
+        storeId: ur.storeId,
       })),
       userRoles: undefined,
     };
   }
 
-  async getPermissionMatrix(userId: string, shopId?: string) {
-    // shopId=undefined → tìm system role (shopId IS NULL)
-    // shopId có giá trị → tìm shop-specific role
+  async getPermissionMatrix(userId: string, storeId?: string) {
+    // storeId=undefined → tìm system role (storeId IS NULL)
+    // storeId có giá trị → tìm store-specific role
     const userRole = await this.prisma.userRole.findFirst({
-      where: { userId, shopId: shopId ?? null },
+      where: { userId, storeId: storeId ?? null },
       select: {
         roleId: true,
-        shopId: true,
+        storeId: true,
         role: {
           select: {
             permissions: { select: { permission: { select: { code: true } } } },
@@ -234,7 +234,7 @@ export class AuthService {
     });
 
     if (!userRole) {
-      return { roleId: null, shopId: shopId ?? null, grantedPermissionCodes: [] };
+      return { roleId: null, storeId: storeId ?? null, grantedPermissionCodes: [] };
     }
 
     const granted = new Set(userRole.role.permissions.map((rp) => rp.permission.code));
@@ -246,7 +246,7 @@ export class AuthService {
 
     return {
       roleId: userRole.roleId,
-      shopId: userRole.shopId,
+      storeId: userRole.storeId,
       permissionMatrix,
     };
   }

@@ -22,7 +22,7 @@
 13. [Phase 6 — User Roles (SHOP_OWNER)](#13-phase-6--user-roles-shop_owner)
 14. [Phase 7 — Staff Profiles + User Roles (SHOP_STAFF)](#14-phase-7--staff-profiles--user-roles-shop_staff)
 15. [Phase 8 — Staff Schedules](#15-phase-8--staff-schedules)
-16. [Phase 9 — Shop-Specific Service Categories](#16-phase-9--shop-specific-service-categories)
+16. [Phase 9 — Shop-Specific Service Categories](#16-phase-9--store-specific-service-categories)
 17. [Phase 10 — Services + Variants](#17-phase-10--services--variants)
 18. [Phase 11 — Staff–Service Assignments](#18-phase-11--staffservice-assignments)
 19. [Thứ tự INSERT để tránh FK violation](#19-thứ-tự-insert-để-tránh-fk-violation)
@@ -654,13 +654,13 @@ Global categories (shopId = NULL, có slug)   ← seeded bởi seed.ts (18 categ
 | `parentId` | NULL (hoặc trỏ global) | **Bắt buộc trỏ global** (validator cứng) |
 | `@@unique([name, shopId])` | Unique per NULL group | Unique per store |
 
-MySQL cho phép nhiều NULL trong unique index → nhiều shop category có `slug = NULL` là hợp lệ.
+MySQL cho phép nhiều NULL trong unique index → nhiều store category có `slug = NULL` là hợp lệ.
 
 ---
 
 ### 16.1 Template danh mục theo từng loại store
 
-Mỗi store được tạo **5–6 shop-specific categories**, mỗi category có `parentId` trỏ về 1 global category.
+Mỗi store được tạo **5–6 store-specific categories**, mỗi category có `parentId` trỏ về 1 global category.
 
 #### Spa Nghỉ Dưỡng — 5 danh mục
 
@@ -770,7 +770,7 @@ Mỗi store được tạo **5–6 shop-specific categories**, mỗi category c�
 ### 16.2 SQL Template
 
 **Lưu ý quan trọng:**
-- `slug = NULL` — shop category không có slug
+- `slug = NULL` — store category không có slug
 - `parent_id` dùng subquery lấy global category theo slug
 - `@@unique([name, shopId])` được đảm bảo vì mỗi tên chỉ xuất hiện 1 lần trong 1 store
 
@@ -813,22 +813,22 @@ ON DUPLICATE KEY UPDATE
 
 ---
 
-### 16.3 Mapping services → shop categories
+### 16.3 Mapping services → store categories
 
-Sau khi tạo categories, mỗi service sẽ được gán `category_id` trỏ đến shop category tương ứng (KHÔNG phải global category):
+Sau khi tạo categories, mỗi service sẽ được gán `category_id` trỏ đến store category tương ứng (KHÔNG phải global category):
 
 ```
-Service "Massage Đá Nóng" → category: "Massage Trị Liệu" (shop category của store đó)
-Service "Facial Vitamin C" → category: "Chăm Sóc Da Mặt" (shop category của store đó)
-Service "Tắm Trắng Carbon" → category: "Tắm Trắng & Xông Hơi" (shop category của store đó)
+Service "Massage Đá Nóng" → category: "Massage Trị Liệu" (store category của store đó)
+Service "Facial Vitamin C" → category: "Chăm Sóc Da Mặt" (store category của store đó)
+Service "Tắm Trắng Carbon" → category: "Tắm Trắng & Xông Hơi" (store category của store đó)
 ```
 
-Generator sẽ map dịch vụ → shop category theo `categoryKey` trong service template:
+Generator sẽ map dịch vụ → store category theo `categoryKey` trong service template:
 
 ```typescript
 type ServiceTemplate = {
   name: string;
-  shopCategoryKey: string;  // key để map sang shop category của store đó
+  shopCategoryKey: string;  // key để map sang store category của store đó
   htmlDescription: string;
   baseSlug: string;
   variantCount: 2 | 3 | 4;
@@ -839,7 +839,7 @@ type ServiceTemplate = {
 // Ví dụ:
 {
   name: 'Massage Đá Nóng',
-  shopCategoryKey: 'massage-tri-lieu',  // → shop category tên "Massage Trị Liệu"
+  shopCategoryKey: 'massage-tri-lieu',  // → store category tên "Massage Trị Liệu"
   htmlDescription: '...',
   baseSlug: 'massage-da-nong',
   variantCount: 3,
@@ -861,7 +861,7 @@ INSERT INTO `services`
   (`id`, `shop_id`, `category_id`, `name`, `slug`, `description`, `image_url`, `status`, `avg_rating`, `created_at`, `updated_at`)
 VALUES
   ('{uuid}', '{store_id}',
-   '{shop_category_id}',    -- UUID của shop category thuộc store này (đã tạo ở Phase 9)
+   '{shop_category_id}',    -- UUID của store category thuộc store này (đã tạo ở Phase 9)
    'Massage Đá Nóng',
    'massage-da-nong-1',     -- slug unique trong store: {service-slug}-{local_index}
    '{HTML_DESCRIPTION}',    -- HTML string đầy đủ như template ở trên
@@ -872,8 +872,8 @@ VALUES
   ...
 ```
 
-> **Lưu ý:** `category_id` trỏ về **shop category** (shopId = store_id), KHÔNG phải global category.
-> Generator tra cứu UUID của shop category bằng map đã build trong bộ nhớ khi xử lý Phase 9.
+> **Lưu ý:** `category_id` trỏ về **store category** (shopId = store_id), KHÔNG phải global category.
+> Generator tra cứu UUID của store category bằng map đã build trong bộ nhớ khi xử lý Phase 9.
 
 ### Service Variants
 
@@ -970,13 +970,13 @@ for (const staff of storeStaff) {
 5.  staff                               — FK: user_id → users.id, store_id → stores.id
 6.  user_roles (SHOP_STAFF)             — FK: user_id → users.id, shop_id → stores.id
 7.  staff_schedules                     — FK: staff_id → staff.id, shop_id → stores.id
-8.  service_categories (shop-specific)  — FK: shop_id → stores.id, parent_id → service_categories.id (global)
-9.  services                            — FK: shop_id → stores.id, category_id → service_categories.id (shop)
+8.  service_categories (store-specific)  — FK: shop_id → stores.id, parent_id → service_categories.id (global)
+9.  services                            — FK: shop_id → stores.id, category_id → service_categories.id (store)
 10. service_variants                    — FK: service_id → services.id
 11. staff_services                      — FK: staff_id → staff.id, service_id → services.id
 ```
 
-> **Quan trọng bước 8:** Global categories (`slug` không NULL) phải tồn tại TRƯỚC khi insert shop categories.
+> **Quan trọng bước 8:** Global categories (`slug` không NULL) phải tồn tại TRƯỚC khi insert store categories.
 > Điều này có nghĩa `pnpm run db:seed` (tạo global categories) phải chạy trước `db:seed:200`.
 
 ---
@@ -1010,7 +1010,7 @@ Output:
 ✅ Section 6:  1,043 staff profiles
 ✅ Section 7:  1,043 staff roles
 ✅ Section 8:  5,215 staff schedules
-✅ Section 9:  1,087 shop-specific service categories
+✅ Section 9:  1,087 store-specific service categories
 ✅ Section 10: 5,847 services
 ✅ Section 11: 14,332 service variants
 ✅ Section 12: 16,891 staff-service assignments
@@ -1067,7 +1067,7 @@ FROM stores s
 WHERE s.email LIKE '%@glowora.local'
 LIMIT 10;
 
--- Kiểm tra shop category có parent hợp lệ không
+-- Kiểm tra store category có parent hợp lệ không
 SELECT sc.name, sc.shop_id, p.name as parent_name, p.slug as parent_slug
 FROM service_categories sc
 JOIN service_categories p ON p.id = sc.parent_id
@@ -1075,7 +1075,7 @@ WHERE sc.shop_id IN (SELECT id FROM stores WHERE email LIKE '%@glowora.local')
   AND p.shop_id IS NULL  -- parent phải là global category
 LIMIT 10;
 
--- Kiểm tra service trỏ đúng shop category (không trỏ global)
+-- Kiểm tra service trỏ đúng store category (không trỏ global)
 SELECT COUNT(*) as wrong_category_count
 FROM services s
 JOIN service_categories sc ON sc.id = s.category_id
@@ -1097,8 +1097,8 @@ LIMIT 5;  -- phải trả về 0 rows
 - [ ] Mỗi store có 3–10 staff
 - [ ] Mỗi store có 20–40 services
 - [ ] Mỗi store có đúng 7 working_hour records
-- [ ] Mỗi store có 5–6 shop-specific categories (slug = NULL, parentId → global)
-- [ ] Không có service nào trỏ về global category (phải trỏ shop category)
+- [ ] Mỗi store có 5–6 store-specific categories (slug = NULL, parentId → global)
+- [ ] Không có service nào trỏ về global category (phải trỏ store category)
 - [ ] Không có service nào có 0 variant
 - [ ] Không có service nào có 0 staff được assign
 - [ ] Login được với `owner.s001@glowora.local` / `Owner@123456`
@@ -1116,7 +1116,7 @@ LIMIT 5;  -- phải trả về 0 rows
 | user_roles | 800 | **1,250** | 2,200 | owners + staff |
 | staff profiles | 600 | **1,050** | 2,000 | |
 | staff_schedules | 3,000 | **5,250** | 12,000 | 5–6 days per staff |
-| **service_categories (shop)** | **1,000** | **1,087** | **1,200** | **5–6 per store, slug=NULL** |
+| **service_categories (store)** | **1,000** | **1,087** | **1,200** | **5–6 per store, slug=NULL** |
 | services | 4,000 | **5,800** | 8,000 | 20–40 per store |
 | service_variants | 5,000 | **13,500** | 32,000 | 1–4 per service |
 | staff_services | 8,000 | **16,000** | 40,000 | 50–70% coverage |

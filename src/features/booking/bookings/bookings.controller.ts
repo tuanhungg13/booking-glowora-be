@@ -41,12 +41,12 @@ export class BookingsController {
   @ApiParam({ name: 'id', description: 'ID của lịch hẹn' })
   @ApiResponse({ status: 200, description: 'Chi tiết lịch hẹn' })
   @ApiResponse({ status: 404, description: 'Không tìm thấy lịch hẹn' })
-  findOne(@Param('id') id: string) {
-    return this.bookingsService.findOne(id);
+  findOne(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
+    return this.bookingsService.findOneForUser(id, user.id);
   }
 
   @Patch(':id/cancel')
-  @RequirePermissions(Permissions.APPOINTMENT.DELETE)
+  @RequirePermissions(Permissions.APPOINTMENT.VIEW)
   @ApiOperation({ summary: 'Hủy lịch hẹn', description: 'Khách hàng hủy lịch hẹn của mình. Chỉ hủy được khi lịch chưa được xác nhận hoặc đang chờ xử lý.' })
   @ApiParam({ name: 'id', description: 'ID của lịch hẹn cần hủy' })
   @ApiResponse({ status: 200, description: 'Hủy lịch hẹn thành công' })
@@ -68,7 +68,7 @@ export class BookingsController {
   @ApiResponse({ status: 200, description: 'Xóa lịch hẹn thành công' })
   @ApiResponse({ status: 403, description: 'Không có quyền xóa lịch hẹn' })
   @ApiResponse({ status: 404, description: 'Không tìm thấy lịch hẹn' })
-  remove(@Param('id') id: string) {
-    return this.bookingsService.remove(id);
+  remove(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
+    return this.bookingsService.remove(id, user.id);
   }
 }

@@ -58,7 +58,7 @@ export class UpdateUserDto {
 
   @ApiPropertyOptional({
     type: [UserRoleAssignmentDto],
-    description: 'List of roles assigned to the user in specific shops',
+    description: 'List of roles assigned to the user in specific stores',
   })
   @IsOptional()
   @IsArray()

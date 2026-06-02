@@ -4,7 +4,7 @@ import { CurrentUser, type CurrentUserPayload } from '../../../common/decorators
 import { Public } from '../../../common/decorators/public.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
-import { ShopId } from '../../../common/decorators/shop-id.decorator';
+import { StoreId } from '../../../common/decorators/store-id.decorator';
 import { StoreStaffService } from './store-staff.service';
 import { InviteStaffDto } from './dto/invite-staff.dto';
 import { AcceptInviteDto } from './dto/accept-invite.dto';
@@ -13,19 +13,19 @@ import { UpdateStaffDto } from './dto/update-staff.dto';
 @ApiTags('stores/staff')
 @Controller('store-staff')
 export class StoreStaffController {
-  constructor(private readonly storeStaffService: StoreStaffService) {}
+  constructor(private readonly storeStaffService: StoreStaffService) { }
 
   @ApiOperation({ summary: 'List all staff of a store' })
   @Public()
   @Get()
-  findAll(@ShopId() storeId: string) {
+  findAll(@StoreId() storeId: string) {
     return this.storeStaffService.findAll(storeId);
   }
 
   @ApiOperation({ summary: 'Get staff detail' })
   @Public()
   @Get(':staffId')
-  findOne(@ShopId() storeId: string, @Param('staffId') staffId: string) {
+  findOne(@StoreId() storeId: string, @Param('staffId') staffId: string) {
     return this.storeStaffService.findOne(storeId, staffId);
   }
 
@@ -34,7 +34,7 @@ export class StoreStaffController {
   @RequirePermissions(Permissions.STAFF.INVITE)
   @Post('invite')
   invite(
-    @ShopId() storeId: string,
+    @StoreId() storeId: string,
     @Body() dto: InviteStaffDto,
     @CurrentUser() user: CurrentUserPayload,
   ) {
@@ -46,7 +46,7 @@ export class StoreStaffController {
   @RequirePermissions(Permissions.STAFF.UPDATE)
   @Patch(':staffId')
   update(
-    @ShopId() storeId: string,
+    @StoreId() storeId: string,
     @Param('staffId') staffId: string,
     @Body() dto: UpdateStaffDto,
     @CurrentUser() user: CurrentUserPayload,
@@ -54,12 +54,12 @@ export class StoreStaffController {
     return this.storeStaffService.update(storeId, user.id, staffId, dto);
   }
 
-  @ApiOperation({ summary: 'Deactivate staff and revoke shop role' })
+  @ApiOperation({ summary: 'Deactivate staff and revoke store role' })
   @ApiBearerAuth()
   @RequirePermissions(Permissions.STAFF.REMOVE)
   @Delete(':staffId')
   remove(
-    @ShopId() storeId: string,
+    @StoreId() storeId: string,
     @Param('staffId') staffId: string,
     @CurrentUser() user: CurrentUserPayload,
   ) {
@@ -70,7 +70,7 @@ export class StoreStaffController {
   @ApiBearerAuth()
   @Get('me/telegram-status')
   getMyTelegramStatus(
-    @ShopId() storeId: string,
+    @StoreId() storeId: string,
     @CurrentUser() user: CurrentUserPayload,
   ) {
     return this.storeStaffService.getMyTelegramStatus(storeId, user.id);
@@ -80,7 +80,7 @@ export class StoreStaffController {
   @ApiBearerAuth()
   @Post('me/telegram-token')
   generateTelegramToken(
-    @ShopId() storeId: string,
+    @StoreId() storeId: string,
     @CurrentUser() user: CurrentUserPayload,
   ) {
     return this.storeStaffService.generateTelegramToken(storeId, user.id);
@@ -90,7 +90,7 @@ export class StoreStaffController {
 @ApiTags('staff-invites')
 @Controller('staff-invites')
 export class StaffInvitesController {
-  constructor(private readonly storeStaffService: StoreStaffService) {}
+  constructor(private readonly storeStaffService: StoreStaffService) { }
 
   @ApiOperation({ summary: 'Accept a staff invite using token' })
   @ApiBearerAuth()

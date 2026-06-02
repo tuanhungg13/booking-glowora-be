@@ -3,21 +3,21 @@ import { IsOptional, IsString, IsArray, IsUUID } from 'class-validator';
 
 export class CreateRoleDto {
   @ApiProperty({
-    example: 'Shop Manager',
+    example: 'Store Manager',
     description: 'The display name of the role',
   })
   @IsString()
   name!: string;
 
   @ApiProperty({
-    example: 'SHOP_MANAGER',
+    example: 'STORE_MANAGER',
     description: 'The unique code for the role',
   })
   @IsString()
   code!: string;
 
   @ApiPropertyOptional({
-    example: 'Responsible for managing shop operations and staff.',
+    example: 'Responsible for managing store operations and staff.',
     description: 'A brief description of the role',
   })
   @IsOptional()
@@ -26,14 +26,18 @@ export class CreateRoleDto {
 
   @ApiPropertyOptional({
     example: '550e8400-e29b-41d4-a716-446655440000',
-    description: 'The UUID of the shop this role belongs to (null for system roles)',
+    description:
+      'The UUID of the store this role belongs to (null for system roles)',
   })
   @IsOptional()
   @IsUUID()
-  shopId?: string;
+  storeId?: string;
 
   @ApiPropertyOptional({
-    example: ['550e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440003'],
+    example: [
+      '550e8400-e29b-41d4-a716-446655440002',
+      '550e8400-e29b-41d4-a716-446655440003',
+    ],
     description: 'List of permission UUIDs associated with this role',
   })
   @IsOptional()

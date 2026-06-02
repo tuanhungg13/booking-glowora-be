@@ -1,14 +1,28 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiHeader, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiHeader,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { CreateShopCategoryDto } from './dto/create-shop-category.dto';
-import { UpdateShopCategoryDto } from './dto/update-shop-category.dto';
+import { CreateStoreCategoryDto } from './dto/create-store-category.dto';
+import { UpdateStoreCategoryDto } from './dto/update-store-category.dto';
 import { Public } from '../../../common/decorators/public.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
-import { ShopId } from '../../../common/decorators/shop-id.decorator';
+import { StoreId } from '../../../common/decorators/store-id.decorator';
 
 @ApiTags('categories')
 @Controller('categories')
@@ -52,7 +66,9 @@ export class CategoriesController {
     return this.categoriesService.findAll();
   }
 
-  @ApiOperation({ summary: 'Chi tiết danh mục hệ thống kèm danh mục con (public)' })
+  @ApiOperation({
+    summary: 'Chi tiết danh mục hệ thống kèm danh mục con (public)',
+  })
   @ApiParam({ name: 'id', description: 'Category ID hoặc slug' })
   @Public()
   @Get(':id')
@@ -60,47 +76,50 @@ export class CategoriesController {
     return this.categoriesService.findOne(id);
   }
 
-  // ── Shop: danh mục của shop (cấp 2) ───────────────────────────────────────
+  // Store categories (level 2)
 
-  @ApiOperation({ summary: 'Tạo danh mục riêng của shop (shop owner)' })
-  @ApiHeader({ name: 'x-shop-id', required: true })
+  @ApiOperation({ summary: 'Tạo danh mục riêng của store (store owner)' })
+  @ApiHeader({ name: 'x-store-id', required: true })
   @ApiBearerAuth()
-  @Post('shop')
+  @Post('store')
   @RequirePermissions(Permissions.CATEGORY.CREATE)
-  createShopCategory(@ShopId() shopId: string, @Body() dto: CreateShopCategoryDto) {
-    return this.categoriesService.createShopCategory(shopId, dto);
-  }
-
-  @ApiOperation({ summary: 'Danh sách danh mục của shop (shop owner)' })
-  @ApiHeader({ name: 'x-shop-id', required: true })
-  @ApiBearerAuth()
-  @Get('shop/list')
-  @RequirePermissions(Permissions.CATEGORY.VIEW)
-  findShopCategories(@ShopId() shopId: string) {
-    return this.categoriesService.findShopCategories(shopId);
-  }
-
-  @ApiOperation({ summary: 'Cập nhật danh mục của shop (shop owner)' })
-  @ApiHeader({ name: 'x-shop-id', required: true })
-  @ApiBearerAuth()
-  @ApiParam({ name: 'id' })
-  @Patch('shop/:id')
-  @RequirePermissions(Permissions.CATEGORY.UPDATE)
-  updateShopCategory(
-    @ShopId() shopId: string,
-    @Param('id') id: string,
-    @Body() dto: UpdateShopCategoryDto,
+  createStoreCategory(
+    @StoreId() storeId: string,
+    @Body() dto: CreateStoreCategoryDto,
   ) {
-    return this.categoriesService.updateShopCategory(id, shopId, dto);
+    return this.categoriesService.createStoreCategory(storeId, dto);
   }
 
-  @ApiOperation({ summary: 'Xóa danh mục của shop (shop owner)' })
-  @ApiHeader({ name: 'x-shop-id', required: true })
+  @ApiOperation({ summary: 'Danh sách danh mục của store (store owner)' })
+  @ApiHeader({ name: 'x-store-id', required: true })
+  @ApiBearerAuth()
+  @Get('store/list')
+  @RequirePermissions(Permissions.CATEGORY.VIEW)
+  findStoreCategories(@StoreId() storeId: string) {
+    return this.categoriesService.findStoreCategories(storeId);
+  }
+
+  @ApiOperation({ summary: 'Cập nhật danh mục của store (store owner)' })
+  @ApiHeader({ name: 'x-store-id', required: true })
   @ApiBearerAuth()
   @ApiParam({ name: 'id' })
-  @Delete('shop/:id')
+  @Patch('store/:id')
+  @RequirePermissions(Permissions.CATEGORY.UPDATE)
+  updateStoreCategory(
+    @StoreId() storeId: string,
+    @Param('id') id: string,
+    @Body() dto: UpdateStoreCategoryDto,
+  ) {
+    return this.categoriesService.updateStoreCategory(id, storeId, dto);
+  }
+
+  @ApiOperation({ summary: 'Xóa danh mục của store (store owner)' })
+  @ApiHeader({ name: 'x-store-id', required: true })
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id' })
+  @Delete('store/:id')
   @RequirePermissions(Permissions.CATEGORY.DELETE)
-  removeShopCategory(@ShopId() shopId: string, @Param('id') id: string) {
-    return this.categoriesService.removeShopCategory(id, shopId);
+  removeStoreCategory(@StoreId() storeId: string, @Param('id') id: string) {
+    return this.categoriesService.removeStoreCategory(id, storeId);
   }
 }

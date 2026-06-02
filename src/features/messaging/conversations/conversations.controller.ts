@@ -14,12 +14,12 @@ import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
-import { ShopId } from '../../../common/decorators/shop-id.decorator';
+import { StoreId } from '../../../common/decorators/store-id.decorator';
 
 @ApiTags('conversations')
 @Controller('conversations')
 export class ConversationsController {
-  constructor(private readonly conversationsService: ConversationsService) {}
+  constructor(private readonly conversationsService: ConversationsService) { }
 
   @ApiOperation({ summary: 'Tạo cuộc hội thoại mới' })
   @ApiBearerAuth()
@@ -31,7 +31,7 @@ export class ConversationsController {
 
   @ApiOperation({ summary: 'Lấy danh sách tất cả hội thoại (admin)' })
   @ApiQuery({ name: 'customerId', required: false, description: 'Lọc theo khách hàng' })
-  @ApiQuery({ name: 'storeId', required: false, description: 'Lọc theo shop' })
+  @ApiQuery({ name: 'storeId', required: false, description: 'Lọc theo store' })
   @ApiQuery({ name: 'skip', required: false, type: Number })
   @ApiQuery({ name: 'take', required: false, type: Number })
   @ApiBearerAuth()
@@ -51,14 +51,14 @@ export class ConversationsController {
     });
   }
 
-  @ApiOperation({ summary: 'Lấy danh sách hội thoại của shop (staff view)' })
+  @ApiOperation({ summary: 'Lấy danh sách hội thoại của store (staff view)' })
   @ApiQuery({ name: 'skip', required: false, type: Number })
   @ApiQuery({ name: 'take', required: false, type: Number })
   @ApiBearerAuth()
   @RequirePermissions(Permissions.CONVERSATION.VIEW)
   @Get('store')
   findByStore(
-    @ShopId() storeId: string,
+    @StoreId() storeId: string,
     @Query('skip') skip?: string,
     @Query('take') take?: string,
   ) {

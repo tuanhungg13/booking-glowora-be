@@ -12,6 +12,7 @@ export class StaffDayOffService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(storeId: string, staffId: string, dto: CreateStaffDayOffDto) {
+    await this.assertStaffInStore(storeId, staffId);
     const date = new Date(dto.date);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -20,14 +21,14 @@ export class StaffDayOffService {
     }
 
     const existing = await this.prisma.staffDayOff.findFirst({
-      where: { shopId: storeId, staffId, date },
+      where: { storeId, staffId, date },
     });
     if (existing) {
       throw new BadRequestException('Day off already registered for this date');
     }
 
     return this.prisma.staffDayOff.create({
-      data: { shopId: storeId, staffId, date, reason: dto.reason },
+      data: { storeId, staffId, date, reason: dto.reason },
       include: dayOffInclude,
     });
   }
@@ -35,7 +36,7 @@ export class StaffDayOffService {
   async findAll(storeId: string, staffId: string, params?: { from?: Date; to?: Date }) {
     return this.prisma.staffDayOff.findMany({
       where: {
-        shopId: storeId,
+        storeId,
         staffId,
         ...(params?.from || params?.to
           ? {
@@ -51,17 +52,21 @@ export class StaffDayOffService {
     });
   }
 
-  async findOne(id: string) {
-    const dayOff = await this.prisma.staffDayOff.findUnique({
-      where: { id },
+  async findOne(id: string, storeId?: string, staffId?: string) {
+    const dayOff = await this.prisma.staffDayOff.findFirst({
+      where: {
+        id,
+        ...(storeId && { storeId }),
+        ...(staffId && { staffId }),
+      },
       include: { staff: { include: { user: { select: { id: true, fullName: true, email: true, phone: true } } } } },
     });
     if (!dayOff) throw new NotFoundException('Staff day off not found');
     return dayOff;
   }
 
-  async update(id: string, dto: UpdateStaffDayOffDto) {
-    await this.findOne(id);
+  async update(id: string, storeId: string, staffId: string, dto: UpdateStaffDayOffDto) {
+    await this.findOne(id, storeId, staffId);
     if (dto.date) {
       const date = new Date(dto.date);
       const today = new Date();
@@ -80,9 +85,17 @@ export class StaffDayOffService {
     });
   }
 
-  async remove(id: string) {
-    await this.findOne(id);
+  async remove(id: string, storeId: string, staffId: string) {
+    await this.findOne(id, storeId, staffId);
     await this.prisma.staffDayOff.delete({ where: { id } });
     return { deleted: true };
+  }
+
+  private async assertStaffInStore(storeId: string, staffId: string) {
+    const staff = await this.prisma.staff.findFirst({
+      where: { id: staffId, storeId },
+      select: { id: true },
+    });
+    if (!staff) throw new NotFoundException('Staff not found in this store');
   }
 }

@@ -100,31 +100,31 @@ export class StoreStaffService {
         data: { userId, storeId: invite.storeId, status: StaffStatus.ACTIVE },
       });
 
-      let shopStaffRole = await tx.role.findFirst({
-        where: { code: STAFF_ROLE_CODE, shopId: invite.storeId },
+      let storeStaffRole = await tx.role.findFirst({
+        where: { code: STAFF_ROLE_CODE, storeId: invite.storeId },
       });
 
-      if (!shopStaffRole) {
+      if (!storeStaffRole) {
         const template = await tx.role.findFirst({
-          where: { code: STAFF_ROLE_CODE, shopId: null },
+          where: { code: STAFF_ROLE_CODE, storeId: null },
           include: { permissions: true },
         });
         if (!template) {
           throw new BadRequestException('SHOP_STAFF template role không tồn tại. Chạy seed trước.');
         }
-        shopStaffRole = await tx.role.create({
+        storeStaffRole = await tx.role.create({
           data: {
             name: template.name,
             code: template.code,
             description: template.description,
             isSystem: false,
-            shopId: invite.storeId,
+            storeId: invite.storeId,
           },
         });
         if (template.permissions.length) {
           await tx.rolePermission.createMany({
             data: template.permissions.map((p) => ({
-              roleId: shopStaffRole!.id,
+              roleId: storeStaffRole!.id,
               permissionId: p.permissionId,
             })),
             skipDuplicates: true,
@@ -133,7 +133,7 @@ export class StoreStaffService {
       }
 
       await tx.userRole.create({
-        data: { userId, roleId: shopStaffRole.id, shopId: invite.storeId },
+        data: { userId, roleId: storeStaffRole.id, storeId: invite.storeId },
       });
 
       await tx.staffInvite.update({
@@ -191,7 +191,7 @@ export class StoreStaffService {
         data: { status: StaffStatus.INACTIVE },
       });
       await tx.userRole.deleteMany({
-        where: { userId: staff.userId, shopId: storeId },
+        where: { userId: staff.userId, storeId },
       });
     });
 

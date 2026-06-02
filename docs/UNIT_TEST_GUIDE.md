@@ -80,7 +80,7 @@ Sau đó mở Chrome → `chrome://inspect` hoặc dùng VS Code debugger để 
     ✓ login signs access and refresh tokens, then persists refresh token (2 ms)
     ✓ refresh rotates tokens and blacklists the old refresh token (5 ms)
     ✓ rejects refresh when token is blacklisted (1 ms)
-    ✓ getMe returns profile with role codes and shop context (2 ms)
+    ✓ getMe returns profile with role codes and store context (2 ms)
     ✓ getMe throws NotFoundException for missing user (1 ms)
     ✓ builds permission matrix from DB and caches granted permissions on cache miss (4 ms)
 

@@ -525,7 +525,7 @@ const STORE_KINDS: StoreKind[] = [
   },
   {
     key: 'barber',
-    label: 'Barber shop',
+    label: 'Barber store',
     count: 20,
     suffixes: ['Barbershop', "Men's Grooming", 'Classic Barber', 'Barber & Spa'],
     categorySlugs: ['cat-toc-barber', 'spa-massage'],
@@ -907,7 +907,7 @@ function subUser(email: string): string {
 }
 
 function subRole(code: 'SHOP_OWNER' | 'SHOP_STAFF'): string {
-  return `(SELECT \`id\` FROM \`roles\` WHERE \`code\` = ${sql(code)} AND \`shop_id\` IS NULL LIMIT 1)`;
+  return `(SELECT \`id\` FROM \`roles\` WHERE \`code\` = ${sql(code)} AND \`store_id\` IS NULL LIMIT 1)`;
 }
 
 function subStaff(email: string, storeSlug: string): string {
@@ -915,15 +915,15 @@ function subStaff(email: string, storeSlug: string): string {
 }
 
 function subShopCategory(name: string, storeSlug: string): string {
-  return `(SELECT \`id\` FROM \`service_categories\` WHERE \`name\` = ${sql(name)} AND \`shop_id\` = ${subStore(storeSlug)} LIMIT 1)`;
+  return `(SELECT \`id\` FROM \`service_categories\` WHERE \`name\` = ${sql(name)} AND \`store_id\` =${subStore(storeSlug)} LIMIT 1)`;
 }
 
 function subGlobalCategory(slug: string): string {
-  return `(SELECT parent_cat.\`id\` FROM (SELECT \`id\` FROM \`service_categories\` WHERE \`slug\` = ${sql(slug)} AND \`shop_id\` IS NULL LIMIT 1) AS parent_cat)`;
+  return `(SELECT parent_cat.\`id\` FROM (SELECT \`id\` FROM \`service_categories\` WHERE \`slug\` = ${sql(slug)} AND \`store_id\` IS NULL LIMIT 1) AS parent_cat)`;
 }
 
 function subService(serviceSlug: string, storeSlug: string): string {
-  return `(SELECT \`id\` FROM \`services\` WHERE \`slug\` = ${sql(serviceSlug)} AND \`shop_id\` = ${subStore(storeSlug)} LIMIT 1)`;
+  return `(SELECT \`id\` FROM \`services\` WHERE \`slug\` = ${sql(serviceSlug)} AND \`store_id\` =${subStore(storeSlug)} LIMIT 1)`;
 }
 
 function makeStores(): StoreSeed[] {
@@ -961,10 +961,10 @@ function buildStoreDescription(store: StoreSeed, address: string, district: stri
     `  <h3>${store.name}</h3>`,
     `  <p>${store.name} la mot diem den demo thuoc nhom ${store.kind.label} tai ${district}, ${store.city.label}. Khong gian duoc mo ta theo huong gan gui, gon gang va de tao cam giac tin cay ngay tu lan dau khach hang xem thong tin. Cua hang phu hop cho nhung nguoi muon tim mot noi co quy trinh ro rang, lich hen linh hoat, thong tin minh bach va trai nghiem on dinh. Dia chi demo tai ${address} giup du lieu co ngu canh dia phuong khi kiem thu ban do, bo loc khu vuc, tim kiem theo thanh pho va trang chi tiet cua tung co so.</p>`,
     `  <p>Diem manh cua ${store.name} nam o cach sap xep dich vu theo nhom nhu cau thay vi chi liet ke ten goi. Khach hang bat dau tu nhu cau thu gian, cham soc ca nhan, cai thien ngoai hinh, phuc hoi the trang hoac duy tri lich cham soc dinh ky. Tung nhom dich vu duoc mo ta de he thong co noi dung day du hon khi hien thi tren trang public, trong ket qua tim kiem, trong luong dat lich va trong cac man hinh quan tri. Dieu nay giup viec test giao dien, SEO noi bo, chatbot va goi y dich vu co du lieu gan voi ngu canh thuc te hon.</p>`,
-    `  <p>Quy trinh van hanh cua cua hang duoc mo phong theo mot co so dich vu hien dai. Khach hang se duoc xem gio mo cua, chon dich vu, chon nhan vien phu hop, chon khung gio, xac nhan thong tin ca nhan va theo doi trang thai lich hen. Doi ngu shop duoc trao quyen quan ly danh muc, gia, thoi luong, nhan su, lich lam viec va danh gia sau khi hoan thanh. Mo ta nay co chu dich dai hon de kiem thu cac thanh phan rich text, layout card, trang chi tiet, cat ngan noi dung va cac truong hop hien thi tren mobile.</p>`,
+    `  <p>Quy trinh van hanh cua cua hang duoc mo phong theo mot co so dich vu hien dai. Khach hang se duoc xem gio mo cua, chon dich vu, chon nhan vien phu hop, chon khung gio, xac nhan thong tin ca nhan va theo doi trang thai lich hen. Doi ngu store duoc trao quyen quan ly danh muc, gia, thoi luong, nhan su, lich lam viec va danh gia sau khi hoan thanh. Mo ta nay co chu dich dai hon de kiem thu cac thanh phan rich text, layout card, trang chi tiet, cat ngan noi dung va cac truong hop hien thi tren mobile.</p>`,
     `  <p>Khong gian cua ${store.name} duoc dinh vi la than thien nhung van chuyen nghiep. Khu vuc tiep don can co thong tin lich hen ro rang, nhan vien nam duoc nhu cau cua khach va huong dan tung buoc truoc khi bat dau. Khu vuc thuc hien dich vu uu tien ve sinh, su rieng tu va su thoai mai. Cac vat tu, san pham va dung cu trong du lieu demo duoc mo ta theo huong an toan, nhe diu, co kiem soat va phu hop voi nhieu tinh huong dat lich khac nhau.</p>`,
-    `  <p>Voi nhom ${store.kind.label}, cua hang phuc vu ca khach hang lan dau trai nghiem lan khach hang quay lai theo chu ky. Noi dung mo ta tap trung vao cam giac yen tam, kha nang tu van truoc dich vu, su thong nhat trong thao tac va viec theo doi ket qua sau khi hoan tat. Khi dung du lieu nay trong demo, tung shop co du noi dung de kiem tra tim kiem toan van, hien thi do dai khac nhau, loc theo danh muc va danh gia muc do phu hop cua dich vu voi nhu cau ca nhan.</p>`,
-    `  <p>${store.name} cung la mot ban ghi demo de kiem thu cac tinh nang danh cho chu shop. Owner duoc phep truy cap bang dieu khien, cap nhat thong tin cua hang, quan ly nhan vien, gan dich vu cho tung nhan vien, dieu chinh lich nghi va theo doi booking. Cac truong mo ta dai giup phat hien som loi tran layout, loi xu ly HTML, loi cat chu, loi ma hoa tieng Viet va loi hieu nang khi trang tai nhieu noi dung cung luc.</p>`,
+    `  <p>Voi nhom ${store.kind.label}, cua hang phuc vu ca khach hang lan dau trai nghiem lan khach hang quay lai theo chu ky. Noi dung mo ta tap trung vao cam giac yen tam, kha nang tu van truoc dich vu, su thong nhat trong thao tac va viec theo doi ket qua sau khi hoan tat. Khi dung du lieu nay trong demo, tung store co du noi dung de kiem tra tim kiem toan van, hien thi do dai khac nhau, loc theo danh muc va danh gia muc do phu hop cua dich vu voi nhu cau ca nhan.</p>`,
+    `  <p>${store.name} cung la mot ban ghi demo de kiem thu cac tinh nang danh cho chu store. Owner duoc phep truy cap bang dieu khien, cap nhat thong tin cua hang, quan ly nhan vien, gan dich vu cho tung nhan vien, dieu chinh lich nghi va theo doi booking. Cac truong mo ta dai giup phat hien som loi tran layout, loi xu ly HTML, loi cat chu, loi ma hoa tieng Viet va loi hieu nang khi trang tai nhieu noi dung cung luc.</p>`,
     `  <p>Tom lai, ${store.name} khong chi la mot cua hang demo de lap day danh sach. Ban ghi nay dai hon de tao cam giac giong mot ho so kinh doanh that, co boi canh dia phuong, co dinh vi dich vu, co quy trinh van hanh va co ky vong trai nghiem cho khach. Noi dung nay giup cac man hinh frontend, API tim kiem, chatbot, thong bao va cong cu quan tri co du chat lieu de kiem thu trong cac tinh huong gan voi san pham thuc te.</p>`,
     '</div>',
   ].join('\n');
@@ -1048,7 +1048,7 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
     );
 
     storeRows.push(
-      `(${sql(randomUUID())}, ${sql(store.slug)}, ${subUser(store.ownerEmail)}, ${sql(store.name)}, ${sql(`02871${store.code}00`)}, ${sql(`hello.s${store.code}@glowora.local`)}, ${sql(`https://${store.slug}.glowora.local`)}, ${sql(buildStoreDescription(store, address, district))}, ${sql(address)}, ${sql(district)}, ${store.city.provinceId}, ${wardId}, ${lat.toFixed(6)}, ${lng.toFixed(6)}, NULL, ${sql(store.kind.imageUrl)}, 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 30, ${store.index % 2 === 0 ? 'TRUE' : 'FALSE'}, ${(4.2 + rand() * 0.7).toFixed(2)}, ${randInt(12, 180, rand)}, NOW(), NOW())`,
+      `(${sql(randomUUID())}, ${sql(store.slug)}, ${subUser(store.ownerEmail)}, ${sql(store.name)}, ${sql(`02871${store.code}00`)}, ${sql(`hello.s${store.code}@glowora.local`)}, ${sql(`https://${store.slug}.glowora.local`)}, ${sql(buildStoreDescription(store, address, district))}, ${sql(address)}, ${store.city.provinceId}, ${wardId}, ${lat.toFixed(6)}, ${lng.toFixed(6)}, NULL, ${sql(store.kind.imageUrl)}, 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 30, ${store.index % 2 === 0 ? 'TRUE' : 'FALSE'}, ${(4.2 + rand() * 0.7).toFixed(2)}, ${randInt(12, 180, rand)}, NOW(), NOW())`,
     );
 
     ownerRoleRows.push(
@@ -1146,12 +1146,12 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
   sqlLines.push('-- SECTION 0: Safety cleanup for regenerated demo seed');
   sqlLines.push('SET FOREIGN_KEY_CHECKS = 0;');
   sqlLines.push("DELETE FROM `staff_services` WHERE `staff_id` IN (SELECT st.`id` FROM `staff` st JOIN `stores` s ON s.`id` = st.`store_id` WHERE s.`email` LIKE 'hello.s%@glowora.local');");
-  sqlLines.push("DELETE FROM `service_variants` WHERE `service_id` IN (SELECT sv.`id` FROM `services` sv JOIN `stores` s ON s.`id` = sv.`shop_id` WHERE s.`email` LIKE 'hello.s%@glowora.local');");
-  sqlLines.push("DELETE FROM `services` WHERE `shop_id` IN (SELECT `id` FROM `stores` WHERE `email` LIKE 'hello.s%@glowora.local');");
-  sqlLines.push("DELETE FROM `staff_schedules` WHERE `shop_id` IN (SELECT `id` FROM `stores` WHERE `email` LIKE 'hello.s%@glowora.local');");
-  sqlLines.push("DELETE FROM `user_roles` WHERE `shop_id` IN (SELECT `id` FROM `stores` WHERE `email` LIKE 'hello.s%@glowora.local');");
+  sqlLines.push("DELETE FROM `service_variants` WHERE `service_id` IN (SELECT sv.`id` FROM `services` sv JOIN `stores` s ON s.`id` = sv.`store_id` WHERE s.`email` LIKE 'hello.s%@glowora.local');");
+  sqlLines.push("DELETE FROM `services` WHERE `store_id` IN (SELECT `id` FROM `stores` WHERE `email` LIKE 'hello.s%@glowora.local');");
+  sqlLines.push("DELETE FROM `staff_schedules` WHERE `store_id` IN (SELECT `id` FROM `stores` WHERE `email` LIKE 'hello.s%@glowora.local');");
+  sqlLines.push("DELETE FROM `user_roles` WHERE `store_id` IN (SELECT `id` FROM `stores` WHERE `email` LIKE 'hello.s%@glowora.local');");
   sqlLines.push("DELETE FROM `staff` WHERE `store_id` IN (SELECT `id` FROM `stores` WHERE `email` LIKE 'hello.s%@glowora.local');");
-  sqlLines.push("DELETE FROM `service_categories` WHERE `shop_id` IN (SELECT `id` FROM `stores` WHERE `email` LIKE 'hello.s%@glowora.local');");
+  sqlLines.push("DELETE FROM `service_categories` WHERE `store_id` IN (SELECT `id` FROM `stores` WHERE `email` LIKE 'hello.s%@glowora.local');");
   sqlLines.push("DELETE FROM `stores` WHERE `email` LIKE 'hello.s%@glowora.local';");
   sqlLines.push("DELETE FROM `users` WHERE `email` LIKE 'owner.s%@glowora.local' OR `email` LIKE 'staff.s%@glowora.local';");
   sqlLines.push('SET FOREIGN_KEY_CHECKS = 1;');
@@ -1188,7 +1188,6 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
         'website',
         'description',
         'address',
-        'district',
         'province_id',
         'ward_id',
         'latitude',
@@ -1211,7 +1210,7 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
       {
         batchSize: 25,
         suffix:
-          'ON DUPLICATE KEY UPDATE `owner_id` = VALUES(`owner_id`), `name` = VALUES(`name`), `phone` = VALUES(`phone`), `email` = VALUES(`email`), `description` = VALUES(`description`), `address` = VALUES(`address`), `district` = VALUES(`district`), `province_id` = VALUES(`province_id`), `ward_id` = VALUES(`ward_id`), `latitude` = VALUES(`latitude`), `longitude` = VALUES(`longitude`), `banner_url` = VALUES(`banner_url`), `status` = VALUES(`status`), `updated_at` = NOW();',
+          'ON DUPLICATE KEY UPDATE `owner_id` = VALUES(`owner_id`), `name` = VALUES(`name`), `phone` = VALUES(`phone`), `email` = VALUES(`email`), `description` = VALUES(`description`), `address` = VALUES(`address`), `province_id` = VALUES(`province_id`), `ward_id` = VALUES(`ward_id`), `latitude` = VALUES(`latitude`), `longitude` = VALUES(`longitude`), `banner_url` = VALUES(`banner_url`), `status` = VALUES(`status`), `updated_at` = NOW();',
       },
     ),
   );
@@ -1226,7 +1225,7 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
 
   sqlLines.push('-- SECTION 5: Owner user roles');
   sqlLines.push(
-    ...batchInsert(ownerRoleRows, 'user_roles', ['id', 'user_id', 'role_id', 'shop_id', 'created_at'], {
+    ...batchInsert(ownerRoleRows, 'user_roles', ['id', 'user_id', 'role_id', 'store_id', 'created_at'], {
       suffix: 'ON DUPLICATE KEY UPDATE `created_at` = `created_at`;',
     }),
   );
@@ -1241,14 +1240,14 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
 
   sqlLines.push('-- SECTION 7: Staff user roles');
   sqlLines.push(
-    ...batchInsert(staffRoleRows, 'user_roles', ['id', 'user_id', 'role_id', 'shop_id', 'created_at'], {
+    ...batchInsert(staffRoleRows, 'user_roles', ['id', 'user_id', 'role_id', 'store_id', 'created_at'], {
       suffix: 'ON DUPLICATE KEY UPDATE `created_at` = `created_at`;',
     }),
   );
 
   sqlLines.push('-- SECTION 8: Staff schedules');
   sqlLines.push(
-    ...batchInsert(scheduleRows, 'staff_schedules', ['id', 'shop_id', 'staff_id', 'day_of_week', 'start_time', 'end_time', 'is_active'], {
+    ...batchInsert(scheduleRows, 'staff_schedules', ['id', 'store_id', 'staff_id', 'day_of_week', 'start_time', 'end_time', 'is_active'], {
       suffix:
         'ON DUPLICATE KEY UPDATE `start_time` = VALUES(`start_time`), `end_time` = VALUES(`end_time`), `is_active` = VALUES(`is_active`);',
     }),
@@ -1256,14 +1255,14 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
 
   sqlLines.push('-- SECTION 9: Shop-specific service categories');
   sqlLines.push(
-    ...batchInsert(shopCategoryRows, 'service_categories', ['id', 'name', 'slug', 'description', 'icon_url', 'shop_id', 'parent_id', 'created_at', 'updated_at'], {
+    ...batchInsert(shopCategoryRows, 'service_categories', ['id', 'name', 'slug', 'description', 'icon_url', 'store_id', 'parent_id', 'created_at', 'updated_at'], {
       suffix: 'ON DUPLICATE KEY UPDATE `description` = VALUES(`description`), `parent_id` = VALUES(`parent_id`), `updated_at` = NOW();',
     }),
   );
 
   sqlLines.push('-- SECTION 10: Services');
   sqlLines.push(
-    ...batchInsert(serviceRows, 'services', ['id', 'shop_id', 'category_id', 'name', 'slug', 'description', 'image_urls', 'status', 'avg_rating', 'created_at', 'updated_at'], {
+    ...batchInsert(serviceRows, 'services', ['id', 'store_id', 'category_id', 'name', 'slug', 'description', 'image_urls', 'status', 'avg_rating', 'created_at', 'updated_at'], {
       batchSize: 25,
       suffix:
         'ON DUPLICATE KEY UPDATE `category_id` = VALUES(`category_id`), `name` = VALUES(`name`), `description` = VALUES(`description`), `image_urls` = VALUES(`image_urls`), `status` = VALUES(`status`), `avg_rating` = VALUES(`avg_rating`), `updated_at` = NOW();',

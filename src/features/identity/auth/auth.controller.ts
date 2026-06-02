@@ -24,7 +24,7 @@ const COOKIE_BASE = {
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @ApiOperation({ summary: 'Đăng nhập' })
   @Public()
@@ -124,13 +124,13 @@ export class AuthController {
     return this.authService.getMe(user.id);
   }
 
-  @ApiOperation({ summary: 'Permissions của user trong context shop (bỏ qua x-shop-id nếu là SUPER_ADMIN)' })
+  @ApiOperation({ summary: 'Permissions của user trong context store (bỏ qua x-store-id nếu là SUPER_ADMIN)' })
   @ApiBearerAuth()
   @Get('getMatrix')
   async getMatrix(
     @CurrentUser() user: CurrentUserPayload,
-    @Headers('x-shop-id') shopId?: string,
+    @Headers('x-store-id') storeId?: string,
   ) {
-    return this.authService.getPermissionMatrix(user.id, shopId);
+    return this.authService.getPermissionMatrix(user.id, storeId);
   }
 }

@@ -28,11 +28,11 @@ export class UpdateRoleDto {
 
   @ApiPropertyOptional({
     example: '550e8400-e29b-41d4-a716-446655440000',
-    description: 'The UUID of the shop this role belongs to',
+    description: 'The UUID of the store this role belongs to',
   })
   @IsOptional()
   @IsUUID()
-  shopId?: string;
+  storeId?: string;
 
   @ApiPropertyOptional({
     example: ['550e8400-e29b-41d4-a716-446655440005'],

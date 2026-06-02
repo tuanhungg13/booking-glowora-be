@@ -134,14 +134,14 @@ model Role {
   code        String  @db.VarChar(50)
   description String?
   isSystem    Boolean @default(false) @map("is_system")
-  shopId      String? @map("shop_id") @db.Char(36)
+  storeId     String? @map("store_id") @db.Char(36)
 
-  shop        Store?           @relation("ShopRoles", fields: [shopId], references: [id])
+  store       Store?           @relation("StoreRoles", fields: [storeId], references: [id])
   permissions RolePermission[]
   userRoles   UserRole[]
 
-  @@unique([code, shopId])
-  @@index([shopId])
+  @@unique([code, storeId])
+  @@index([storeId])
   @@map("roles")
 }
 
@@ -171,17 +171,17 @@ model UserRole {
   id        String   @id @default(uuid()) @db.Char(36)
   userId    String   @map("user_id") @db.Char(36)
   roleId    String   @map("role_id") @db.Char(36)
-  shopId    String?  @map("shop_id") @db.Char(36)
+  storeId   String?  @map("store_id") @db.Char(36)
   createdAt DateTime @default(now()) @map("created_at")
 
-  user User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role Role   @relation(fields: [roleId], references: [id])
-  shop Store? @relation("UserShopRoles", fields: [shopId], references: [id])
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role  Role   @relation(fields: [roleId], references: [id])
+  store Store? @relation("UserStoreRoles", fields: [storeId], references: [id])
 
-  // Note: MySQL treats NULL != NULL so unique on nullable shopId is enforced in code for system roles
-  @@unique([userId, roleId, shopId])
+  // Note: MySQL treats NULL != NULL so unique on nullable storeId is enforced in code for system roles
+  @@unique([userId, roleId, storeId])
   @@index([userId])
-  @@index([shopId])
+  @@index([storeId])
   @@map("user_roles")
 }
 
@@ -297,9 +297,9 @@ model Store {
   services       Service[]
   bookings       Booking[]
   reviews        Review[]
-  roles          Role[]          @relation("ShopRoles")
-  userRoles      UserRole[]      @relation("UserShopRoles")
-  shopCategories     ServiceCategory[] @relation("ShopCategories")
+  roles              Role[]            @relation("StoreRoles")
+  userRoles          UserRole[]        @relation("UserStoreRoles")
+  storeCategories     ServiceCategory[] @relation("StoreCategories")
   staffInvites       StaffInvite[]
   staffSchedules StaffSchedule[]
   staffDayOffs   StaffDayOff[]
@@ -373,18 +373,18 @@ model ServiceCategory {
   slug        String?  @unique @db.VarChar(120)
   description String?
   iconUrl     String?  @map("icon_url")
-  shopId      String?  @map("shop_id") @db.Char(36)
+  storeId     String?  @map("store_id") @db.Char(36)
   parentId    String?  @map("parent_id") @db.Char(36)
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  shop     Store?            @relation("ShopCategories", fields: [shopId], references: [id])
+  store    Store?            @relation("StoreCategories", fields: [storeId], references: [id])
   parent   ServiceCategory?  @relation("CategoryTree", fields: [parentId], references: [id])
   children ServiceCategory[] @relation("CategoryTree")
   services Service[]
 
-  @@unique([name, shopId])
-  @@index([shopId])
+  @@unique([name, storeId])
+  @@index([storeId])
   @@index([parentId])
   @@map("service_categories")
 }
@@ -395,7 +395,7 @@ model ServiceCategory {
 
 model Service {
   id          String        @id @default(uuid()) @db.Char(36)
-  shopId      String        @map("shop_id") @db.Char(36)
+  storeId     String        @map("store_id") @db.Char(36)
   categoryId  String?       @map("category_id") @db.Char(36)
   name        String        @db.VarChar(150)
   slug        String?       @db.VarChar(200)
@@ -406,15 +406,15 @@ model Service {
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
 
-  store        Store            @relation(fields: [shopId], references: [id])
+  store        Store            @relation(fields: [storeId], references: [id])
   category     ServiceCategory? @relation(fields: [categoryId], references: [id])
   variants     ServiceVariant[]
   bookingItems BookingItem[]
   reviews      Review[]
   staffs       StaffService[]
 
-  @@unique([shopId, slug])
-  @@index([shopId, status])
+  @@unique([storeId, slug])
+  @@index([storeId, status])
   @@index([categoryId])
   @@map("services")
 }
@@ -464,18 +464,18 @@ model StaffService {
 
 model StaffSchedule {
   id        String    @id @default(uuid()) @db.Char(36)
-  shopId    String    @map("shop_id") @db.Char(36)
+  storeId   String    @map("store_id") @db.Char(36)
   staffId   String    @map("staff_id") @db.Char(36)
   dayOfWeek DayOfWeek @map("day_of_week")
   startTime String    @map("start_time") @db.VarChar(5) // "09:00"
   endTime   String    @map("end_time") @db.VarChar(5) // "18:00"
   isActive  Boolean   @default(true) @map("is_active")
 
-  shop  Store @relation(fields: [shopId], references: [id])
+  store Store @relation(fields: [storeId], references: [id])
   staff Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
 
   @@unique([staffId, dayOfWeek])
-  @@index([shopId, dayOfWeek])
+  @@index([storeId, dayOfWeek])
   @@map("staff_schedules")
 }
 
@@ -485,16 +485,16 @@ model StaffSchedule {
 
 model StaffDayOff {
   id      String   @id @default(uuid()) @db.Char(36)
-  shopId  String   @map("shop_id") @db.Char(36)
+  storeId String   @map("store_id") @db.Char(36)
   staffId String   @map("staff_id") @db.Char(36)
   date    DateTime @map("date") @db.Date
   reason  String?
 
-  shop  Store @relation(fields: [shopId], references: [id])
+  store Store @relation(fields: [storeId], references: [id])
   staff Staff @relation(fields: [staffId], references: [id], onDelete: Cascade)
 
   @@unique([staffId, date])
-  @@index([shopId, date])
+  @@index([storeId, date])
   @@map("staff_day_offs")
 }
 

@@ -13,10 +13,18 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { CurrentUser, type CurrentUserPayload } from '../../common/decorators/current-user.decorator';
+import {
+  CurrentUser,
+  type CurrentUserPayload,
+} from '../../common/decorators/current-user.decorator';
 import { Public } from '../../common/decorators/public.decorator';
 import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../common/constants/permissions';
@@ -66,11 +74,13 @@ export class StoresController {
     return this.storesService.findMine(user.id);
   }
 
-  @ApiOperation({ summary: 'All shops current user belongs to with role (flat)' })
+  @ApiOperation({
+    summary: 'All stores current user belongs to with role (flat)',
+  })
   @ApiBearerAuth()
-  @Get('my-shops')
-  findMyShops(@CurrentUser() user: CurrentUserPayload) {
-    return this.storesService.findMyShops(user.id);
+  @Get('my-stores')
+  findMyStores(@CurrentUser() user: CurrentUserPayload) {
+    return this.storesService.findMyStores(user.id);
   }
 
   @ApiOperation({ summary: 'Public store detail by id or slug' })
@@ -100,11 +110,15 @@ export class StoresController {
   @UseInterceptors(FileInterceptor('file', { storage: imageStorage('logos') }))
   uploadLogo(
     @Param('id') id: string,
-    @UploadedFile() file: any,
+    @UploadedFile() file: Express.Multer.File,
     @CurrentUser() user: CurrentUserPayload,
   ) {
     if (!file) throw new BadRequestException('No file uploaded');
-    return this.storesService.uploadLogo(id, user.id, `/uploads/logos/${file.filename}`);
+    return this.storesService.uploadLogo(
+      id,
+      user.id,
+      `/uploads/logos/${file.filename}`,
+    );
   }
 
   @ApiOperation({ summary: 'Upload store banner' })
@@ -112,17 +126,25 @@ export class StoresController {
   @ApiBearerAuth()
   @RequirePermissions(Permissions.STORE.UPDATE)
   @Post(':id/banner')
-  @UseInterceptors(FileInterceptor('file', { storage: imageStorage('banners') }))
+  @UseInterceptors(
+    FileInterceptor('file', { storage: imageStorage('banners') }),
+  )
   uploadBanner(
     @Param('id') id: string,
-    @UploadedFile() file: any,
+    @UploadedFile() file: Express.Multer.File,
     @CurrentUser() user: CurrentUserPayload,
   ) {
     if (!file) throw new BadRequestException('No file uploaded');
-    return this.storesService.uploadBanner(id, user.id, `/uploads/banners/${file.filename}`);
+    return this.storesService.uploadBanner(
+      id,
+      user.id,
+      `/uploads/banners/${file.filename}`,
+    );
   }
 
-  @ApiOperation({ summary: 'Generate a one-time Telegram group setup link (valid 10 min)' })
+  @ApiOperation({
+    summary: 'Generate a one-time Telegram group setup link (valid 10 min)',
+  })
   @ApiBearerAuth()
   @RequirePermissions(Permissions.STORE.UPDATE)
   @Post(':id/telegram/setup-link')
@@ -132,7 +154,8 @@ export class StoresController {
   ) {
     await this.storesService.checkOwnership(id, user.id);
     const url = await this.telegramService.generateStoreSetupUrl(id);
-    if (!url) throw new BadRequestException('TELEGRAM_BOT_USERNAME chưa được cấu hình');
+    if (!url)
+      throw new BadRequestException('TELEGRAM_BOT_USERNAME chưa được cấu hình');
     return { url };
   }
 
@@ -145,7 +168,11 @@ export class StoresController {
     @Body() body: { telegramGroupId: string },
     @CurrentUser() user: CurrentUserPayload,
   ) {
-    return this.storesService.linkTelegramGroup(id, user.id, body.telegramGroupId);
+    return this.storesService.linkTelegramGroup(
+      id,
+      user.id,
+      body.telegramGroupId,
+    );
   }
 
   @ApiOperation({ summary: 'Unlink Telegram group from this store' })

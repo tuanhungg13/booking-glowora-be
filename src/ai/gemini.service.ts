@@ -95,7 +95,7 @@ export class GeminiService {
         slug: true,
         imageUrls: true,
         avgRating: true,
-        shopId: true,
+        storeId: true,
         store: { select: { name: true } },
         variants: {
           where: { status: 'ACTIVE' },
@@ -115,7 +115,7 @@ export class GeminiService {
       imageUrls: Array.isArray(s.imageUrls) ? (s.imageUrls as string[]) : [],
       imageUrl: Array.isArray(s.imageUrls) ? ((s.imageUrls as string[])[0] ?? null) : null,
       avgRating: Number(s.avgRating),
-      storeId: s.shopId,
+      storeId: s.storeId,
       storeName: s.store.name,
       variants: s.variants.map((v) => ({
         name: v.name,
@@ -128,7 +128,7 @@ export class GeminiService {
   async buildPlatformContext(): Promise<PlatformContext> {
     const [categories, storesByProvince] = await Promise.all([
       this.prisma.serviceCategory.findMany({
-        where: { shopId: null, parentId: null },
+        where: { storeId: null, parentId: null },
         select: { name: true, slug: true },
         take: 20,
       }),

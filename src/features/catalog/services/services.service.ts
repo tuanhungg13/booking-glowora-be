@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma, ServiceStatus, StoreStatus } from '@prisma/client';
+import { Prisma, ServiceStatus, StaffStatus, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CloudinaryService } from '../../../cloudinary/cloudinary.service';
 import { CreateServiceDto } from './dto/create-service.dto';
@@ -47,7 +47,7 @@ export class ServicesService {
   private async checkDuplicateName(name: string, storeId: string, excludeId?: string) {
     const existing = await this.prisma.service.findFirst({
       where: {
-        shopId: storeId,
+        storeId,
         name: { equals: name },
         ...(excludeId && { id: { not: excludeId } }),
       },
@@ -61,7 +61,7 @@ export class ServicesService {
     const slug = await this.generateUniqueSlug(dto.name, storeId);
     return this.prisma.service.create({
       data: {
-        shopId: storeId,
+        storeId,
         name: dto.name,
         slug,
         description: dto.description,
@@ -87,7 +87,7 @@ export class ServicesService {
     const page = params?.page ?? 1;
     const limit = params?.limit ?? 20;
     const where: Prisma.ServiceWhereInput = {
-      ...(params?.storeId && { shopId: params.storeId }),
+      ...(params?.storeId && { storeId: params.storeId }),
       ...(params?.status && { status: params.status }),
       ...(params?.categoryId && { categoryId: params.categoryId }),
     };
@@ -121,7 +121,7 @@ export class ServicesService {
     const dir = direction === 'desc' ? Prisma.sql`DESC` : Prisma.sql`ASC`;
 
     const conds: Prisma.Sql[] = [Prisma.sql`sv.status = 'ACTIVE'`];
-    if (params.storeId) conds.push(Prisma.sql`s.shop_id = ${params.storeId}`);
+    if (params.storeId) conds.push(Prisma.sql`s.store_id = ${params.storeId}`);
     if (params.status) conds.push(Prisma.sql`s.status = ${params.status}`);
     if (params.categoryId) conds.push(Prisma.sql`s.category_id = ${params.categoryId}`);
 
@@ -168,7 +168,7 @@ export class ServicesService {
     const where: Prisma.ServiceWhereInput = {
       status: ServiceStatus.ACTIVE,
       store: { status: StoreStatus.ACTIVE },
-      ...(params.storeId && { shopId: params.storeId }),
+      ...(params.storeId && { storeId: params.storeId }),
       ...(params.categoryId && {
         OR: [
           { category: { parentId: params.categoryId } },
@@ -238,7 +238,7 @@ export class ServicesService {
       Prisma.sql`st.status = 'ACTIVE'`,
     ];
 
-    if (params.storeId) conds.push(Prisma.sql`s.shop_id = ${params.storeId}`);
+    if (params.storeId) conds.push(Prisma.sql`s.store_id = ${params.storeId}`);
 
     if (params.categoryId) {
       conds.push(Prisma.sql`(
@@ -274,7 +274,7 @@ export class ServicesService {
       this.prisma.$queryRaw<{ id: string }[]>(Prisma.sql`
         SELECT s.id
         FROM services s
-        INNER JOIN stores st ON st.id = s.shop_id
+        INNER JOIN stores st ON st.id = s.store_id
         INNER JOIN service_variants sv ON sv.service_id = s.id AND sv.status = 'ACTIVE'
         WHERE ${where}
         GROUP BY s.id
@@ -284,7 +284,7 @@ export class ServicesService {
       this.prisma.$queryRaw<{ total: bigint }[]>(Prisma.sql`
         SELECT COUNT(DISTINCT s.id) AS total
         FROM services s
-        INNER JOIN stores st ON st.id = s.shop_id
+        INNER JOIN stores st ON st.id = s.store_id
         INNER JOIN service_variants sv ON sv.service_id = s.id AND sv.status = 'ACTIVE'
         WHERE ${where}
       `),
@@ -309,7 +309,7 @@ export class ServicesService {
     const service = await this.prisma.service.findFirst({
       where: {
         OR: [{ id: idOrSlug }, { slug: idOrSlug }],
-        ...(storeId && { shopId: storeId }),
+        ...(storeId && { storeId }),
       },
       include: serviceInclude,
     });
@@ -403,11 +403,25 @@ export class ServicesService {
 
   async assignStaff(id: string, storeId: string, staffIds: string[]) {
     const service = await this.findOne(id, storeId);
+    const uniqueStaffIds = [...new Set(staffIds)];
+    if (uniqueStaffIds.length) {
+      const validCount = await this.prisma.staff.count({
+        where: {
+          id: { in: uniqueStaffIds },
+          storeId,
+          status: StaffStatus.ACTIVE,
+        },
+      });
+      if (validCount !== uniqueStaffIds.length) {
+        throw new BadRequestException('All staff must belong to this store and be active');
+      }
+    }
+
     await this.prisma.$transaction(async (tx) => {
       await tx.staffService.deleteMany({ where: { serviceId: id } });
-      if (staffIds.length) {
+      if (uniqueStaffIds.length) {
         await tx.staffService.createMany({
-          data: staffIds.map((staffId) => ({ serviceId: id, staffId })),
+          data: uniqueStaffIds.map((staffId) => ({ serviceId: id, staffId })),
           skipDuplicates: true,
         });
       }
@@ -467,7 +481,7 @@ export class ServicesService {
 
   private async findVariantOrThrow(serviceId: string, variantId: string, storeId: string) {
     const variant = await this.prisma.serviceVariant.findFirst({
-      where: { id: variantId, serviceId, service: { shopId: storeId } },
+      where: { id: variantId, serviceId, service: { storeId } },
     });
     if (!variant) throw new NotFoundException('Variant not found');
     return variant;
@@ -479,7 +493,7 @@ export class ServicesService {
     let suffix = 2;
     while (true) {
       const existing = await this.prisma.service.findFirst({
-        where: { shopId: storeId, slug, ...(excludeId && { id: { not: excludeId } }) },
+        where: { storeId, slug, ...(excludeId && { id: { not: excludeId } }) },
       });
       if (!existing) return slug;
       slug = `${base}-${suffix++}`;

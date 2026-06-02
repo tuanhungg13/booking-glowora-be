@@ -113,7 +113,7 @@ export class NotificationsService {
     const timeStr = this.formatDateTime(scheduledAt);
 
     const ownerRole = await this.prisma.userRole.findFirst({
-      where: { shopId: storeId, role: { code: 'SHOP_OWNER' } },
+      where: { storeId, role: { code: 'SHOP_OWNER' } },
     });
     if (ownerRole) {
       const ownerNotif = await this.prisma.notification.create({
@@ -232,7 +232,7 @@ export class NotificationsService {
     const { bookingId, storeId, storeName, customerId, customerName, customerEmail, serviceNames, reason } = params;
 
     const ownerRole = await this.prisma.userRole.findFirst({
-      where: { shopId: storeId, role: { code: 'SHOP_OWNER' } },
+      where: { storeId, role: { code: 'SHOP_OWNER' } },
     });
     if (ownerRole) {
       const ownerNotif = await this.prisma.notification.create({

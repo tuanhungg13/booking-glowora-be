@@ -170,7 +170,7 @@ async function main() {
 
   for (const r of systemRoles) {
     const existingRole = await prisma.role.findFirst({
-      where: { code: r.code, shopId: null },
+      where: { code: r.code, storeId: null },
     });
     const role = existingRole
       ? await prisma.role.update({
@@ -183,7 +183,7 @@ async function main() {
           name: r.name,
           description: r.description,
           isSystem: true,
-          shopId: null,
+          storeId: null,
         },
       });
     roles[r.code] = role.id;
@@ -234,11 +234,11 @@ async function main() {
 
   // Gán SUPER_ADMIN role nếu chưa có
   const existingAdminRole = await prisma.userRole.findFirst({
-    where: { userId: adminUser.id, roleId: roles['SUPER_ADMIN'], shopId: null },
+    where: { userId: adminUser.id, roleId: roles['SUPER_ADMIN'], storeId: null },
   });
   if (!existingAdminRole) {
     await prisma.userRole.create({
-      data: { userId: adminUser.id, roleId: roles['SUPER_ADMIN'], shopId: null },
+      data: { userId: adminUser.id, roleId: roles['SUPER_ADMIN'], storeId: null },
     });
   }
   console.log(`✅ Super Admin seeded (${adminEmail})`);

@@ -3,7 +3,7 @@ import { DayOfWeek } from '@prisma/client';
 
 export class CreateWorkingHourDto {
   @IsUUID()
-  shopId!: string;
+  storeId!: string;
 
   @IsEnum(DayOfWeek)
   dayOfWeek!: DayOfWeek;

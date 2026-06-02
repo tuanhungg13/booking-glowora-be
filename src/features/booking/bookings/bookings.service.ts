@@ -44,10 +44,10 @@ export class BookingsService {
       throw new BadRequestException('Phải chọn ít nhất 1 dịch vụ');
     }
 
-    const isShopMember = await this.prisma.userRole.findFirst({
-      where: { userId: customerId, shopId: dto.storeId },
+    const isStoreMember = await this.prisma.userRole.findFirst({
+      where: { userId: customerId, storeId: dto.storeId },
     });
-    if (isShopMember) {
+    if (isStoreMember) {
       throw new ForbiddenException('Không thể đặt lịch tại cơ sở bạn đang làm việc');
     }
 
@@ -77,7 +77,7 @@ export class BookingsService {
               id: svc.variantId,
               serviceId: svc.serviceId,
               status: ServiceStatus.ACTIVE,
-              service: { shopId: dto.storeId, status: ServiceStatus.ACTIVE },
+              service: { storeId: dto.storeId, status: ServiceStatus.ACTIVE },
             },
           });
           if (!variant) {
@@ -87,7 +87,11 @@ export class BookingsService {
           let staffId: string;
           if (svc.staffId) {
             const canDo = await tx.staffService.findFirst({
-              where: { staffId: svc.staffId, serviceId: svc.serviceId },
+              where: {
+                staffId: svc.staffId,
+                serviceId: svc.serviceId,
+                staff: { storeId: dto.storeId, status: 'ACTIVE' },
+              },
             });
             if (!canDo) {
               throw new BadRequestException(`Nhân viên không thực hiện được dịch vụ thứ ${i + 1}`);
@@ -293,12 +297,18 @@ export class BookingsService {
     return booking;
   }
 
+  async findOneForUser(id: string, userId: string) {
+    const booking = await this.findOne(id);
+    await this.assertBookingReadable(userId, booking);
+    return booking;
+  }
+
   async confirm(id: string, userId: string) {
     const booking = await this.findOne(id);
     if (booking.status !== BookingStatus.PENDING) {
       throw new BadRequestException('Only pending bookings can be confirmed');
     }
-    await this.assertShopMember(userId, booking.storeId);
+    await this.assertStoreMember(userId, booking.storeId);
 
     const updated = await this.prisma.booking.update({
       where: { id },
@@ -327,7 +337,7 @@ export class BookingsService {
     if (booking.status !== BookingStatus.PENDING) {
       throw new BadRequestException('Only pending bookings can be rejected');
     }
-    await this.assertShopMember(userId, booking.storeId);
+    await this.assertStoreMember(userId, booking.storeId);
 
     const updated = await this.prisma.booking.update({
       where: { id },
@@ -356,7 +366,7 @@ export class BookingsService {
     if (booking.status !== BookingStatus.CONFIRMED) {
       throw new BadRequestException('Only confirmed bookings can be completed');
     }
-    await this.assertShopMember(userId, booking.storeId);
+    await this.assertStoreMember(userId, booking.storeId);
 
     const updated = await this.prisma.booking.update({
       where: { id },
@@ -425,15 +435,27 @@ export class BookingsService {
     return updated;
   }
 
-  async remove(id: string) {
-    await this.findOne(id);
+  async remove(id: string, userId: string) {
+    const booking = await this.findOne(id);
+    await this.assertStoreMember(userId, booking.storeId);
     await this.prisma.booking.delete({ where: { id } });
     return { deleted: true };
   }
 
-  private async assertShopMember(userId: string, storeId: string) {
+  private async assertBookingReadable(
+    userId: string,
+    booking: { customerId: string; storeId: string },
+  ) {
+    if (booking.customerId === userId) return;
+    await this.assertStoreMember(userId, booking.storeId);
+  }
+
+  private async assertStoreMember(userId: string, storeId: string) {
     const userRole = await this.prisma.userRole.findFirst({
-      where: { userId, shopId: storeId },
+      where: {
+        userId,
+        OR: [{ storeId }, { storeId: null, role: { code: 'SUPER_ADMIN' } }],
+      },
     });
     if (!userRole) throw new ForbiddenException('Bạn không phải nhân viên của cơ sở này');
   }

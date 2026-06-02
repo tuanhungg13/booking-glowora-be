@@ -1,9 +1,13 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { CreateShopCategoryDto } from './dto/create-shop-category.dto';
-import { UpdateShopCategoryDto } from './dto/update-shop-category.dto';
+import { CreateStoreCategoryDto } from './dto/create-store-category.dto';
+import { UpdateStoreCategoryDto } from './dto/update-store-category.dto';
 
 function slugify(value: string): string {
   return value
@@ -25,7 +29,12 @@ export class CategoriesService {
   async create(dto: CreateCategoryDto) {
     const slug = await this.generateUniqueSlug(dto.name);
     return this.prisma.serviceCategory.create({
-      data: { name: dto.name, slug, description: dto.description, iconUrl: dto.iconUrl },
+      data: {
+        name: dto.name,
+        slug,
+        description: dto.description,
+        iconUrl: dto.iconUrl,
+      },
     });
   }
 
@@ -33,7 +42,7 @@ export class CategoriesService {
 
   async findAll() {
     return this.prisma.serviceCategory.findMany({
-      where: { shopId: null },
+      where: { storeId: null },
       orderBy: { name: 'asc' },
       include: { _count: { select: { services: true, children: true } } },
     });
@@ -41,7 +50,7 @@ export class CategoriesService {
 
   async findOne(idOrSlug: string) {
     const category = await this.prisma.serviceCategory.findFirst({
-      where: { shopId: null, OR: [{ id: idOrSlug }, { slug: idOrSlug }] },
+      where: { storeId: null, OR: [{ id: idOrSlug }, { slug: idOrSlug }] },
       include: {
         children: { orderBy: { name: 'asc' } },
         _count: { select: { services: true } },
@@ -53,28 +62,39 @@ export class CategoriesService {
 
   async update(id: string, dto: UpdateCategoryDto) {
     await this.findOne(id);
-    const slug = dto.name ? await this.generateUniqueSlug(dto.name, id) : undefined;
+    const slug = dto.name
+      ? await this.generateUniqueSlug(dto.name, id)
+      : undefined;
     return this.prisma.serviceCategory.update({
       where: { id },
-      data: { name: dto.name, slug, description: dto.description, iconUrl: dto.iconUrl },
+      data: {
+        name: dto.name,
+        slug,
+        description: dto.description,
+        iconUrl: dto.iconUrl,
+      },
     });
   }
 
   async remove(id: string) {
     const category = await this.findOne(id);
-    const hasChildren = await this.prisma.serviceCategory.count({ where: { parentId: id } });
+    const hasChildren = await this.prisma.serviceCategory.count({
+      where: { parentId: id },
+    });
     if (hasChildren > 0) {
-      throw new BadRequestException('Không thể xóa danh mục đang có danh mục con của shop');
+      throw new BadRequestException(
+        'Không thể xóa danh mục đang có danh mục con của store',
+      );
     }
     await this.prisma.serviceCategory.delete({ where: { id: category.id } });
     return { deleted: true };
   }
 
-  // ── Shop: danh mục của shop (cấp 2) ───────────────────────────────────────
+  // Store categories (level 2)
 
-  async createShopCategory(shopId: string, dto: CreateShopCategoryDto) {
+  async createStoreCategory(storeId: string, dto: CreateStoreCategoryDto) {
     const parent = await this.prisma.serviceCategory.findFirst({
-      where: { id: dto.parentId, shopId: null },
+      where: { id: dto.parentId, storeId: null },
     });
     if (!parent) throw new NotFoundException('Danh mục hệ thống không tồn tại');
 
@@ -82,16 +102,16 @@ export class CategoriesService {
       data: {
         name: dto.name,
         description: dto.description,
-        shopId,
+        storeId,
         parentId: dto.parentId,
       },
       include: { parent: { select: { id: true, name: true, slug: true } } },
     });
   }
 
-  async findShopCategories(shopId: string) {
+  async findStoreCategories(storeId: string) {
     return this.prisma.serviceCategory.findMany({
-      where: { shopId },
+      where: { storeId },
       orderBy: { name: 'asc' },
       include: {
         parent: { select: { id: true, name: true, slug: true, iconUrl: true } },
@@ -100,23 +120,38 @@ export class CategoriesService {
     });
   }
 
-  async updateShopCategory(id: string, shopId: string, dto: UpdateShopCategoryDto) {
-    const category = await this.prisma.serviceCategory.findFirst({ where: { id, shopId } });
+  async updateStoreCategory(
+    id: string,
+    storeId: string,
+    dto: UpdateStoreCategoryDto,
+  ) {
+    const category = await this.prisma.serviceCategory.findFirst({
+      where: { id, storeId },
+    });
     if (!category) throw new NotFoundException('Danh mục không tồn tại');
 
     return this.prisma.serviceCategory.update({
       where: { id },
       data: { name: dto.name, description: dto.description },
-      include: { parent: { select: { id: true, name: true, slug: true, iconUrl: true } } },
+      include: {
+        parent: { select: { id: true, name: true, slug: true, iconUrl: true } },
+      },
     });
   }
 
-  async removeShopCategory(id: string, shopId: string) {
-    const category = await this.prisma.serviceCategory.findFirst({ where: { id, shopId } });
+  async removeStoreCategory(id: string, storeId: string) {
+    const category = await this.prisma.serviceCategory.findFirst({
+      where: { id, storeId },
+    });
     if (!category) throw new NotFoundException('Danh mục không tồn tại');
 
-    const inUse = await this.prisma.service.count({ where: { categoryId: id } });
-    if (inUse > 0) throw new BadRequestException('Danh mục đang được dùng bởi dịch vụ, không thể xóa');
+    const inUse = await this.prisma.service.count({
+      where: { categoryId: id },
+    });
+    if (inUse > 0)
+      throw new BadRequestException(
+        'Danh mục đang được dùng bởi dịch vụ, không thể xóa',
+      );
 
     await this.prisma.serviceCategory.delete({ where: { id } });
     return { deleted: true };

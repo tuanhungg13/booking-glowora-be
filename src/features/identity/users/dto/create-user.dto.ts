@@ -15,10 +15,10 @@ import { UserStatus } from '@prisma/client';
 export class UserRoleAssignmentDto {
   @ApiProperty({
     example: '550e8400-e29b-41d4-a716-446655440000',
-    description: 'The UUID of the shop',
+    description: 'The UUID of the store',
   })
   @IsUUID()
-  shopId!: string;
+  storeId!: string;
 
   @ApiProperty({
     example: '550e8400-e29b-41d4-a716-446655440001',
@@ -72,7 +72,7 @@ export class CreateUserDto {
 
   @ApiPropertyOptional({
     type: [UserRoleAssignmentDto],
-    description: 'List of roles assigned to the user in specific shops',
+    description: 'List of roles assigned to the user in specific stores',
   })
   @IsOptional()
   @IsArray()

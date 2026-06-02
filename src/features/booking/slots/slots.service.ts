@@ -63,8 +63,8 @@ export class SlotsService {
       return { date, totalDuration: 0, services: [], availableSlots: [] };
     }
 
-    const shopOpenMins = this.parseTime(workingHour.openTime);
-    const shopCloseMins = this.parseTime(workingHour.closeTime);
+    const storeOpenMins = this.parseTime(workingHour.openTime);
+    const storeCloseMins = this.parseTime(workingHour.closeTime);
 
     // Fix 2: Query tất cả variant song song thay vì tuần tự
     const variantResults = await Promise.all(
@@ -74,7 +74,7 @@ export class SlotsService {
             id: svc.variantId,
             serviceId: svc.serviceId,
             status: ServiceStatus.ACTIVE,
-            service: { shopId: storeId, status: ServiceStatus.ACTIVE },
+            service: { storeId, status: ServiceStatus.ACTIVE },
           },
         }),
       ),
@@ -175,8 +175,8 @@ export class SlotsService {
         continue;
       }
 
-      const windowStart = Math.max(shopOpenMins, this.parseTime(schedule.startTime));
-      const windowEnd = Math.min(shopCloseMins, this.parseTime(schedule.endTime));
+      const windowStart = Math.max(storeOpenMins, this.parseTime(schedule.startTime));
+      const windowEnd = Math.min(storeCloseMins, this.parseTime(schedule.endTime));
       if (windowStart >= windowEnd) {
         staffInfoMap.set(staffId, null);
         continue;
@@ -219,7 +219,7 @@ export class SlotsService {
     const availableSlots: Array<{ startTime: string; assignments: SlotAssignment[] }> = [];
 
     // Fix 5: Dùng store.bookingBufferMins thay vì hardcode
-    for (let slotMins = shopOpenMins; slotMins + totalDuration <= shopCloseMins; slotMins += store.slotIntervalMins) {
+    for (let slotMins = storeOpenMins; slotMins + totalDuration <= storeCloseMins; slotMins += store.slotIntervalMins) {
       if (isToday && slotMins <= nowLocalMins + store.bookingBufferMins) continue;
 
       let currentMins = slotMins;

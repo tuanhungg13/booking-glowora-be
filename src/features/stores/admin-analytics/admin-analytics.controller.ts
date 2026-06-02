@@ -10,7 +10,7 @@ import { AdminAnalyticsQueryDto, AdminTopStoresQueryDto } from './dto/admin-anal
 @Controller('admin/analytics')
 @RequirePermissions(Permissions.REPORT.VIEW)
 export class AdminAnalyticsController {
-  constructor(private readonly analyticsService: AdminAnalyticsService) {}
+  constructor(private readonly analyticsService: AdminAnalyticsService) { }
 
   @Get('overview')
   @ApiOperation({ summary: 'KPIs tổng quan toàn hệ thống trong khoảng thời gian' })
@@ -19,7 +19,7 @@ export class AdminAnalyticsController {
   }
 
   @Get('stores')
-  @ApiOperation({ summary: 'Biểu đồ số shop đăng ký theo ngày/tuần/tháng kèm breakdown status' })
+  @ApiOperation({ summary: 'Biểu đồ số store đăng ký theo ngày/tuần/tháng kèm breakdown status' })
   getStoreTrend(@Query() query: AdminAnalyticsQueryDto) {
     return this.analyticsService.getStoreTrend(query.from, query.to, query.groupBy ?? 'day');
   }
@@ -37,7 +37,7 @@ export class AdminAnalyticsController {
   }
 
   @Get('top-stores')
-  @ApiOperation({ summary: 'Top shop có doanh thu cao nhất trong khoảng thời gian' })
+  @ApiOperation({ summary: 'Top store có doanh thu cao nhất trong khoảng thời gian' })
   getTopStores(@Query() query: AdminTopStoresQueryDto) {
     return this.analyticsService.getTopStores(query.from, query.to, query.limit ?? 10);
   }

@@ -31,11 +31,11 @@ export class UsersService {
         status: dto.status ?? UserStatus.ACTIVE,
         userRoles: dedupedRoles.length
           ? {
-              create: dedupedRoles.map((a) => ({
-                shopId: a.shopId,
-                roleId: a.roleId,
-              })),
-            }
+            create: dedupedRoles.map((a) => ({
+              storeId: a.storeId,
+              roleId: a.roleId,
+            })),
+          }
           : undefined,
       },
       select: this.selectSafe(),
@@ -74,7 +74,7 @@ export class UsersService {
         userRoles: {
           include: {
             role: { select: { id: true, name: true, code: true } },
-            shop: { select: { id: true, name: true } },
+            store: { select: { id: true, name: true } },
           },
         },
       },
@@ -100,19 +100,19 @@ export class UsersService {
     if (dto.password) data.password = await bcrypt.hash(dto.password, 10);
     if (dto.roleAssignments !== undefined) {
       const dedupedRoles = this.deduplicateRoles(dto.roleAssignments);
-      const shopRolesCount = dedupedRoles.filter((a) => a.shopId).length;
-      if (shopRolesCount > 3) {
+      const storeRolesCount = dedupedRoles.filter((a) => a.storeId).length;
+      if (storeRolesCount > 3) {
         throw new BadRequestException('Tài khoản không thể có quá 3 vai trò cơ sở');
       }
       data.userRoles = {
         deleteMany: {},
         ...(dedupedRoles.length
           ? {
-              create: dedupedRoles.map((a) => ({
-                shopId: a.shopId,
-                roleId: a.roleId,
-              })),
-            }
+            create: dedupedRoles.map((a) => ({
+              storeId: a.storeId,
+              roleId: a.roleId,
+            })),
+          }
           : {}),
       };
     }
@@ -151,12 +151,12 @@ export class UsersService {
   }
 
   // MySQL treats NULL != NULL in UNIQUE constraints, so (userId, roleId, null) can be
-  // inserted multiple times without violating @@unique([userId, roleId, shopId]).
+  // inserted multiple times without violating @@unique([userId, roleId, storeId]).
   // Deduplicate here before any bulk insert to prevent phantom duplicates.
-  private deduplicateRoles(assignments: Array<{ roleId: string; shopId?: string | null }>) {
+  private deduplicateRoles(assignments: Array<{ roleId: string; storeId?: string | null }>) {
     const seen = new Set<string>();
     return assignments.filter((a) => {
-      const key = `${a.roleId}::${a.shopId ?? '__null__'}`;
+      const key = `${a.roleId}::${a.storeId ?? '__null__'}`;
       if (seen.has(key)) return false;
       seen.add(key);
       return true;

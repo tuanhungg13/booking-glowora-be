@@ -13,9 +13,10 @@ export class StaffScheduleService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(storeId: string, staffId: string, dto: CreateStaffScheduleDto) {
+    await this.assertStaffInStore(storeId, staffId);
     return this.prisma.staffSchedule.create({
       data: {
-        shopId: storeId,
+        storeId,
         staffId,
         dayOfWeek: dto.dayOfWeek,
         startTime: dto.startTime,
@@ -27,12 +28,13 @@ export class StaffScheduleService {
   }
 
   async bulkUpsert(storeId: string, staffId: string, schedules: CreateStaffScheduleDto[]) {
+    await this.assertStaffInStore(storeId, staffId);
     await this.prisma.$transaction(async (tx) => {
-      await tx.staffSchedule.deleteMany({ where: { shopId: storeId, staffId } });
+      await tx.staffSchedule.deleteMany({ where: { storeId, staffId } });
       if (schedules.length) {
         await tx.staffSchedule.createMany({
           data: schedules.map((s) => ({
-            shopId: storeId,
+            storeId,
             staffId,
             dayOfWeek: s.dayOfWeek,
             startTime: s.startTime,
@@ -43,7 +45,7 @@ export class StaffScheduleService {
       }
     });
     return this.prisma.staffSchedule.findMany({
-      where: { shopId: storeId, staffId },
+      where: { storeId, staffId },
       orderBy: { dayOfWeek: 'asc' },
       include: scheduleInclude,
     });
@@ -52,7 +54,7 @@ export class StaffScheduleService {
   async findAll(storeId: string, staffId: string, dayOfWeek?: DayOfWeek) {
     return this.prisma.staffSchedule.findMany({
       where: {
-        shopId: storeId,
+        storeId,
         staffId,
         ...(dayOfWeek && { dayOfWeek }),
       },
@@ -61,17 +63,21 @@ export class StaffScheduleService {
     });
   }
 
-  async findOne(id: string) {
-    const schedule = await this.prisma.staffSchedule.findUnique({
-      where: { id },
+  async findOne(id: string, storeId?: string, staffId?: string) {
+    const schedule = await this.prisma.staffSchedule.findFirst({
+      where: {
+        id,
+        ...(storeId && { storeId }),
+        ...(staffId && { staffId }),
+      },
       include: { staff: { include: { user: { select: { id: true, fullName: true, email: true, phone: true } } } } },
     });
     if (!schedule) throw new NotFoundException('Staff schedule not found');
     return schedule;
   }
 
-  async update(id: string, dto: UpdateStaffScheduleDto) {
-    await this.findOne(id);
+  async update(id: string, storeId: string, staffId: string, dto: UpdateStaffScheduleDto) {
+    await this.findOne(id, storeId, staffId);
     return this.prisma.staffSchedule.update({
       where: { id },
       data: {
@@ -84,9 +90,17 @@ export class StaffScheduleService {
     });
   }
 
-  async remove(id: string) {
-    await this.findOne(id);
+  async remove(id: string, storeId: string, staffId: string) {
+    await this.findOne(id, storeId, staffId);
     await this.prisma.staffSchedule.delete({ where: { id } });
     return { deleted: true };
+  }
+
+  private async assertStaffInStore(storeId: string, staffId: string) {
+    const staff = await this.prisma.staff.findFirst({
+      where: { id: staffId, storeId },
+      select: { id: true },
+    });
+    if (!staff) throw new NotFoundException('Staff not found in this store');
   }
 }

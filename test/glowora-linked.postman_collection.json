@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "b9f2795a-role-workflows-glowora",
     "name": "Glowora Booking API - Role Workflows",
-    "description": "One collection organized by real user roles and jobs.\n\nRun order:\n00 Shared Setup creates fresh test users and tokens.\n01 Shop Owner creates the shop shell.\n02 Super Admin approves the shop.\n03 Shop Owner builds catalog and invites staff.\n04 Shop Staff accepts invite and manages booking work.\n05 Customer browses, books, pays, reviews, chats.\n06 Super Admin moderates review after customer review exists.\n07 Public Read APIs can be run after shop is approved.\n\nUse one environment only: test/glowora-local.postman_environment.json.\nSeed requirements: pnpm run db:seed. Demo seed is optional: pnpm run db:seed:demo. Location seed is optional for /locations checks: pnpm exec prisma db execute --file prisma/seed_provinces_wards.sql.",
+    "description": "One collection organized by real user roles and jobs.\n\nRun order:\n00 Shared Setup creates fresh test users and tokens.\n01 Shop Owner creates the store shell.\n02 Super Admin approves the store.\n03 Shop Owner builds catalog and invites staff.\n04 Shop Staff accepts invite and manages booking work.\n05 Customer browses, books, pays, reviews, chats.\n06 Super Admin moderates review after customer review exists.\n07 Public Read APIs can be run after store is approved.\n\nUse one environment only: test/glowora-local.postman_environment.json.\nSeed requirements: pnpm run db:seed. Demo seed is optional: pnpm run db:seed:demo. Location seed is optional for /locations checks: pnpm exec prisma db execute --file prisma/seed_provinces_wards.sql.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "event": [
@@ -531,11 +531,11 @@
     },
     {
       "name": "01 - SHOP_OWNER: Store Setup",
-      "description": "Owner creates and configures a shop. Store remains PENDING until super admin approves it.",
+      "description": "Owner creates and configures a store. Store remains PENDING until super admin approves it.",
       "item": [
         {
           "name": "01.01 Create pending store",
-          "description": "Saves storeId/storeSlug. Later role workflows use this store as x-shop-id.",
+          "description": "Saves storeId/storeSlug. Later role workflows use this store as x-store-id.",
           "request": {
             "method": "POST",
             "header": [
@@ -636,8 +636,8 @@
           ]
         },
         {
-          "name": "01.03 Owner - list my shop memberships",
-          "description": "Shows shop role membership after store creation.",
+          "name": "01.03 Owner - list my store memberships",
+          "description": "Shows store role membership after store creation.",
           "request": {
             "method": "GET",
             "header": [
@@ -679,8 +679,8 @@
           ]
         },
         {
-          "name": "01.04 Owner - permission matrix in shop",
-          "description": "Verifies SHOP_OWNER permissions in x-shop-id context.",
+          "name": "01.04 Owner - permission matrix in store",
+          "description": "Verifies SHOP_OWNER permissions in x-store-id context.",
           "request": {
             "method": "GET",
             "header": [
@@ -689,7 +689,7 @@
                 "value": "Bearer {{ownerToken}}"
               },
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -729,7 +729,7 @@
     },
     {
       "name": "02 - SUPER_ADMIN: Store Moderation",
-      "description": "Super admin reviews and approves the pending shop.",
+      "description": "Super admin reviews and approves the pending store.",
       "item": [
         {
           "name": "02.01 Admin - list pending stores",
@@ -782,7 +782,7 @@
         },
         {
           "name": "02.02 Admin - approve store",
-          "description": "Makes the shop ACTIVE so public/customer workflows can use it.",
+          "description": "Makes the store ACTIVE so public/customer workflows can use it.",
           "request": {
             "method": "PATCH",
             "header": [
@@ -831,7 +831,7 @@
         },
         {
           "name": "02.03 Admin - get approved store detail",
-          "description": "Confirms admin can inspect the approved shop.",
+          "description": "Confirms admin can inspect the approved store.",
           "request": {
             "method": "GET",
             "header": [
@@ -926,7 +926,7 @@
     },
     {
       "name": "03 - SHOP_OWNER: Catalog, Hours, Staff Invite",
-      "description": "Owner configures working hours, services, staff, and combo for the approved shop.",
+      "description": "Owner configures working hours, services, staff, and combo for the approved store.",
       "item": [
         {
           "name": "03.01 Owner - replace working hours",
@@ -943,7 +943,7 @@
                 "value": "Bearer {{ownerToken}}"
               },
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -1004,7 +1004,7 @@
                 "value": "Bearer {{ownerToken}}"
               },
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -1070,7 +1070,7 @@
                 "value": "Bearer {{ownerToken}}"
               },
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -1134,7 +1134,7 @@
                 "value": "Bearer {{ownerToken}}"
               },
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -1190,7 +1190,7 @@
       "item": [
         {
           "name": "04.01 Staff - accept invite",
-          "description": "Creates staff profile and shop-specific SHOP_STAFF role. Saves staffId.",
+          "description": "Creates staff profile and store-specific SHOP_STAFF role. Saves staffId.",
           "request": {
             "method": "POST",
             "header": [
@@ -1248,7 +1248,7 @@
           ]
         },
         {
-          "name": "04.02 Staff - permission matrix in shop",
+          "name": "04.02 Staff - permission matrix in store",
           "description": "Verifies staff permissions after accepting invite.",
           "request": {
             "method": "GET",
@@ -1258,7 +1258,7 @@
                 "value": "Bearer {{staffToken}}"
               },
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -1309,7 +1309,7 @@
                 "value": "Bearer {{ownerToken}}"
               },
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -1370,7 +1370,7 @@
                 "value": "Bearer {{ownerToken}}"
               },
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -1418,12 +1418,12 @@
         },
         {
           "name": "04.05 Staff - list own/store staff record",
-          "description": "Public staff detail by x-shop-id.",
+          "description": "Public staff detail by x-store-id.",
           "request": {
             "method": "GET",
             "header": [
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -1470,7 +1470,7 @@
                 "value": "Bearer {{staffToken}}"
               },
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -1594,12 +1594,12 @@
         },
         {
           "name": "05.03 Public - services in store",
-          "description": "Customer-facing service list for this shop.",
+          "description": "Customer-facing service list for this store.",
           "request": {
             "method": "GET",
             "header": [
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -1803,7 +1803,7 @@
                 "value": "Bearer {{staffToken}}"
               },
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -1849,7 +1849,7 @@
                 "value": "Bearer {{staffToken}}"
               },
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -1897,7 +1897,7 @@
                 "value": "Bearer {{staffToken}}"
               },
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -2567,7 +2567,7 @@
         },
         {
           "name": "07.04 Public - explore services",
-          "description": "Cross-shop service search.",
+          "description": "Cross-store service search.",
           "request": {
             "method": "GET",
             "header": [],
@@ -2689,12 +2689,12 @@
         },
         {
           "name": "07.07 Public - combos in store",
-          "description": "No token, but x-shop-id chooses the store.",
+          "description": "No token, but x-store-id chooses the store.",
           "request": {
             "method": "GET",
             "header": [
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -2887,7 +2887,7 @@
                 "value": "Bearer {{staffToken}}"
               },
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -3003,7 +3003,7 @@
                 "value": "Bearer {{staffToken}}"
               },
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -3122,7 +3122,7 @@
                 "value": "Bearer {{staffToken}}"
               },
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],
@@ -3189,7 +3189,7 @@
                 "value": "Bearer {{staffToken}}"
               },
               {
-                "key": "x-shop-id",
+                "key": "x-store-id",
                 "value": "{{storeId}}"
               }
             ],

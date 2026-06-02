@@ -9,7 +9,7 @@ START TRANSACTION;
 -- ─────────────────────────────────────────────────────────────
 -- 1. ROLES
 -- ─────────────────────────────────────────────────────────────
-INSERT IGNORE INTO `roles` (id, code, name, description, is_system, shop_id) VALUES
+INSERT IGNORE INTO `roles` (id, code, name, description, is_system, store_id) VALUES
   ('7b0e395c-e9a3-43c3-9e4e-34aadd5e0b6c', 'SUPER_ADMIN',     'Super Admin',  'Quan tri vien he thong, toan quyen', TRUE, NULL),
   ('a9dc7ae6-6b45-4ed2-a01f-3aad346ab44d', 'SHOP_OWNER',      'Shop Owner',   'Chu cua hang, quan ly toan bo hoat dong', TRUE, NULL),
   ('4a7e7dfe-75b9-406a-9703-1b4be5fffaaa', 'SHOP_STAFF',      'Shop Staff',   'Nhan vien cua hang (thuc hien dich vu)', TRUE, NULL),
