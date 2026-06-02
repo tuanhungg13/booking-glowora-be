@@ -2,8 +2,7 @@ import { IsBoolean, IsEnum, IsOptional, IsString, IsUUID, Matches } from 'class-
 import { DayOfWeek } from '@prisma/client';
 
 export class CreateWorkingHourDto {
-  @IsUUID()
-  storeId!: string;
+  storeId!: string; // set by controller from x-store-id header, not from request body
 
   @IsEnum(DayOfWeek)
   dayOfWeek!: DayOfWeek;

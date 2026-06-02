@@ -43,6 +43,24 @@ export class ConversationsService {
     });
   }
 
+  async findByStore(requesterId: string, storeId: string, params?: { skip?: number; take?: number }) {
+    const store = await this.prisma.store.findUnique({
+      where: { id: storeId },
+      select: { ownerId: true },
+    });
+    if (!store) throw new NotFoundException('Store not found');
+
+    if (store.ownerId !== requesterId) {
+      const isStaff = await this.prisma.staff.findFirst({
+        where: { userId: requesterId, storeId, status: 'ACTIVE' },
+        select: { id: true },
+      });
+      if (!isStaff) throw new ForbiddenException('Not an owner or active staff of this store');
+    }
+
+    return this.findAll({ storeId, ...params });
+  }
+
   async findAll(params?: { customerId?: string; storeId?: string; skip?: number; take?: number }) {
     const where = {
       ...(params?.customerId && { customerId: params.customerId }),
@@ -61,18 +79,34 @@ export class ConversationsService {
     return { items, total };
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, requesterId?: string) {
     const conversation = await this.prisma.conversation.findUnique({
       where: { id },
       include: {
         ...conversationInclude,
         messages: {
-          orderBy: { createdAt: 'asc' },
+          orderBy: { createdAt: 'desc' },
+          take: 20,
           include: { sender: { select: { id: true, fullName: true, email: true, avatarUrl: true } } },
         },
       },
     });
     if (!conversation) throw new NotFoundException('Conversation not found');
+
+    conversation.messages.reverse();
+
+    if (requesterId) {
+      const isCustomer = conversation.customerId === requesterId;
+      const isOwner = (conversation.store as any).ownerId === requesterId;
+      if (!isCustomer && !isOwner) {
+        const isStaff = await this.prisma.staff.findFirst({
+          where: { userId: requesterId, storeId: conversation.storeId, status: 'ACTIVE' },
+          select: { id: true },
+        });
+        if (!isStaff) throw new ForbiddenException();
+      }
+    }
+
     return conversation;
   }
 

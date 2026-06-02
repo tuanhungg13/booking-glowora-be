@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thông báo lịch hẹn – Glowora</title>
+  <style>
+    body { margin: 0; padding: 0; background-color: #f4f4f4; font-family: 'Segoe UI', Arial, sans-serif; }
+    .wrapper { max-width: 520px; margin: 40px auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    .header { background: linear-gradient(135deg, #d4a5c9, #a05e8a); padding: 36px 40px; text-align: center; }
+    .header h1 { margin: 0; color: #ffffff; font-size: 26px; letter-spacing: 1px; }
+    .header p { margin: 8px 0 0; color: rgba(255,255,255,0.85); font-size: 14px; }
+    .body { padding: 36px 40px; }
+    .greeting { font-size: 16px; color: #444; margin-bottom: 16px; }
+    .message { font-size: 15px; color: #555; line-height: 1.6; margin-bottom: 28px; }
+    .info-box { background: #fdf4fb; border: 1.5px solid #d4a5c9; border-radius: 10px; padding: 20px 24px; margin-bottom: 28px; }
+    .info-row { display: flex; align-items: flex-start; margin-bottom: 10px; font-size: 14px; color: #444; }
+    .info-row:last-child { margin-bottom: 0; }
+    .info-label { font-weight: 600; color: #a05e8a; min-width: 110px; }
+    .badge { display: inline-block; font-size: 13px; font-weight: 600; padding: 5px 14px; border-radius: 20px; margin-bottom: 20px; }
+    .badge-success { background: #e8f5e9; color: #2e7d32; }
+    .badge-warning { background: #fff8e1; color: #f57f17; }
+    .badge-error { background: #fce4ec; color: #c62828; }
+    .footer { background: #f9f9f9; padding: 20px 40px; text-align: center; font-size: 12px; color: #aaa; border-top: 1px solid #eee; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <h1>✦ Glowora</h1>
+      {{#if isCreated}}<p>Xác nhận đặt lịch</p>{{/if}}
+      {{#if isConfirmed}}<p>Lịch hẹn được xác nhận</p>{{/if}}
+      {{#if isRejected}}<p>Thông báo lịch hẹn</p>{{/if}}
+      {{#if isCancelled}}<p>Thông báo hủy lịch</p>{{/if}}
+      {{#if isCompleted}}<p>Dịch vụ hoàn thành</p>{{/if}}
+      {{#if isPaymentSuccess}}<p>Xác nhận thanh toán</p>{{/if}}
+    </div>
+    <div class="body">
+      <p class="greeting">Xin chào <strong>{{fullName}}</strong>,</p>
+
+      {{#if isCreated}}
+        <span class="badge badge-success">✓ Đặt lịch thành công</span>
+        <p class="message">
+          Bạn đã đặt lịch thành công tại <strong>{{storeName}}</strong>.<br />
+          Lịch hẹn của bạn đang chờ cửa hàng xác nhận. Chúng tôi sẽ thông báo ngay khi có phản hồi!
+        </p>
+      {{/if}}
+
+      {{#if isConfirmed}}
+        <span class="badge badge-success">✓ Đã xác nhận</span>
+        <p class="message">
+          Lịch hẹn của bạn tại <strong>{{storeName}}</strong> đã được xác nhận.<br />
+          Hẹn gặp bạn tại cửa hàng nhé!
+        </p>
+      {{/if}}
+
+      {{#if isRejected}}
+        <span class="badge badge-error">✗ Chưa được xác nhận</span>
+        <p class="message">
+          Rất tiếc, lịch hẹn của bạn tại <strong>{{storeName}}</strong> chưa được xác nhận.<br />
+          {{#if reason}}<strong>Lý do:</strong> {{reason}}<br />{{/if}}
+          Bạn có thể đặt lịch lại ở thời gian khác qua ứng dụng Glowora.
+        </p>
+      {{/if}}
+
+      {{#if isCancelled}}
+        <span class="badge badge-warning">Đã hủy</span>
+        <p class="message">
+          Lịch hẹn của bạn tại <strong>{{storeName}}</strong> đã được hủy.<br />
+          {{#if reason}}<strong>Lý do:</strong> {{reason}}<br />{{/if}}
+          Nếu có thắc mắc, vui lòng liên hệ cửa hàng hoặc hỗ trợ Glowora.
+        </p>
+      {{/if}}
+
+      {{#if isCompleted}}
+        <span class="badge badge-success">✓ Hoàn thành</span>
+        <p class="message">
+          Dịch vụ tại <strong>{{storeName}}</strong> đã hoàn thành.<br />
+          Cảm ơn bạn đã tin dùng Glowora! Hãy dành chút thời gian để đánh giá dịch vụ nhé.
+        </p>
+      {{/if}}
+
+      {{#if isPaymentSuccess}}
+        <span class="badge badge-success">✓ Thanh toán thành công</span>
+        <p class="message">
+          Giao dịch thanh toán của bạn tại <strong>{{storeName}}</strong> đã được ghi nhận thành công.
+        </p>
+      {{/if}}
+
+      <div class="info-box">
+        <div class="info-row">
+          <span class="info-label">Cửa hàng</span>
+          <span>{{storeName}}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Dịch vụ</span>
+          <span>{{serviceNames}}</span>
+        </div>
+        {{#if scheduledAt}}
+        <div class="info-row">
+          <span class="info-label">Thời gian</span>
+          <span>{{scheduledAt}}</span>
+        </div>
+        {{/if}}
+        {{#if amount}}
+        <div class="info-row">
+          <span class="info-label">Số tiền</span>
+          <span>{{amount}}</span>
+        </div>
+        {{/if}}
+      </div>
+
+      <p style="font-size:14px;color:#777;">Cảm ơn bạn đã tin dùng <strong>Glowora</strong>.</p>
+    </div>
+    <div class="footer">
+      © 2025 Glowora · Nền tảng đặt lịch spa &amp; salon
+    </div>
+  </div>
+</body>
+</html>

@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { SenderType } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
@@ -18,6 +19,7 @@ export class MessagesService {
         data: {
           conversationId: dto.conversationId,
           senderId: dto.senderId,
+          senderType: dto.senderType ?? SenderType.CUSTOMER,
           content: dto.content,
           isRead: dto.isRead ?? false,
         },

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { vnDateRange } from '../../../common/utils/date.util';
 
 type GroupBy = 'day' | 'week' | 'month';
 
@@ -14,9 +15,7 @@ export class StoreAnalyticsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getOverview(storeId: string, from: string, to: string) {
-    const fromDate = new Date(from);
-    const toDate = new Date(to);
-    toDate.setHours(23, 59, 59, 999);
+    const { fromDate, toDate } = vnDateRange(from, to);
 
     const [revenueAgg, bookingStats, ratingAgg, newCustomers] = await Promise.all([
       // Tổng doanh thu từ payments đã thanh toán
@@ -84,9 +83,7 @@ export class StoreAnalyticsService {
   }
 
   async getRevenueTrend(storeId: string, from: string, to: string, groupBy: GroupBy) {
-    const fromDate = new Date(from);
-    const toDate = new Date(to);
-    toDate.setHours(23, 59, 59, 999);
+    const { fromDate, toDate } = vnDateRange(from, to);
 
     const fmt = dateFormat(groupBy);
 
@@ -119,9 +116,7 @@ export class StoreAnalyticsService {
   }
 
   async getBookingTrend(storeId: string, from: string, to: string, groupBy: GroupBy) {
-    const fromDate = new Date(from);
-    const toDate = new Date(to);
-    toDate.setHours(23, 59, 59, 999);
+    const { fromDate, toDate } = vnDateRange(from, to);
 
     const fmt = dateFormat(groupBy);
 
@@ -168,9 +163,7 @@ export class StoreAnalyticsService {
   }
 
   async getTopServices(storeId: string, from: string, to: string, limit: number) {
-    const fromDate = new Date(from);
-    const toDate = new Date(to);
-    toDate.setHours(23, 59, 59, 999);
+    const { fromDate, toDate } = vnDateRange(from, to);
 
     const rows = await this.prisma.$queryRawUnsafe<
       {

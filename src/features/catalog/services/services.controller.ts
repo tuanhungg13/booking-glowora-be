@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   Param,
   Patch,
   Post,
@@ -59,7 +60,7 @@ export class ServicesController {
   @Public()
   @Get(':id')
   findOne(
-    @StoreId() storeId: string,
+    @Headers('x-store-id') storeId: string | undefined,
     @Param('id') id: string,
     @Query('userLat') userLat?: string,
     @Query('userLng') userLng?: string,

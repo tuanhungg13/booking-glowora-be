@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { vnDateRange } from '../../../common/utils/date.util';
 
 type GroupBy = 'day' | 'week' | 'month';
 
@@ -14,9 +15,7 @@ export class AdminAnalyticsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getOverview(from: string, to: string) {
-    const fromDate = new Date(from);
-    const toDate = new Date(to);
-    toDate.setHours(23, 59, 59, 999);
+    const { fromDate, toDate } = vnDateRange(from, to);
 
     const [storeStats, userStats, bookingStats, revenueAgg, reviewAgg] = await Promise.all([
       this.prisma.store.groupBy({
@@ -104,9 +103,7 @@ export class AdminAnalyticsService {
   }
 
   async getStoreTrend(from: string, to: string, groupBy: GroupBy) {
-    const fromDate = new Date(from);
-    const toDate = new Date(to);
-    toDate.setHours(23, 59, 59, 999);
+    const { fromDate, toDate } = vnDateRange(from, to);
 
     const fmt = dateFormat(groupBy);
 
@@ -147,9 +144,7 @@ export class AdminAnalyticsService {
   }
 
   async getUserTrend(from: string, to: string, groupBy: GroupBy) {
-    const fromDate = new Date(from);
-    const toDate = new Date(to);
-    toDate.setHours(23, 59, 59, 999);
+    const { fromDate, toDate } = vnDateRange(from, to);
 
     const fmt = dateFormat(groupBy);
 
@@ -190,9 +185,7 @@ export class AdminAnalyticsService {
   }
 
   async getRevenueTrend(from: string, to: string, groupBy: GroupBy) {
-    const fromDate = new Date(from);
-    const toDate = new Date(to);
-    toDate.setHours(23, 59, 59, 999);
+    const { fromDate, toDate } = vnDateRange(from, to);
 
     const fmt = dateFormat(groupBy);
 
@@ -222,9 +215,7 @@ export class AdminAnalyticsService {
   }
 
   async getTopStores(from: string, to: string, limit: number) {
-    const fromDate = new Date(from);
-    const toDate = new Date(to);
-    toDate.setHours(23, 59, 59, 999);
+    const { fromDate, toDate } = vnDateRange(from, to);
 
     const rows = await this.prisma.$queryRawUnsafe<
       {

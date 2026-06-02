@@ -8,16 +8,18 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { WorkingHourService } from './working-hour.service';
 import { CreateWorkingHourDto } from './dto/create-working-hour.dto';
 import { UpdateWorkingHourDto } from './dto/update-working-hour.dto';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
+import { StoreId } from '../../../common/decorators/store-id.decorator';
 import { DayOfWeek } from '@prisma/client';
 
 @ApiTags('staff / working-hours')
 @ApiBearerAuth()
+@ApiHeader({ name: 'x-store-id', description: 'ID của store', required: true })
 @Controller('working-hours')
 export class WorkingHourController {
   constructor(private readonly workingHourService: WorkingHourService) {}
@@ -26,8 +28,8 @@ export class WorkingHourController {
   @ApiResponse({ status: 201, description: 'Tạo thành công' })
   @Post()
   @RequirePermissions(Permissions.WORKING_HOUR.CREATE)
-  create(@Body() dto: CreateWorkingHourDto) {
-    return this.workingHourService.create(dto);
+  create(@StoreId() storeId: string, @Body() dto: CreateWorkingHourDto) {
+    return this.workingHourService.create({ ...dto, storeId });
   }
 
   @ApiOperation({ summary: 'Lấy danh sách giờ làm việc' })
@@ -35,8 +37,8 @@ export class WorkingHourController {
   @ApiResponse({ status: 200, description: 'Danh sách giờ làm việc' })
   @Get()
   @RequirePermissions(Permissions.WORKING_HOUR.VIEW)
-  findAll(@Query('dayOfWeek') dayOfWeek?: DayOfWeek) {
-    return this.workingHourService.findAll({ dayOfWeek });
+  findAll(@StoreId() storeId: string, @Query('dayOfWeek') dayOfWeek?: DayOfWeek) {
+    return this.workingHourService.findAll({ storeId, dayOfWeek });
   }
 
   @ApiOperation({ summary: 'Lấy chi tiết giờ làm việc' })

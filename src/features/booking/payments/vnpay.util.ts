@@ -63,14 +63,16 @@ export function verifyVnpaySignature(
 }
 
 export function formatVnpayDate(date: Date): string {
+  // VNPay yêu cầu giờ Việt Nam (UTC+7)
+  const vn = new Date(date.getTime() + 7 * 60 * 60 * 1000);
   const pad = (n: number) => String(n).padStart(2, '0');
   return (
-    date.getFullYear().toString() +
-    pad(date.getMonth() + 1) +
-    pad(date.getDate()) +
-    pad(date.getHours()) +
-    pad(date.getMinutes()) +
-    pad(date.getSeconds())
+    vn.getUTCFullYear().toString() +
+    pad(vn.getUTCMonth() + 1) +
+    pad(vn.getUTCDate()) +
+    pad(vn.getUTCHours()) +
+    pad(vn.getUTCMinutes()) +
+    pad(vn.getUTCSeconds())
   );
 }
 

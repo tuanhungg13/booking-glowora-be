@@ -38,12 +38,8 @@ export class SystemLogService {
     const limit = filter.limit ?? 20;
 
     const createdAt: Prisma.DateTimeFilter = {};
-    if (filter.dateFrom) createdAt.gte = new Date(filter.dateFrom);
-    if (filter.dateTo) {
-      const to = new Date(filter.dateTo);
-      to.setHours(23, 59, 59, 999);
-      createdAt.lte = to;
-    }
+    if (filter.dateFrom) createdAt.gte = new Date(`${filter.dateFrom}T00:00:00+07:00`);
+    if (filter.dateTo) createdAt.lte = new Date(`${filter.dateTo}T23:59:59.999+07:00`);
 
     const where: Prisma.SystemLogWhereInput = {
       ...(filter.type && { type: filter.type }),

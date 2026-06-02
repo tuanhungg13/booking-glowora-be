@@ -11,6 +11,7 @@ import { map } from 'rxjs/operators';
 function convertDecimals(value: unknown): unknown {
   if (Prisma.Decimal.isDecimal(value)) return (value as Prisma.Decimal).toNumber();
   if (Array.isArray(value)) return value.map(convertDecimals);
+  if (value instanceof Date) return value;
   if (value !== null && typeof value === 'object') {
     return Object.fromEntries(
       Object.entries(value as Record<string, unknown>).map(([k, v]) => [k, convertDecimals(v)]),

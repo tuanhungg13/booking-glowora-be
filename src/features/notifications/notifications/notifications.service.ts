@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject, forwardRef, Logger } from '@nestjs/common';
 import { NotificationType } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { ChatGateway } from '../../../gateways/chat.gateway';
@@ -9,6 +9,8 @@ import { UpdateNotificationDto } from './dto/update-notification.dto';
 
 @Injectable()
 export class NotificationsService {
+  private readonly logger = new Logger(NotificationsService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     @Inject(forwardRef(() => ChatGateway))
@@ -141,18 +143,28 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', customerNotif);
     this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
 
-    console.log(`[EMAIL] To: ${customerEmail} | Subject: Xác nhận đặt lịch tại ${storeName}`);
+    this.mail
+      .sendBookingEvent({
+        email: customerEmail,
+        fullName: customerName,
+        storeName,
+        serviceNames,
+        scheduledAt: timeStr,
+        eventType: 'CREATED',
+      })
+      .catch((err: Error) => this.logger.warn(`Email CREATED failed for ${customerEmail}: ${err?.message}`));
   }
 
   async notifyBookingConfirmed(params: {
     bookingId: string;
     customerId: string;
     customerEmail: string;
+    customerName?: string;
     storeName: string;
     serviceNames: string;
     scheduledAt: Date;
   }) {
-    const { bookingId, customerId, customerEmail, storeName, serviceNames, scheduledAt } = params;
+    const { bookingId, customerId, customerEmail, customerName, storeName, serviceNames, scheduledAt } = params;
     const timeStr = this.formatDateTime(scheduledAt);
 
     const notif = await this.prisma.notification.create({
@@ -167,18 +179,28 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    console.log(`[EMAIL] To: ${customerEmail} | Subject: Lịch hẹn đã được xác nhận tại ${storeName}`);
+    this.mail
+      .sendBookingEvent({
+        email: customerEmail,
+        fullName: customerName ?? customerEmail,
+        storeName,
+        serviceNames,
+        scheduledAt: timeStr,
+        eventType: 'CONFIRMED',
+      })
+      .catch((err: Error) => this.logger.warn(`Email CONFIRMED failed for ${customerEmail}: ${err?.message}`));
   }
 
   async notifyBookingRejected(params: {
     bookingId: string;
     customerId: string;
     customerEmail: string;
+    customerName?: string;
     storeName: string;
     serviceNames: string;
     reason: string;
   }) {
-    const { bookingId, customerId, customerEmail, storeName, serviceNames, reason } = params;
+    const { bookingId, customerId, customerEmail, customerName, storeName, serviceNames, reason } = params;
 
     const notif = await this.prisma.notification.create({
       data: {
@@ -192,17 +214,27 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    console.log(`[EMAIL] To: ${customerEmail} | Subject: Lịch hẹn chưa được xác nhận tại ${storeName}`);
+    this.mail
+      .sendBookingEvent({
+        email: customerEmail,
+        fullName: customerName ?? customerEmail,
+        storeName,
+        serviceNames,
+        reason,
+        eventType: 'REJECTED',
+      })
+      .catch((err: Error) => this.logger.warn(`Email REJECTED failed for ${customerEmail}: ${err?.message}`));
   }
 
   async notifyBookingCompleted(params: {
     bookingId: string;
     customerId: string;
     customerEmail: string;
+    customerName?: string;
     storeName: string;
     serviceNames: string;
   }) {
-    const { bookingId, customerId, customerEmail, storeName, serviceNames } = params;
+    const { bookingId, customerId, customerEmail, customerName, storeName, serviceNames } = params;
 
     const notif = await this.prisma.notification.create({
       data: {
@@ -216,7 +248,15 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    console.log(`[EMAIL] To: ${customerEmail} | Subject: Cảm ơn bạn đã sử dụng dịch vụ tại ${storeName}`);
+    this.mail
+      .sendBookingEvent({
+        email: customerEmail,
+        fullName: customerName ?? customerEmail,
+        storeName,
+        serviceNames,
+        eventType: 'COMPLETED',
+      })
+      .catch((err: Error) => this.logger.warn(`Email COMPLETED failed for ${customerEmail}: ${err?.message}`));
   }
 
   async notifyBookingCancelled(params: {
@@ -260,7 +300,16 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', customerNotif);
     this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
 
-    console.log(`[EMAIL] To: ${customerEmail} | Subject: Lịch hẹn tại ${storeName} đã bị hủy`);
+    this.mail
+      .sendBookingEvent({
+        email: customerEmail,
+        fullName: customerName,
+        storeName,
+        serviceNames,
+        reason,
+        eventType: 'CANCELLED',
+      })
+      .catch((err: Error) => this.logger.warn(`Email CANCELLED failed for ${customerEmail}: ${err?.message}`));
   }
 
   async notifyPaymentSuccess(params: {
@@ -272,7 +321,7 @@ export class NotificationsService {
     storeName: string;
     serviceNames: string;
   }) {
-    const { bookingId, customerId, customerEmail, storeName, serviceNames, amount } = params;
+    const { bookingId, customerId, customerEmail, customerName, storeName, serviceNames, amount } = params;
     const formattedAmount = amount.toLocaleString('vi-VN');
 
     const notif = await this.prisma.notification.create({
@@ -287,7 +336,16 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    console.log(`[EMAIL] To: ${customerEmail} | Subject: Xác nhận thanh toán thành công tại ${storeName}`);
+    this.mail
+      .sendBookingEvent({
+        email: customerEmail,
+        fullName: customerName,
+        storeName,
+        serviceNames,
+        amount: `${formattedAmount}₫`,
+        eventType: 'PAYMENT_SUCCESS',
+      })
+      .catch((err: Error) => this.logger.warn(`Email PAYMENT_SUCCESS failed for ${customerEmail}: ${err?.message}`));
   }
 
   async notifyBookingReminder1Day(params: {
@@ -323,7 +381,7 @@ export class NotificationsService {
         scheduledAt: timeStr,
         isOneDayReminder: true,
       })
-      .catch(() => undefined);
+      .catch((err: Error) => this.logger.warn(`Reminder 1-day email failed for ${customerEmail}: ${err?.message}`));
   }
 
   async notifyBookingReminder1Hour(params: {
@@ -359,15 +417,19 @@ export class NotificationsService {
         scheduledAt: timeStr,
         isOneDayReminder: false,
       })
-      .catch(() => undefined);
+      .catch((err: Error) => this.logger.warn(`Reminder 1-hour email failed for ${customerEmail}: ${err?.message}`));
   }
 
   private push(userId: string, title: string, body: string, data?: Record<string, unknown>) {
-    this.webPush.sendToUser(userId, { title, body, data }).catch(() => undefined);
+    this.webPush
+      .sendToUser(userId, { title, body, data })
+      .catch((err: Error) => this.logger.warn(`Web push failed for user ${userId}: ${err?.message}`));
   }
 
+  // Offset UTC → UTC+7 thủ công để không phụ thuộc vào ICU locale của server
   private formatDateTime(date: Date): string {
-    const d = date.toISOString();
-    return d.replace('T', ' ').substring(0, 16);
+    const vn = new Date(date.getTime() + 7 * 60 * 60 * 1000);
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${pad(vn.getUTCDate())}/${pad(vn.getUTCMonth() + 1)}/${vn.getUTCFullYear()} ${pad(vn.getUTCHours())}:${pad(vn.getUTCMinutes())}`;
   }
 }

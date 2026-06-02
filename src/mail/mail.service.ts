@@ -27,6 +27,47 @@ export class MailService {
     this.logger.log(`Password reset OTP email sent to ${email}`);
   }
 
+  async sendBookingEvent(params: {
+    email: string;
+    fullName: string;
+    storeName: string;
+    serviceNames: string;
+    scheduledAt?: string;
+    reason?: string;
+    amount?: string;
+    eventType: 'CREATED' | 'CONFIRMED' | 'REJECTED' | 'CANCELLED' | 'COMPLETED' | 'PAYMENT_SUCCESS';
+  }): Promise<void> {
+    const { email, fullName, storeName, serviceNames, scheduledAt, reason, amount, eventType } = params;
+    const subjects: Record<string, string> = {
+      CREATED: `[Glowora] Xác nhận đặt lịch tại ${storeName}`,
+      CONFIRMED: `[Glowora] Lịch hẹn tại ${storeName} đã được xác nhận`,
+      REJECTED: `[Glowora] Lịch hẹn tại ${storeName} chưa được xác nhận`,
+      CANCELLED: `[Glowora] Lịch hẹn tại ${storeName} đã bị hủy`,
+      COMPLETED: `[Glowora] Cảm ơn bạn đã sử dụng dịch vụ tại ${storeName}`,
+      PAYMENT_SUCCESS: `[Glowora] Xác nhận thanh toán thành công tại ${storeName}`,
+    };
+    await this.mailer.sendMail({
+      to: email,
+      subject: subjects[eventType],
+      template: 'booking-event',
+      context: {
+        fullName,
+        storeName,
+        serviceNames,
+        scheduledAt,
+        reason,
+        amount,
+        isCreated: eventType === 'CREATED',
+        isConfirmed: eventType === 'CONFIRMED',
+        isRejected: eventType === 'REJECTED',
+        isCancelled: eventType === 'CANCELLED',
+        isCompleted: eventType === 'COMPLETED',
+        isPaymentSuccess: eventType === 'PAYMENT_SUCCESS',
+      },
+    });
+    this.logger.log(`Booking event email (${eventType}) sent to ${email}`);
+  }
+
   async sendBookingReminder(params: {
     email: string;
     fullName: string;

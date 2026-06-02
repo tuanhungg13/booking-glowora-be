@@ -15,6 +15,8 @@ import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
 import { StoreId } from '../../../common/decorators/store-id.decorator';
+import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 
 @ApiTags('conversations')
 @Controller('conversations')
@@ -51,19 +53,35 @@ export class ConversationsController {
     });
   }
 
-  @ApiOperation({ summary: 'Lấy danh sách hội thoại của store (staff view)' })
+  @ApiOperation({ summary: 'Lấy danh sách hội thoại của tôi (customer)' })
   @ApiQuery({ name: 'skip', required: false, type: Number })
   @ApiQuery({ name: 'take', required: false, type: Number })
   @ApiBearerAuth()
-  @RequirePermissions(Permissions.CONVERSATION.VIEW)
-  @Get('store')
-  findByStore(
-    @StoreId() storeId: string,
+  @Get('my')
+  findMy(
+    @CurrentUser() user: CurrentUserPayload,
     @Query('skip') skip?: string,
     @Query('take') take?: string,
   ) {
     return this.conversationsService.findAll({
-      storeId,
+      customerId: user.id,
+      skip: skip ? Number(skip) : undefined,
+      take: take ? Number(take) : undefined,
+    });
+  }
+
+  @ApiOperation({ summary: 'Lấy danh sách hội thoại của store (owner/staff view)' })
+  @ApiQuery({ name: 'skip', required: false, type: Number })
+  @ApiQuery({ name: 'take', required: false, type: Number })
+  @ApiBearerAuth()
+  @Get('store')
+  findByStore(
+    @CurrentUser() user: CurrentUserPayload,
+    @StoreId() storeId: string,
+    @Query('skip') skip?: string,
+    @Query('take') take?: string,
+  ) {
+    return this.conversationsService.findByStore(user.id, storeId, {
       skip: skip ? Number(skip) : undefined,
       take: take ? Number(take) : undefined,
     });
@@ -73,9 +91,8 @@ export class ConversationsController {
   @ApiParam({ name: 'id', description: 'Conversation ID' })
   @ApiBearerAuth()
   @Get(':id')
-  @RequirePermissions(Permissions.CONVERSATION.VIEW)
-  findOne(@Param('id') id: string) {
-    return this.conversationsService.findOne(id);
+  findOne(@CurrentUser() user: CurrentUserPayload, @Param('id') id: string) {
+    return this.conversationsService.findOne(id, user.id);
   }
 
   @ApiOperation({ summary: 'Cập nhật thông tin hội thoại' })
