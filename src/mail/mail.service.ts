@@ -26,4 +26,26 @@ export class MailService {
     });
     this.logger.log(`Password reset OTP email sent to ${email}`);
   }
+
+  async sendBookingReminder(params: {
+    email: string;
+    fullName: string;
+    storeName: string;
+    serviceNames: string;
+    scheduledAt: string;
+    isOneDayReminder: boolean;
+  }): Promise<void> {
+    const { email, fullName, storeName, serviceNames, scheduledAt, isOneDayReminder } = params;
+    const subject = isOneDayReminder
+      ? `[Glowora] Nhắc nhở: Lịch hẹn tại ${storeName} vào ngày mai`
+      : `[Glowora] Nhắc nhở: Lịch hẹn tại ${storeName} sau 1 giờ nữa`;
+
+    await this.mailer.sendMail({
+      to: email,
+      subject,
+      template: 'booking-reminder',
+      context: { fullName, storeName, serviceNames, scheduledAt, isOneDayReminder },
+    });
+    this.logger.log(`Booking reminder email sent to ${email} (${isOneDayReminder ? '1-day' : '1-hour'})`);
+  }
 }

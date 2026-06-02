@@ -118,7 +118,6 @@ export class StoresService {
           website: dto.website,
           description: dto.description,
           address: dto.address,
-          district: dto.district,
           wardId: dto.wardId,
           provinceId: dto.provinceId,
           status: StoreStatus.PENDING,

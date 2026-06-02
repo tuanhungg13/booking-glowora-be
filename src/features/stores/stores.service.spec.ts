@@ -17,7 +17,6 @@ describe('StoresService - Phase 2 Store owner flow', () => {
     name: 'Glowora Spa',
     address: '123 Nguyen Du',
     city: 'Ha Noi',
-    district: 'Cau Giay',
     phone: '0901234567',
     email: 'contact@glowora.vn',
     website: 'https://glowora.vn',

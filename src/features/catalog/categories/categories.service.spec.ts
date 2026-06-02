@@ -73,25 +73,24 @@ describe('CategoriesService — Phase 3 Catalog', () => {
 
     expect(prisma.serviceCategory.findMany).toHaveBeenCalledWith({
       orderBy: { name: 'asc' },
-      include: { _count: { select: { services: true, combos: true } } },
+      include: { _count: { select: { services: true } } },
     });
     expect(result).toHaveLength(2);
   });
 
   // ─── findOne ──────────────────────────────────────────────────────────────
 
-  it('findOne returns category with services and combos', async () => {
+  it('findOne returns category with services', async () => {
     prisma.serviceCategory.findUnique.mockResolvedValue({
       ...baseCategory,
       services: [],
-      combos: [],
     });
 
     const result = await service.findOne('cat-1');
 
     expect(prisma.serviceCategory.findUnique).toHaveBeenCalledWith({
       where: { id: 'cat-1' },
-      include: { services: true, combos: true },
+      include: { services: true },
     });
     expect(result.id).toBe('cat-1');
   });
@@ -105,7 +104,7 @@ describe('CategoriesService — Phase 3 Catalog', () => {
   // ─── update ───────────────────────────────────────────────────────────────
 
   it('update changes name and re-generates slug', async () => {
-    prisma.serviceCategory.findUnique.mockResolvedValue({ ...baseCategory, services: [], combos: [] });
+    prisma.serviceCategory.findUnique.mockResolvedValue({ ...baseCategory, services: [] });
     prisma.serviceCategory.update.mockResolvedValue({ ...baseCategory, name: 'Massage Thư Giãn', slug: 'massage-thu-gian' });
 
     const result = await service.update('cat-1', { name: 'Massage Thư Giãn' });
@@ -123,7 +122,7 @@ describe('CategoriesService — Phase 3 Catalog', () => {
   });
 
   it('update keeps existing slug when name is not provided', async () => {
-    prisma.serviceCategory.findUnique.mockResolvedValue({ ...baseCategory, services: [], combos: [] });
+    prisma.serviceCategory.findUnique.mockResolvedValue({ ...baseCategory, services: [] });
     prisma.serviceCategory.update.mockResolvedValue({ ...baseCategory, description: 'Updated desc' });
 
     await service.update('cat-1', { description: 'Updated desc' });
@@ -149,7 +148,7 @@ describe('CategoriesService — Phase 3 Catalog', () => {
   // ─── remove ───────────────────────────────────────────────────────────────
 
   it('remove hard-deletes category by id', async () => {
-    prisma.serviceCategory.findUnique.mockResolvedValue({ ...baseCategory, services: [], combos: [] });
+    prisma.serviceCategory.findUnique.mockResolvedValue({ ...baseCategory, services: [] });
     prisma.serviceCategory.delete.mockResolvedValue(baseCategory);
 
     const result = await service.remove('cat-1');

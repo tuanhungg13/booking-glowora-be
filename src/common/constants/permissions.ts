@@ -32,13 +32,6 @@ export const Permissions = {
     UPDATE: 'UPDATE_CATEGORY',
     DELETE: 'DELETE_CATEGORY',
   },
-  COMBO: {
-    CREATE: 'CREATE_COMBO',
-    VIEW: 'VIEW_COMBO',
-    UPDATE: 'UPDATE_COMBO',
-    DELETE: 'DELETE_COMBO',
-  },
-
   // ─── Booking ───
   APPOINTMENT: {
     CREATE: 'CREATE_APPOINTMENT',

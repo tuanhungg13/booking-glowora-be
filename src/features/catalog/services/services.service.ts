@@ -13,7 +13,7 @@ const serviceInclude = {
   category: true,
   variants: { where: { status: ServiceStatus.ACTIVE }, orderBy: { sortOrder: 'asc' as const } },
   staffs: { include: { staff: { include: { user: { select: { id: true, fullName: true, email: true, avatarUrl: true } } } } } },
-  store: { select: { id: true, name: true, slug: true, address: true, district: true, logoUrl: true, latitude: true, longitude: true } },
+  store: { select: { id: true, name: true, slug: true, address: true, logoUrl: true, latitude: true, longitude: true } },
 } as const;
 
 function calcDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {

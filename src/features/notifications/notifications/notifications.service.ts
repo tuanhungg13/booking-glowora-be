@@ -2,6 +2,8 @@ import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/commo
 import { NotificationType } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { ChatGateway } from '../../../gateways/chat.gateway';
+import { MailService } from '../../../mail/mail.service';
+import { WebPushService } from '../web-push/web-push.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 
@@ -11,6 +13,8 @@ export class NotificationsService {
     private readonly prisma: PrismaService,
     @Inject(forwardRef(() => ChatGateway))
     private readonly gateway: ChatGateway,
+    private readonly mail: MailService,
+    private readonly webPush: WebPushService,
   ) {}
 
   async create(dto: CreateNotificationDto) {
@@ -122,6 +126,7 @@ export class NotificationsService {
         },
       });
       this.gateway.emitToUser(ownerRole.userId, 'notification_received', ownerNotif);
+      this.push(ownerRole.userId, ownerNotif.title, ownerNotif.body, { bookingId });
     }
 
     const customerNotif = await this.prisma.notification.create({
@@ -134,6 +139,7 @@ export class NotificationsService {
       },
     });
     this.gateway.emitToUser(customerId, 'notification_received', customerNotif);
+    this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
 
     console.log(`[EMAIL] To: ${customerEmail} | Subject: Xác nhận đặt lịch tại ${storeName}`);
   }
@@ -159,6 +165,7 @@ export class NotificationsService {
       },
     });
     this.gateway.emitToUser(customerId, 'notification_received', notif);
+    this.push(customerId, notif.title, notif.body, { bookingId });
 
     console.log(`[EMAIL] To: ${customerEmail} | Subject: Lịch hẹn đã được xác nhận tại ${storeName}`);
   }
@@ -183,6 +190,7 @@ export class NotificationsService {
       },
     });
     this.gateway.emitToUser(customerId, 'notification_received', notif);
+    this.push(customerId, notif.title, notif.body, { bookingId });
 
     console.log(`[EMAIL] To: ${customerEmail} | Subject: Lịch hẹn chưa được xác nhận tại ${storeName}`);
   }
@@ -206,6 +214,7 @@ export class NotificationsService {
       },
     });
     this.gateway.emitToUser(customerId, 'notification_received', notif);
+    this.push(customerId, notif.title, notif.body, { bookingId });
 
     console.log(`[EMAIL] To: ${customerEmail} | Subject: Cảm ơn bạn đã sử dụng dịch vụ tại ${storeName}`);
   }
@@ -236,6 +245,7 @@ export class NotificationsService {
         },
       });
       this.gateway.emitToUser(ownerRole.userId, 'notification_received', ownerNotif);
+      this.push(ownerRole.userId, ownerNotif.title, ownerNotif.body, { bookingId });
     }
 
     const customerNotif = await this.prisma.notification.create({
@@ -248,6 +258,7 @@ export class NotificationsService {
       },
     });
     this.gateway.emitToUser(customerId, 'notification_received', customerNotif);
+    this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
 
     console.log(`[EMAIL] To: ${customerEmail} | Subject: Lịch hẹn tại ${storeName} đã bị hủy`);
   }
@@ -274,8 +285,85 @@ export class NotificationsService {
       },
     });
     this.gateway.emitToUser(customerId, 'notification_received', notif);
+    this.push(customerId, notif.title, notif.body, { bookingId });
 
     console.log(`[EMAIL] To: ${customerEmail} | Subject: Xác nhận thanh toán thành công tại ${storeName}`);
+  }
+
+  async notifyBookingReminder1Day(params: {
+    bookingId: string;
+    customerId: string;
+    customerEmail: string;
+    customerName: string;
+    storeName: string;
+    serviceNames: string;
+    scheduledAt: Date;
+  }) {
+    const { bookingId, customerId, customerEmail, customerName, storeName, serviceNames, scheduledAt } = params;
+    const timeStr = this.formatDateTime(scheduledAt);
+
+    const notif = await this.prisma.notification.create({
+      data: {
+        userId: customerId,
+        bookingId,
+        type: NotificationType.BOOKING_REMINDER_1DAY,
+        title: 'Nhắc nhở: Lịch hẹn của bạn vào ngày mai',
+        body: `${serviceNames} tại ${storeName} vào ${timeStr}. Đừng quên nhé!`,
+      },
+    });
+    this.gateway.emitToUser(customerId, 'notification_received', notif);
+    this.push(customerId, notif.title, notif.body, { bookingId });
+
+    this.mail
+      .sendBookingReminder({
+        email: customerEmail,
+        fullName: customerName,
+        storeName,
+        serviceNames,
+        scheduledAt: timeStr,
+        isOneDayReminder: true,
+      })
+      .catch(() => undefined);
+  }
+
+  async notifyBookingReminder1Hour(params: {
+    bookingId: string;
+    customerId: string;
+    customerEmail: string;
+    customerName: string;
+    storeName: string;
+    serviceNames: string;
+    scheduledAt: Date;
+  }) {
+    const { bookingId, customerId, customerEmail, customerName, storeName, serviceNames, scheduledAt } = params;
+    const timeStr = this.formatDateTime(scheduledAt);
+
+    const notif = await this.prisma.notification.create({
+      data: {
+        userId: customerId,
+        bookingId,
+        type: NotificationType.BOOKING_REMINDER_1HOUR,
+        title: 'Nhắc nhở: Lịch hẹn của bạn sau 1 giờ nữa',
+        body: `${serviceNames} tại ${storeName} vào ${timeStr}. Chuẩn bị sẵn sàng nhé!`,
+      },
+    });
+    this.gateway.emitToUser(customerId, 'notification_received', notif);
+    this.push(customerId, notif.title, notif.body, { bookingId });
+
+    this.mail
+      .sendBookingReminder({
+        email: customerEmail,
+        fullName: customerName,
+        storeName,
+        serviceNames,
+        scheduledAt: timeStr,
+        isOneDayReminder: false,
+      })
+      .catch(() => undefined);
+  }
+
+  private push(userId: string, title: string, body: string, data?: Record<string, unknown>) {
+    this.webPush.sendToUser(userId, { title, body, data }).catch(() => undefined);
   }
 
   private formatDateTime(date: Date): string {

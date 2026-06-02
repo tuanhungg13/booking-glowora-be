@@ -43,8 +43,10 @@ describe('NotificationsService — Phase 4 & 5', () => {
     };
 
     gateway = { emitToUser: jest.fn() };
+    const mail = { sendBookingReminder: jest.fn().mockResolvedValue(undefined) };
+    const webPush = { sendToUser: jest.fn().mockResolvedValue(undefined) };
 
-    service = new NotificationsService(prisma, gateway);
+    service = new NotificationsService(prisma, gateway, mail as any, webPush as any);
   });
 
   afterEach(() => jest.clearAllMocks());

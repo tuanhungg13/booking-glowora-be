@@ -35,7 +35,7 @@ export class CategoriesService {
     return this.prisma.serviceCategory.findMany({
       where: { shopId: null },
       orderBy: { name: 'asc' },
-      include: { _count: { select: { services: true, combos: true, children: true } } },
+      include: { _count: { select: { services: true, children: true } } },
     });
   }
 
@@ -44,7 +44,7 @@ export class CategoriesService {
       where: { shopId: null, OR: [{ id: idOrSlug }, { slug: idOrSlug }] },
       include: {
         children: { orderBy: { name: 'asc' } },
-        _count: { select: { services: true, combos: true } },
+        _count: { select: { services: true } },
       },
     });
     if (!category) throw new NotFoundException('Category not found');
@@ -95,7 +95,7 @@ export class CategoriesService {
       orderBy: { name: 'asc' },
       include: {
         parent: { select: { id: true, name: true, slug: true, iconUrl: true } },
-        _count: { select: { services: true, combos: true } },
+        _count: { select: { services: true } },
       },
     });
   }

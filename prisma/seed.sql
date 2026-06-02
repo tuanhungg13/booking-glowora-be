@@ -47,11 +47,6 @@ INSERT IGNORE INTO `permissions` (id, code, name, description) VALUES
   ('6aa616ce-9c9e-4ca6-8a0a-0ce0b89bdcdb', 'UPDATE_CATEGORY',   'Cap nhat danh muc',     'Chinh sua danh muc'),
   ('3dfc4c12-48a7-4628-b698-83473426713a', 'DELETE_CATEGORY',   'Xoa danh muc',          'Xoa danh muc'),
 
-  ('5ffccb6b-f52d-4eac-95d1-a212f9b5206a', 'CREATE_COMBO',      'Tao combo',             'Tao combo moi'),
-  ('d4b0ff2a-5235-4762-9926-f5c828d3a5c5', 'VIEW_COMBO',        'Xem combo',             'Xem danh sach combo'),
-  ('bf1637ca-f7a3-4222-89dc-8bb847dcafd8', 'UPDATE_COMBO',      'Cap nhat combo',        'Chinh sua combo'),
-  ('b0c525f0-52af-4afc-b11b-2115de41e706', 'DELETE_COMBO',      'Xoa combo',             'Xoa combo'),
-
 -- Booking
   ('79800791-75c3-44cd-b26b-d7ab4ca29003', 'CREATE_APPOINTMENT','Tao lich hen',          'Tao lich hen moi'),
   ('f293aa7f-0846-42da-a0fe-27c74ede7a16', 'VIEW_APPOINTMENT',  'Xem lich hen',          'Xem danh sach lich hen'),
@@ -137,7 +132,6 @@ WHERE code IN (
   -- Full catalog
   'CREATE_SERVICE',  'VIEW_SERVICE',  'UPDATE_SERVICE',  'DELETE_SERVICE',
   'CREATE_CATEGORY', 'VIEW_CATEGORY', 'UPDATE_CATEGORY', 'DELETE_CATEGORY',
-  'CREATE_COMBO',    'VIEW_COMBO',    'UPDATE_COMBO',    'DELETE_COMBO',
   -- Full booking
   'CREATE_APPOINTMENT', 'VIEW_APPOINTMENT', 'UPDATE_APPOINTMENT', 'DELETE_APPOINTMENT',
   'CREATE_PAYMENT',     'VIEW_PAYMENT',     'UPDATE_PAYMENT',     'DELETE_PAYMENT',
@@ -163,7 +157,7 @@ INSERT IGNORE INTO `role_permissions` (role_id, permission_id)
 SELECT '4a7e7dfe-75b9-406a-9703-1b4be5fffaaa', id FROM `permissions`
 WHERE code IN (
   -- View catalog (read-only)
-  'VIEW_SERVICE', 'VIEW_CATEGORY', 'VIEW_COMBO',
+  'VIEW_SERVICE', 'VIEW_CATEGORY',
   'VIEW_STAFF',
   -- Appointments: view + update status
   'VIEW_APPOINTMENT', 'UPDATE_APPOINTMENT',
@@ -186,7 +180,7 @@ INSERT IGNORE INTO `role_permissions` (role_id, permission_id)
 SELECT 'c8be51b4-852c-4851-924d-bdefd81b417a', id FROM `permissions`
 WHERE code IN (
   -- Browse catalog
-  'VIEW_SERVICE', 'VIEW_CATEGORY', 'VIEW_COMBO',
+  'VIEW_SERVICE', 'VIEW_CATEGORY',
   -- Book appointments
   'CREATE_APPOINTMENT', 'VIEW_APPOINTMENT',
   -- Payments

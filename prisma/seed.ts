@@ -42,10 +42,6 @@ const PERMISSIONS = [
   { code: 'VIEW_CATEGORY', name: 'Xem danh mục' },
   { code: 'UPDATE_CATEGORY', name: 'Cập nhật danh mục' },
   { code: 'DELETE_CATEGORY', name: 'Xóa danh mục' },
-  { code: 'CREATE_COMBO', name: 'Tạo combo' },
-  { code: 'VIEW_COMBO', name: 'Xem combo' },
-  { code: 'UPDATE_COMBO', name: 'Cập nhật combo' },
-  { code: 'DELETE_COMBO', name: 'Xóa combo' },
   // Booking
   { code: 'CREATE_APPOINTMENT', name: 'Tạo lịch hẹn' },
   { code: 'VIEW_APPOINTMENT', name: 'Xem lịch hẹn' },
@@ -106,7 +102,7 @@ const PERMISSIONS = [
 
 // ─── Permissions theo từng role ───────────────────────────────────────────────
 const CUSTOMER_PERMISSIONS = [
-  'VIEW_SERVICE', 'VIEW_CATEGORY', 'VIEW_COMBO',
+  'VIEW_SERVICE', 'VIEW_CATEGORY',
   'CREATE_APPOINTMENT', 'VIEW_APPOINTMENT',
   'CREATE_PAYMENT', 'VIEW_PAYMENT',
   'CREATE_REVIEW', 'VIEW_REVIEW',
@@ -118,7 +114,7 @@ const CUSTOMER_PERMISSIONS = [
 ];
 
 const STAFF_PERMISSIONS = [
-  'VIEW_SERVICE', 'VIEW_CATEGORY', 'VIEW_COMBO',
+  'VIEW_SERVICE', 'VIEW_CATEGORY',
   'VIEW_APPOINTMENT', 'UPDATE_APPOINTMENT',
   'VIEW_PAYMENT', 'VIEW_REVIEW',
   'CREATE_CONVERSATION', 'VIEW_CONVERSATION',
@@ -135,7 +131,6 @@ const SHOP_OWNER_PERMISSIONS = [
   'VIEW_PERMISSION',
   'CREATE_SERVICE', 'VIEW_SERVICE', 'UPDATE_SERVICE', 'DELETE_SERVICE',
   'VIEW_CATEGORY',
-  'CREATE_COMBO', 'VIEW_COMBO', 'UPDATE_COMBO', 'DELETE_COMBO',
   'CREATE_APPOINTMENT', 'VIEW_APPOINTMENT', 'UPDATE_APPOINTMENT', 'DELETE_APPOINTMENT',
   'CREATE_PAYMENT', 'VIEW_PAYMENT', 'UPDATE_PAYMENT',
   'VIEW_REVIEW', 'UPDATE_REVIEW', 'DELETE_REVIEW',

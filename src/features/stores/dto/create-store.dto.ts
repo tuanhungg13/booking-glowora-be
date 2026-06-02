@@ -25,12 +25,6 @@ export class CreateStoreDto {
   @MaxLength(300)
   address!: string;
 
-  @ApiPropertyOptional({ example: 'Cau Giay', description: 'Quận/Huyện (free text)' })
-  @IsOptional()
-  @IsString()
-  @MaxLength(100)
-  district?: string;
-
   @ApiPropertyOptional({ example: 10101003, description: 'ID xã/phường từ bảng wards' })
   @IsOptional()
   @IsInt()
