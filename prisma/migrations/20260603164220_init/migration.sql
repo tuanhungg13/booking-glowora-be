@@ -113,6 +113,7 @@ CREATE TABLE `stores` (
     `max_advance_days` INTEGER NOT NULL DEFAULT 30,
     `booking_buffer_mins` INTEGER NOT NULL DEFAULT 30,
     `auto_confirm` BOOLEAN NOT NULL DEFAULT false,
+    `deposit_percent` INTEGER NOT NULL DEFAULT 0,
     `avg_rating` DECIMAL(3, 2) NOT NULL DEFAULT 0.00,
     `total_reviews` INTEGER NOT NULL DEFAULT 0,
     `telegram_group_id` VARCHAR(50) NULL,
@@ -281,7 +282,10 @@ CREATE TABLE `bookings` (
     `discount_amount` DECIMAL(12, 2) NOT NULL DEFAULT 0,
     `final_price` DECIMAL(12, 2) NOT NULL DEFAULT 0,
     `coupon_id` CHAR(36) NULL,
-    `status` ENUM('PENDING', 'CONFIRMED', 'COMPLETED', 'REJECTED', 'CANCELLED') NOT NULL DEFAULT 'PENDING',
+    `status` ENUM('PENDING', 'CONFIRMED', 'DEPOSIT_PENDING', 'DEPOSIT_PAID', 'COMPLETED', 'REJECTED', 'CANCELLED') NOT NULL DEFAULT 'PENDING',
+    `deposit_amount` DECIMAL(12, 2) NULL,
+    `deposit_deadline` DATETIME(3) NULL,
+    `deposit_paid_at` DATETIME(3) NULL,
     `notes` TEXT NULL,
     `cancellation_reason` TEXT NULL,
     `confirmed_at` DATETIME(3) NULL,
@@ -322,22 +326,37 @@ CREATE TABLE `payments` (
     `booking_id` CHAR(36) NOT NULL,
     `customer_id` CHAR(36) NOT NULL,
     `amount` DECIMAL(12, 2) NOT NULL,
-    `method` ENUM('VNPAY', 'STRIPE', 'CASH') NOT NULL DEFAULT 'VNPAY',
+    `type` ENUM('DEPOSIT', 'FULL') NOT NULL DEFAULT 'FULL',
+    `method` ENUM('SEPAY', 'CASH') NOT NULL DEFAULT 'SEPAY',
     `status` ENUM('PENDING', 'PAID', 'FAILED', 'REFUNDED') NOT NULL DEFAULT 'PENDING',
-    `vnp_txn_ref` VARCHAR(100) NULL,
-    `vnp_transaction_no` VARCHAR(100) NULL,
-    `vnp_bank_code` VARCHAR(20) NULL,
-    `vnp_card_type` VARCHAR(20) NULL,
-    `vnp_pay_date` VARCHAR(20) NULL,
-    `vnp_response_code` VARCHAR(10) NULL,
+    `sepay_code` VARCHAR(20) NULL,
+    `sepay_transaction_id` VARCHAR(50) NULL,
+    `sepay_gateway` VARCHAR(50) NULL,
     `paid_at` DATETIME(3) NULL,
     `failed_reason` VARCHAR(500) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `payments_vnp_txn_ref_key`(`vnp_txn_ref`),
+    UNIQUE INDEX `payments_sepay_code_key`(`sepay_code`),
     INDEX `payments_booking_id_idx`(`booking_id`),
     INDEX `payments_customer_id_status_idx`(`customer_id`, `status`),
+    INDEX `payments_sepay_code_idx`(`sepay_code`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `store_payment_configs` (
+    `id` CHAR(36) NOT NULL,
+    `store_id` CHAR(36) NOT NULL,
+    `bank_bin` VARCHAR(10) NOT NULL,
+    `bank_account_no` VARCHAR(30) NOT NULL,
+    `bank_account_name` VARCHAR(100) NOT NULL,
+    `sepay_api_key` VARCHAR(200) NULL,
+    `is_active` BOOLEAN NOT NULL DEFAULT true,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `store_payment_configs_store_id_key`(`store_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -369,7 +388,7 @@ CREATE TABLE `notifications` (
     `id` CHAR(36) NOT NULL,
     `user_id` CHAR(36) NOT NULL,
     `booking_id` CHAR(36) NULL,
-    `type` ENUM('BOOKING_CREATED', 'BOOKING_CONFIRMED', 'BOOKING_REJECTED', 'BOOKING_COMPLETED', 'BOOKING_CANCELLED', 'STORE_APPROVED', 'STORE_REJECTED', 'STORE_LOCKED', 'STAFF_INVITED', 'PAYMENT_SUCCESS', 'BOOKING_REMINDER_1DAY', 'BOOKING_REMINDER_1HOUR') NOT NULL,
+    `type` ENUM('BOOKING_CREATED', 'BOOKING_CONFIRMED', 'BOOKING_REJECTED', 'BOOKING_COMPLETED', 'BOOKING_CANCELLED', 'BOOKING_DEPOSIT_REQUIRED', 'BOOKING_DEPOSIT_PAID', 'BOOKING_DEPOSIT_EXPIRED', 'STORE_APPROVED', 'STORE_REJECTED', 'STORE_LOCKED', 'STAFF_INVITED', 'PAYMENT_SUCCESS', 'BOOKING_REMINDER_1DAY', 'BOOKING_REMINDER_1HOUR') NOT NULL,
     `title` VARCHAR(200) NOT NULL,
     `body` TEXT NOT NULL,
     `is_read` BOOLEAN NOT NULL DEFAULT false,
@@ -472,9 +491,10 @@ CREATE TABLE `coupon_usages` (
 -- CreateTable
 CREATE TABLE `system_logs` (
     `id` CHAR(36) NOT NULL,
-    `type` ENUM('SYSTEM_ERROR', 'AUTH_REGISTER', 'AUTH_LOGIN', 'AUTH_LOGOUT', 'STORE_CREATED', 'STORE_APPROVED', 'STORE_REJECTED', 'STORE_BANNED', 'STORE_UNLOCKED', 'USER_BANNED', 'USER_UNBANNED', 'PAYMENT_COMPLETED', 'PAYMENT_FAILED', 'REVIEW_HIDDEN', 'REVIEW_SHOWN', 'BOOKING_CREATED', 'BOOKING_CONFIRMED', 'BOOKING_REJECTED', 'BOOKING_COMPLETED', 'BOOKING_CANCELLED', 'COUPON_CREATED', 'COUPON_UPDATED', 'COUPON_DELETED', 'SERVICE_CREATED', 'SERVICE_UPDATED', 'SERVICE_DELETED') NOT NULL,
+    `type` ENUM('SYSTEM_ERROR', 'AUTH_REGISTER', 'AUTH_LOGIN', 'AUTH_LOGOUT', 'STORE_CREATED', 'STORE_APPROVED', 'STORE_REJECTED', 'STORE_BANNED', 'STORE_UNLOCKED', 'USER_BANNED', 'USER_UNBANNED', 'PAYMENT_COMPLETED', 'PAYMENT_FAILED', 'REVIEW_HIDDEN', 'REVIEW_SHOWN', 'BOOKING_CREATED', 'BOOKING_CONFIRMED', 'BOOKING_REJECTED', 'BOOKING_COMPLETED', 'BOOKING_CANCELLED', 'BOOKING_DEPOSIT_PAID', 'BOOKING_DEPOSIT_EXPIRED', 'COUPON_CREATED', 'COUPON_UPDATED', 'COUPON_DELETED', 'SERVICE_CREATED', 'SERVICE_UPDATED', 'SERVICE_DELETED') NOT NULL,
     `status` ENUM('SUCCESS', 'ERROR') NOT NULL DEFAULT 'SUCCESS',
     `actor_id` CHAR(36) NULL,
+    `store_id` CHAR(36) NULL,
     `target_id` CHAR(36) NULL,
     `target_type` VARCHAR(50) NULL,
     `metadata` JSON NULL,
@@ -483,6 +503,8 @@ CREATE TABLE `system_logs` (
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     INDEX `system_logs_actor_id_idx`(`actor_id`),
+    INDEX `system_logs_store_id_idx`(`store_id`),
+    INDEX `system_logs_store_id_created_at_idx`(`store_id`, `created_at`),
     INDEX `system_logs_type_created_at_idx`(`type`, `created_at`),
     INDEX `system_logs_status_created_at_idx`(`status`, `created_at`),
     INDEX `system_logs_request_id_idx`(`request_id`),
@@ -597,6 +619,9 @@ ALTER TABLE `payments` ADD CONSTRAINT `payments_booking_id_fkey` FOREIGN KEY (`b
 
 -- AddForeignKey
 ALTER TABLE `payments` ADD CONSTRAINT `payments_customer_id_fkey` FOREIGN KEY (`customer_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `store_payment_configs` ADD CONSTRAINT `store_payment_configs_store_id_fkey` FOREIGN KEY (`store_id`) REFERENCES `stores`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `reviews` ADD CONSTRAINT `reviews_booking_item_id_fkey` FOREIGN KEY (`booking_item_id`) REFERENCES `booking_items`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

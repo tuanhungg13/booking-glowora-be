@@ -348,6 +348,171 @@ export class NotificationsService {
       .catch((err: Error) => this.logger.warn(`Email PAYMENT_SUCCESS failed for ${customerEmail}: ${err?.message}`));
   }
 
+  async notifyDepositReminder(params: {
+    bookingId: string;
+    customerId: string;
+    storeName: string;
+    serviceNames: string;
+    depositAmount: number;
+    depositDeadline: Date;
+  }) {
+    const { bookingId, customerId, storeName, serviceNames, depositAmount, depositDeadline } = params;
+    const deadlineStr = this.formatDateTime(depositDeadline);
+    const formattedAmount = depositAmount.toLocaleString('vi-VN');
+    const title = 'Nhắc nhở: Còn 30 phút để thanh toán cọc';
+    const body = `Vui lòng thanh toán cọc ${formattedAmount}₫ cho ${serviceNames} tại ${storeName} trước ${deadlineStr}.`;
+
+    // Chỉ web push — không lưu DB, không email
+    this.push(customerId, title, body, { bookingId });
+  }
+
+  async notifyDepositRequired(params: {
+    bookingId: string;
+    customerId: string;
+    customerEmail: string;
+    customerName?: string;
+    storeName: string;
+    serviceNames: string;
+    scheduledAt: Date;
+    depositAmount: number;
+    depositDeadline: Date;
+  }) {
+    const { bookingId, customerId, customerEmail, customerName, storeName, serviceNames, scheduledAt, depositAmount, depositDeadline } = params;
+    const timeStr = this.formatDateTime(scheduledAt);
+    const deadlineStr = this.formatDateTime(depositDeadline);
+    const formattedAmount = depositAmount.toLocaleString('vi-VN');
+
+    const notif = await this.prisma.notification.create({
+      data: {
+        userId: customerId,
+        bookingId,
+        type: NotificationType.BOOKING_DEPOSIT_REQUIRED,
+        title: 'Cần thanh toán tiền cọc',
+        body: `Lịch hẹn ${serviceNames} tại ${storeName} vào ${timeStr} đã được xác nhận. Vui lòng thanh toán cọc ${formattedAmount}₫ trước ${deadlineStr}.`,
+      },
+    });
+    this.gateway.emitToUser(customerId, 'notification_received', notif);
+    this.push(customerId, notif.title, notif.body, { bookingId });
+
+    this.mail
+      .sendBookingEvent({
+        email: customerEmail,
+        fullName: customerName ?? customerEmail,
+        storeName,
+        serviceNames,
+        scheduledAt: timeStr,
+        amount: `${formattedAmount}₫`,
+        depositDeadline: deadlineStr,
+        eventType: 'DEPOSIT_REQUIRED',
+      })
+      .catch((err: Error) => this.logger.warn(`Email DEPOSIT_REQUIRED failed for ${customerEmail}: ${err?.message}`));
+  }
+
+  async notifyDepositPaid(params: {
+    bookingId: string;
+    storeId: string;
+    storeName: string;
+    customerId: string;
+    customerName: string;
+    customerEmail: string;
+    serviceNames: string;
+    depositAmount: number;
+  }) {
+    const { bookingId, storeId, storeName, customerId, customerName, customerEmail, serviceNames, depositAmount } = params;
+    const formattedAmount = depositAmount.toLocaleString('vi-VN');
+
+    const ownerRole = await this.prisma.userRole.findFirst({
+      where: { storeId, role: { code: 'SHOP_OWNER' } },
+    });
+    if (ownerRole) {
+      const ownerNotif = await this.prisma.notification.create({
+        data: {
+          userId: ownerRole.userId,
+          bookingId,
+          type: NotificationType.BOOKING_DEPOSIT_PAID,
+          title: 'Khách đã thanh toán tiền cọc',
+          body: `${customerName} đã đặt cọc ${formattedAmount}₫ cho lịch hẹn ${serviceNames}.`,
+        },
+      });
+      this.gateway.emitToUser(ownerRole.userId, 'notification_received', ownerNotif);
+      this.push(ownerRole.userId, ownerNotif.title, ownerNotif.body, { bookingId });
+    }
+
+    const customerNotif = await this.prisma.notification.create({
+      data: {
+        userId: customerId,
+        bookingId,
+        type: NotificationType.BOOKING_DEPOSIT_PAID,
+        title: 'Đặt cọc thành công',
+        body: `Bạn đã đặt cọc ${formattedAmount}₫ cho ${serviceNames} tại ${storeName}. Lịch hẹn của bạn đã được giữ chỗ.`,
+      },
+    });
+    this.gateway.emitToUser(customerId, 'notification_received', customerNotif);
+    this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
+
+    this.mail
+      .sendBookingEvent({
+        email: customerEmail,
+        fullName: customerName,
+        storeName,
+        serviceNames,
+        amount: `${formattedAmount}₫`,
+        eventType: 'DEPOSIT_PAID',
+      })
+      .catch((err: Error) => this.logger.warn(`Email DEPOSIT_PAID failed for ${customerEmail}: ${err?.message}`));
+  }
+
+  async notifyDepositExpired(params: {
+    bookingId: string;
+    storeId: string;
+    storeName: string;
+    customerId: string;
+    customerName: string;
+    customerEmail: string;
+    serviceNames: string;
+  }) {
+    const { bookingId, storeId, storeName, customerId, customerName, customerEmail, serviceNames } = params;
+
+    const ownerRole = await this.prisma.userRole.findFirst({
+      where: { storeId, role: { code: 'SHOP_OWNER' } },
+    });
+    if (ownerRole) {
+      const ownerNotif = await this.prisma.notification.create({
+        data: {
+          userId: ownerRole.userId,
+          bookingId,
+          type: NotificationType.BOOKING_DEPOSIT_EXPIRED,
+          title: 'Lịch hẹn bị hủy do không cọc đúng hạn',
+          body: `${customerName} không thanh toán cọc đúng hạn. Lịch hẹn ${serviceNames} đã được hủy tự động.`,
+        },
+      });
+      this.gateway.emitToUser(ownerRole.userId, 'notification_received', ownerNotif);
+      this.push(ownerRole.userId, ownerNotif.title, ownerNotif.body, { bookingId });
+    }
+
+    const customerNotif = await this.prisma.notification.create({
+      data: {
+        userId: customerId,
+        bookingId,
+        type: NotificationType.BOOKING_DEPOSIT_EXPIRED,
+        title: 'Lịch hẹn đã bị hủy',
+        body: `Lịch hẹn ${serviceNames} tại ${storeName} đã bị hủy do bạn không thanh toán tiền cọc đúng hạn.`,
+      },
+    });
+    this.gateway.emitToUser(customerId, 'notification_received', customerNotif);
+    this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
+
+    this.mail
+      .sendBookingEvent({
+        email: customerEmail,
+        fullName: customerName,
+        storeName,
+        serviceNames,
+        eventType: 'CANCELLED',
+      })
+      .catch((err: Error) => this.logger.warn(`Email DEPOSIT_EXPIRED failed for ${customerEmail}: ${err?.message}`));
+  }
+
   async notifyBookingReminder1Day(params: {
     bookingId: string;
     customerId: string;

@@ -35,9 +35,10 @@ export class MailService {
     scheduledAt?: string;
     reason?: string;
     amount?: string;
-    eventType: 'CREATED' | 'CONFIRMED' | 'REJECTED' | 'CANCELLED' | 'COMPLETED' | 'PAYMENT_SUCCESS';
+    depositDeadline?: string;
+    eventType: 'CREATED' | 'CONFIRMED' | 'REJECTED' | 'CANCELLED' | 'COMPLETED' | 'PAYMENT_SUCCESS' | 'DEPOSIT_REQUIRED' | 'DEPOSIT_PAID';
   }): Promise<void> {
-    const { email, fullName, storeName, serviceNames, scheduledAt, reason, amount, eventType } = params;
+    const { email, fullName, storeName, serviceNames, scheduledAt, reason, amount, depositDeadline, eventType } = params;
     const subjects: Record<string, string> = {
       CREATED: `[Glowora] Xác nhận đặt lịch tại ${storeName}`,
       CONFIRMED: `[Glowora] Lịch hẹn tại ${storeName} đã được xác nhận`,
@@ -45,6 +46,8 @@ export class MailService {
       CANCELLED: `[Glowora] Lịch hẹn tại ${storeName} đã bị hủy`,
       COMPLETED: `[Glowora] Cảm ơn bạn đã sử dụng dịch vụ tại ${storeName}`,
       PAYMENT_SUCCESS: `[Glowora] Xác nhận thanh toán thành công tại ${storeName}`,
+      DEPOSIT_REQUIRED: `[Glowora] Vui lòng thanh toán tiền cọc cho lịch hẹn tại ${storeName}`,
+      DEPOSIT_PAID: `[Glowora] Đặt cọc thành công tại ${storeName}`,
     };
     await this.mailer.sendMail({
       to: email,
@@ -57,12 +60,15 @@ export class MailService {
         scheduledAt,
         reason,
         amount,
+        depositDeadline,
         isCreated: eventType === 'CREATED',
         isConfirmed: eventType === 'CONFIRMED',
         isRejected: eventType === 'REJECTED',
         isCancelled: eventType === 'CANCELLED',
         isCompleted: eventType === 'COMPLETED',
         isPaymentSuccess: eventType === 'PAYMENT_SUCCESS',
+        isDepositRequired: eventType === 'DEPOSIT_REQUIRED',
+        isDepositPaid: eventType === 'DEPOSIT_PAID',
       },
     });
     this.logger.log(`Booking event email (${eventType}) sent to ${email}`);

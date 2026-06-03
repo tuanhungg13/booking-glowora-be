@@ -55,9 +55,10 @@ export class CouponsService {
     this.systemLog.log({
       type: LogType.COUPON_CREATED,
       actorId: createdById,
+      storeId: storeId ?? undefined,
       targetId: coupon.id,
       targetType: 'Coupon',
-      metadata: { code: coupon.code, storeId },
+      metadata: { code: coupon.code },
     });
 
     return coupon;
@@ -127,9 +128,10 @@ export class CouponsService {
     this.systemLog.log({
       type: LogType.COUPON_UPDATED,
       actorId,
+      storeId: coupon.storeId ?? undefined,
       targetId: id,
       targetType: 'Coupon',
-      metadata: { code: coupon.code, storeId: coupon.storeId, changes: dto },
+      metadata: { code: coupon.code, changes: dto },
     });
 
     return updated;
@@ -153,9 +155,10 @@ export class CouponsService {
     this.systemLog.log({
       type: LogType.COUPON_DELETED,
       actorId,
+      storeId: coupon.storeId ?? undefined,
       targetId: id,
       targetType: 'Coupon',
-      metadata: { code: coupon.code, storeId: coupon.storeId, softDelete: coupon.usedCount > 0 },
+      metadata: { code: coupon.code, softDelete: coupon.usedCount > 0 },
     });
 
     return result;

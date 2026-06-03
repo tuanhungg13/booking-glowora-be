@@ -127,7 +127,7 @@ export class AdminStoresService {
       },
     });
 
-    this.systemLog.log({ type: LogType.STORE_APPROVED, actorId: adminId, targetId: id, targetType: 'Store', metadata: { storeName: store.name }, ipAddress, requestId });
+    this.systemLog.log({ type: LogType.STORE_APPROVED, actorId: adminId, storeId: id, targetId: id, targetType: 'Store', metadata: { storeName: store.name }, ipAddress, requestId });
     return updated;
   }
 
@@ -160,7 +160,7 @@ export class AdminStoresService {
       },
     });
 
-    this.systemLog.log({ type: LogType.STORE_REJECTED, actorId: adminId, targetId: id, targetType: 'Store', metadata: { storeName: store.name, reason: dto.reason }, ipAddress, requestId });
+    this.systemLog.log({ type: LogType.STORE_REJECTED, actorId: adminId, storeId: id, targetId: id, targetType: 'Store', metadata: { storeName: store.name, reason: dto.reason }, ipAddress, requestId });
     return updated;
   }
 
@@ -193,7 +193,7 @@ export class AdminStoresService {
       },
     });
 
-    this.systemLog.log({ type: LogType.STORE_BANNED, actorId: adminId, targetId: id, targetType: 'Store', metadata: { storeName: store.name, reason: dto.reason }, ipAddress, requestId });
+    this.systemLog.log({ type: LogType.STORE_BANNED, actorId: adminId, storeId: id, targetId: id, targetType: 'Store', metadata: { storeName: store.name, reason: dto.reason }, ipAddress, requestId });
     return updated;
   }
 
@@ -212,7 +212,7 @@ export class AdminStoresService {
       include: adminStoreInclude,
     });
 
-    this.systemLog.log({ type: LogType.STORE_UNLOCKED, actorId: adminId, targetId: id, targetType: 'Store', metadata: { storeName: store.name }, ipAddress, requestId });
+    this.systemLog.log({ type: LogType.STORE_UNLOCKED, actorId: adminId, storeId: id, targetId: id, targetType: 'Store', metadata: { storeName: store.name }, ipAddress, requestId });
     return updated;
   }
 }

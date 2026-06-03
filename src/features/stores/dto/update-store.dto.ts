@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/swagger';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString, Max, MaxLength, Min } from 'class-validator';
+import { IsInt, IsNumber, IsOptional, IsString, Max, MaxLength, Min } from 'class-validator';
 import { CreateStoreDto } from './create-store.dto';
 
 export class UpdateStoreDto extends PartialType(CreateStoreDto) {
@@ -9,6 +9,13 @@ export class UpdateStoreDto extends PartialType(CreateStoreDto) {
   @IsString()
   @MaxLength(50)
   timezone?: string;
+
+  @ApiPropertyOptional({ example: 30, description: 'Phần trăm đặt cọc (0 = miễn cọc, 1–100)' })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(100)
+  depositPercent?: number;
 
   @ApiPropertyOptional({ example: 21.0285 })
   @IsOptional()

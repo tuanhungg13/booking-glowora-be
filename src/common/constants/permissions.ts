@@ -115,6 +115,7 @@ export const Permissions = {
   // ─── System Log ───
   LOG: {
     VIEW: 'VIEW_LOG',
+    VIEW_SHOP: 'VIEW_SHOP_LOG',
   },
 
   // ─── Analytics ───

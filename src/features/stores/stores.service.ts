@@ -14,6 +14,7 @@ import { CreateStoreDto } from './dto/create-store.dto';
 import { StoreFilterDto } from './dto/store-filter.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { UpdateWorkingHoursDto } from './dto/update-working-hours.dto';
+import { UpsertPaymentConfigDto } from './dto/upsert-payment-config.dto';
 
 const SHOP_OWNER_ROLE_CODE = 'SHOP_OWNER';
 const MAX_STORE_ROLES_PER_USER = 3;
@@ -180,7 +181,7 @@ export class StoresService {
     });
 
     await this.permissionCache.invalidateUser(ownerId);
-    this.systemLog.log({ type: LogType.STORE_CREATED, actorId: ownerId, targetId: store.id, targetType: 'Store', metadata: { name: store.name, slug: store.slug } });
+    this.systemLog.log({ type: LogType.STORE_CREATED, actorId: ownerId, storeId: store.id, targetId: store.id, targetType: 'Store', metadata: { name: store.name, slug: store.slug } });
     return store;
   }
 
@@ -398,6 +399,60 @@ export class StoresService {
       data: { telegramGroupId },
       select: { id: true, name: true, telegramGroupId: true },
     });
+  }
+
+  async getPaymentConfig(storeId: string, ownerId: string) {
+    await this.checkOwnership(storeId, ownerId);
+    const config = await this.prisma.storePaymentConfig.findUnique({
+      where: { storeId },
+      select: {
+        id: true,
+        bankBin: true,
+        bankAccountNo: true,
+        bankAccountName: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+    return config;
+  }
+
+  async upsertPaymentConfig(storeId: string, ownerId: string, dto: UpsertPaymentConfigDto) {
+    await this.checkOwnership(storeId, ownerId);
+    return this.prisma.storePaymentConfig.upsert({
+      where: { storeId },
+      create: {
+        storeId,
+        bankBin: dto.bankBin,
+        bankAccountNo: dto.bankAccountNo,
+        bankAccountName: dto.bankAccountName.toUpperCase(),
+        sepayApiKey: dto.sepayApiKey,
+        isActive: true,
+      },
+      update: {
+        bankBin: dto.bankBin,
+        bankAccountNo: dto.bankAccountNo,
+        bankAccountName: dto.bankAccountName.toUpperCase(),
+        ...(dto.sepayApiKey !== undefined && { sepayApiKey: dto.sepayApiKey }),
+        isActive: true,
+      },
+      select: {
+        id: true,
+        bankBin: true,
+        bankAccountNo: true,
+        bankAccountName: true,
+        isActive: true,
+        updatedAt: true,
+      },
+    });
+  }
+
+  async deletePaymentConfig(storeId: string, ownerId: string) {
+    await this.checkOwnership(storeId, ownerId);
+    const existing = await this.prisma.storePaymentConfig.findUnique({ where: { storeId } });
+    if (!existing) throw new NotFoundException('Chưa có cấu hình thanh toán để xóa');
+    await this.prisma.storePaymentConfig.delete({ where: { storeId } });
   }
 
   async checkOwnership(storeId: string, userId: string) {

@@ -201,7 +201,7 @@ export class ReviewsService {
       await this.recalculateRatings(existing.storeId, existing.serviceId, existing.staffId, tx);
       return r;
     });
-    this.systemLog.log({ type: isVisible ? LogType.REVIEW_SHOWN : LogType.REVIEW_HIDDEN, actorId, targetId: id, targetType: 'Review', metadata: { storeId: existing.storeId, serviceId: existing.serviceId } });
+    this.systemLog.log({ type: isVisible ? LogType.REVIEW_SHOWN : LogType.REVIEW_HIDDEN, actorId, storeId: existing.storeId, targetId: id, targetType: 'Review', metadata: { serviceId: existing.serviceId } });
     return review;
   }
 

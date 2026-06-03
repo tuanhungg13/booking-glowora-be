@@ -5,11 +5,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { BookingStatus, Prisma, ServiceStatus, StoreStatus } from '@prisma/client';
+import { BookingStatus, LogType, PaymentStatus, Prisma, ServiceStatus, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { NotificationsService } from '../../notifications/notifications/notifications.service';
 import { SystemLogService } from '../../../system-log/system-log.service';
-import { LogType } from '@prisma/client';
 import { BookingFilterDto } from './dto/booking-filter.dto';
 import { MyBookingFilterDto } from './dto/my-booking-filter.dto';
 import { CreateBookingDto } from './dto/create-booking.dto';
@@ -197,7 +196,7 @@ export class BookingsService {
       })
       .catch(() => undefined);
 
-    this.systemLog.log({ type: LogType.BOOKING_CREATED, actorId: customerId, targetId: booking.id, targetType: 'Booking', metadata: { storeId: booking.storeId, scheduledAt: booking.scheduledAt, totalPrice: Number(booking.totalPrice) }, ipAddress, requestId });
+    this.systemLog.log({ type: LogType.BOOKING_CREATED, actorId: customerId, storeId: booking.storeId, targetId: booking.id, targetType: 'Booking', metadata: { scheduledAt: booking.scheduledAt, totalPrice: Number(booking.totalPrice) }, ipAddress, requestId });
 
     return booking;
   }
@@ -352,26 +351,72 @@ export class BookingsService {
     }
     await this.assertStoreMember(userId, booking.storeId);
 
+    const now = new Date();
+    const depositPercent = booking.store.depositPercent;
+    let updateData: Prisma.BookingUpdateInput;
+    let needsDeposit = false;
+
+    if (depositPercent > 0) {
+      const deadline = this.calcDepositDeadline(now, booking.scheduledAt);
+      if (deadline) {
+        const rawPrice = Number(booking.finalPrice) > 0 ? Number(booking.finalPrice) : Number(booking.totalPrice);
+        const depositAmount = new Prisma.Decimal(Math.ceil(rawPrice * depositPercent / 100));
+        updateData = { status: BookingStatus.DEPOSIT_PENDING, confirmedAt: now, depositAmount, depositDeadline: deadline };
+        needsDeposit = true;
+      } else {
+        updateData = { status: BookingStatus.CONFIRMED, confirmedAt: now };
+      }
+    } else {
+      updateData = { status: BookingStatus.CONFIRMED, confirmedAt: now };
+    }
+
     const updated = await this.prisma.booking.update({
       where: { id },
-      data: { status: BookingStatus.CONFIRMED, confirmedAt: new Date() },
+      data: updateData,
       include: bookingInclude,
     });
 
-    this.notifications
-      .notifyBookingConfirmed({
-        bookingId: id,
-        customerId: updated.customer.id,
-        customerEmail: updated.customer.email,
-        storeName: updated.store.name,
-        serviceNames: updated.items.map((i) => i.service.name).join(', '),
-        scheduledAt: updated.scheduledAt,
-      })
-      .catch(() => undefined);
+    const serviceNames = updated.items.map((i) => i.service.name).join(', ');
 
-    this.systemLog.log({ type: LogType.BOOKING_CONFIRMED, actorId: userId, targetId: id, targetType: 'Booking', metadata: { storeId: updated.storeId, customerId: updated.customerId }, ipAddress, requestId });
+    if (needsDeposit) {
+      this.notifications
+        .notifyDepositRequired({
+          bookingId: id,
+          customerId: updated.customer.id,
+          customerEmail: updated.customer.email,
+          customerName: updated.customer.fullName,
+          storeName: updated.store.name,
+          serviceNames,
+          scheduledAt: updated.scheduledAt,
+          depositAmount: Number(updated.depositAmount),
+          depositDeadline: updated.depositDeadline!,
+        })
+        .catch(() => undefined);
+    } else {
+      this.notifications
+        .notifyBookingConfirmed({
+          bookingId: id,
+          customerId: updated.customer.id,
+          customerEmail: updated.customer.email,
+          storeName: updated.store.name,
+          serviceNames,
+          scheduledAt: updated.scheduledAt,
+        })
+        .catch(() => undefined);
+    }
+
+    this.systemLog.log({ type: LogType.BOOKING_CONFIRMED, actorId: userId, storeId: updated.storeId, targetId: id, targetType: 'Booking', metadata: { customerId: updated.customerId, needsDeposit }, ipAddress, requestId });
 
     return updated;
+  }
+
+  private calcDepositDeadline(confirmedAt: Date, scheduledAt: Date): Date | null {
+    const gapH = (scheduledAt.getTime() - confirmedAt.getTime()) / (1000 * 60 * 60);
+    if (gapH > 7 * 24) return new Date(confirmedAt.getTime() + 24 * 60 * 60 * 1000);
+    if (gapH > 24) return new Date(confirmedAt.getTime() + 6 * 60 * 60 * 1000);
+    if (gapH > 6) return new Date(confirmedAt.getTime() + 2 * 60 * 60 * 1000);
+    if (gapH > 2) return new Date(confirmedAt.getTime() + 60 * 60 * 1000);
+    return null; // < 2h so lịch → miễn cọc
   }
 
   async reject(id: string, userId: string, reason: string, ipAddress?: string, requestId?: string) {
@@ -398,14 +443,14 @@ export class BookingsService {
       })
       .catch(() => undefined);
 
-    this.systemLog.log({ type: LogType.BOOKING_REJECTED, actorId: userId, targetId: id, targetType: 'Booking', metadata: { storeId: updated.storeId, customerId: updated.customerId, reason }, ipAddress, requestId });
+    this.systemLog.log({ type: LogType.BOOKING_REJECTED, actorId: userId, storeId: updated.storeId, targetId: id, targetType: 'Booking', metadata: { customerId: updated.customerId, reason }, ipAddress, requestId });
 
     return updated;
   }
 
   async complete(id: string, userId: string, ipAddress?: string, requestId?: string) {
     const booking = await this.findOne(id);
-    if (booking.status !== BookingStatus.CONFIRMED) {
+    if (booking.status !== BookingStatus.CONFIRMED && booking.status !== BookingStatus.DEPOSIT_PAID) {
       throw new BadRequestException('Only confirmed bookings can be completed');
     }
     await this.assertStoreMember(userId, booking.storeId);
@@ -426,7 +471,7 @@ export class BookingsService {
       })
       .catch(() => undefined);
 
-    this.systemLog.log({ type: LogType.BOOKING_COMPLETED, actorId: userId, targetId: id, targetType: 'Booking', metadata: { storeId: updated.storeId, customerId: updated.customerId }, ipAddress, requestId });
+    this.systemLog.log({ type: LogType.BOOKING_COMPLETED, actorId: userId, storeId: updated.storeId, targetId: id, targetType: 'Booking', metadata: { customerId: updated.customerId }, ipAddress, requestId });
 
     return updated;
   }
@@ -437,10 +482,13 @@ export class BookingsService {
     if (booking.customerId !== userId) {
       throw new ForbiddenException('Bạn không phải chủ lịch hẹn này');
     }
-    if (
-      booking.status !== BookingStatus.PENDING &&
-      booking.status !== BookingStatus.CONFIRMED
-    ) {
+    const cancellableStatuses: BookingStatus[] = [
+      BookingStatus.PENDING,
+      BookingStatus.CONFIRMED,
+      BookingStatus.DEPOSIT_PENDING,
+      BookingStatus.DEPOSIT_PAID,
+    ];
+    if (!cancellableStatuses.includes(booking.status)) {
       throw new BadRequestException('Only pending or confirmed bookings can be cancelled');
     }
 
@@ -449,15 +497,21 @@ export class BookingsService {
       throw new BadRequestException(`Chỉ được hủy trước ${booking.store.cancelBeforeHours} giờ`);
     }
 
-    const updated = await this.prisma.booking.update({
-      where: { id },
-      data: {
-        status: BookingStatus.CANCELLED,
-        cancelledAt: new Date(),
-        cancellationReason: reason,
-      },
-      include: bookingInclude,
-    });
+    const [updated] = await this.prisma.$transaction([
+      this.prisma.booking.update({
+        where: { id },
+        data: {
+          status: BookingStatus.CANCELLED,
+          cancelledAt: new Date(),
+          cancellationReason: reason,
+        },
+        include: bookingInclude,
+      }),
+      this.prisma.payment.updateMany({
+        where: { bookingId: id, status: PaymentStatus.PAID },
+        data: { status: PaymentStatus.REFUNDED },
+      }),
+    ]);
 
     this.notifications
       .notifyBookingCancelled({
@@ -472,7 +526,7 @@ export class BookingsService {
       })
       .catch(() => undefined);
 
-    this.systemLog.log({ type: LogType.BOOKING_CANCELLED, actorId: userId, targetId: id, targetType: 'Booking', metadata: { storeId: updated.storeId, reason }, ipAddress });
+    this.systemLog.log({ type: LogType.BOOKING_CANCELLED, actorId: userId, storeId: updated.storeId, targetId: id, targetType: 'Booking', metadata: { reason }, ipAddress });
 
     return updated;
   }
@@ -544,7 +598,7 @@ export class BookingsService {
     const busyItems = await tx.bookingItem.findMany({
       where: {
         staffId,
-        booking: { status: { in: [BookingStatus.PENDING, BookingStatus.CONFIRMED] } },
+        booking: { status: { in: [BookingStatus.PENDING, BookingStatus.CONFIRMED, BookingStatus.DEPOSIT_PENDING, BookingStatus.DEPOSIT_PAID] } },
         startTime: { gte: windowMin, lte: windowMax },
       },
       select: { startTime: true, duration: true },

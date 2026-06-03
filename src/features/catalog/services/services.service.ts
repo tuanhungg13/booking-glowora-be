@@ -87,9 +87,10 @@ export class ServicesService {
     this.systemLog.log({
       type: LogType.SERVICE_CREATED,
       actorId,
+      storeId,
       targetId: service.id,
       targetType: 'Service',
-      metadata: { name: service.name, storeId },
+      metadata: { name: service.name },
     });
 
     return service;
@@ -443,9 +444,10 @@ export class ServicesService {
     this.systemLog.log({
       type: LogType.SERVICE_UPDATED,
       actorId,
+      storeId,
       targetId: id,
       targetType: 'Service',
-      metadata: { name: service.name, storeId },
+      metadata: { name: service.name },
     });
 
     return this.findOne(id, storeId);
@@ -579,9 +581,10 @@ export class ServicesService {
     this.systemLog.log({
       type: LogType.SERVICE_DELETED,
       actorId,
+      storeId,
       targetId: id,
       targetType: 'Service',
-      metadata: { name: service.name, storeId },
+      metadata: { name: service.name },
     });
 
     return { deleted: true };

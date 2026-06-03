@@ -16,9 +16,7 @@ import { SystemLogService } from '../../system-log/system-log.service';
 
 type AuditRequest = Request & {
   user?: { id?: string };
-  body?: unknown;
   params?: Record<string, string>;
-  query?: Record<string, unknown>;
   systemLogErrorRecorded?: boolean;
 };
 
@@ -48,11 +46,7 @@ export class SystemAuditInterceptor implements NestInterceptor {
             targetId: this.getTargetId(request, options),
             targetType: options.targetType,
             metadata: {
-              method: request.method,
               path: request.originalUrl ?? request.url,
-              params: request.params,
-              query: request.query,
-              body: this.redact(request.body),
             },
           },
           error,
@@ -71,31 +65,5 @@ export class SystemAuditInterceptor implements NestInterceptor {
     const paramName = options.targetIdParam ?? 'id';
     const value = request.params?.[paramName];
     return typeof value === 'string' && value.trim() ? value.trim() : undefined;
-  }
-
-  private redact(value: unknown): unknown {
-    if (Array.isArray(value)) return value.map((item) => this.redact(item));
-    if (value === null || typeof value !== 'object') return value;
-
-    return Object.fromEntries(
-      Object.entries(value as Record<string, unknown>).map(([key, item]) => {
-        if (this.isSensitiveKey(key)) return [key, '[REDACTED]'];
-        return [key, this.redact(item)];
-      }),
-    );
-  }
-
-  private isSensitiveKey(key: string): boolean {
-    return [
-      'password',
-      'newpassword',
-      'currentpassword',
-      'otp',
-      'access_token',
-      'refresh_token',
-      'authorization',
-      'cookie',
-      'token',
-    ].includes(key.toLowerCase());
   }
 }

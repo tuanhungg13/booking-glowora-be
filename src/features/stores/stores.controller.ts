@@ -18,8 +18,12 @@ import {
   ApiBody,
   ApiConsumes,
   ApiOperation,
+  ApiPropertyOptional,
   ApiTags,
 } from '@nestjs/swagger';
+import { LogStatus, LogType } from '@prisma/client';
+import { Type } from 'class-transformer';
+import { IsDateString, IsEnum, IsInt, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import {
@@ -34,9 +38,57 @@ import { CreateStoreDto } from './dto/create-store.dto';
 import { StoreFilterDto } from './dto/store-filter.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { UpdateWorkingHoursDto } from './dto/update-working-hours.dto';
+import { UpsertPaymentConfigDto } from './dto/upsert-payment-config.dto';
 import { StoresService } from './stores.service';
 import { TelegramService } from '../../telegram/telegram.service';
-import { LogType } from '@prisma/client';
+import { SystemLogService } from '../../system-log/system-log.service';
+
+class StoreOwnerLogFilterDto {
+  @ApiPropertyOptional({ enum: LogType })
+  @IsOptional()
+  @IsEnum(LogType)
+  type?: LogType;
+
+  @ApiPropertyOptional({ enum: LogStatus })
+  @IsOptional()
+  @IsEnum(LogStatus)
+  status?: LogStatus;
+
+  @ApiPropertyOptional({ description: 'Tìm theo tên hoặc email người thực hiện' })
+  @IsOptional()
+  @IsString()
+  q?: string;
+
+  @ApiPropertyOptional({ description: 'Lọc theo ID người thực hiện (actorId)' })
+  @IsOptional()
+  @IsUUID()
+  actorId?: string;
+
+  @ApiPropertyOptional({ example: '2026-01-01' })
+  @IsOptional()
+  @IsDateString()
+  dateFrom?: string;
+
+  @ApiPropertyOptional({ example: '2026-12-31' })
+  @IsOptional()
+  @IsDateString()
+  dateTo?: string;
+
+  @ApiPropertyOptional({ example: 1 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  page?: number;
+
+  @ApiPropertyOptional({ example: 20 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(100)
+  limit?: number;
+}
 
 const imageStorage = (folder: string) =>
   diskStorage({
@@ -53,6 +105,7 @@ export class StoresController {
   constructor(
     private readonly storesService: StoresService,
     private readonly telegramService: TelegramService,
+    private readonly systemLogService: SystemLogService,
   ) {}
 
   @ApiOperation({ summary: 'Public listing for active stores' })
@@ -85,6 +138,14 @@ export class StoresController {
   @Get('my-stores')
   findMyStores(@CurrentUser() user: CurrentUserPayload) {
     return this.storesService.findMyStores(user.id);
+  }
+
+  @ApiOperation({ summary: 'Nhật ký hoạt động cửa hàng (chỉ owner)' })
+  @ApiBearerAuth()
+  @RequirePermissions(Permissions.LOG.VIEW_SHOP)
+  @Get(':id/logs')
+  getStoreLogs(@Param('id') id: string, @Query() filter: StoreOwnerLogFilterDto) {
+    return this.systemLogService.findAll({ ...filter, storeId: id });
   }
 
   @ApiOperation({ summary: 'Public store detail by id or slug' })
@@ -227,5 +288,39 @@ export class StoresController {
     @CurrentUser() user: CurrentUserPayload,
   ) {
     return this.storesService.updateWorkingHours(id, user.id, dto);
+  }
+
+  @ApiOperation({ summary: 'Lấy cấu hình thanh toán chuyển khoản của shop (chỉ owner)' })
+  @ApiBearerAuth()
+  @RequirePermissions(Permissions.STORE.UPDATE)
+  @Get(':id/payment-config')
+  getPaymentConfig(
+    @Param('id') id: string,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return this.storesService.getPaymentConfig(id, user.id);
+  }
+
+  @ApiOperation({ summary: 'Cấu hình/cập nhật thông tin tài khoản ngân hàng nhận tiền (chỉ owner)' })
+  @ApiBearerAuth()
+  @RequirePermissions(Permissions.STORE.UPDATE)
+  @Put(':id/payment-config')
+  upsertPaymentConfig(
+    @Param('id') id: string,
+    @Body() dto: UpsertPaymentConfigDto,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return this.storesService.upsertPaymentConfig(id, user.id, dto);
+  }
+
+  @ApiOperation({ summary: 'Xóa cấu hình thanh toán của shop (chỉ owner)' })
+  @ApiBearerAuth()
+  @RequirePermissions(Permissions.STORE.UPDATE)
+  @Delete(':id/payment-config')
+  deletePaymentConfig(
+    @Param('id') id: string,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return this.storesService.deletePaymentConfig(id, user.id);
   }
 }

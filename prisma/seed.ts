@@ -96,6 +96,7 @@ const PERMISSIONS = [
   { code: 'APPROVE_STORE', name: 'Phê duyệt cơ sở' },
   // System Log
   { code: 'VIEW_LOG', name: 'Xem nhật ký hệ thống' },
+  { code: 'VIEW_SHOP_LOG', name: 'Xem nhật ký hoạt động cơ sở' },
   // Analytics
   { code: 'VIEW_REPORT', name: 'Xem báo cáo doanh thu' },
   // Coupon
@@ -151,6 +152,7 @@ const SHOP_OWNER_PERMISSIONS = [
   'INVITE_STAFF', 'VIEW_STAFF', 'UPDATE_STAFF', 'REMOVE_STAFF',
   'VIEW_REPORT',
   'CREATE_COUPON', 'VIEW_COUPON', 'UPDATE_COUPON', 'DELETE_COUPON',
+  'VIEW_SHOP_LOG',
 ];
 
 async function main() {

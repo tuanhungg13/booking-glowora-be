@@ -23,6 +23,11 @@ class SystemLogFilterDto implements SystemLogFilter {
   @IsUUID()
   actorId?: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsUUID()
+  storeId?: string;
+
   @ApiPropertyOptional({ description: 'Tìm theo email hoặc tên user' })
   @IsOptional()
   @IsString()

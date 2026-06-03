@@ -7,6 +7,7 @@ export interface LogData {
   type: LogType;
   status?: LogStatus;
   actorId?: string;
+  storeId?: string;
   targetId?: string;
   targetType?: string;
   metadata?: Record<string, unknown>;
@@ -18,6 +19,7 @@ export interface SystemLogFilter {
   type?: LogType;
   status?: LogStatus;
   actorId?: string;
+  storeId?: string;
   q?: string;
   targetType?: string;
   targetId?: string;
@@ -73,6 +75,7 @@ export class SystemLogService {
       ...(filter.type && { type: filter.type }),
       ...(filter.status && { status: filter.status }),
       ...(filter.actorId && { actorId: filter.actorId }),
+      ...(filter.storeId && { storeId: filter.storeId }),
       ...(filter.targetId && { targetId: filter.targetId }),
       ...(filter.targetType && { targetType: filter.targetType }),
       ...(filter.requestId && { requestId: filter.requestId }),
@@ -109,6 +112,7 @@ export class SystemLogService {
       type: data.type,
       status: data.status ?? LogStatus.SUCCESS,
       actorId: data.actorId ?? this.requestContext.getActorId(),
+      storeId: data.storeId,
       targetId: data.targetId,
       targetType: data.targetType,
       metadata: data.metadata ? this.toJsonValue(this.redactSensitive(data.metadata)) : undefined,
