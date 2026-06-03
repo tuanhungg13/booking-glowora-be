@@ -278,6 +278,9 @@ CREATE TABLE `bookings` (
     `scheduled_at` DATETIME(3) NOT NULL,
     `total_duration` INTEGER NOT NULL,
     `total_price` DECIMAL(12, 2) NOT NULL,
+    `discount_amount` DECIMAL(12, 2) NOT NULL DEFAULT 0,
+    `final_price` DECIMAL(12, 2) NOT NULL DEFAULT 0,
+    `coupon_id` CHAR(36) NULL,
     `status` ENUM('PENDING', 'CONFIRMED', 'COMPLETED', 'REJECTED', 'CANCELLED') NOT NULL DEFAULT 'PENDING',
     `notes` TEXT NULL,
     `cancellation_reason` TEXT NULL,
@@ -303,6 +306,9 @@ CREATE TABLE `booking_items` (
     `start_time` DATETIME(3) NOT NULL,
     `duration` INTEGER NOT NULL,
     `price` DECIMAL(12, 2) NOT NULL,
+    `service_name` VARCHAR(150) NOT NULL,
+    `variant_name` VARCHAR(150) NOT NULL,
+    `staff_name` VARCHAR(255) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     INDEX `booking_items_booking_id_idx`(`booking_id`),
@@ -425,18 +431,61 @@ CREATE TABLE `messages` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `coupons` (
+    `id` CHAR(36) NOT NULL,
+    `code` VARCHAR(50) NOT NULL,
+    `type` ENUM('PERCENTAGE', 'FIXED') NOT NULL,
+    `value` DECIMAL(12, 2) NOT NULL,
+    `min_amount` DECIMAL(12, 2) NULL,
+    `max_discount` DECIMAL(12, 2) NULL,
+    `usage_limit` INTEGER NULL,
+    `per_user_limit` INTEGER NULL,
+    `used_count` INTEGER NOT NULL DEFAULT 0,
+    `start_at` DATETIME(3) NOT NULL,
+    `expired_at` DATETIME(3) NULL,
+    `is_active` BOOLEAN NOT NULL DEFAULT true,
+    `store_id` CHAR(36) NULL,
+    `created_by_id` CHAR(36) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `coupons_code_key`(`code`),
+    INDEX `coupons_store_id_is_active_idx`(`store_id`, `is_active`),
+    INDEX `coupons_expired_at_is_active_idx`(`expired_at`, `is_active`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `coupon_usages` (
+    `id` CHAR(36) NOT NULL,
+    `coupon_id` CHAR(36) NOT NULL,
+    `user_id` CHAR(36) NOT NULL,
+    `booking_id` CHAR(36) NOT NULL,
+    `discount` DECIMAL(12, 2) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    UNIQUE INDEX `coupon_usages_booking_id_key`(`booking_id`),
+    INDEX `coupon_usages_coupon_id_user_id_idx`(`coupon_id`, `user_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `system_logs` (
     `id` CHAR(36) NOT NULL,
-    `type` ENUM('AUTH_REGISTER', 'AUTH_LOGIN', 'AUTH_LOGOUT', 'STORE_CREATED', 'STORE_APPROVED', 'STORE_REJECTED', 'STORE_BANNED', 'STORE_UNLOCKED', 'USER_BANNED', 'USER_UNBANNED', 'PAYMENT_COMPLETED', 'PAYMENT_FAILED', 'REVIEW_HIDDEN', 'REVIEW_SHOWN', 'BOOKING_CREATED', 'BOOKING_CONFIRMED', 'BOOKING_REJECTED', 'BOOKING_COMPLETED', 'BOOKING_CANCELLED') NOT NULL,
+    `type` ENUM('SYSTEM_ERROR', 'AUTH_REGISTER', 'AUTH_LOGIN', 'AUTH_LOGOUT', 'STORE_CREATED', 'STORE_APPROVED', 'STORE_REJECTED', 'STORE_BANNED', 'STORE_UNLOCKED', 'USER_BANNED', 'USER_UNBANNED', 'PAYMENT_COMPLETED', 'PAYMENT_FAILED', 'REVIEW_HIDDEN', 'REVIEW_SHOWN', 'BOOKING_CREATED', 'BOOKING_CONFIRMED', 'BOOKING_REJECTED', 'BOOKING_COMPLETED', 'BOOKING_CANCELLED', 'COUPON_CREATED', 'COUPON_UPDATED', 'COUPON_DELETED', 'SERVICE_CREATED', 'SERVICE_UPDATED', 'SERVICE_DELETED') NOT NULL,
+    `status` ENUM('SUCCESS', 'ERROR') NOT NULL DEFAULT 'SUCCESS',
     `actor_id` CHAR(36) NULL,
     `target_id` CHAR(36) NULL,
     `target_type` VARCHAR(50) NULL,
     `metadata` JSON NULL,
     `ip_address` VARCHAR(45) NULL,
+    `request_id` CHAR(36) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     INDEX `system_logs_actor_id_idx`(`actor_id`),
     INDEX `system_logs_type_created_at_idx`(`type`, `created_at`),
+    INDEX `system_logs_status_created_at_idx`(`status`, `created_at`),
+    INDEX `system_logs_request_id_idx`(`request_id`),
     INDEX `system_logs_target_id_target_type_idx`(`target_id`, `target_type`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -529,6 +578,9 @@ ALTER TABLE `bookings` ADD CONSTRAINT `bookings_customer_id_fkey` FOREIGN KEY (`
 ALTER TABLE `bookings` ADD CONSTRAINT `bookings_store_id_fkey` FOREIGN KEY (`store_id`) REFERENCES `stores`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `bookings` ADD CONSTRAINT `bookings_coupon_id_fkey` FOREIGN KEY (`coupon_id`) REFERENCES `coupons`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `booking_items` ADD CONSTRAINT `booking_items_booking_id_fkey` FOREIGN KEY (`booking_id`) REFERENCES `bookings`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -587,6 +639,21 @@ ALTER TABLE `messages` ADD CONSTRAINT `messages_conversation_id_fkey` FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE `messages` ADD CONSTRAINT `messages_sender_id_fkey` FOREIGN KEY (`sender_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `coupons` ADD CONSTRAINT `coupons_store_id_fkey` FOREIGN KEY (`store_id`) REFERENCES `stores`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `coupons` ADD CONSTRAINT `coupons_created_by_id_fkey` FOREIGN KEY (`created_by_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `coupon_usages` ADD CONSTRAINT `coupon_usages_coupon_id_fkey` FOREIGN KEY (`coupon_id`) REFERENCES `coupons`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `coupon_usages` ADD CONSTRAINT `coupon_usages_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `coupon_usages` ADD CONSTRAINT `coupon_usages_booking_id_fkey` FOREIGN KEY (`booking_id`) REFERENCES `bookings`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `system_logs` ADD CONSTRAINT `system_logs_actor_id_fkey` FOREIGN KEY (`actor_id`) REFERENCES `users`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

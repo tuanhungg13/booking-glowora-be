@@ -9,13 +9,15 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiHeader, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ServicesService } from './services.service';
+import { ServicesImportService } from './services-import.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { AssignStaffDto } from './dto/assign-staff.dto';
@@ -24,21 +26,56 @@ import { CreateServiceVariantDto, UpdateServiceVariantDto } from './dto/service-
 import { PublicServiceQueryDto, ServiceQueryDto } from './dto/service-filter.dto';
 import { Public } from '../../../common/decorators/public.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
+import { AuditLog } from '../../../common/decorators/audit-log.decorator';
 import { Permissions } from '../../../common/constants/permissions';
 import { StoreId } from '../../../common/decorators/store-id.decorator';
+import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
+import { LogType } from '@prisma/client';
 
 @ApiTags('services')
 @ApiHeader({ name: 'x-store-id', description: 'ID của store (bắt buộc trừ GET /services/:id)', required: false })
 @Controller('services')
 export class ServicesController {
-  constructor(private readonly servicesService: ServicesService) { }
+  constructor(
+    private readonly servicesService: ServicesService,
+    private readonly servicesImportService: ServicesImportService,
+  ) { }
 
   @ApiOperation({ summary: 'Tạo dịch vụ mới' })
   @ApiBearerAuth()
   @Post()
   @RequirePermissions(Permissions.SERVICE.CREATE)
-  create(@StoreId() storeId: string, @Body() dto: CreateServiceDto) {
-    return this.servicesService.create(storeId, dto);
+  @AuditLog({ type: LogType.SERVICE_CREATED, targetType: 'Service' })
+  create(
+    @StoreId() storeId: string,
+    @Body() dto: CreateServiceDto,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return this.servicesService.create(storeId, dto, user.id);
+  }
+
+  @ApiOperation({ summary: 'Import dịch vụ từ file Excel (.xlsx/.xls, field: file)' })
+  @ApiBearerAuth()
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: { type: 'string', format: 'binary', description: 'File Excel (.xlsx/.xls)' },
+      },
+      required: ['file'],
+    },
+  })
+  @Post('import')
+  @RequirePermissions(Permissions.SERVICE.CREATE)
+  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
+  importServices(
+    @StoreId() storeId: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    if (!file) throw new BadRequestException('Không có file nào được tải lên');
+    return this.servicesImportService.importServices(storeId, file);
   }
 
   @ApiOperation({ summary: 'Khám phá dịch vụ công khai từ nhiều store (public)' })
@@ -77,12 +114,14 @@ export class ServicesController {
   @ApiParam({ name: 'id', description: 'Service ID' })
   @Patch(':id')
   @RequirePermissions(Permissions.SERVICE.UPDATE)
+  @AuditLog({ type: LogType.SERVICE_UPDATED, targetType: 'Service' })
   update(
     @StoreId() storeId: string,
     @Param('id') id: string,
     @Body() dto: UpdateServiceDto,
+    @CurrentUser() user: CurrentUserPayload,
   ) {
-    return this.servicesService.update(id, storeId, dto);
+    return this.servicesService.update(id, storeId, dto, user.id);
   }
 
   @ApiOperation({ summary: 'Thêm variant cho dịch vụ' })
@@ -187,7 +226,12 @@ export class ServicesController {
   @ApiParam({ name: 'id', description: 'Service ID' })
   @Delete(':id')
   @RequirePermissions(Permissions.SERVICE.DELETE)
-  remove(@StoreId() storeId: string, @Param('id') id: string) {
-    return this.servicesService.remove(id, storeId);
+  @AuditLog({ type: LogType.SERVICE_DELETED, targetType: 'Service' })
+  remove(
+    @StoreId() storeId: string,
+    @Param('id') id: string,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return this.servicesService.remove(id, storeId, user.id);
   }
 }

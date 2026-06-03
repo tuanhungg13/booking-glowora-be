@@ -1,14 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Patch, Query } from '@nestjs/common';
-import { Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from '@nestjs/common';
+import type { Request } from 'express';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
+import { AuditLog } from '../../../common/decorators/audit-log.decorator';
 import { Permissions } from '../../../common/constants/permissions';
 import { BookingsService } from './bookings.service';
 import { CancelBookingDto } from './dto/cancel-booking.dto';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { MyBookingFilterDto } from './dto/my-booking-filter.dto';
+import { LogType } from '@prisma/client';
 
 @ApiTags('bookings')
 @ApiBearerAuth()
@@ -18,12 +20,14 @@ export class BookingsController {
 
   @Post()
   @RequirePermissions(Permissions.APPOINTMENT.CREATE)
+  @AuditLog({ type: LogType.BOOKING_CREATED, targetType: 'Booking' })
   @ApiOperation({ summary: 'Tạo lịch hẹn mới', description: 'Khách hàng đặt lịch dịch vụ tại cửa hàng. Yêu cầu quyền APPOINTMENT.CREATE.' })
   @ApiResponse({ status: 201, description: 'Tạo lịch hẹn thành công' })
   @ApiResponse({ status: 400, description: 'Dữ liệu không hợp lệ hoặc slot đã bị đặt' })
   @ApiResponse({ status: 403, description: 'Không có quyền tạo lịch hẹn' })
-  create(@Body() dto: CreateBookingDto, @CurrentUser() user: CurrentUserPayload) {
-    return this.bookingsService.create(dto, user.id);
+  create(@Body() dto: CreateBookingDto, @CurrentUser() user: CurrentUserPayload, @Req() req: Request) {
+    const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ?? req.ip ?? '';
+    return this.bookingsService.create(dto, user.id, ip);
   }
 
   // MUST be before :id to avoid route conflict
@@ -47,6 +51,7 @@ export class BookingsController {
 
   @Patch(':id/cancel')
   @RequirePermissions(Permissions.APPOINTMENT.VIEW)
+  @AuditLog({ type: LogType.BOOKING_CANCELLED, targetType: 'Booking' })
   @ApiOperation({ summary: 'Hủy lịch hẹn', description: 'Khách hàng hủy lịch hẹn của mình. Chỉ hủy được khi lịch chưa được xác nhận hoặc đang chờ xử lý.' })
   @ApiParam({ name: 'id', description: 'ID của lịch hẹn cần hủy' })
   @ApiResponse({ status: 200, description: 'Hủy lịch hẹn thành công' })
@@ -57,8 +62,10 @@ export class BookingsController {
     @Param('id') id: string,
     @Body() dto: CancelBookingDto,
     @CurrentUser() user: CurrentUserPayload,
+    @Req() req: Request,
   ) {
-    return this.bookingsService.cancel(id, user.id, dto.reason);
+    const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ?? req.ip ?? '';
+    return this.bookingsService.cancel(id, user.id, dto.reason, ip);
   }
 
   @Delete(':id')

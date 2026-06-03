@@ -49,7 +49,7 @@ export class AuthService {
     return { ...rest, roles: user.userRoles.map((ur) => ur.role.name) };
   }
 
-  async login(user: { id: string; email: string; roles: string[] }) {
+  async login(user: { id: string; email: string; roles: string[] }, ipAddress?: string, requestId?: string) {
     const accessToken = this._signAccess(user.id, user.email);
     const refreshToken = this._signRefresh(user.id, user.email);
 
@@ -58,7 +58,7 @@ export class AuthService {
       data: { refreshToken: await bcrypt.hash(refreshToken, 10) },
     });
 
-    this.systemLog.log({ type: LogType.AUTH_LOGIN, actorId: user.id, targetId: user.id, targetType: 'User', metadata: { email: user.email } });
+    this.systemLog.log({ type: LogType.AUTH_LOGIN, actorId: user.id, targetId: user.id, targetType: 'User', metadata: { email: user.email }, ipAddress, requestId });
 
     return {
       access_token: accessToken,
@@ -91,7 +91,7 @@ export class AuthService {
     return { message: 'OTP đã được gửi đến email của bạn. Vui lòng xác nhận trong 10 phút.' };
   }
 
-  async verifyRegisterOtp(dto: VerifyOtpDto) {
+  async verifyRegisterOtp(dto: VerifyOtpDto, ipAddress?: string, requestId?: string) {
     const pendingKey = `otp:register:${dto.email}`;
     const raw = await this.redis.get(pendingKey);
 
@@ -128,7 +128,7 @@ export class AuthService {
 
     await this.redis.del(pendingKey);
 
-    this.systemLog.log({ type: LogType.AUTH_REGISTER, actorId: user.id, targetId: user.id, targetType: 'User', metadata: { email: dto.email } });
+    this.systemLog.log({ type: LogType.AUTH_REGISTER, actorId: user.id, targetId: user.id, targetType: 'User', metadata: { email: dto.email }, ipAddress, requestId });
 
     return user;
   }

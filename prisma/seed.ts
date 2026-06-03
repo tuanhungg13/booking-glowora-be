@@ -98,6 +98,12 @@ const PERMISSIONS = [
   { code: 'VIEW_LOG', name: 'Xem nhật ký hệ thống' },
   // Analytics
   { code: 'VIEW_REPORT', name: 'Xem báo cáo doanh thu' },
+  // Coupon
+  { code: 'CREATE_COUPON', name: 'Tạo mã giảm giá' },
+  { code: 'VIEW_COUPON', name: 'Xem mã giảm giá' },
+  { code: 'UPDATE_COUPON', name: 'Cập nhật mã giảm giá' },
+  { code: 'DELETE_COUPON', name: 'Xóa mã giảm giá' },
+  { code: 'MANAGE_COUPON', name: 'Quản lý mã giảm giá toàn hệ thống' },
 ];
 
 // ─── Permissions theo từng role ───────────────────────────────────────────────
@@ -111,6 +117,7 @@ const CUSTOMER_PERMISSIONS = [
   'VIEW_NOTIFICATION',
   'VIEW_WORKING_HOUR',
   'CREATE_STORE',
+  'VIEW_COUPON',
 ];
 
 const STAFF_PERMISSIONS = [
@@ -143,6 +150,7 @@ const SHOP_OWNER_PERMISSIONS = [
   'CREATE_STORE', 'UPDATE_STORE',
   'INVITE_STAFF', 'VIEW_STAFF', 'UPDATE_STAFF', 'REMOVE_STAFF',
   'VIEW_REPORT',
+  'CREATE_COUPON', 'VIEW_COUPON', 'UPDATE_COUPON', 'DELETE_COUPON',
 ];
 
 async function main() {

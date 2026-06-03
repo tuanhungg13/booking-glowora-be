@@ -97,7 +97,7 @@ export class AdminStoresService {
     return store;
   }
 
-  async approve(id: string, adminId: string) {
+  async approve(id: string, adminId: string, ipAddress?: string, requestId?: string) {
     const store = await this.findOne(id);
     if (store.status !== StoreStatus.PENDING && store.status !== StoreStatus.INACTIVE) {
       throw new BadRequestException('Only pending or inactive stores can be approved');
@@ -127,11 +127,11 @@ export class AdminStoresService {
       },
     });
 
-    this.systemLog.log({ type: LogType.STORE_APPROVED, actorId: adminId, targetId: id, targetType: 'Store', metadata: { storeName: store.name } });
+    this.systemLog.log({ type: LogType.STORE_APPROVED, actorId: adminId, targetId: id, targetType: 'Store', metadata: { storeName: store.name }, ipAddress, requestId });
     return updated;
   }
 
-  async reject(id: string, dto: AdminStoreActionDto, adminId: string) {
+  async reject(id: string, dto: AdminStoreActionDto, adminId: string, ipAddress?: string, requestId?: string) {
     if (!dto.reason?.trim()) {
       throw new BadRequestException('Reject reason is required');
     }
@@ -160,11 +160,11 @@ export class AdminStoresService {
       },
     });
 
-    this.systemLog.log({ type: LogType.STORE_REJECTED, actorId: adminId, targetId: id, targetType: 'Store', metadata: { storeName: store.name, reason: dto.reason } });
+    this.systemLog.log({ type: LogType.STORE_REJECTED, actorId: adminId, targetId: id, targetType: 'Store', metadata: { storeName: store.name, reason: dto.reason }, ipAddress, requestId });
     return updated;
   }
 
-  async lock(id: string, dto: AdminStoreActionDto, adminId: string) {
+  async lock(id: string, dto: AdminStoreActionDto, adminId: string, ipAddress?: string, requestId?: string) {
     if (!dto.reason?.trim()) {
       throw new BadRequestException('Lock reason is required');
     }
@@ -193,11 +193,11 @@ export class AdminStoresService {
       },
     });
 
-    this.systemLog.log({ type: LogType.STORE_BANNED, actorId: adminId, targetId: id, targetType: 'Store', metadata: { storeName: store.name, reason: dto.reason } });
+    this.systemLog.log({ type: LogType.STORE_BANNED, actorId: adminId, targetId: id, targetType: 'Store', metadata: { storeName: store.name, reason: dto.reason }, ipAddress, requestId });
     return updated;
   }
 
-  async unlock(id: string, adminId: string) {
+  async unlock(id: string, adminId: string, ipAddress?: string, requestId?: string) {
     const store = await this.findOne(id);
     if (store.status !== StoreStatus.BANNED) {
       throw new BadRequestException('Only banned stores can be unlocked');
@@ -212,7 +212,7 @@ export class AdminStoresService {
       include: adminStoreInclude,
     });
 
-    this.systemLog.log({ type: LogType.STORE_UNLOCKED, actorId: adminId, targetId: id, targetType: 'Store', metadata: { storeName: store.name } });
+    this.systemLog.log({ type: LogType.STORE_UNLOCKED, actorId: adminId, targetId: id, targetType: 'Store', metadata: { storeName: store.name }, ipAddress, requestId });
     return updated;
   }
 }

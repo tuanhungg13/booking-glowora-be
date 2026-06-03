@@ -1,13 +1,14 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma, ServiceStatus, StaffStatus, StoreStatus } from '@prisma/client';
+import { LogType, Prisma, ServiceStatus, StaffStatus, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CloudinaryService } from '../../../cloudinary/cloudinary.service';
+import { SystemLogService } from '../../../system-log/system-log.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { CreateServiceVariantDto, UpdateServiceVariantDto } from './dto/service-variant.dto';
 
 type ServiceParams = { storeId?: string; status?: ServiceStatus; categoryId?: string; sort?: 'name' | 'name-desc' | 'price' | 'price-desc' | 'avgRating' | 'avgRating-asc'; page?: number; limit?: number };
-type PublicServiceParams = { storeId?: string; categoryId?: string; q?: string; minPrice?: number; maxPrice?: number; minRating?: number; maxRating?: number; sort?: 'avgRating' | 'price' | 'price-desc' | 'newest'; page?: number; limit?: number };
+type PublicServiceParams = { storeId?: string; categoryId?: string; q?: string; minPrice?: number; maxPrice?: number; minRating?: number; maxRating?: number; sort?: 'avgRating' | 'price' | 'price-desc' | 'newest' | 'popular'; page?: number; limit?: number };
 
 const serviceInclude = {
   category: true,
@@ -42,6 +43,7 @@ export class ServicesService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly cloudinary: CloudinaryService,
+    private readonly systemLog: SystemLogService,
   ) {}
 
   private async checkDuplicateName(name: string, storeId: string, excludeId?: string) {
@@ -56,10 +58,10 @@ export class ServicesService {
     if (existing) throw new BadRequestException(`Dịch vụ "${name}" đã tồn tại trong cửa hàng`);
   }
 
-  async create(storeId: string, dto: CreateServiceDto) {
+  async create(storeId: string, dto: CreateServiceDto, actorId: string) {
     await this.checkDuplicateName(dto.name, storeId);
     const slug = await this.generateUniqueSlug(dto.name, storeId);
-    return this.prisma.service.create({
+    const service = await this.prisma.service.create({
       data: {
         storeId,
         name: dto.name,
@@ -81,6 +83,16 @@ export class ServicesService {
       },
       include: serviceInclude,
     });
+
+    this.systemLog.log({
+      type: LogType.SERVICE_CREATED,
+      actorId,
+      targetId: service.id,
+      targetType: 'Service',
+      metadata: { name: service.name, storeId },
+    });
+
+    return service;
   }
 
   async findAll(params?: ServiceParams) {
@@ -210,6 +222,10 @@ export class ServicesService {
       return this.findPublicSortedByPrice(params, publicInclude, page, limit, params.sort === 'price-desc' ? 'desc' : 'asc');
     }
 
+    if (params.sort === 'popular') {
+      return this.findPublicSortedByPopular(params, publicInclude, page, limit);
+    }
+
     const orderBy: Prisma.ServiceOrderByWithRelationInput =
       params.sort === 'newest' ? { createdAt: 'desc' } :
       params.sort === 'avgRating' ? { avgRating: 'desc' } :
@@ -305,6 +321,81 @@ export class ServicesService {
     return { items, total, page, limit };
   }
 
+  private async findPublicSortedByPopular(params: PublicServiceParams, include: object, page: number, limit: number) {
+    const offset = (page - 1) * limit;
+
+    const conds: Prisma.Sql[] = [
+      Prisma.sql`s.status = 'ACTIVE'`,
+      Prisma.sql`st.status = 'ACTIVE'`,
+    ];
+
+    if (params.storeId) conds.push(Prisma.sql`s.store_id = ${params.storeId}`);
+
+    if (params.categoryId) {
+      conds.push(Prisma.sql`(
+        s.category_id = ${params.categoryId}
+        OR EXISTS (
+          SELECT 1 FROM service_categories sc
+          WHERE sc.id = s.category_id AND sc.parent_id = ${params.categoryId}
+        )
+      )`);
+    }
+
+    if (params.q) {
+      const like = `%${params.q}%`;
+      conds.push(Prisma.sql`(s.name LIKE ${like} OR s.description LIKE ${like})`);
+    }
+
+    if (params.minPrice !== undefined || params.maxPrice !== undefined) {
+      const priceConds: Prisma.Sql[] = [
+        Prisma.sql`pv.service_id = s.id`,
+        Prisma.sql`pv.status = 'ACTIVE'`,
+      ];
+      if (params.minPrice !== undefined) priceConds.push(Prisma.sql`pv.price >= ${params.minPrice}`);
+      if (params.maxPrice !== undefined) priceConds.push(Prisma.sql`pv.price <= ${params.maxPrice}`);
+      conds.push(Prisma.sql`EXISTS (SELECT 1 FROM service_variants pv WHERE ${Prisma.join(priceConds, ' AND ')})`);
+    }
+
+    if (params.minRating !== undefined) conds.push(Prisma.sql`s.avg_rating >= ${params.minRating}`);
+    if (params.maxRating !== undefined) conds.push(Prisma.sql`s.avg_rating <= ${params.maxRating}`);
+
+    const where = Prisma.join(conds, ' AND ');
+
+    const [rows, countRows] = await Promise.all([
+      this.prisma.$queryRaw<{ id: string }[]>(Prisma.sql`
+        SELECT s.id
+        FROM services s
+        INNER JOIN stores st ON st.id = s.store_id
+        LEFT JOIN booking_items bi ON bi.service_id = s.id
+        LEFT JOIN bookings b ON b.id = bi.booking_id AND b.status = 'COMPLETED'
+        WHERE ${where}
+        GROUP BY s.id
+        ORDER BY COUNT(bi.id) DESC, s.avg_rating DESC, s.id ASC
+        LIMIT ${limit} OFFSET ${offset}
+      `),
+      this.prisma.$queryRaw<{ total: bigint }[]>(Prisma.sql`
+        SELECT COUNT(DISTINCT s.id) AS total
+        FROM services s
+        INNER JOIN stores st ON st.id = s.store_id
+        WHERE ${where}
+      `),
+    ]);
+
+    const total = Number(countRows[0]?.total ?? 0);
+    const paginatedIds = rows.map((r) => r.id);
+    if (!paginatedIds.length) return { items: [], total, page, limit };
+
+    const items = await this.prisma.service.findMany({
+      where: { id: { in: paginatedIds } },
+      include: include as any,
+    });
+
+    const order = new Map(paginatedIds.map((id, i) => [id, i]));
+    items.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+
+    return { items, total, page, limit };
+  }
+
   async findOne(idOrSlug: string, storeId?: string, userLat?: number, userLng?: number) {
     const service = await this.prisma.service.findFirst({
       where: {
@@ -324,7 +415,7 @@ export class ServicesService {
     return { ...service, store: { ...storeWithoutCoords, ...(distance !== undefined && { distance }) } };
   }
 
-  async update(id: string, storeId: string, dto: UpdateServiceDto) {
+  async update(id: string, storeId: string, dto: UpdateServiceDto, actorId: string) {
     const service = await this.findOne(id, storeId);
     if (dto.name) await this.checkDuplicateName(dto.name, storeId, id);
     const slug = dto.name ? await this.generateUniqueSlug(dto.name, storeId, id) : undefined;
@@ -347,6 +438,14 @@ export class ServicesService {
         categoryId: dto.categoryId,
         ...(dto.imageUrls !== undefined && { imageUrls: dto.imageUrls }),
       },
+    });
+
+    this.systemLog.log({
+      type: LogType.SERVICE_UPDATED,
+      actorId,
+      targetId: id,
+      targetType: 'Service',
+      metadata: { name: service.name, storeId },
     });
 
     return this.findOne(id, storeId);
@@ -470,12 +569,21 @@ export class ServicesService {
     });
   }
 
-  async remove(id: string, storeId: string) {
-    await this.findOne(id, storeId);
+  async remove(id: string, storeId: string, actorId: string) {
+    const service = await this.findOne(id, storeId);
     await this.prisma.service.update({
       where: { id },
       data: { status: ServiceStatus.INACTIVE },
     });
+
+    this.systemLog.log({
+      type: LogType.SERVICE_DELETED,
+      actorId,
+      targetId: id,
+      targetType: 'Service',
+      metadata: { name: service.name, storeId },
+    });
+
     return { deleted: true };
   }
 

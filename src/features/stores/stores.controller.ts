@@ -28,6 +28,7 @@ import {
 } from '../../common/decorators/current-user.decorator';
 import { Public } from '../../common/decorators/public.decorator';
 import { RequirePermissions } from '../../common/decorators/require-permissions.decorator';
+import { AuditLog } from '../../common/decorators/audit-log.decorator';
 import { Permissions } from '../../common/constants/permissions';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { StoreFilterDto } from './dto/store-filter.dto';
@@ -35,6 +36,7 @@ import { UpdateStoreDto } from './dto/update-store.dto';
 import { UpdateWorkingHoursDto } from './dto/update-working-hours.dto';
 import { StoresService } from './stores.service';
 import { TelegramService } from '../../telegram/telegram.service';
+import { LogType } from '@prisma/client';
 
 const imageStorage = (folder: string) =>
   diskStorage({
@@ -63,6 +65,7 @@ export class StoresController {
   @ApiOperation({ summary: 'Create a store for current owner' })
   @ApiBearerAuth()
   @RequirePermissions(Permissions.STORE.CREATE)
+  @AuditLog({ type: LogType.STORE_CREATED, targetType: 'Store' })
   @Post()
   create(@Body() dto: CreateStoreDto, @CurrentUser() user: CurrentUserPayload) {
     return this.storesService.create(dto, user.id);

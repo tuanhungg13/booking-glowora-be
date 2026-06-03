@@ -3,9 +3,10 @@ import { BookingsModule } from './booking/bookings/bookings.module';
 import { PaymentsModule } from './booking/payments/payments.module';
 import { ReviewsModule } from './booking/reviews/reviews.module';
 import { SlotsModule } from './booking/slots/slots.module';
+import { CouponsModule } from './booking/coupons/coupons.module';
 
 @Module({
-  imports: [BookingsModule, PaymentsModule, ReviewsModule, SlotsModule],
-  exports: [BookingsModule, PaymentsModule, ReviewsModule, SlotsModule],
+  imports: [BookingsModule, PaymentsModule, ReviewsModule, SlotsModule, CouponsModule],
+  exports: [BookingsModule, PaymentsModule, ReviewsModule, SlotsModule, CouponsModule],
 })
 export class BookingModule {}

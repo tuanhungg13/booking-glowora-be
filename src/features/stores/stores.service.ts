@@ -84,10 +84,11 @@ export class StoresService {
     }
 
     const existingStore = await this.prisma.store.findFirst({
-      where: { ownerId, name: dto.name, address: dto.address },
+      where: { name: { equals: dto.name } },
+      select: { id: true },
     });
     if (existingStore) {
-      throw new ConflictException('Store already exists for this owner and address');
+      throw new ConflictException(`Tên cửa hàng "${dto.name}" đã tồn tại trong hệ thống`);
     }
 
     const storeRoleCount = await this.prisma.userRole.count({
@@ -323,10 +324,10 @@ export class StoresService {
 
     if (dto.name && dto.name !== store.name) {
       const duplicate = await this.prisma.store.findFirst({
-        where: { ownerId, name: { equals: dto.name }, id: { not: id } },
+        where: { name: { equals: dto.name }, id: { not: id } },
         select: { id: true },
       });
-      if (duplicate) throw new ConflictException(`Bạn đã có cửa hàng tên "${dto.name}" rồi`);
+      if (duplicate) throw new ConflictException(`Tên cửa hàng "${dto.name}" đã tồn tại trong hệ thống`);
     }
 
     const slug = dto.name && dto.name !== store.name

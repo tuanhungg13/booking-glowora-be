@@ -4,6 +4,7 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { Prisma } from '@prisma/client';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -22,11 +23,14 @@ function convertDecimals(value: unknown): unknown {
 
 @Injectable()
 export class TransformResponseInterceptor implements NestInterceptor {
-  intercept(_context: ExecutionContext, next: CallHandler): Observable<unknown> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
+    const req = context.switchToHttp().getRequest<Request>();
+    const requestId = (req as any).requestId as string;
+
     return next.handle().pipe(
       map((data: any) => {
         if (data && typeof data === 'object' && 'success' in data && 'data' in data) {
-          return data;
+          return { ...data, requestId };
         }
 
         // Tách pagination ra meta nếu service trả { items, total, page, limit }
@@ -47,6 +51,7 @@ export class TransformResponseInterceptor implements NestInterceptor {
               limit: limit ?? items.length,
               totalPages: limit ? Math.ceil(total / limit) : 1,
             },
+            requestId,
           };
         }
 
@@ -54,6 +59,7 @@ export class TransformResponseInterceptor implements NestInterceptor {
           success: true,
           message: 'Thành công',
           data: convertDecimals(data),
+          requestId,
         };
       }),
     );

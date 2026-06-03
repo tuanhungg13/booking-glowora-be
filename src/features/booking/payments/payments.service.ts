@@ -53,12 +53,15 @@ export class PaymentsService {
       throw new BadRequestException('Booking này đã được thanh toán');
     }
 
+    // Dùng finalPrice (sau giảm giá). Booking cũ chưa có coupon thì finalPrice = 0 → fallback totalPrice
+    const chargeAmount = Number(booking.finalPrice) > 0 ? booking.finalPrice : booking.totalPrice;
+
     const txnRef = `${bookingId}-${Date.now()}`;
     const payment = await this.prisma.payment.create({
       data: {
         bookingId,
         customerId: userId,
-        amount: booking.totalPrice,
+        amount: chargeAmount,
         status: PaymentStatus.PENDING,
         method: PaymentMethod.VNPAY,
         vnpTxnRef: txnRef,
@@ -68,7 +71,7 @@ export class PaymentsService {
     const serviceNames = booking.items.map((i) => i.service.name).join(', ');
     const paymentUrl = buildVnpayUrl(
       {
-        amount: Number(booking.totalPrice),
+        amount: Number(chargeAmount),
         orderInfo: `Thanh toan ${serviceNames} tai ${booking.store.name}`,
         txnRef,
         clientIp: getClientIp(req as Record<string, unknown>),

@@ -10,8 +10,10 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { Public } from '../../../common/decorators/public.decorator';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import { AuditLog } from '../../../common/decorators/audit-log.decorator';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
+import { LogType } from '@prisma/client';
 
 const ACCESS_TOKEN_TTL = 15 * 60 * 1000;
 const REFRESH_TOKEN_TTL = 7 * 24 * 60 * 60 * 1000;
@@ -32,15 +34,14 @@ export class AuthController {
   @Public()
   @Post('login')
   @UseGuards(LocalAuthGuard)
+  @AuditLog({ type: LogType.AUTH_LOGIN, targetType: 'User' })
   async login(
     @CurrentUser() user: CurrentUserPayload,
+    @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const result = await this.authService.login({
-      id: user.id,
-      email: user.email,
-      roles: user.roles ?? [],
-    });
+    const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ?? req.ip ?? '';
+    const result = await this.authService.login({ id: user.id, email: user.email, roles: user.roles ?? [] }, ip);
 
     res.cookie('access_token', result.access_token, { ...COOKIE_BASE, maxAge: ACCESS_TOKEN_TTL });
     res.cookie('refresh_token', result.refresh_token, { ...COOKIE_BASE, maxAge: REFRESH_TOKEN_TTL });
@@ -58,8 +59,10 @@ export class AuthController {
   @ApiOperation({ summary: 'Bước 2: Xác nhận OTP — hoàn tất đăng ký tài khoản' })
   @Public()
   @Post('verify-otp')
-  async verifyOtp(@Body() dto: VerifyOtpDto) {
-    return this.authService.verifyRegisterOtp(dto);
+  @AuditLog({ type: LogType.AUTH_REGISTER, targetType: 'User' })
+  async verifyOtp(@Body() dto: VerifyOtpDto, @Req() req: Request) {
+    const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ?? req.ip ?? '';
+    return this.authService.verifyRegisterOtp(dto, ip);
   }
 
   @ApiOperation({ summary: 'Làm mới access token bằng refresh token' })
@@ -95,6 +98,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Đăng xuất, blacklist refresh token' })
   @ApiBearerAuth()
   @Post('logout')
+  @AuditLog({ type: LogType.AUTH_LOGOUT, targetType: 'User' })
   async logout(
     @CurrentUser() user: CurrentUserPayload,
     @Req() req: Request,

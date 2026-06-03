@@ -14,9 +14,11 @@ import { Public } from '../../../common/decorators/public.decorator';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
+import { AuditLog } from '../../../common/decorators/audit-log.decorator';
 import { Permissions } from '../../../common/constants/permissions';
 import { PaymentsService } from './payments.service';
 import { CreateVnpayPaymentDto } from './dto/create-vnpay-payment.dto';
+import { LogType } from '@prisma/client';
 
 @ApiTags('payments')
 @Controller('')
@@ -46,6 +48,7 @@ export class PaymentsController {
   @ApiOperation({ summary: 'VNPAY IPN — webhook server-to-server' })
   @Public()
   @Post('payments/vnpay/ipn')
+  @AuditLog({ type: LogType.PAYMENT_FAILED, targetType: 'Payment' })
   vnpayIpn(@Query() query: Record<string, string>, @Body() body: Record<string, string>) {
     return this.paymentsService.handleIpn({ ...query, ...body });
   }

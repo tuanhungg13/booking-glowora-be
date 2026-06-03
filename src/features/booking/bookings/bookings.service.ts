@@ -13,10 +13,12 @@ import { LogType } from '@prisma/client';
 import { BookingFilterDto } from './dto/booking-filter.dto';
 import { MyBookingFilterDto } from './dto/my-booking-filter.dto';
 import { CreateBookingDto } from './dto/create-booking.dto';
+import { CouponsService } from '../coupons/coupons.service';
 
 const bookingInclude = {
   customer: { select: { id: true, fullName: true, email: true, phone: true } },
   store: true,
+  coupon: { select: { id: true, code: true, type: true, value: true } },
   items: {
     orderBy: { sortOrder: 'asc' as const },
     include: {
@@ -37,9 +39,10 @@ export class BookingsService {
     private readonly prisma: PrismaService,
     private readonly notifications: NotificationsService,
     private readonly systemLog: SystemLogService,
+    private readonly coupons: CouponsService,
   ) {}
 
-  async create(dto: CreateBookingDto, customerId: string) {
+  async create(dto: CreateBookingDto, customerId: string, ipAddress?: string, requestId?: string) {
     if (dto.services.length === 0) {
       throw new BadRequestException('Phải chọn ít nhất 1 dịch vụ');
     }
@@ -67,6 +70,9 @@ export class BookingsService {
           startTime: Date;
           duration: number;
           price: Prisma.Decimal;
+          serviceName: string;
+          variantName: string;
+          staffName: string | null;
         }> = [];
 
         for (let i = 0; i < dto.services.length; i++) {
@@ -79,6 +85,7 @@ export class BookingsService {
               status: ServiceStatus.ACTIVE,
               service: { storeId: dto.storeId, status: ServiceStatus.ACTIVE },
             },
+            include: { service: { select: { name: true } } },
           });
           if (!variant) {
             throw new NotFoundException(`Variant không tìm thấy cho dịch vụ thứ ${i + 1}`);
@@ -107,6 +114,11 @@ export class BookingsService {
 
           await this.assertNoOverlap(tx, staffId, currentTime, variant.duration);
 
+          const staffRecord = await tx.staff.findUnique({
+            where: { id: staffId },
+            select: { user: { select: { fullName: true } } },
+          });
+
           itemsData.push({
             sortOrder: i,
             serviceId: svc.serviceId,
@@ -115,21 +127,45 @@ export class BookingsService {
             startTime: new Date(currentTime),
             duration: variant.duration,
             price: variant.price,
+            serviceName: variant.service.name,
+            variantName: variant.name,
+            staffName: staffRecord?.user?.fullName ?? null,
           });
 
           currentTime = new Date(currentTime.getTime() + variant.duration * 60 * 1000);
         }
 
         const totalDuration = itemsData.reduce((sum, item) => sum + item.duration, 0);
-        const totalPrice = itemsData.reduce((sum, item) => sum + Number(item.price), 0);
+        const totalPriceNum = itemsData.reduce((sum, item) => sum + Number(item.price), 0);
+        const totalPrice = new Prisma.Decimal(totalPriceNum);
 
-        return tx.booking.create({
+        let couponId: string | null = null;
+        let discountAmount = new Prisma.Decimal(0);
+
+        if (dto.couponCode) {
+          const result = await this.coupons.applyToBooking(
+            tx,
+            dto.couponCode,
+            dto.storeId,
+            totalPrice,
+            customerId,
+          );
+          couponId = result.couponId;
+          discountAmount = result.discountAmount;
+        }
+
+        const finalPrice = totalPrice.sub(discountAmount);
+
+        const booking = await tx.booking.create({
           data: {
             customerId,
             storeId: dto.storeId,
             scheduledAt: new Date(dto.scheduledAt),
             totalDuration,
             totalPrice,
+            discountAmount,
+            finalPrice,
+            couponId,
             status: store.autoConfirm ? BookingStatus.CONFIRMED : BookingStatus.PENDING,
             confirmedAt: store.autoConfirm ? new Date() : undefined,
             notes: dto.notes,
@@ -137,6 +173,12 @@ export class BookingsService {
           },
           include: bookingInclude,
         });
+
+        if (couponId) {
+          await this.coupons.recordUsage(tx, couponId, customerId, booking.id, discountAmount);
+        }
+
+        return booking;
       },
       { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
     );
@@ -155,7 +197,7 @@ export class BookingsService {
       })
       .catch(() => undefined);
 
-    this.systemLog.log({ type: LogType.BOOKING_CREATED, actorId: customerId, targetId: booking.id, targetType: 'Booking', metadata: { storeId: booking.storeId, scheduledAt: booking.scheduledAt, totalPrice: Number(booking.totalPrice) } });
+    this.systemLog.log({ type: LogType.BOOKING_CREATED, actorId: customerId, targetId: booking.id, targetType: 'Booking', metadata: { storeId: booking.storeId, scheduledAt: booking.scheduledAt, totalPrice: Number(booking.totalPrice) }, ipAddress, requestId });
 
     return booking;
   }
@@ -303,7 +345,7 @@ export class BookingsService {
     return booking;
   }
 
-  async confirm(id: string, userId: string) {
+  async confirm(id: string, userId: string, ipAddress?: string, requestId?: string) {
     const booking = await this.findOne(id);
     if (booking.status !== BookingStatus.PENDING) {
       throw new BadRequestException('Only pending bookings can be confirmed');
@@ -327,12 +369,12 @@ export class BookingsService {
       })
       .catch(() => undefined);
 
-    this.systemLog.log({ type: LogType.BOOKING_CONFIRMED, actorId: userId, targetId: id, targetType: 'Booking', metadata: { storeId: updated.storeId, customerId: updated.customerId } });
+    this.systemLog.log({ type: LogType.BOOKING_CONFIRMED, actorId: userId, targetId: id, targetType: 'Booking', metadata: { storeId: updated.storeId, customerId: updated.customerId }, ipAddress, requestId });
 
     return updated;
   }
 
-  async reject(id: string, userId: string, reason: string) {
+  async reject(id: string, userId: string, reason: string, ipAddress?: string, requestId?: string) {
     const booking = await this.findOne(id);
     if (booking.status !== BookingStatus.PENDING) {
       throw new BadRequestException('Only pending bookings can be rejected');
@@ -356,12 +398,12 @@ export class BookingsService {
       })
       .catch(() => undefined);
 
-    this.systemLog.log({ type: LogType.BOOKING_REJECTED, actorId: userId, targetId: id, targetType: 'Booking', metadata: { storeId: updated.storeId, customerId: updated.customerId, reason } });
+    this.systemLog.log({ type: LogType.BOOKING_REJECTED, actorId: userId, targetId: id, targetType: 'Booking', metadata: { storeId: updated.storeId, customerId: updated.customerId, reason }, ipAddress, requestId });
 
     return updated;
   }
 
-  async complete(id: string, userId: string) {
+  async complete(id: string, userId: string, ipAddress?: string, requestId?: string) {
     const booking = await this.findOne(id);
     if (booking.status !== BookingStatus.CONFIRMED) {
       throw new BadRequestException('Only confirmed bookings can be completed');
@@ -384,12 +426,12 @@ export class BookingsService {
       })
       .catch(() => undefined);
 
-    this.systemLog.log({ type: LogType.BOOKING_COMPLETED, actorId: userId, targetId: id, targetType: 'Booking', metadata: { storeId: updated.storeId, customerId: updated.customerId } });
+    this.systemLog.log({ type: LogType.BOOKING_COMPLETED, actorId: userId, targetId: id, targetType: 'Booking', metadata: { storeId: updated.storeId, customerId: updated.customerId }, ipAddress, requestId });
 
     return updated;
   }
 
-  async cancel(id: string, userId: string, reason?: string) {
+  async cancel(id: string, userId: string, reason?: string, ipAddress?: string) {
     const booking = await this.findOne(id);
 
     if (booking.customerId !== userId) {
@@ -430,7 +472,7 @@ export class BookingsService {
       })
       .catch(() => undefined);
 
-    this.systemLog.log({ type: LogType.BOOKING_CANCELLED, actorId: userId, targetId: id, targetType: 'Booking', metadata: { storeId: updated.storeId, reason } });
+    this.systemLog.log({ type: LogType.BOOKING_CANCELLED, actorId: userId, targetId: id, targetType: 'Booking', metadata: { storeId: updated.storeId, reason }, ipAddress });
 
     return updated;
   }

@@ -81,10 +81,10 @@ export class PublicServiceQueryDto {
   @Max(5)
   maxRating?: number;
 
-  @ApiPropertyOptional({ enum: ['avgRating', 'price', 'price-desc', 'newest'], example: 'avgRating' })
+  @ApiPropertyOptional({ enum: ['avgRating', 'price', 'price-desc', 'newest', 'popular'], example: 'avgRating' })
   @IsOptional()
-  @IsIn(['avgRating', 'price', 'price-desc', 'newest'])
-  sort?: 'avgRating' | 'price' | 'price-desc' | 'newest';
+  @IsIn(['avgRating', 'price', 'price-desc', 'newest', 'popular'])
+  sort?: 'avgRating' | 'price' | 'price-desc' | 'newest' | 'popular';
 
   @ApiPropertyOptional({ example: 1, minimum: 1 })
   @IsOptional()

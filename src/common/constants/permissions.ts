@@ -121,6 +121,15 @@ export const Permissions = {
   REPORT: {
     VIEW: 'VIEW_REPORT',
   },
+
+  // ─── Coupon ───
+  COUPON: {
+    CREATE: 'CREATE_COUPON',
+    VIEW: 'VIEW_COUPON',
+    UPDATE: 'UPDATE_COUPON',
+    DELETE: 'DELETE_COUPON',
+    MANAGE: 'MANAGE_COUPON', // tạo platform-wide coupon (admin only)
+  },
 } as const;
 
 type PermissionGroup = (typeof Permissions)[keyof typeof Permissions];

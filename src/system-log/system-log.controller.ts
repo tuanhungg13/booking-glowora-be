@@ -1,6 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiPropertyOptional, ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { LogType } from '@prisma/client';
+import { LogStatus, LogType } from '@prisma/client';
 import { Type } from 'class-transformer';
 import { IsDateString, IsEnum, IsInt, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
 import { Permissions } from '../common/constants/permissions';
@@ -12,6 +12,11 @@ class SystemLogFilterDto implements SystemLogFilter {
   @IsOptional()
   @IsEnum(LogType)
   type?: LogType;
+
+  @ApiPropertyOptional({ enum: LogStatus })
+  @IsOptional()
+  @IsEnum(LogStatus)
+  status?: LogStatus;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -32,6 +37,16 @@ class SystemLogFilterDto implements SystemLogFilter {
   @IsOptional()
   @IsString()
   targetType?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsUUID()
+  requestId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  ipAddress?: string;
 
   @ApiPropertyOptional({ example: '2026-01-01' })
   @IsOptional()

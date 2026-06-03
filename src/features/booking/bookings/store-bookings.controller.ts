@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Query, Req } from '@nestjs/common';
+import type { Request } from 'express';
 import {
   ApiBearerAuth,
   ApiHeader,
@@ -10,12 +11,14 @@ import {
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
+import { AuditLog } from '../../../common/decorators/audit-log.decorator';
 import { Permissions } from '../../../common/constants/permissions';
 import { StoreId } from '../../../common/decorators/store-id.decorator';
 import { BookingsService } from './bookings.service';
 import { BookingFilterDto } from './dto/booking-filter.dto';
 import { CalendarQueryDto } from './dto/calendar-query.dto';
 import { RejectBookingDto } from './dto/reject-booking.dto';
+import { LogType } from '@prisma/client';
 
 @ApiTags('store-bookings')
 @ApiBearerAuth()
@@ -62,6 +65,7 @@ export class StoreBookingsController {
 
   @Patch(':id/confirm')
   @RequirePermissions(Permissions.APPOINTMENT.UPDATE)
+  @AuditLog({ type: LogType.BOOKING_CONFIRMED, targetType: 'Booking' })
   @ApiOperation({
     summary: 'Xác nhận lịch hẹn',
     description:
@@ -75,12 +79,14 @@ export class StoreBookingsController {
   })
   @ApiResponse({ status: 403, description: 'Không có quyền xác nhận lịch hẹn' })
   @ApiResponse({ status: 404, description: 'Không tìm thấy lịch hẹn' })
-  confirm(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
-    return this.bookingsService.confirm(id, user.id);
+  confirm(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload, @Req() req: Request) {
+    const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ?? req.ip ?? '';
+    return this.bookingsService.confirm(id, user.id, ip);
   }
 
   @Patch(':id/reject')
   @RequirePermissions(Permissions.APPOINTMENT.UPDATE)
+  @AuditLog({ type: LogType.BOOKING_REJECTED, targetType: 'Booking' })
   @ApiOperation({
     summary: 'Từ chối lịch hẹn',
     description:
@@ -98,12 +104,15 @@ export class StoreBookingsController {
     @Param('id') id: string,
     @Body() dto: RejectBookingDto,
     @CurrentUser() user: CurrentUserPayload,
+    @Req() req: Request,
   ) {
-    return this.bookingsService.reject(id, user.id, dto.reason);
+    const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ?? req.ip ?? '';
+    return this.bookingsService.reject(id, user.id, dto.reason, ip);
   }
 
   @Patch(':id/complete')
   @RequirePermissions(Permissions.APPOINTMENT.UPDATE)
+  @AuditLog({ type: LogType.BOOKING_COMPLETED, targetType: 'Booking' })
   @ApiOperation({
     summary: 'Hoàn thành lịch hẹn',
     description:
@@ -123,7 +132,8 @@ export class StoreBookingsController {
   })
   @ApiResponse({ status: 403, description: 'Không có quyền cập nhật lịch hẹn' })
   @ApiResponse({ status: 404, description: 'Không tìm thấy lịch hẹn' })
-  complete(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
-    return this.bookingsService.complete(id, user.id);
+  complete(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload, @Req() req: Request) {
+    const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ?? req.ip ?? '';
+    return this.bookingsService.complete(id, user.id, ip);
   }
 }

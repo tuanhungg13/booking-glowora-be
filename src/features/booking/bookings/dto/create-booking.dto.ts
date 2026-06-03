@@ -47,4 +47,10 @@ export class CreateBookingDto {
   @IsString()
   @MaxLength(1000)
   notes?: string;
+
+  @ApiPropertyOptional({ description: 'Mã coupon giảm giá (nếu có)', example: 'SUMMER20' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  couponCode?: string;
 }

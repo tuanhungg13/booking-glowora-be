@@ -11,6 +11,7 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Public } from '../../../common/decorators/public.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
+import { AuditLog } from '../../../common/decorators/audit-log.decorator';
 import { Permissions } from '../../../common/constants/permissions';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
@@ -18,6 +19,7 @@ import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { ReviewFilterDto } from './dto/review-filter.dto';
+import { LogType } from '@prisma/client';
 
 @ApiTags('reviews')
 @Controller('')
@@ -67,6 +69,7 @@ export class ReviewsController {
   @ApiBearerAuth()
   @Patch('admin/reviews/:id/hide')
   @RequirePermissions(Permissions.REVIEW.MANAGE)
+  @AuditLog({ type: LogType.REVIEW_HIDDEN, targetType: 'Review' })
   hide(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
     return this.reviewsService.toggleVisibility(id, false, user.id);
   }
@@ -75,6 +78,7 @@ export class ReviewsController {
   @ApiBearerAuth()
   @Patch('admin/reviews/:id/show')
   @RequirePermissions(Permissions.REVIEW.MANAGE)
+  @AuditLog({ type: LogType.REVIEW_SHOWN, targetType: 'Review' })
   show(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
     return this.reviewsService.toggleVisibility(id, true, user.id);
   }
