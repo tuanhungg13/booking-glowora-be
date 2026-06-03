@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
-import { ApiBearerAuth, ApiConsumes, ApiHeader, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiHeader, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ServicesService } from './services.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
@@ -28,7 +28,7 @@ import { Permissions } from '../../../common/constants/permissions';
 import { StoreId } from '../../../common/decorators/store-id.decorator';
 
 @ApiTags('services')
-@ApiHeader({ name: 'x-store-id', description: 'ID của store', required: true })
+@ApiHeader({ name: 'x-store-id', description: 'ID của store (bắt buộc trừ GET /services/:id)', required: false })
 @Controller('services')
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) { }
@@ -57,6 +57,8 @@ export class ServicesController {
 
   @ApiOperation({ summary: 'Lấy chi tiết dịch vụ (public)' })
   @ApiParam({ name: 'id', description: 'Service ID' })
+  @ApiQuery({ name: 'userLat', required: false, type: Number, description: 'Vĩ độ người dùng (hiển thị khoảng cách)' })
+  @ApiQuery({ name: 'userLng', required: false, type: Number, description: 'Kinh độ người dùng (hiển thị khoảng cách)' })
   @Public()
   @Get(':id')
   findOne(
@@ -142,6 +144,19 @@ export class ServicesController {
   @ApiBearerAuth()
   @ApiParam({ name: 'id', description: 'Service ID' })
   @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        files: {
+          type: 'array',
+          items: { type: 'string', format: 'binary' },
+          description: 'Tối đa 5 ảnh',
+        },
+      },
+      required: ['files'],
+    },
+  })
   @Post(':id/images')
   @RequirePermissions(Permissions.SERVICE.UPDATE)
   @UseInterceptors(FilesInterceptor('files', 5, { storage: memoryStorage() }))

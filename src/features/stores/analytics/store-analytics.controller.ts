@@ -1,5 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
 import { StoreId } from '../../../common/decorators/store-id.decorator';
@@ -8,6 +8,7 @@ import { AnalyticsQueryDto, TopServicesQueryDto } from './dto/analytics-query.dt
 
 @ApiTags('store-analytics')
 @ApiBearerAuth()
+@ApiHeader({ name: 'x-store-id', required: true, description: 'ID của cửa hàng' })
 @Controller('store-analytics')
 export class StoreAnalyticsController {
   constructor(private readonly analyticsService: StoreAnalyticsService) { }

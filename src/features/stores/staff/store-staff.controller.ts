@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentUser, type CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 import { Public } from '../../../common/decorators/public.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
@@ -11,6 +11,7 @@ import { AcceptInviteDto } from './dto/accept-invite.dto';
 import { UpdateStaffDto } from './dto/update-staff.dto';
 
 @ApiTags('stores/staff')
+@ApiHeader({ name: 'x-store-id', required: true, description: 'ID của cửa hàng' })
 @Controller('store-staff')
 export class StoreStaffController {
   constructor(private readonly storeStaffService: StoreStaffService) { }

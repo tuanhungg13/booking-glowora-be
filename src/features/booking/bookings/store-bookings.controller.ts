@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiHeader,
   ApiOperation,
   ApiParam,
   ApiResponse,
@@ -18,6 +19,7 @@ import { RejectBookingDto } from './dto/reject-booking.dto';
 
 @ApiTags('store-bookings')
 @ApiBearerAuth()
+@ApiHeader({ name: 'x-store-id', required: true, description: 'ID của cửa hàng' })
 @Controller('store-bookings')
 export class StoreBookingsController {
   constructor(private readonly bookingsService: BookingsService) {}

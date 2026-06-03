@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Headers, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody, ApiHeader } from '@nestjs/swagger';
+import { LoginDto } from './dto/login.dto';
 import type { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
@@ -27,6 +28,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
   @ApiOperation({ summary: 'Đăng nhập' })
+  @ApiBody({ type: LoginDto })
   @Public()
   @Post('login')
   @UseGuards(LocalAuthGuard)
@@ -126,6 +128,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Permissions của user trong context store (bỏ qua x-store-id nếu là SUPER_ADMIN)' })
   @ApiBearerAuth()
+  @ApiHeader({ name: 'x-store-id', required: false, description: 'Store ID (bỏ qua nếu là SUPER_ADMIN)' })
   @Get('getMatrix')
   async getMatrix(
     @CurrentUser() user: CurrentUserPayload,

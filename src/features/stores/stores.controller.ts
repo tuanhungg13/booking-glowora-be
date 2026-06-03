@@ -15,6 +15,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiConsumes,
   ApiOperation,
   ApiTags,
@@ -104,6 +105,15 @@ export class StoresController {
 
   @ApiOperation({ summary: 'Upload store logo' })
   @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: { type: 'string', format: 'binary', description: 'File ảnh logo' },
+      },
+      required: ['file'],
+    },
+  })
   @ApiBearerAuth()
   @RequirePermissions(Permissions.STORE.UPDATE)
   @Post(':id/logo')
@@ -123,6 +133,15 @@ export class StoresController {
 
   @ApiOperation({ summary: 'Upload store banner' })
   @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: { type: 'string', format: 'binary', description: 'File ảnh banner' },
+      },
+      required: ['file'],
+    },
+  })
   @ApiBearerAuth()
   @RequirePermissions(Permissions.STORE.UPDATE)
   @Post(':id/banner')
@@ -160,6 +179,15 @@ export class StoresController {
   }
 
   @ApiOperation({ summary: 'Link a Telegram supergroup (forum) to this store' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        telegramGroupId: { type: 'string', example: '-1001234567890', description: 'Telegram supergroup chat ID' },
+      },
+      required: ['telegramGroupId'],
+    },
+  })
   @ApiBearerAuth()
   @RequirePermissions(Permissions.STORE.UPDATE)
   @Patch(':id/telegram-group')

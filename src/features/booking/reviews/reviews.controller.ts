@@ -8,7 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Public } from '../../../common/decorators/public.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
@@ -90,6 +90,11 @@ export class ReviewsController {
   }
 
   @ApiOperation({ summary: 'Danh sách reviews (admin)' })
+  @ApiQuery({ name: 'customerId', required: false, description: 'Lọc theo ID khách hàng' })
+  @ApiQuery({ name: 'storeId', required: false, description: 'Lọc theo ID store' })
+  @ApiQuery({ name: 'serviceId', required: false, description: 'Lọc theo ID dịch vụ' })
+  @ApiQuery({ name: 'skip', required: false, type: Number, description: 'Số bản ghi bỏ qua' })
+  @ApiQuery({ name: 'take', required: false, type: Number, description: 'Số bản ghi lấy về' })
   @ApiBearerAuth()
   @Get('reviews')
   @RequirePermissions(Permissions.REVIEW.VIEW)
