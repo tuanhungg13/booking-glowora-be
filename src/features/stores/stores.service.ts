@@ -17,9 +17,11 @@ import { StoreFilterDto } from './dto/store-filter.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { UpdateWorkingHoursDto } from './dto/update-working-hours.dto';
 import { UpsertPaymentConfigDto } from './dto/upsert-payment-config.dto';
+import { CloudinaryService } from '../../cloudinary/cloudinary.service';
 
 const SHOP_OWNER_ROLE_CODE = 'SHOP_OWNER';
 const MAX_STORE_ROLES_PER_USER = 3;
+const CLOUDINARY_IMAGE_HOST = 'res.cloudinary.com';
 
 const storeListInclude = {
   workingHours: { orderBy: { dayOfWeek: 'asc' as const } },
@@ -72,6 +74,7 @@ export class StoresService {
     private readonly permissionCache: PermissionCacheService,
     private readonly systemLog: SystemLogService,
     private readonly config: ConfigService,
+    private readonly cloudinary: CloudinaryService,
   ) { }
 
   async create(dto: CreateStoreDto, ownerId: string) {
@@ -386,22 +389,33 @@ export class StoresService {
     });
   }
 
-  async uploadLogo(id: string, ownerId: string, filePath: string) {
-    await this.checkOwnership(id, ownerId);
-    return this.prisma.store.update({
+  async uploadLogo(id: string, ownerId: string, file: Express.Multer.File) {
+    const store = await this.checkOwnership(id, ownerId);
+    const logoUrl = await this.cloudinary.uploadImage(file, `glowora/stores/${id}/logo`);
+    const updated = await this.prisma.store.update({
       where: { id },
-      data: { logoUrl: filePath },
+      data: { logoUrl },
       select: { id: true, logoUrl: true },
     });
+    await this.deleteCloudinaryImageIfPresent(store.logoUrl).catch(() => undefined);
+    return updated;
   }
 
-  async uploadBanner(id: string, ownerId: string, filePath: string) {
-    await this.checkOwnership(id, ownerId);
-    return this.prisma.store.update({
+  async uploadBanner(id: string, ownerId: string, file: Express.Multer.File) {
+    const store = await this.checkOwnership(id, ownerId);
+    const bannerUrl = await this.cloudinary.uploadImage(file, `glowora/stores/${id}/banner`);
+    const updated = await this.prisma.store.update({
       where: { id },
-      data: { bannerUrl: filePath },
+      data: { bannerUrl },
       select: { id: true, bannerUrl: true },
     });
+    await this.deleteCloudinaryImageIfPresent(store.bannerUrl).catch(() => undefined);
+    return updated;
+  }
+
+  private async deleteCloudinaryImageIfPresent(url?: string | null) {
+    if (!url?.includes(CLOUDINARY_IMAGE_HOST)) return;
+    await this.cloudinary.deleteImage(this.cloudinary.extractPublicId(url));
   }
 
   async linkTelegramGroup(storeId: string, ownerId: string, telegramGroupId: string | null) {

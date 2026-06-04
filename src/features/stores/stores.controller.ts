@@ -24,8 +24,7 @@ import {
 import { LogStatus, LogType } from '@prisma/client';
 import { Type } from 'class-transformer';
 import { IsDateString, IsEnum, IsInt, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { memoryStorage } from 'multer';
 import {
   CurrentUser,
   type CurrentUserPayload,
@@ -89,15 +88,6 @@ class StoreOwnerLogFilterDto {
   @Max(100)
   limit?: number;
 }
-
-const imageStorage = (folder: string) =>
-  diskStorage({
-    destination: `./uploads/${folder}`,
-    filename: (_req, file, cb) => {
-      const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}${extname(file.originalname)}`;
-      cb(null, uniqueName);
-    },
-  });
 
 @ApiTags('stores')
 @Controller('stores')
@@ -181,18 +171,14 @@ export class StoresController {
   @ApiBearerAuth()
   @RequirePermissions(Permissions.STORE.UPDATE)
   @Post(':id/logo')
-  @UseInterceptors(FileInterceptor('file', { storage: imageStorage('logos') }))
+  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
   uploadLogo(
     @Param('id') id: string,
     @UploadedFile() file: Express.Multer.File,
     @CurrentUser() user: CurrentUserPayload,
   ) {
     if (!file) throw new BadRequestException('No file uploaded');
-    return this.storesService.uploadLogo(
-      id,
-      user.id,
-      `/uploads/logos/${file.filename}`,
-    );
+    return this.storesService.uploadLogo(id, user.id, file);
   }
 
   @ApiOperation({ summary: 'Upload store banner' })
@@ -210,7 +196,7 @@ export class StoresController {
   @RequirePermissions(Permissions.STORE.UPDATE)
   @Post(':id/banner')
   @UseInterceptors(
-    FileInterceptor('file', { storage: imageStorage('banners') }),
+    FileInterceptor('file', { storage: memoryStorage() }),
   )
   uploadBanner(
     @Param('id') id: string,
@@ -218,11 +204,7 @@ export class StoresController {
     @CurrentUser() user: CurrentUserPayload,
   ) {
     if (!file) throw new BadRequestException('No file uploaded');
-    return this.storesService.uploadBanner(
-      id,
-      user.id,
-      `/uploads/banners/${file.filename}`,
-    );
+    return this.storesService.uploadBanner(id, user.id, file);
   }
 
   @ApiOperation({

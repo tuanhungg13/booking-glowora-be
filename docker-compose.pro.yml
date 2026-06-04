@@ -1,72 +1,75 @@
-version: '3.9'
+﻿version: '3.9'
 
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: glowora_app
+    container_name: glowora_app_pro
     restart: unless-stopped
     env_file:
-      - .env
+      - .env.production
     environment:
       NODE_ENV: production
-      # Override host names để app kết nối đúng service trong Docker network
+      APP_PORT: 8080
       MYSQL_HOST: mysql
+      MYSQL_DB: ${MYSQL_DB:-glowora_business}
       REDIS_HOST: redis
-      DATABASE_URL: "mysql://root:${MYSQL_ROOT_PASSWORD:-gloworadev}@mysql:3306/${MYSQL_DATABASE:-glowora_business}?allowPublicKeyRetrieval=true"
+      TZ: ${TZ:-Asia/Ho_Chi_Minh}
     ports:
-      - "${APP_PORT:-8080}:8080"
+      - "${HOST_PORT:-8080}:8080"
     depends_on:
       mysql:
         condition: service_healthy
       redis:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:8080/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     networks:
       - glowora_network
 
   mysql:
     image: mysql:8.0
-    container_name: glowora_mysql
+    container_name: glowora_mysql_pro
     restart: unless-stopped
-    env_file:
-      - .env
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-gloworadev}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-glowora_business}
-      MYSQL_USER: ${MYSQL_USER:-postgres}
+      MYSQL_DATABASE: ${MYSQL_DB:-glowora_business}
+      MYSQL_USER: ${MYSQL_USER:-hwglee}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-gloworadev}
       TZ: ${TZ:-Asia/Ho_Chi_Minh}
-    # Ports exposed to localhost only (for IDE, development tools)
     ports:
-      - "127.0.0.1:3306:3306"
+      - "127.0.0.1:${MYSQL_PORT:-3306}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-gloworadev}"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 30s
     networks:
       - glowora_network
 
   redis:
     image: redis:7-alpine
-    container_name: glowora_redis
+    container_name: glowora_redis_pro
     restart: unless-stopped
-    env_file:
-      - .env
     command: redis-server --requirepass ${REDIS_PASSWORD:-redis123} --appendonly yes
-    # Ports exposed to localhost only (for redis-cli, development tools)
     ports:
-      - "127.0.0.1:6379:6379"
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
     volumes:
       - redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-redis123}", "ping"]
       interval: 10s
       timeout: 3s
-      retries: 5
+      retries: 10
+      start_period: 10s
     networks:
       - glowora_network
 
@@ -77,4 +80,3 @@ volumes:
 networks:
   glowora_network:
     driver: bridge
-

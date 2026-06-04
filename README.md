@@ -1,6 +1,6 @@
 # Booking Business — Hướng dẫn làm quen dự án
 
-Backend **NestJS** cho nền tảng đặt lịch (spa/salon/store): quản lý store, catalog dịch vụ, lịch hẹn, nhân sự, thanh toán, chat và thông báo. Dữ liệu lưu **PostgreSQL** qua **Prisma**; **Redis** dùng cache quyền người dùng.
+Backend **NestJS** cho nền tảng đặt lịch (spa/salon/store): quản lý store, catalog dịch vụ, lịch hẹn, nhân sự, thanh toán, chat và thông báo. Dữ liệu lưu **MySQL** qua **Prisma**; **Redis** dùng cache quyền người dùng.
 
 ---
 
@@ -40,7 +40,7 @@ flowchart TB
   end
 
   subgraph infra["Hạ tầng"]
-    Prisma[(Prisma → PostgreSQL)]
+    Prisma[(Prisma → MySQL)]
     Redis[(Redis cache quyền)]
   end
 

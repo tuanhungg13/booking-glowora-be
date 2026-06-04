@@ -39,14 +39,16 @@ async function bootstrap() {
     new HttpExceptionFilter(systemLogService),
   );
 
-  const config = new DocumentBuilder()
-    .setTitle('Booking Platform API')
-    .setDescription('The booking platform API description')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  if (process.env.NODE_ENV !== 'production') {
+    const config = new DocumentBuilder()
+      .setTitle('Booking Platform API')
+      .setDescription('The booking platform API description')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api', app, document);
+  }
 
   await app.listen(process.env.APP_PORT ?? 8080);
 }

@@ -8,9 +8,10 @@ import { StoreAnalyticsService } from './analytics/store-analytics.service';
 import { AdminAnalyticsController } from './admin-analytics/admin-analytics.controller';
 import { AdminAnalyticsService } from './admin-analytics/admin-analytics.service';
 import { TelegramModule } from '../../telegram/telegram.module';
+import { CloudinaryModule } from '../../cloudinary/cloudinary.module';
 
 @Module({
-  imports: [TelegramModule],
+  imports: [TelegramModule, CloudinaryModule],
   controllers: [StoresController, AdminStoresController, StoreAnalyticsController, AdminAnalyticsController],
   providers: [StoresService, AdminStoresService, StoreAnalyticsService, AdminAnalyticsService],
   exports: [StoresService, AdminStoresService],

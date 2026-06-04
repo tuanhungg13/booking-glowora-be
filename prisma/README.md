@@ -2,7 +2,7 @@
 
 ## Vai trò
 
-File **`schema.prisma`** mô tả toàn bộ model PostgreSQL: user, store, lịch hẹn, thanh toán, chat, v.v. Đây là **nguồn sự thật** về cấu trúc DB; service layer chỉ “thực thi” quy tắc nghiệp vụ trên các bảng này.
+File **`schema.prisma`** mô tả toàn bộ model MySQL: user, store, lịch hẹn, thanh toán, chat, v.v. Đây là **nguồn sự thật** về cấu trúc DB; service layer chỉ “thực thi” quy tắc nghiệp vụ trên các bảng này.
 
 ## Cách đọc schema hiệu quả
 
@@ -31,4 +31,4 @@ npx prisma studio      # UI xem/sửa dữ liệu (dev)
 
 ## Biến môi trường
 
-`DATABASE_URL` trỏ tới PostgreSQL (định nghĩa trong `datasource db` của schema / env).
+`DATABASE_URL` trỏ tới MySQL (định nghĩa trong `datasource db` của schema / env).

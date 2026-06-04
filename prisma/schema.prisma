@@ -224,7 +224,7 @@ model User {
   email        String     @unique @db.VarChar(150)
   password     String
   phone        String?    @db.VarChar(20)
-  avatarUrl    String?    @map("avatar_url")
+  avatarUrl    String?    @map("avatar_url") @db.VarChar(500)
   status       UserStatus @default(ACTIVE)
   refreshToken String?    @map("refresh_token")
   bannedAt     DateTime?  @map("banned_at")
@@ -301,8 +301,8 @@ model Store {
   provinceId        Int?        @map("province_id")
   latitude          Float?
   longitude         Float?
-  logoUrl           String?     @map("logo_url")
-  bannerUrl         String?     @map("banner_url")
+  logoUrl           String?     @map("logo_url") @db.VarChar(500)
+  bannerUrl         String?     @map("banner_url") @db.VarChar(500)
   status            StoreStatus @default(PENDING)
   approvedById      String?     @map("approved_by_id") @db.Char(36)
   approvedAt        DateTime?   @map("approved_at")
@@ -405,7 +405,7 @@ model ServiceCategory {
   name        String   @db.VarChar(100)
   slug        String?  @unique @db.VarChar(120)
   description String?
-  iconUrl     String?  @map("icon_url")
+  iconUrl     String?  @map("icon_url") @db.VarChar(500)
   storeId     String?  @map("store_id") @db.Char(36)
   parentId    String?  @map("parent_id") @db.Char(36)
   createdAt   DateTime @default(now()) @map("created_at")

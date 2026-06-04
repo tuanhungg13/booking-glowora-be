@@ -27,7 +27,7 @@ import { MailService } from './mail.service';
             from: config.get<string>('MAIL_FROM', '"Glowora" <no-reply@glowora.com>'),
           },
           template: {
-            dir: join(process.cwd(), 'src', 'mail', 'templates'),
+            dir: join(__dirname, 'templates'),
             adapter: new HandlebarsAdapter(),
             options: { strict: true },
           },
