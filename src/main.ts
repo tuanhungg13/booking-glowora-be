@@ -1,4 +1,4 @@
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import cookieParser = require('cookie-parser');
@@ -16,8 +16,17 @@ async function bootstrap() {
   app.use(cookieParser());
   app.use(app.get(RequestContextService).middleware());
 
+  const allowedOrigins = (process.env.FRONTEND_URL ?? 'http://localhost:3000')
+    .split(',')
+    .map((o) => o.trim());
   app.enableCors({
-    origin: process.env.FRONTEND_URL ?? 'http://localhost:3000',
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`CORS: origin ${origin} not allowed`));
+      }
+    },
     credentials: true,
   });
 
@@ -50,6 +59,15 @@ async function bootstrap() {
     SwaggerModule.setup('api', app, document);
   }
 
-  await app.listen(process.env.APP_PORT ?? 8080);
+  const port = process.env.APP_PORT ?? 8080;
+  await app.listen(port);
+
+  const logger = new Logger('Bootstrap');
+  const isProduction = process.env.NODE_ENV === 'production';
+  logger.log(`NODE_ENV        : ${process.env.NODE_ENV ?? '(not set)'}`);
+  logger.log(`Cookie sameSite : ${isProduction ? 'none' : 'lax'}`);
+  logger.log(`Cookie secure   : ${isProduction}`);
+  logger.log(`CORS origins    : ${allowedOrigins.join(', ')}`);
+  logger.log(`Listening on    : ${port}`);
 }
 bootstrap();
