@@ -1,30 +1,6 @@
 version: '3.9'
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: glowora_app
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      NODE_ENV: production
-      # Override host names để app kết nối đúng service trong Docker network
-      MYSQL_HOST: mysql
-      REDIS_HOST: redis
-      DATABASE_URL: "mysql://root:${MYSQL_ROOT_PASSWORD:-gloworadev}@mysql:3306/${MYSQL_DATABASE:-glowora_business}?allowPublicKeyRetrieval=true"
-    ports:
-      - "${APP_PORT:-8080}:8080"
-    depends_on:
-      mysql:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    networks:
-      - glowora_network
-
   mysql:
     image: mysql:8.0
     container_name: glowora_mysql

@@ -18,10 +18,11 @@ import { LogType } from '@prisma/client';
 const ACCESS_TOKEN_TTL = 15 * 60 * 1000;
 const REFRESH_TOKEN_TTL = 7 * 24 * 60 * 60 * 1000;
 
+const isProduction = process.env.NODE_ENV === 'production';
 const COOKIE_BASE = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'strict' as const,
+  secure: isProduction,
+  sameSite: (isProduction ? 'none' : 'lax') as 'none' | 'lax',
 };
 
 @ApiTags('auth')

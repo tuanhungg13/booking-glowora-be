@@ -5,11 +5,12 @@ import { PrismaClient } from '@prisma/client'
 import { PrismaMariaDb } from '@prisma/adapter-mariadb'
 
 const adapter = new PrismaMariaDb({
-  host: 'localhost',
-  port: 3306,
-  user: 'root',
-  password: 'gloworadev',
-  database: 'glowora_business',
+  host: process.env.MYSQL_HOST ?? 'localhost',
+  port: Number(process.env.MYSQL_PORT ?? 3306),
+  user: process.env.MYSQL_USER ?? 'root',
+  password: process.env.MYSQL_PASSWORD ?? 'gloworadev',
+  database: process.env.MYSQL_DB ?? 'glowora_business',
+  allowPublicKeyRetrieval: true,
 })
 
 const prisma = new PrismaClient({

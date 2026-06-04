@@ -5,6 +5,15 @@ import * as path from 'path';
 const OUTPUT_SQL = path.join(__dirname, 'seed_200_stores.sql');
 const OUTPUT_ACCOUNTS = path.join(__dirname, 'seed_200_accounts.md');
 const PASSWORD_HASH = '$2b$10$4rNY01kLNBZFcBWQuq.Rsu5P9g490SvP0fZ6PoftwySYtMQTKw/Dq';
+const DEMO_STORE_COUNT = 60;
+const MIN_SERVICES_PER_STORE = 20;
+const MAX_SERVICES_PER_STORE = 30;
+const MIN_CATEGORIES_PER_STORE = 2;
+const MAX_CATEGORIES_PER_STORE = 5;
+const MIN_IMAGES_PER_SERVICE = 1;
+const MAX_IMAGES_PER_SERVICE = 3;
+const MIN_VARIANTS_PER_SERVICE = 1;
+const MAX_VARIANTS_PER_SERVICE = 3;
 const DAYS = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'] as const;
 
 type DayOfWeek = (typeof DAYS)[number];
@@ -85,295 +94,10 @@ function pick<T>(items: T[], rand: () => number): T {
   return items[Math.floor(rand() * items.length)];
 }
 
-function viText(value: string): string {
-  const replacements: Array<[string, string]> = [
-    ['Ho Chi Minh', 'Hồ Chí Minh'],
-    ['Ha Noi', 'Hà Nội'],
-    ['Da Nang', 'Đà Nẵng'],
-    ['Can Tho', 'Cần Thơ'],
-    ['Hue', 'Huế'],
-    ['Khanh Hoa', 'Khánh Hòa'],
-    ['Dong Nai', 'Đồng Nai'],
-    ['Hai Phong', 'Hải Phòng'],
-    ['Quang Ninh', 'Quảng Ninh'],
-    ['Lam Dong', 'Lâm Đồng'],
-    ['Bac Ninh', 'Bắc Ninh'],
-    ['An Nhien', 'An Nhiên'],
-    ['Moc An', 'Mộc An'],
-    ['Rose', 'Rosé'],
-    ['Toc & Lam Dep', 'Tóc & Làm Đẹp'],
-    ['Tham My Vien', 'Thẩm Mỹ Viện'],
-    ['Tam Trang & Spa', 'Tắm Trắng & Spa'],
-    ['Chu cua hang', 'Chủ cửa hàng'],
-    ['Nhan vien', 'Nhân viên'],
-    ['cua hang', 'cửa hàng'],
-    ['thuoc nhom', 'thuộc nhóm'],
-    ['du lieu duoc tao de test tim kiem, dat lich, nhan vien va dich vu', 'dữ liệu được tạo để test tìm kiếm, đặt lịch, nhân viên và dịch vụ'],
-    ['Quan ', 'Quận '],
-    ['Binh Thanh', 'Bình Thạnh'],
-    ['Phu Nhuan', 'Phú Nhuận'],
-    ['Tan Binh', 'Tân Bình'],
-    ['Thu Duc', 'Thủ Đức'],
-    ['Hoan Kiem', 'Hoàn Kiếm'],
-    ['Ba Dinh', 'Ba Đình'],
-    ['Dong Da', 'Đống Đa'],
-    ['Cau Giay', 'Cầu Giấy'],
-    ['Tay Ho', 'Tây Hồ'],
-    ['Ha Dong', 'Hà Đông'],
-    ['Hai Chau', 'Hải Châu'],
-    ['Thanh Khe', 'Thanh Khê'],
-    ['Son Tra', 'Sơn Trà'],
-    ['Ngu Hanh Son', 'Ngũ Hành Sơn'],
-    ['Lien Chieu', 'Liên Chiểu'],
-    ['Ninh Kieu', 'Ninh Kiều'],
-    ['Binh Thuy', 'Bình Thủy'],
-    ['Cai Rang', 'Cái Răng'],
-    ['O Mon', 'Ô Môn'],
-    ['Thuan Hoa', 'Thuận Hóa'],
-    ['Phu Xuan', 'Phú Xuân'],
-    ['Huong Thuy', 'Hương Thủy'],
-    ['Nha Trang', 'Nha Trang'],
-    ['Cam Ranh', 'Cam Ranh'],
-    ['Dien Khanh', 'Diên Khánh'],
-    ['Bien Hoa', 'Biên Hòa'],
-    ['Long Khanh', 'Long Khánh'],
-    ['Trang Bom', 'Trảng Bom'],
-    ['Hong Bang', 'Hồng Bàng'],
-    ['Ngo Quyen', 'Ngô Quyền'],
-    ['Le Chan', 'Lê Chân'],
-    ['Ha Long', 'Hạ Long'],
-    ['Cam Pha', 'Cẩm Phả'],
-    ['Uong Bi', 'Uông Bí'],
-    ['Da Lat', 'Đà Lạt'],
-    ['Bao Loc', 'Bảo Lộc'],
-    ['Duc Trong', 'Đức Trọng'],
-    ['Tu Son', 'Từ Sơn'],
-    ['Que Vo', 'Quế Võ'],
-    ['Nguyen Hue', 'Nguyễn Huệ'],
-    ['Le Loi', 'Lê Lợi'],
-    ['Tran Hung Dao', 'Trần Hưng Đạo'],
-    ['Hai Ba Trung', 'Hai Bà Trưng'],
-    ['Phan Chu Trinh', 'Phan Chu Trinh'],
-    ['Ly Thuong Kiet', 'Lý Thường Kiệt'],
-    ['Spa nghi duong', 'Spa nghỉ dưỡng'],
-    ['Hair salon nu', 'Hair salon nữ'],
-    ['Tham my vien', 'Thẩm mỹ viện'],
-    ['Phun xam PMU', 'Phun xăm PMU'],
-    ['Body care & tam trang', 'Body care & tắm trắng'],
-    ['Massage tri lieu', 'Massage trị liệu'],
-    ['Cham soc body', 'Chăm sóc body'],
-    ['Facial thu gian', 'Facial thư giãn'],
-    ['Xong hoi thao moc', 'Xông hơi thảo mộc'],
-    ['Gel nail', 'Gel nail'],
-    ['Nail art', 'Nail art'],
-    ['Cat tao kieu', 'Cắt tạo kiểu'],
-    ['Nhuom mau', 'Nhuộm màu'],
-    ['Uon duoi', 'Uốn duỗi'],
-    ['Phuc hoi toc', 'Phục hồi tóc'],
-    ['Cat toc nam', 'Cắt tóc nam'],
-    ['Cao rau', 'Cạo râu'],
-    ['Goi dau thao moc', 'Gội đầu thảo mộc'],
-    ['Facial chuyen sau', 'Facial chuyên sâu'],
-    ['Tri mun', 'Trị mụn'],
-    ['Peel da', 'Peel da'],
-    ['Tham nam', 'thâm nám'],
-    ['Nang co', 'Nâng cơ'],
-    ['tre hoa', 'trẻ hóa'],
-    ['Giam beo', 'Giảm béo'],
-    ['Noi mi', 'Nối mi'],
-    ['Tao dang long may', 'Tạo dáng lông mày'],
-    ['Phun moi', 'Phun môi'],
-    ['Tam trang', 'Tắm trắng'],
-    ['U body', 'Ủ body'],
-    ['Noi Mi', 'Nối Mi'],
-    ['Cham Soc', 'Chăm Sóc'],
-    ['Duong Sinh', 'Dưỡng Sinh'],
-    ['Massage tri lieu', 'Massage trị liệu'],
-    ['Cham soc da mat', 'Chăm sóc da mặt'],
-    ['Cham soc', 'Chăm sóc'],
-    ['Lam sach', 'Làm sạch'],
-    ['cap am', 'cấp ẩm'],
-    ['da dau', 'da đầu'],
-    ['co vai gay', 'cổ vai gáy'],
-    ['dieu tri', 'điều trị'],
-    ['phuc hoi', 'phục hồi'],
-    ['giam', 'giảm'],
-    ['thu gian', 'thư giãn'],
-    ['tu nhien', 'tự nhiên'],
-    ['an toan', 'an toàn'],
-    ['toan than', 'toàn thân'],
-    ['thao duoc', 'thảo dược'],
-    ['nghe thuat', 'nghệ thuật'],
-    ['dinh hinh', 'định hình'],
-    ['cong nghe', 'công nghệ'],
-    ['khuon mat', 'khuôn mặt'],
-    ['chan may', 'chân mày'],
-    ['mat na', 'mặt nạ'],
-    ['co the', 'cơ thể'],
-    ['mau', 'màu'],
-    ['moi', 'môi'],
-    ['mong', 'móng'],
-    ['toc', 'tóc'],
-    ['long', 'lông'],
-    ['triet', 'triệt'],
-    ['duong', 'dưỡng'],
-    ['dau', 'đầu'],
-    [' va ', ' và '],
-    ['Tam trang va xong hoi', 'Tắm trắng và xông hơi'],
-    ['Cham soc co the', 'Chăm sóc cơ thể'],
-    ['Goi dau duong sinh', 'Gội đầu dưỡng sinh'],
-    ['Nail gel va son mong', 'Nail gel và sơn móng'],
-    ['Nail art va dap bot', 'Nail art và đắp bột'],
-    ['Pedicure va foot care', 'Pedicure và foot care'],
-    ['Waxing diu nhe', 'Waxing dịu nhẹ'],
-    ['Mi va chan may', 'Mi và chân mày'],
-    ['Cat va tao kieu', 'Cắt và tạo kiểu'],
-    ['Nhuom va highlight', 'Nhuộm và highlight'],
-    ['Uon duoi ep toc', 'Uốn duỗi ép tóc'],
-    ['Makeup va styling', 'Makeup và styling'],
-    ['Cat toc nam', 'Cắt tóc nam'],
-    ['Cao rau va cham soc beard', 'Cạo râu và chăm sóc beard'],
-    ['Goi dau nam', 'Gội đầu nam'],
-    ['Combo grooming', 'Combo grooming'],
-    ['Massage thu gian', 'Massage thư giãn'],
-    ['Facial va cap am', 'Facial và cấp ẩm'],
-    ['Dieu tri mun va tham', 'Điều trị mụn và thâm'],
-    ['Peel da hoa hoc', 'Peel da hóa học'],
-    ['Laser va tre hoa', 'Laser và trẻ hóa'],
-    ['Triet long laser', 'Triệt lông laser'],
-    ['Yoga co ban va nang cao', 'Yoga cơ bản và nâng cao'],
-    ['Pilates va core', 'Pilates và core'],
-    ['Thien va breathwork', 'Thiền và breathwork'],
-    ['Personal training', 'Personal training'],
-    ['Yoga tri lieu', 'Yoga trị liệu'],
-    ['Nang co va cang da', 'Nâng cơ và căng da'],
-    ['Dieu khac khuon mat', 'Điêu khắc khuôn mặt'],
-    ['Tre hoa cong nghe cao', 'Trẻ hóa công nghệ cao'],
-    ['Giam beo va dinh hinh', 'Giảm béo và định hình'],
-    ['Dieu tri tham nam', 'Điều trị thâm nám'],
-    ['Noi mi classic va volume', 'Nối mi classic và volume'],
-    ['Lift mi va uon mi', 'Lift mi và uốn mi'],
-    ['Tao dang long may', 'Tạo dáng lông mày'],
-    ['Cham soc mi tu nhien', 'Chăm sóc mi tự nhiên'],
-    ['Combo mat', 'Combo mắt'],
-    ['Phun moi tham my', 'Phun môi thẩm mỹ'],
-    ['Phun va dieu khac chan may', 'Phun và điêu khắc chân mày'],
-    ['Phun mi mat', 'Phun mí mắt'],
-    ['Cham soc sau phun', 'Chăm sóc sau phun'],
-    ['Combo phun xam', 'Combo phun xăm'],
-    ['Tam trang toan than', 'Tắm trắng toàn thân'],
-    ['Body scrub', 'Body scrub'],
-    ['U body va mat na co the', 'Ủ body và mặt nạ cơ thể'],
-    ['Xong hoi va ngam tam', 'Xông hơi và ngâm tắm'],
-    ['Massage da nong', 'Massage đá nóng'],
-    ['Massage body tinh dau', 'Massage body tinh dầu'],
-    ['Massage co vai gay', 'Massage cổ vai gáy'],
-    ['Facial cap am phuc hoi', 'Facial cấp ẩm phục hồi'],
-    ['Tam trang thao moc', 'Tắm trắng thảo mộc'],
-    ['Xong hoi detox', 'Xông hơi detox'],
-    ['Body scrub muoi khoang', 'Body scrub muối khoáng'],
-    ['Son gel Han Quoc', 'Sơn gel Hàn Quốc'],
-    ['Dap gel builder', 'Đắp gel builder'],
-    ['Pedicure spa', 'Pedicure spa'],
-    ['Waxing vung nho', 'Waxing vùng nhỏ'],
-    ['Noi mi tu nhien', 'Nối mi tự nhiên'],
-    ['Cat tao kieu nu', 'Cắt tạo kiểu nữ'],
-    ['Nhuom phu bac', 'Nhuộm phủ bạc'],
-    ['Balayage thoi trang', 'Balayage thời trang'],
-    ['Uon setting', 'Uốn setting'],
-    ['Duoi collagen', 'Duỗi collagen'],
-    ['Phuc hoi keratin', 'Phục hồi keratin'],
-    ['Makeup du tiec', 'Makeup dự tiệc'],
-    ['Cao rau nong', 'Cạo râu nóng'],
-    ['Goi dau thao moc nam', 'Gội đầu thảo mộc nam'],
-    ['Facial lam sach sau', 'Facial làm sạch sâu'],
-    ['Tri mun chuyen sau', 'Trị mụn chuyên sâu'],
-    ['Giam tham sau mun', 'Giảm thâm sau mụn'],
-    ['Laser tri nam', 'Laser trị nám'],
-    ['Triet long toan than', 'Triệt lông toàn thân'],
-    ['Phun moi lip blush', 'Phun môi lip blush'],
-    ['Phun moi khu tham', 'Phun môi khử thâm'],
-    ['Microblading chan may', 'Microblading chân mày'],
-    ['Phun mi eyeliner', 'Phun mí eyeliner'],
-    ['Tai kham bo sung mau', 'Tái khám bổ sung màu'],
-    ['Tam trang sua de', 'Tắm trắng sữa dê'],
-    ['Tam trang carbon', 'Tắm trắng carbon'],
-    ['Body scrub ca phe', 'Body scrub cà phê'],
-    ['U body collagen', 'Ủ body collagen'],
-    ['Xong hoi onsen', 'Xông hơi onsen'],
-    ['Massage body co ban', 'Massage body cơ bản'],
-    ['Co ban', 'Cơ bản'],
-    ['Nang cao', 'Nâng cao'],
-    ['phut', 'phút'],
-    ['thoi luong', 'thời lượng'],
-    ['lieu trinh', 'liệu trình'],
-    ['thuc hien', 'thực hiện'],
-    ['phu hop', 'phù hợp'],
-    ['khach hang', 'khách hàng'],
-    ['can trai nghiem on dinh', 'cần trải nghiệm ổn định'],
-    ['co the dat lich lap lai', 'có thể đặt lịch lặp lại'],
-    ['Tu van nhanh truoc khi bat dau', 'Tư vấn nhanh trước khi bắt đầu'],
-    ['Thuc hien theo quy trinh ve sinh va thao tac chuan', 'Thực hiện theo quy trình vệ sinh và thao tác chuẩn'],
-    ['Su dung san pham diu nhe, phu hop da so nhu cau', 'Sử dụng sản phẩm dịu nhẹ, phù hợp đa số nhu cầu'],
-    ['Huong dan cham soc sau dich vu', 'Hướng dẫn chăm sóc sau dịch vụ'],
-    ['phu trach', 'phụ trách'],
-    [' la ', ' là '],
-    [' cua ', ' của '],
-    ['tam trang', 'tắm trắng'],
-    ['massage tri lieu', 'massage trị liệu'],
-    ['cham soc', 'chăm sóc'],
-    ['xong hoi', 'xông hơi'],
-    ['thao moc', 'thảo mộc'],
-    ['cat tao kieu', 'cắt tạo kiểu'],
-    ['nhuom mau', 'nhuộm màu'],
-    ['uon duoi', 'uốn duỗi'],
-    ['phuc hoi toc', 'phục hồi tóc'],
-    ['cat toc nam', 'cắt tóc nam'],
-    ['cao rau', 'cạo râu'],
-    ['facial chuyen sau', 'facial chuyên sâu'],
-    ['tri mun', 'trị mụn'],
-    ['peel da', 'peel da'],
-    ['nang co', 'nâng cơ'],
-    ['laser tham nam', 'laser thâm nám'],
-    ['giam beo', 'giảm béo'],
-    ['noi mi', 'nối mi'],
-    ['tao dang long may', 'tạo dáng lông mày'],
-    ['phun moi', 'phun môi'],
-    ['microblading', 'microblading'],
-    ['powder brow', 'powder brow'],
-    ['phun mi', 'phun mí'],
-    ['body scrub', 'body scrub'],
-    ['u body', 'ủ body'],
-    ['Xong hoi', 'Xông hơi'],
-    ['Nhuom', 'Nhuộm'],
-    ['thoi trang', 'thời trang'],
-    ['phu bac', 'phủ bạc'],
-    ['kho', 'khô'],
-    ['uot', 'ướt'],
-  ];
-
-  let out = value;
-  for (const [from, to] of [...replacements].sort((a, b) => b[0].length - a[0].length)) {
-    out = out.split(from).join(to);
-  }
-  return out;
-}
-
-function shouldTranslate(value: string): boolean {
-  if (value.includes('@')) return false;
-  if (value.startsWith('http://') || value.startsWith('https://')) return false;
-  if (value.startsWith('$2')) return false;
-  if (/^[a-z0-9-]+$/.test(value)) return false;
-  if (/^[A-Z_]+$/.test(value)) return false;
-  if (/^[A-Za-z_/-]+$/.test(value)) return false;
-  return true;
-}
-
 function sql(value: string | number | boolean | null): string {
   if (value === null) return 'NULL';
   if (typeof value === 'number') return String(value);
   if (typeof value === 'boolean') return value ? 'TRUE' : 'FALSE';
-  if (shouldTranslate(value)) value = viText(value);
   return `'${value.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
 }
 
@@ -385,6 +109,8 @@ function slugify(value: string): string {
   return value
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D')
     .replace(/&/g, ' and ')
     .replace(/[^a-zA-Z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
@@ -411,9 +137,9 @@ function batchInsert(
 
 const BRANDS = [
   'Glowora',
-  'An Nhien',
+  'An Nhiên',
   'Lumina',
-  'Moc An',
+  'Mộc An',
   'Serene',
   'Aurora',
   'La Vie',
@@ -428,7 +154,7 @@ const BRANDS = [
   'Velvet',
   'Zenith',
   'Ivory',
-  'Rose',
+  'Rosé',
   'Amber',
 ];
 
@@ -498,17 +224,17 @@ const FIRST_NAMES = [
 const STORE_KINDS: StoreKind[] = [
   {
     key: 'spa',
-    label: 'Spa nghi duong',
-    count: 30,
+    label: 'Spa nghỉ dưỡng',
+    count: 9,
     suffixes: ['Spa', 'Wellness Spa', 'Day Spa', 'Luxury Spa'],
     categorySlugs: ['spa-massage', 'cham-soc-da-mat', 'xong-hoi-tam-trang', 'cham-soc-co-the'],
-    staffSpecialties: ['Massage tri lieu', 'Cham soc body', 'Facial thu gian', 'Xong hoi thao moc'],
+    staffSpecialties: ['Massage trị liệu', 'Chăm sóc body', 'Facial thư giãn', 'Xông hơi thảo mộc'],
     imageUrl: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=80',
   },
   {
     key: 'nail',
     label: 'Nail & beauty salon',
-    count: 25,
+    count: 8,
     suffixes: ['Nail Studio', 'Beauty Bar', 'Nail & Spa', 'Nail Lounge'],
     categorySlugs: ['nail-mong-tay', 'long-may-mi-mat', 'triet-long'],
     staffSpecialties: ['Gel nail', 'Nail art', 'Pedicure', 'Waxing'],
@@ -516,74 +242,74 @@ const STORE_KINDS: StoreKind[] = [
   },
   {
     key: 'hair',
-    label: 'Hair salon nu',
-    count: 25,
-    suffixes: ['Hair Salon', 'Hair Studio', 'Beauty Salon', 'Toc & Lam Dep'],
+    label: 'Hair salon nữ',
+    count: 8,
+    suffixes: ['Hair Salon', 'Hair Studio', 'Beauty Salon', 'Tóc & Làm Đẹp'],
     categorySlugs: ['toc-nu', 'cham-soc-da-mat', 'trang-diem'],
-    staffSpecialties: ['Cat tao kieu', 'Nhuom mau', 'Uon duoi', 'Phuc hoi toc'],
+    staffSpecialties: ['Cắt tạo kiểu', 'Nhuộm màu', 'Uốn duỗi', 'Phục hồi tóc'],
     imageUrl: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=80',
   },
   {
     key: 'barber',
     label: 'Barber store',
-    count: 20,
+    count: 6,
     suffixes: ['Barbershop', "Men's Grooming", 'Classic Barber', 'Barber & Spa'],
     categorySlugs: ['cat-toc-barber', 'spa-massage'],
-    staffSpecialties: ['Cat toc nam', 'Cao rau', 'Fade & pompadour', 'Goi dau thao moc'],
+    staffSpecialties: ['Cắt tóc nam', 'Cạo râu', 'Fade & pompadour', 'Gội đầu thảo mộc'],
     imageUrl: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=1200&q=80',
   },
   {
     key: 'skin',
     label: 'Skincare clinic',
-    count: 25,
+    count: 8,
     suffixes: ['Skin Clinic', 'Beauty Clinic', 'Skincare Studio', 'Derma Spa'],
     categorySlugs: ['cham-soc-da-mat', 'tham-my-vien', 'triet-long'],
-    staffSpecialties: ['Facial chuyen sau', 'Tri mun', 'Peel da', 'Laser toning'],
+    staffSpecialties: ['Facial chuyên sâu', 'Trị mụn', 'Peel da', 'Laser toning'],
     imageUrl: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1200&q=80',
   },
   {
     key: 'yoga',
     label: 'Yoga & wellness studio',
-    count: 15,
+    count: 4,
     suffixes: ['Yoga Studio', 'Wellness Center', 'Yoga & Pilates', 'Mind & Body'],
     categorySlugs: ['yoga-thien', 'fitness-pt', 'cham-soc-suc-khoe'],
-    staffSpecialties: ['Hatha yoga', 'Pilates', 'Breathwork', 'PT ca nhan'],
+    staffSpecialties: ['Hatha yoga', 'Pilates', 'Breathwork', 'PT cá nhân'],
     imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1200&q=80',
   },
   {
     key: 'aesthetic',
-    label: 'Tham my vien',
-    count: 20,
-    suffixes: ['Beauty Center', 'Aesthetic Clinic', 'Beauty Lab', 'Tham My Vien'],
+    label: 'Thẩm mỹ viện',
+    count: 6,
+    suffixes: ['Beauty Center', 'Aesthetic Clinic', 'Beauty Lab', 'Thẩm Mỹ Viện'],
     categorySlugs: ['tham-my-vien', 'triet-long', 'cham-soc-co-the', 'cham-soc-da-mat'],
-    staffSpecialties: ['HIFU nang co', 'RF tre hoa', 'Laser tham nam', 'Giam beo cong nghe'],
+    staffSpecialties: ['HIFU nâng cơ', 'RF trẻ hóa', 'Laser thâm nám', 'Giảm béo công nghệ'],
     imageUrl: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1200&q=80',
   },
   {
     key: 'lash',
     label: 'Eyelash & brow studio',
-    count: 15,
+    count: 4,
     suffixes: ['Lash Studio', 'Brow & Lash', 'Eye Beauty', 'Lash Lounge'],
     categorySlugs: ['long-may-mi-mat', 'trang-diem'],
-    staffSpecialties: ['Noi mi classic', 'Volume lash', 'Lift mi', 'Tao dang long may'],
+    staffSpecialties: ['Nối mi classic', 'Volume lash', 'Lift mi', 'Tạo dáng lông mày'],
     imageUrl: 'https://images.unsplash.com/photo-1589710751893-f9a6770ad71b?auto=format&fit=crop&w=1200&q=80',
   },
   {
     key: 'pmu',
-    label: 'Phun xam PMU',
-    count: 15,
-    suffixes: ['PMU Studio', 'Phun Xam Studio', 'Xam Tham My', 'Beauty Art'],
+    label: 'Phun xăm PMU',
+    count: 4,
+    suffixes: ['PMU Studio', 'Phun Xăm Studio', 'Xăm Thẩm Mỹ', 'Beauty Art'],
     categorySlugs: ['phun-xam-tham-my', 'long-may-mi-mat'],
-    staffSpecialties: ['Phun moi', 'Microblading', 'Powder brow', 'Phun mi'],
+    staffSpecialties: ['Phun môi', 'Microblading', 'Powder brow', 'Phun mí'],
     imageUrl: 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=1200&q=80',
   },
   {
     key: 'body',
-    label: 'Body care & tam trang',
-    count: 10,
-    suffixes: ['Body Studio', 'Tam Trang & Spa', 'Body Lounge', 'Care House'],
+    label: 'Body care & tắm trắng',
+    count: 3,
+    suffixes: ['Body Studio', 'Tắm Trắng & Spa', 'Body Lounge', 'Care House'],
     categorySlugs: ['xong-hoi-tam-trang', 'cham-soc-co-the', 'spa-massage'],
-    staffSpecialties: ['Tam trang', 'Body scrub', 'U body', 'Massage thu gian'],
+    staffSpecialties: ['Tắm trắng', 'Body scrub', 'Ủ body', 'Massage thư giãn'],
     imageUrl: 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1200&q=80',
   },
 ];
@@ -591,8 +317,8 @@ const STORE_KINDS: StoreKind[] = [
 const CITIES: CityPlan[] = [
   {
     provinceId: 29,
-    label: 'Ho Chi Minh',
-    count: 50,
+    label: 'Hồ Chí Minh',
+    count: 15,
     wards: [
       71701001, 71701002, 71701003, 71701004, 71703005, 71703006, 71709007, 71703008, 71709009,
       71709010, 71709011, 71709012, 71705013, 71705014, 71705015, 71705016, 71705017, 71705018,
@@ -600,12 +326,12 @@ const CITIES: CityPlan[] = [
     ],
     lat: [10.72, 10.86],
     lng: [106.62, 106.78],
-    districts: ['Quan 1', 'Quan 3', 'Binh Thanh', 'Phu Nhuan', 'Tan Binh', 'Thu Duc'],
+    districts: ['Quận 1', 'Quận 3', 'Bình Thạnh', 'Phú Nhuận', 'Tân Bình', 'Thủ Đức'],
   },
   {
     provinceId: 1,
-    label: 'Ha Noi',
-    count: 50,
+    label: 'Hà Nội',
+    count: 15,
     wards: [
       10105001, 10105002, 10101003, 10101004, 10101005, 10107006, 10107007, 10107008, 10109009,
       10109010, 10109011, 10109012, 10113025, 10113026, 10113027, 10103028, 10111022, 10111023,
@@ -613,251 +339,251 @@ const CITIES: CityPlan[] = [
     ],
     lat: [20.98, 21.08],
     lng: [105.78, 105.88],
-    districts: ['Hoan Kiem', 'Ba Dinh', 'Dong Da', 'Cau Giay', 'Tay Ho', 'Ha Dong'],
+    districts: ['Hoàn Kiếm', 'Ba Đình', 'Đống Đa', 'Cầu Giấy', 'Tây Hồ', 'Hà Đông'],
   },
   {
     provinceId: 21,
-    label: 'Da Nang',
-    count: 25,
+    label: 'Đà Nẵng',
+    count: 8,
     wards: [
       50101001, 50101002, 50103003, 50115004, 50105005, 50105006, 50107007, 50109008, 50109009,
       50109010, 50115011, 50111012,
     ],
     lat: [15.99, 16.10],
     lng: [108.17, 108.28],
-    districts: ['Hai Chau', 'Thanh Khe', 'Son Tra', 'Ngu Hanh Son', 'Lien Chieu'],
+    districts: ['Hải Châu', 'Thanh Khê', 'Sơn Trà', 'Ngũ Hành Sơn', 'Liên Chiểu'],
   },
   {
     provinceId: 33,
-    label: 'Can Tho',
-    count: 20,
+    label: 'Cần Thơ',
+    count: 6,
     wards: [81519001, 81519002, 81519003, 81519004, 81521005, 81521006, 81523008, 81523009],
     lat: [10.00, 10.08],
     lng: [105.72, 105.82],
-    districts: ['Ninh Kieu', 'Binh Thuy', 'Cai Rang', 'O Mon'],
+    districts: ['Ninh Kiều', 'Bình Thủy', 'Cái Răng', 'Ô Môn'],
   },
   {
     provinceId: 20,
-    label: 'Hue',
-    count: 15,
+    label: 'Huế',
+    count: 4,
     wards: [41109001, 41119002, 41109003, 41101004, 41101005, 41101006, 41101007],
     lat: [16.42, 16.50],
     lng: [107.55, 107.65],
-    districts: ['Thuan Hoa', 'Phu Xuan', 'Huong Thuy'],
+    districts: ['Thuận Hóa', 'Phú Xuân', 'Hương Thủy'],
   },
   {
     provinceId: 23,
-    label: 'Khanh Hoa',
-    count: 15,
+    label: 'Khánh Hòa',
+    count: 4,
     wards: [51101001, 51101002, 51101003, 51101004, 51109005, 51109006, 51109007],
     lat: [12.20, 12.30],
     lng: [109.15, 109.25],
-    districts: ['Nha Trang', 'Cam Ranh', 'Dien Khanh'],
+    districts: ['Nha Trang', 'Cam Ranh', 'Diên Khánh'],
   },
   {
     provinceId: 28,
-    label: 'Dong Nai',
-    count: 10,
+    label: 'Đồng Nai',
+    count: 3,
     wards: [71301001, 71301002, 71301003, 71301004, 71301005, 71301006],
     lat: [10.90, 11.02],
     lng: [106.78, 106.92],
-    districts: ['Bien Hoa', 'Long Khanh', 'Trang Bom'],
+    districts: ['Biên Hòa', 'Long Khánh', 'Trảng Bom'],
   },
   {
     provinceId: 4,
-    label: 'Hai Phong',
-    count: 4,
+    label: 'Hải Phòng',
+    count: 2,
     wards: [10301008, 10301009, 10303010, 10303011, 10305012, 10305013],
     lat: [20.82, 20.90],
     lng: [106.65, 106.75],
-    districts: ['Hong Bang', 'Ngo Quyen', 'Le Chan'],
+    districts: ['Hồng Bàng', 'Ngô Quyền', 'Lê Chân'],
   },
   {
     provinceId: 3,
-    label: 'Quang Ninh',
-    count: 4,
+    label: 'Quảng Ninh',
+    count: 1,
     wards: [22501015, 22501017, 22501021, 22501022, 22503028],
     lat: [20.93, 21.02],
     lng: [107.05, 107.16],
-    districts: ['Ha Long', 'Cam Pha', 'Uong Bi'],
+    districts: ['Hạ Long', 'Cẩm Phả', 'Uông Bí'],
   },
   {
     provinceId: 26,
-    label: 'Lam Dong',
-    count: 4,
+    label: 'Lâm Đồng',
+    count: 1,
     wards: [70301001, 70301002, 70301003, 70301004, 70305005],
     lat: [11.90, 11.98],
     lng: [108.40, 108.48],
-    districts: ['Da Lat', 'Bao Loc', 'Duc Trong'],
+    districts: ['Đà Lạt', 'Bảo Lộc', 'Đức Trọng'],
   },
   {
     provinceId: 2,
-    label: 'Bac Ninh',
-    count: 3,
+    label: 'Bắc Ninh',
+    count: 1,
     wards: [22113001, 22113002, 22113003, 22113004],
     lat: [21.15, 21.22],
     lng: [106.02, 106.10],
-    districts: ['Bac Ninh', 'Tu Son', 'Que Vo'],
+    districts: ['Bắc Ninh', 'Từ Sơn', 'Quế Võ'],
   },
 ];
 
 const SHOP_CATEGORIES: Record<StoreKindKey, ShopCategoryTemplate[]> = {
   spa: [
-    { key: 'massage-tri-lieu', name: 'Massage tri lieu', parentSlug: 'spa-massage', description: 'Massage body, da nong, tinh dau va phuc hoi co vai gay.' },
-    { key: 'facial-spa', name: 'Cham soc da mat', parentSlug: 'cham-soc-da-mat', description: 'Facial lam sach, cap am, tre hoa va lam sang da.' },
-    { key: 'tam-trang-xong-hoi', name: 'Tam trang va xong hoi', parentSlug: 'xong-hoi-tam-trang', description: 'Xong hoi thao moc, tam trang va ngam thu gian.' },
-    { key: 'body-care', name: 'Cham soc co the', parentSlug: 'cham-soc-co-the', description: 'Body scrub, u duong va wrap thao moc.' },
-    { key: 'goi-dau', name: 'Goi dau duong sinh', parentSlug: 'spa-massage', description: 'Cham soc da dau, co vai gay va thao moc.' },
+    { key: 'massage-tri-lieu', name: 'Massage trị liệu', parentSlug: 'spa-massage', description: 'Massage body, đá nóng, tinh dầu và phục hồi cổ vai gáy.' },
+    { key: 'facial-spa', name: 'Chăm sóc da mặt', parentSlug: 'cham-soc-da-mat', description: 'Facial làm sạch, cấp ẩm, trẻ hóa và làm sáng da.' },
+    { key: 'tam-trang-xong-hoi', name: 'Tắm trắng và xông hơi', parentSlug: 'xong-hoi-tam-trang', description: 'Xông hơi thảo mộc, tắm trắng và ngâm thư giãn.' },
+    { key: 'body-care', name: 'Chăm sóc cơ thể', parentSlug: 'cham-soc-co-the', description: 'Body scrub, ủ dưỡng và wrap thảo mộc.' },
+    { key: 'goi-dau', name: 'Gội đầu dưỡng sinh', parentSlug: 'spa-massage', description: 'Chăm sóc da đầu, cổ vai gáy và thảo mộc.' },
   ],
   nail: [
-    { key: 'nail-gel', name: 'Nail gel va son mong', parentSlug: 'nail-mong-tay', description: 'Son gel, gel builder va cham soc mong.' },
-    { key: 'nail-art', name: 'Nail art va dap bot', parentSlug: 'nail-mong-tay', description: 'Ve nghe thuat, charm, ombre va dap bot.' },
-    { key: 'pedicure', name: 'Pedicure va foot care', parentSlug: 'nail-mong-tay', description: 'Cham soc chan, goi got va son mong chan.' },
-    { key: 'waxing', name: 'Waxing diu nhe', parentSlug: 'triet-long', description: 'Waxing mat, tay, chan va vung nho.' },
-    { key: 'lash-brow', name: 'Mi va chan may', parentSlug: 'long-may-mi-mat', description: 'Noi mi, lift mi va tao dang chan may.' },
+    { key: 'nail-gel', name: 'Nail gel và sơn móng', parentSlug: 'nail-mong-tay', description: 'Sơn gel, gel builder và chăm sóc móng.' },
+    { key: 'nail-art', name: 'Nail art và đắp bột', parentSlug: 'nail-mong-tay', description: 'Vẽ nghệ thuật, charm, ombre và đắp bột.' },
+    { key: 'pedicure', name: 'Pedicure và foot care', parentSlug: 'nail-mong-tay', description: 'Chăm sóc chân, gót chân và sơn móng chân.' },
+    { key: 'waxing', name: 'Waxing dịu nhẹ', parentSlug: 'triet-long', description: 'Waxing mặt, tay, chân và vùng nhỏ.' },
+    { key: 'lash-brow', name: 'Mi và chân mày', parentSlug: 'long-may-mi-mat', description: 'Nối mi, lift mi và tạo dáng chân mày.' },
   ],
   hair: [
-    { key: 'cat-tao-kieu', name: 'Cat va tao kieu', parentSlug: 'toc-nu', description: 'Cat toc nu, tao kieu, goi say va tu van form toc.' },
-    { key: 'nhuom-toc', name: 'Nhuom va highlight', parentSlug: 'toc-nu', description: 'Nhuom thoi trang, highlight, balayage va phu bac.' },
-    { key: 'uon-duoi', name: 'Uon duoi ep toc', parentSlug: 'toc-nu', description: 'Uon setting, duoi collagen va ep phuc hoi.' },
-    { key: 'phuc-hoi-toc', name: 'Phuc hoi toc', parentSlug: 'toc-nu', description: 'Keratin, olaplex, protein va hap dau cao cap.' },
-    { key: 'makeup', name: 'Makeup va styling', parentSlug: 'trang-diem', description: 'Makeup du tiec, chup anh va styling toc.' },
+    { key: 'cat-tao-kieu', name: 'Cắt và tạo kiểu', parentSlug: 'toc-nu', description: 'Cắt tóc nữ, tạo kiểu, gội sấy và tư vấn form tóc.' },
+    { key: 'nhuom-toc', name: 'Nhuộm và highlight', parentSlug: 'toc-nu', description: 'Nhuộm thời trang, highlight, balayage và phủ bạc.' },
+    { key: 'uon-duoi', name: 'Uốn duỗi ép tóc', parentSlug: 'toc-nu', description: 'Uốn setting, duỗi collagen và ép phục hồi.' },
+    { key: 'phuc-hoi-toc', name: 'Phục hồi tóc', parentSlug: 'toc-nu', description: 'Keratin, olaplex, protein và hấp dầu cao cấp.' },
+    { key: 'makeup', name: 'Makeup và styling', parentSlug: 'trang-diem', description: 'Makeup dự tiệc, chụp ảnh và styling tóc.' },
   ],
   barber: [
-    { key: 'cat-toc-nam', name: 'Cat toc nam', parentSlug: 'cat-toc-barber', description: 'Fade, undercut, pompadour va classic cut.' },
-    { key: 'beard-care', name: 'Cao rau va cham soc beard', parentSlug: 'cat-toc-barber', description: 'Cao rau nong, tao kieu beard va duong da.' },
-    { key: 'goi-dau-nam', name: 'Goi dau nam', parentSlug: 'spa-massage', description: 'Goi dau thao moc, massage co vai gay cho nam.' },
-    { key: 'combo-grooming', name: 'Combo grooming', parentSlug: 'cat-toc-barber', description: 'Combo cat, cao rau, goi dau va styling.' },
-    { key: 'massage-nam', name: 'Massage thu gian', parentSlug: 'spa-massage', description: 'Massage dau, vai gay va tay cho khach nam.' },
+    { key: 'cat-toc-nam', name: 'Cắt tóc nam', parentSlug: 'cat-toc-barber', description: 'Fade, undercut, pompadour và classic cut.' },
+    { key: 'beard-care', name: 'Cạo râu và chăm sóc beard', parentSlug: 'cat-toc-barber', description: 'Cạo râu nóng, tạo kiểu beard và dưỡng da.' },
+    { key: 'goi-dau-nam', name: 'Gội đầu nam', parentSlug: 'spa-massage', description: 'Gội đầu thảo mộc, massage cổ vai gáy cho nam.' },
+    { key: 'combo-grooming', name: 'Combo grooming', parentSlug: 'cat-toc-barber', description: 'Combo cắt, cạo râu, gội đầu và styling.' },
+    { key: 'massage-nam', name: 'Massage thư giãn', parentSlug: 'spa-massage', description: 'Massage đầu, vai gáy và tay cho khách nam.' },
   ],
   skin: [
-    { key: 'facial-basic', name: 'Facial va cap am', parentSlug: 'cham-soc-da-mat', description: 'Lam sach sau, cap am, dien di tinh chat va mat na.' },
-    { key: 'tri-mun', name: 'Dieu tri mun va tham', parentSlug: 'cham-soc-da-mat', description: 'Lay nhan mun, giam tham, kiem soat dau va phuc hoi.' },
-    { key: 'peel-da', name: 'Peel da hoa hoc', parentSlug: 'cham-soc-da-mat', description: 'AHA, BHA, enzyme peel va retinol peel.' },
-    { key: 'laser-skin', name: 'Laser va tre hoa', parentSlug: 'tham-my-vien', description: 'Laser toning, RF, collagen va tre hoa da.' },
-    { key: 'triet-long', name: 'Triet long laser', parentSlug: 'triet-long', description: 'Triet long diode, IPL va cham soc sau laser.' },
+    { key: 'facial-basic', name: 'Facial và cấp ẩm', parentSlug: 'cham-soc-da-mat', description: 'Làm sạch sâu, cấp ẩm, điện di tinh chất và mặt nạ.' },
+    { key: 'tri-mun', name: 'Điều trị mụn và thâm', parentSlug: 'cham-soc-da-mat', description: 'Lấy nhân mụn, giảm thâm, kiểm soát dầu và phục hồi.' },
+    { key: 'peel-da', name: 'Peel da hóa học', parentSlug: 'cham-soc-da-mat', description: 'AHA, BHA, enzyme peel và retinol peel.' },
+    { key: 'laser-skin', name: 'Laser và trẻ hóa', parentSlug: 'tham-my-vien', description: 'Laser toning, RF, collagen và trẻ hóa da.' },
+    { key: 'triet-long', name: 'Triệt lông laser', parentSlug: 'triet-long', description: 'Triệt lông diode, IPL và chăm sóc sau laser.' },
   ],
   yoga: [
-    { key: 'yoga-basic', name: 'Yoga co ban va nang cao', parentSlug: 'yoga-thien', description: 'Hatha, Vinyasa, Yin va yoga can bang.' },
-    { key: 'pilates', name: 'Pilates va core', parentSlug: 'fitness-pt', description: 'Mat pilates, reformer, core va mobility.' },
-    { key: 'breathwork', name: 'Thien va breathwork', parentSlug: 'yoga-thien', description: 'Mindfulness, thien dinh va ky thuat tho.' },
-    { key: 'personal-training', name: 'Personal training', parentSlug: 'fitness-pt', description: 'PT ca nhan, theo doi chi so va ke hoach tap.' },
-    { key: 'yoga-tri-lieu', name: 'Yoga tri lieu', parentSlug: 'yoga-thien', description: 'Yoga phuc hoi, dau lung, prenatal va senior.' },
+    { key: 'yoga-basic', name: 'Yoga cơ bản và nâng cao', parentSlug: 'yoga-thien', description: 'Hatha, Vinyasa, Yin và yoga cân bằng.' },
+    { key: 'pilates', name: 'Pilates và core', parentSlug: 'fitness-pt', description: 'Mat pilates, reformer, core và mobility.' },
+    { key: 'breathwork', name: 'Thiền và breathwork', parentSlug: 'yoga-thien', description: 'Mindfulness, thiền định và kỹ thuật thở.' },
+    { key: 'personal-training', name: 'Personal training', parentSlug: 'fitness-pt', description: 'PT cá nhân, theo dõi chỉ số và kế hoạch tập.' },
+    { key: 'yoga-tri-lieu', name: 'Yoga trị liệu', parentSlug: 'yoga-thien', description: 'Yoga phục hồi, đau lưng, prenatal và senior.' },
   ],
   aesthetic: [
-    { key: 'nang-co', name: 'Nang co va cang da', parentSlug: 'tham-my-vien', description: 'HIFU, RF, thread lift va nang co khong phau thuat.' },
-    { key: 'dieu-khac-face', name: 'Dieu khac khuon mat', parentSlug: 'tham-my-vien', description: 'Filler, botox, V-line va tu van ty le mat.' },
-    { key: 'tre-hoa-cn', name: 'Tre hoa cong nghe cao', parentSlug: 'tham-my-vien', description: 'PRP, laser CO2, Thermage va Ultherapy.' },
-    { key: 'triet-long-laser', name: 'Triet long laser', parentSlug: 'triet-long', description: 'Laser diode, IPL va triet long toan than.' },
-    { key: 'giam-beo', name: 'Giam beo va dinh hinh', parentSlug: 'cham-soc-co-the', description: 'Cavitation, EMS, tan mo va tao duong cong.' },
-    { key: 'tham-nam', name: 'Dieu tri tham nam', parentSlug: 'cham-soc-da-mat', description: 'Laser nam, IPL, pico va cham soc phuc hoi.' },
+    { key: 'nang-co', name: 'Nâng cơ và căng da', parentSlug: 'tham-my-vien', description: 'HIFU, RF, thread lift và nâng cơ không phẫu thuật.' },
+    { key: 'dieu-khac-face', name: 'Điêu khắc khuôn mặt', parentSlug: 'tham-my-vien', description: 'Filler, botox, V-line và tư vấn tỷ lệ mặt.' },
+    { key: 'tre-hoa-cn', name: 'Trẻ hóa công nghệ cao', parentSlug: 'tham-my-vien', description: 'PRP, laser CO2, Thermage và Ultherapy.' },
+    { key: 'triet-long-laser', name: 'Triệt lông laser', parentSlug: 'triet-long', description: 'Laser diode, IPL và triệt lông toàn thân.' },
+    { key: 'giam-beo', name: 'Giảm béo và định hình', parentSlug: 'cham-soc-co-the', description: 'Cavitation, EMS, tan mỡ và tạo đường cong.' },
+    { key: 'tham-nam', name: 'Điều trị thâm nám', parentSlug: 'cham-soc-da-mat', description: 'Laser nám, IPL, pico và chăm sóc phục hồi.' },
   ],
   lash: [
-    { key: 'lash-extension', name: 'Noi mi classic va volume', parentSlug: 'long-may-mi-mat', description: 'Classic, hybrid, volume 2D-6D va mega volume.' },
-    { key: 'lash-lift', name: 'Lift mi va uon mi', parentSlug: 'long-may-mi-mat', description: 'Lift mi keratin, uon mi va nhuom mi.' },
-    { key: 'brow-shaping', name: 'Tao dang long may', parentSlug: 'long-may-mi-mat', description: 'Wax, thread, tint va brow lamination.' },
-    { key: 'lash-care', name: 'Cham soc mi tu nhien', parentSlug: 'long-may-mi-mat', description: 'Duong mi, serum mi va thao mi an toan.' },
-    { key: 'eye-combo', name: 'Combo mat', parentSlug: 'long-may-mi-mat', description: 'Combo mi, long may va makeup mat.' },
+    { key: 'lash-extension', name: 'Nối mi classic và volume', parentSlug: 'long-may-mi-mat', description: 'Classic, hybrid, volume 2D-6D và mega volume.' },
+    { key: 'lash-lift', name: 'Lift mi và uốn mi', parentSlug: 'long-may-mi-mat', description: 'Lift mi keratin, uốn mi và nhuộm mi.' },
+    { key: 'brow-shaping', name: 'Tạo dáng lông mày', parentSlug: 'long-may-mi-mat', description: 'Wax, thread, tint và brow lamination.' },
+    { key: 'lash-care', name: 'Chăm sóc mi tự nhiên', parentSlug: 'long-may-mi-mat', description: 'Dưỡng mi, serum mi và tháo mi an toàn.' },
+    { key: 'eye-combo', name: 'Combo mắt', parentSlug: 'long-may-mi-mat', description: 'Combo mi, lông mày và makeup mắt.' },
   ],
   pmu: [
-    { key: 'phun-moi', name: 'Phun moi tham my', parentSlug: 'phun-xam-tham-my', description: 'Lip blush, ombre, khu tham nhe va phu bong moi.' },
-    { key: 'phun-may', name: 'Phun va dieu khac chan may', parentSlug: 'phun-xam-tham-my', description: 'Microblading, powder brow va ombre brow.' },
-    { key: 'phun-mi', name: 'Phun mi mat', parentSlug: 'phun-xam-tham-my', description: 'Eyeliner PMU, phun mi tren duoi va cham soc sau phun.' },
-    { key: 'sau-phun', name: 'Cham soc sau phun', parentSlug: 'phun-xam-tham-my', description: 'Tai kham, bo sung mau va phuc hoi sau phun.' },
-    { key: 'pmu-combo', name: 'Combo phun xam', parentSlug: 'phun-xam-tham-my', description: 'Goi moi, may, mi va cham soc tron goi.' },
+    { key: 'phun-moi', name: 'Phun môi thẩm mỹ', parentSlug: 'phun-xam-tham-my', description: 'Lip blush, ombre, khử thâm nhẹ và phủ bóng môi.' },
+    { key: 'phun-may', name: 'Phun và điêu khắc chân mày', parentSlug: 'phun-xam-tham-my', description: 'Microblading, powder brow và ombre brow.' },
+    { key: 'phun-mi', name: 'Phun mí mắt', parentSlug: 'phun-xam-tham-my', description: 'Eyeliner PMU, phun mí trên dưới và chăm sóc sau phun.' },
+    { key: 'sau-phun', name: 'Chăm sóc sau phun', parentSlug: 'phun-xam-tham-my', description: 'Tái khám, bổ sung màu và phục hồi sau phun.' },
+    { key: 'pmu-combo', name: 'Combo phun xăm', parentSlug: 'phun-xam-tham-my', description: 'Gói môi, mày, mí và chăm sóc trọn gói.' },
   ],
   body: [
-    { key: 'tam-trang', name: 'Tam trang toan than', parentSlug: 'xong-hoi-tam-trang', description: 'Tam trang sua de, glutathione, carbon va khoang.' },
-    { key: 'body-scrub', name: 'Body scrub', parentSlug: 'cham-soc-co-the', description: 'Scrub muoi, ca phe, duong va thao moc.' },
-    { key: 'u-body', name: 'U body va mat na co the', parentSlug: 'cham-soc-co-the', description: 'U collagen, wrap duong am va tinh chat.' },
-    { key: 'xong-hoi', name: 'Xong hoi va ngam tam', parentSlug: 'xong-hoi-tam-trang', description: 'Xong hoi kho, uot, ngam thao duoc va onsen.' },
-    { key: 'massage-body', name: 'Massage thu gian', parentSlug: 'spa-massage', description: 'Massage co ban ket hop body care.' },
+    { key: 'tam-trang', name: 'Tắm trắng toàn thân', parentSlug: 'xong-hoi-tam-trang', description: 'Tắm trắng sữa dê, glutathione, carbon và khoáng.' },
+    { key: 'body-scrub', name: 'Body scrub', parentSlug: 'cham-soc-co-the', description: 'Scrub muối, cà phê, dưỡng và thảo mộc.' },
+    { key: 'u-body', name: 'Ủ body và mặt nạ cơ thể', parentSlug: 'cham-soc-co-the', description: 'Ủ collagen, wrap dưỡng ẩm và tinh chất.' },
+    { key: 'xong-hoi', name: 'Xông hơi và ngâm tắm', parentSlug: 'xong-hoi-tam-trang', description: 'Xông hơi khô, ướt, ngâm thảo dược và onsen.' },
+    { key: 'massage-body', name: 'Massage thư giãn', parentSlug: 'spa-massage', description: 'Massage cơ bản kết hợp body care.' },
   ],
 };
 
 const SERVICE_TEMPLATES: Record<StoreKindKey, ServiceTemplate[]> = {
   spa: [
-    service('Massage da nong', 'massage-da-nong', 'massage-tri-lieu', 'massage da nong va thao moc', [350000, 560000, 820000], [60, 90, 120]),
-    service('Massage body tinh dau', 'massage-body-tinh-dau', 'massage-tri-lieu', 'massage toan than voi tinh dau diu nhe', [280000, 480000, 720000], [60, 90, 120]),
-    service('Massage co vai gay', 'massage-co-vai-gay', 'massage-tri-lieu', 'giam cang co vai gay va lung tren', [220000, 360000, 540000], [45, 60, 90]),
-    service('Facial cap am phuc hoi', 'facial-cap-am-phuc-hoi', 'facial-spa', 'lam sach va cap am da mat', [320000, 520000, 780000], [60, 75, 90]),
-    service('Tam trang thao moc', 'tam-trang-thao-moc', 'tam-trang-xong-hoi', 'tam trang va u body thao moc', [420000, 650000, 940000], [75, 100, 130]),
-    service('Xong hoi detox', 'xong-hoi-detox', 'tam-trang-xong-hoi', 'xong hoi va ngam chan thanh loc', [180000, 320000, 520000], [30, 45, 60]),
-    service('Body scrub muoi khoang', 'body-scrub-muoi-khoang', 'body-care', 'tay te bao chet va u duong body', [260000, 430000, 680000], [45, 75, 100]),
-    service('Goi dau duong sinh', 'goi-dau-duong-sinh', 'goi-dau', 'goi dau thao moc va massage dau', [180000, 290000, 450000], [45, 60, 90]),
+    service('Massage đá nóng', 'massage-da-nong', 'massage-tri-lieu', 'massage đá nóng và thảo mộc', [350000, 560000, 820000], [60, 90, 120]),
+    service('Massage body tinh dầu', 'massage-body-tinh-dau', 'massage-tri-lieu', 'massage toàn thân với tinh dầu dịu nhẹ', [280000, 480000, 720000], [60, 90, 120]),
+    service('Massage cổ vai gáy', 'massage-co-vai-gay', 'massage-tri-lieu', 'giảm căng cơ cổ vai gáy và lưng trên', [220000, 360000, 540000], [45, 60, 90]),
+    service('Facial cấp ẩm phục hồi', 'facial-cap-am-phuc-hoi', 'facial-spa', 'làm sạch và cấp ẩm da mặt', [320000, 520000, 780000], [60, 75, 90]),
+    service('Tắm trắng thảo mộc', 'tam-trang-thao-moc', 'tam-trang-xong-hoi', 'tắm trắng và ủ body thảo mộc', [420000, 650000, 940000], [75, 100, 130]),
+    service('Xông hơi detox', 'xong-hoi-detox', 'tam-trang-xong-hoi', 'xông hơi và ngâm chân thanh lọc', [180000, 320000, 520000], [30, 45, 60]),
+    service('Body scrub muối khoáng', 'body-scrub-muoi-khoang', 'body-care', 'tẩy tế bào chết và ủ dưỡng body', [260000, 430000, 680000], [45, 75, 100]),
+    service('Gội đầu dưỡng sinh', 'goi-dau-duong-sinh', 'goi-dau', 'gội đầu thảo mộc và massage đầu', [180000, 290000, 450000], [45, 60, 90]),
   ],
   nail: [
-    service('Son gel Han Quoc', 'son-gel-han-quoc', 'nail-gel', 'son gel bong ben va cham soc mong', [150000, 260000, 420000], [45, 60, 90]),
-    service('Dap gel builder', 'dap-gel-builder', 'nail-gel', 'dap gel tao form mong tu nhien', [280000, 420000, 620000], [75, 100, 130]),
-    service('Nail art charm', 'nail-art-charm', 'nail-art', 've mong nghe thuat va gan charm', [220000, 380000, 580000], [75, 105, 135]),
-    service('Pedicure spa', 'pedicure-spa', 'pedicure', 'cham soc chan va goi got', [180000, 300000, 480000], [45, 75, 100]),
-    service('Waxing vung nho', 'waxing-vung-nho', 'waxing', 'waxing diu nhe cho mat va co the', [120000, 220000, 360000], [30, 45, 60]),
-    service('Noi mi tu nhien', 'noi-mi-tu-nhien', 'lash-brow', 'noi mi classic nhe mat', [220000, 400000, 650000], [75, 100, 130]),
+    service('Sơn gel Hàn Quốc', 'son-gel-han-quoc', 'nail-gel', 'sơn gel bóng bền và chăm sóc móng', [150000, 260000, 420000], [45, 60, 90]),
+    service('Đắp gel builder', 'dap-gel-builder', 'nail-gel', 'đắp gel tạo form móng tự nhiên', [280000, 420000, 620000], [75, 100, 130]),
+    service('Nail art charm', 'nail-art-charm', 'nail-art', 'vẽ móng nghệ thuật và gắn charm', [220000, 380000, 580000], [75, 105, 135]),
+    service('Pedicure spa', 'pedicure-spa', 'pedicure', 'chăm sóc chân và gót chân', [180000, 300000, 480000], [45, 75, 100]),
+    service('Waxing vùng nhỏ', 'waxing-vung-nho', 'waxing', 'waxing dịu nhẹ cho mặt và cơ thể', [120000, 220000, 360000], [30, 45, 60]),
+    service('Nối mi tự nhiên', 'noi-mi-tu-nhien', 'lash-brow', 'nối mi classic nhẹ mắt', [220000, 400000, 650000], [75, 100, 130]),
   ],
   hair: [
-    service('Cat tao kieu nu', 'cat-tao-kieu-nu', 'cat-tao-kieu', 'cat toc va tu van form mat', [120000, 240000, 420000], [45, 60, 90]),
-    service('Nhuom phu bac', 'nhuom-phu-bac', 'nhuom-toc', 'nhuom phu bac va cham soc toc', [350000, 620000, 980000], [120, 150, 180]),
-    service('Balayage thoi trang', 'balayage-thoi-trang', 'nhuom-toc', 'nhuom balayage va highlight', [800000, 1400000, 2200000], [180, 240, 300]),
-    service('Uon setting', 'uon-setting', 'uon-duoi', 'uon tao nep va cham soc sau hoa chat', [580000, 900000, 1400000], [150, 210, 270]),
-    service('Duoi collagen', 'duoi-collagen', 'uon-duoi', 'duoi toc mem va giam xo', [520000, 860000, 1320000], [150, 210, 270]),
-    service('Phuc hoi keratin', 'phuc-hoi-keratin', 'phuc-hoi-toc', 'hap phuc hoi va bo sung keratin', [380000, 680000, 1050000], [90, 120, 150]),
-    service('Makeup du tiec', 'makeup-du-tiec', 'makeup', 'makeup va styling toc du tiec', [450000, 750000, 1200000], [90, 120, 150]),
+    service('Cắt tạo kiểu nữ', 'cat-tao-kieu-nu', 'cat-tao-kieu', 'cắt tóc và tư vấn form mặt', [120000, 240000, 420000], [45, 60, 90]),
+    service('Nhuộm phủ bạc', 'nhuom-phu-bac', 'nhuom-toc', 'nhuộm phủ bạc và chăm sóc tóc', [350000, 620000, 980000], [120, 150, 180]),
+    service('Balayage thời trang', 'balayage-thoi-trang', 'nhuom-toc', 'nhuộm balayage và highlight', [800000, 1400000, 2200000], [180, 240, 300]),
+    service('Uốn setting', 'uon-setting', 'uon-duoi', 'uốn tạo nếp và chăm sóc sau hóa chất', [580000, 900000, 1400000], [150, 210, 270]),
+    service('Duỗi collagen', 'duoi-collagen', 'uon-duoi', 'duỗi tóc mềm và giảm xơ', [520000, 860000, 1320000], [150, 210, 270]),
+    service('Phục hồi keratin', 'phuc-hoi-keratin', 'phuc-hoi-toc', 'hấp phục hồi và bổ sung keratin', [380000, 680000, 1050000], [90, 120, 150]),
+    service('Makeup dự tiệc', 'makeup-du-tiec', 'makeup', 'makeup và styling tóc dự tiệc', [450000, 750000, 1200000], [90, 120, 150]),
   ],
   barber: [
-    service('Classic haircut', 'classic-haircut', 'cat-toc-nam', 'cat toc nam co dien va goi say', [100000, 180000, 280000], [30, 45, 60]),
-    service('Fade cut', 'fade-cut', 'cat-toc-nam', 'fade, taper va tao kieu hien dai', [150000, 260000, 420000], [45, 60, 75]),
-    service('Cao rau nong', 'cao-rau-nong', 'beard-care', 'cao rau khan nong va duong da', [90000, 160000, 260000], [30, 45, 60]),
-    service('Beard styling', 'beard-styling', 'beard-care', 'tao kieu rau va duong beard oil', [120000, 220000, 340000], [30, 45, 60]),
-    service('Goi dau thao moc nam', 'goi-dau-thao-moc-nam', 'goi-dau-nam', 'goi dau va massage co vai gay', [140000, 240000, 360000], [45, 60, 75]),
-    service('Combo gentleman', 'combo-gentleman', 'combo-grooming', 'cat toc, cao rau, goi dau va styling', [260000, 420000, 650000], [75, 100, 130]),
+    service('Classic haircut', 'classic-haircut', 'cat-toc-nam', 'cắt tóc nam cổ điển và gội sấy', [100000, 180000, 280000], [30, 45, 60]),
+    service('Fade cut', 'fade-cut', 'cat-toc-nam', 'fade, taper và tạo kiểu hiện đại', [150000, 260000, 420000], [45, 60, 75]),
+    service('Cạo râu nóng', 'cao-rau-nong', 'beard-care', 'cạo râu khăn nóng và dưỡng da', [90000, 160000, 260000], [30, 45, 60]),
+    service('Beard styling', 'beard-styling', 'beard-care', 'tạo kiểu râu và dưỡng beard oil', [120000, 220000, 340000], [30, 45, 60]),
+    service('Gội đầu thảo mộc nam', 'goi-dau-thao-moc-nam', 'goi-dau-nam', 'gội đầu và massage cổ vai gáy', [140000, 240000, 360000], [45, 60, 75]),
+    service('Combo gentleman', 'combo-gentleman', 'combo-grooming', 'cắt tóc, cạo râu, gội đầu và styling', [260000, 420000, 650000], [75, 100, 130]),
   ],
   skin: [
-    service('Facial lam sach sau', 'facial-lam-sach-sau', 'facial-basic', 'lam sach sau va cap am', [280000, 480000, 760000], [60, 75, 90]),
-    service('Tri mun chuyen sau', 'tri-mun-chuyen-sau', 'tri-mun', 'lay nhan mun va giam viem', [350000, 620000, 980000], [75, 100, 130]),
-    service('Giam tham sau mun', 'giam-tham-sau-mun', 'tri-mun', 'serum phuc hoi va lam sang', [420000, 720000, 1100000], [75, 100, 130]),
-    service('Peel AHA BHA', 'peel-aha-bha', 'peel-da', 'peel da va phuc hoi hang rao da', [500000, 850000, 1300000], [60, 90, 120]),
-    service('Laser toning', 'laser-toning', 'laser-skin', 'laser lam sang va deu mau da', [850000, 1500000, 2400000], [60, 90, 120]),
-    service('Triet long diode', 'triet-long-diode', 'triet-long', 'triet long bang cong nghe diode', [300000, 650000, 1200000], [45, 75, 100]),
+    service('Facial làm sạch sâu', 'facial-lam-sach-sau', 'facial-basic', 'làm sạch sâu và cấp ẩm', [280000, 480000, 760000], [60, 75, 90]),
+    service('Trị mụn chuyên sâu', 'tri-mun-chuyen-sau', 'tri-mun', 'lấy nhân mụn và giảm viêm', [350000, 620000, 980000], [75, 100, 130]),
+    service('Giảm thâm sau mụn', 'giam-tham-sau-mun', 'tri-mun', 'serum phục hồi và làm sáng', [420000, 720000, 1100000], [75, 100, 130]),
+    service('Peel AHA BHA', 'peel-aha-bha', 'peel-da', 'peel da và phục hồi hàng rào da', [500000, 850000, 1300000], [60, 90, 120]),
+    service('Laser toning', 'laser-toning', 'laser-skin', 'laser làm sáng và đều màu da', [850000, 1500000, 2400000], [60, 90, 120]),
+    service('Triệt lông diode', 'triet-long-diode', 'triet-long', 'triệt lông bằng công nghệ diode', [300000, 650000, 1200000], [45, 75, 100]),
   ],
   yoga: [
-    service('Hatha yoga', 'hatha-yoga', 'yoga-basic', 'lop yoga nen tang va can bang', [150000, 350000, 850000], [60, 75, 90]),
-    service('Vinyasa flow', 'vinyasa-flow', 'yoga-basic', 'chuoi dong tac lien tuc va linh hoat', [180000, 420000, 950000], [60, 75, 90]),
-    service('Reformer pilates', 'reformer-pilates', 'pilates', 'pilates voi may reformer', [280000, 650000, 1400000], [50, 60, 75]),
-    service('Breathwork session', 'breathwork-session', 'breathwork', 'ky thuat tho va thien dinh', [180000, 360000, 780000], [45, 60, 90]),
-    service('PT ca nhan', 'pt-ca-nhan', 'personal-training', 'huan luyen ca nhan theo muc tieu', [350000, 750000, 1600000], [60, 90, 120]),
-    service('Yoga tri lieu dau lung', 'yoga-tri-lieu-dau-lung', 'yoga-tri-lieu', 'yoga phuc hoi cho lung va cot song', [220000, 480000, 980000], [60, 75, 90]),
+    service('Hatha yoga', 'hatha-yoga', 'yoga-basic', 'lớp yoga nền tảng và cân bằng', [150000, 350000, 850000], [60, 75, 90]),
+    service('Vinyasa flow', 'vinyasa-flow', 'yoga-basic', 'chuỗi động tác liên tục và linh hoạt', [180000, 420000, 950000], [60, 75, 90]),
+    service('Reformer pilates', 'reformer-pilates', 'pilates', 'pilates với máy reformer', [280000, 650000, 1400000], [50, 60, 75]),
+    service('Breathwork session', 'breathwork-session', 'breathwork', 'kỹ thuật thở và thiền định', [180000, 360000, 780000], [45, 60, 90]),
+    service('PT cá nhân', 'pt-ca-nhan', 'personal-training', 'huấn luyện cá nhân theo mục tiêu', [350000, 750000, 1600000], [60, 90, 120]),
+    service('Yoga trị liệu đau lưng', 'yoga-tri-lieu-dau-lung', 'yoga-tri-lieu', 'yoga phục hồi cho lưng và cột sống', [220000, 480000, 980000], [60, 75, 90]),
   ],
   aesthetic: [
-    service('HIFU nang co', 'hifu-nang-co', 'nang-co', 'nang co khong phau thuat', [1200000, 2600000, 5200000], [60, 90, 120]),
-    service('RF tre hoa da', 'rf-tre-hoa-da', 'tre-hoa-cn', 'song RF kich thich collagen', [850000, 1600000, 3000000], [60, 90, 120]),
-    service('Filler tao hinh', 'filler-tao-hinh', 'dieu-khac-face', 'tu van va tao hinh duong net', [1800000, 3600000, 6800000], [45, 75, 100]),
-    service('Laser tri nam', 'laser-tri-nam', 'tham-nam', 'laser pico va phuc hoi da', [950000, 1900000, 3600000], [60, 90, 120]),
-    service('Giam beo cavitation', 'giam-beo-cavitation', 'giam-beo', 'tan mo va dinh hinh co the', [650000, 1300000, 2500000], [75, 100, 130]),
-    service('Triet long toan than', 'triet-long-toan-than', 'triet-long-laser', 'triet long laser nhieu vung', [900000, 1800000, 3200000], [90, 120, 150]),
+    service('HIFU nâng cơ', 'hifu-nang-co', 'nang-co', 'nâng cơ không phẫu thuật', [1200000, 2600000, 5200000], [60, 90, 120]),
+    service('RF trẻ hóa da', 'rf-tre-hoa-da', 'tre-hoa-cn', 'sóng RF kích thích collagen', [850000, 1600000, 3000000], [60, 90, 120]),
+    service('Filler tạo hình', 'filler-tao-hinh', 'dieu-khac-face', 'tư vấn và tạo hình đường nét', [1800000, 3600000, 6800000], [45, 75, 100]),
+    service('Laser trị nám', 'laser-tri-nam', 'tham-nam', 'laser pico và phục hồi da', [950000, 1900000, 3600000], [60, 90, 120]),
+    service('Giảm béo cavitation', 'giam-beo-cavitation', 'giam-beo', 'tan mỡ và định hình cơ thể', [650000, 1300000, 2500000], [75, 100, 130]),
+    service('Triệt lông toàn thân', 'triet-long-toan-than', 'triet-long-laser', 'triệt lông laser nhiều vùng', [900000, 1800000, 3200000], [90, 120, 150]),
   ],
   lash: [
-    service('Noi mi classic', 'noi-mi-classic', 'lash-extension', 'noi mi 1:1 tu nhien', [220000, 380000, 620000], [75, 100, 130]),
-    service('Noi mi volume', 'noi-mi-volume', 'lash-extension', 'volume 3D-6D mem nhe', [360000, 560000, 850000], [100, 130, 160]),
-    service('Lift mi keratin', 'lift-mi-keratin', 'lash-lift', 'lift mi va duong keratin', [260000, 420000, 620000], [60, 75, 90]),
-    service('Brow lamination', 'brow-lamination', 'brow-shaping', 'dinh hinh va lamination long may', [300000, 480000, 720000], [60, 75, 90]),
-    service('Thao mi an toan', 'thao-mi-an-toan', 'lash-care', 'thao mi va cham soc mi that', [120000, 220000, 340000], [30, 45, 60]),
-    service('Combo lash brow', 'combo-lash-brow', 'eye-combo', 'noi mi va tao dang long may', [520000, 760000, 1100000], [120, 150, 180]),
+    service('Nối mi classic', 'noi-mi-classic', 'lash-extension', 'nối mi 1:1 tự nhiên', [220000, 380000, 620000], [75, 100, 130]),
+    service('Nối mi volume', 'noi-mi-volume', 'lash-extension', 'volume 3D-6D mềm nhẹ', [360000, 560000, 850000], [100, 130, 160]),
+    service('Lift mi keratin', 'lift-mi-keratin', 'lash-lift', 'lift mi và dưỡng keratin', [260000, 420000, 620000], [60, 75, 90]),
+    service('Brow lamination', 'brow-lamination', 'brow-shaping', 'định hình và lamination lông mày', [300000, 480000, 720000], [60, 75, 90]),
+    service('Tháo mi an toàn', 'thao-mi-an-toan', 'lash-care', 'tháo mi và chăm sóc mi thật', [120000, 220000, 340000], [30, 45, 60]),
+    service('Combo lash brow', 'combo-lash-brow', 'eye-combo', 'nối mi và tạo dáng lông mày', [520000, 760000, 1100000], [120, 150, 180]),
   ],
   pmu: [
-    service('Phun moi lip blush', 'phun-moi-lip-blush', 'phun-moi', 'phun moi trong treo va deu mau', [1800000, 3200000, 5200000], [120, 150, 180]),
-    service('Phun moi khu tham', 'phun-moi-khu-tham', 'phun-moi', 'xu ly nen moi tham va phun mau', [2200000, 3800000, 6000000], [150, 180, 210]),
-    service('Microblading chan may', 'microblading-chan-may', 'phun-may', 'dieu khac soi may tu nhien', [2000000, 3600000, 5800000], [120, 150, 180]),
-    service('Powder brow', 'powder-brow', 'phun-may', 'phun may hat bot mem min', [1800000, 3200000, 5200000], [120, 150, 180]),
-    service('Phun mi eyeliner', 'phun-mi-eyeliner', 'phun-mi', 'phun mi sat chan mi tu nhien', [1500000, 2600000, 4200000], [90, 120, 150]),
-    service('Tai kham bo sung mau', 'tai-kham-bo-sung-mau', 'sau-phun', 'kiem tra va bo sung mau sau bong', [400000, 800000, 1400000], [60, 90, 120]),
+    service('Phun môi lip blush', 'phun-moi-lip-blush', 'phun-moi', 'phun môi trong trẻo và đều màu', [1800000, 3200000, 5200000], [120, 150, 180]),
+    service('Phun môi khử thâm', 'phun-moi-khu-tham', 'phun-moi', 'xử lý nền môi thâm và phun màu', [2200000, 3800000, 6000000], [150, 180, 210]),
+    service('Microblading chân mày', 'microblading-chan-may', 'phun-may', 'điêu khắc sợi mày tự nhiên', [2000000, 3600000, 5800000], [120, 150, 180]),
+    service('Powder brow', 'powder-brow', 'phun-may', 'phun mày hạt bột mềm mịn', [1800000, 3200000, 5200000], [120, 150, 180]),
+    service('Phun mí eyeliner', 'phun-mi-eyeliner', 'phun-mi', 'phun mí sát chân mi tự nhiên', [1500000, 2600000, 4200000], [90, 120, 150]),
+    service('Tái khám bổ sung màu', 'tai-kham-bo-sung-mau', 'sau-phun', 'kiểm tra và bổ sung màu sau bong', [400000, 800000, 1400000], [60, 90, 120]),
   ],
   body: [
-    service('Tam trang sua de', 'tam-trang-sua-de', 'tam-trang', 'tam trang va duong am toan than', [420000, 680000, 980000], [75, 100, 130]),
-    service('Tam trang carbon', 'tam-trang-carbon', 'tam-trang', 'lam sang da voi carbon va khoang', [520000, 850000, 1250000], [90, 120, 150]),
-    service('Body scrub ca phe', 'body-scrub-ca-phe', 'body-scrub', 'tay te bao chet va lam min da', [260000, 420000, 620000], [45, 75, 100]),
-    service('U body collagen', 'u-body-collagen', 'u-body', 'u duong collagen va cap am sau', [360000, 580000, 860000], [60, 90, 120]),
-    service('Xong hoi onsen', 'xong-hoi-onsen', 'xong-hoi', 'xong hoi va ngam tam thu gian', [280000, 460000, 760000], [60, 90, 120]),
-    service('Massage body co ban', 'massage-body-co-ban', 'massage-body', 'massage thu gian ket hop body care', [260000, 450000, 700000], [60, 90, 120]),
+    service('Tắm trắng sữa dê', 'tam-trang-sua-de', 'tam-trang', 'tắm trắng và dưỡng ẩm toàn thân', [420000, 680000, 980000], [75, 100, 130]),
+    service('Tắm trắng carbon', 'tam-trang-carbon', 'tam-trang', 'làm sáng da với carbon và khoáng', [520000, 850000, 1250000], [90, 120, 150]),
+    service('Body scrub cà phê', 'body-scrub-ca-phe', 'body-scrub', 'tẩy tế bào chết và làm mịn da', [260000, 420000, 620000], [45, 75, 100]),
+    service('Ủ body collagen', 'u-body-collagen', 'u-body', 'ủ dưỡng collagen và cấp ẩm sâu', [360000, 580000, 860000], [60, 90, 120]),
+    service('Xông hơi onsen', 'xong-hoi-onsen', 'xong-hoi', 'xông hơi và ngâm tắm thư giãn', [280000, 460000, 760000], [60, 90, 120]),
+    service('Massage body cơ bản', 'massage-body-co-ban', 'massage-body', 'massage thư giãn kết hợp body care', [260000, 450000, 700000], [60, 90, 120]),
   ],
 };
 
@@ -878,6 +604,278 @@ function service(
     price,
     duration,
   };
+}
+
+const SERVICE_IMAGE_POOLS = {
+  massage: [
+    '1741522509438-a120c0bb5e88',
+    '1519823551278-64ac92734fb1',
+    '1515377905703-c4788e51af15',
+    '1639162906614-0603b0ae95fd',
+    '1600334089648-b0d9d3028eb2',
+  ],
+  skin: [
+    '1581182800629-7d90925ad072',
+    '1573461160327-b450ce3d8e7f',
+    '1555820585-c5ae44394b79',
+    '1609542334025-778f9093a234',
+    '1723540634462-528708cc17aa',
+  ],
+  nail: [
+    '1604654894610-df63bc536371',
+    '1632345031435-8727f6897d53',
+    '1610992015762-45dca7fa3a85',
+    '1607779097040-26e80aa78e66',
+    '1619607146034-5a05296c8f9a',
+  ],
+  haircut: [
+    '1605497788044-5a32c7078486',
+    '1503951914875-452162b0f3f1',
+    '1647140655214-e4a2d914971f',
+    '1599351431202-1e0f0137899a',
+    '1621605815971-fbc98d665033',
+  ],
+  facial: [
+    '1643684391140-c5056cfd3436',
+    '1616394584738-fc6e612e71b9',
+    '1570172619644-dfd03ed5d881',
+    '1731514771613-991a02407132',
+    '1730288951113-9cc087c14b83',
+  ],
+  botox: [
+    '1713085085470-fba013d67e65',
+    '1598300188904-6287d52746ad',
+    '1544717304-a2db4a7b16ee',
+    '1737215398603-2ef701df8036',
+    '1623682687826-fe06bf64e6d8',
+  ],
+  microblading: [
+    '1585885970325-81cba4494c27',
+    '1567629307995-b9f33097bd30',
+    '1674049406179-d7bf2c263e71',
+    '1651839633408-3fccd671b832',
+    '1735151225764-eac694642dbf',
+  ],
+  eyeliner: [
+    '1622336889416-8d790ad807d7',
+    '1595550912256-b24059bb08e8',
+    '1631214524020-7e18db9a8f92',
+    '1487412947147-5cebf100ffc2',
+    '1631237535134-e009a5939d9c',
+  ],
+  lipBlush: [
+    '1631214499500-2e34edcaccfe',
+    '1625093742435-6fa192b6fb10',
+    '1654374504608-67c4cfe65fca',
+    '1643630661247-2474f10e4f70',
+    '1654375078795-7229b6458d25',
+  ],
+  hairRemoval: [
+    '1700760933574-9f0f4ea9aa3b',
+    '1700760934166-4c766d708139',
+    '1700760933941-3a06a28fbf47',
+    '1720424643392-4b63bd63d271',
+    '1467632499275-7a693a761056',
+  ],
+  bodyCare: [
+    '1573461160327-b450ce3d8e7f',
+    '1619451427882-6aaaded0cc61',
+    '1599817878414-43ef36677cf0',
+    '1544717304-a2db4a7b16ee',
+    '1515377905703-c4788e51af15',
+  ],
+  bodyExfoliation: [
+    '1654864471383-50ac3ed9b4f6',
+    '1669979963553-c9b9e347f08a',
+    '1598619254718-4cd63ec2d0f5',
+    '1766241883878-b8262bbce8f8',
+    '1778410238722-b691772411aa',
+  ],
+  hairTherapy: [
+    '1564141696939-9eb6e957ccfc',
+    '1634449571010-02389ed0f9b0',
+    '1522337360788-8b13dee7a37e',
+    '1560264641-1b5191cc63e2',
+    '1580618672591-eb180b1a973f',
+  ],
+  hairColor: [
+    '1554519934-e32b1629d9ee',
+    '1522337360788-8b13dee7a37e',
+    '1614020863825-28a0bb7e3c3c',
+    '1707812343087-c9ff9e5abb43',
+    '1602549179763-ce6c9df961b7',
+  ],
+  lashes: [
+    '1589710751893-f9a6770ad71b',
+    '1587910234573-d6fc84743bc8',
+    '1612804327354-d29af30ac8a6',
+    '1516220362602-dba5272034e7',
+    '1735151226446-1d364b4adc2f',
+  ],
+  yoga: [
+    '1544367567-0f2fcb009e0b',
+    '1506126613408-eca07ce68773',
+    '1599901860904-17e6ed7083a0',
+    '1552196563-55cd4e45efb3',
+    '1579454566790-f9e5697ddf36',
+  ],
+  pilates: [
+    '1579454566790-f9e5697ddf36',
+    '1747239069226-55382c570116',
+    '1747238415033-b74eec07eb59',
+    '1552196527-bffef41ef674',
+    '1591258370814-01609b341790',
+  ],
+  barber: [
+    '1605497788044-5a32c7078486',
+    '1503951914875-452162b0f3f1',
+    '1647140655214-e4a2d914971f',
+    '1621605815971-fbc98d665033',
+    '1599351431202-1e0f0137899a',
+  ],
+  spa: [
+    '1741522509438-a120c0bb5e88',
+    '1519823551278-64ac92734fb1',
+    '1515377905703-c4788e51af15',
+    '1544161515-4ab6ce6db874',
+    '1591343395082-e120087004b4',
+  ],
+  hair: [
+    '1564141696939-9eb6e957ccfc',
+    '1522337360788-8b13dee7a37e',
+    '1554519934-e32b1629d9ee',
+    '1605497788044-5a32c7078486',
+    '1560066984-138dadb4c035',
+  ],
+  aesthetic: [
+    '1713085085470-fba013d67e65',
+    '1598300188904-6287d52746ad',
+    '1616394584738-fc6e612e71b9',
+    '1570172619644-dfd03ed5d881',
+    '1544717304-a2db4a7b16ee',
+  ],
+  lash: [
+    '1589710751893-f9a6770ad71b',
+    '1587910234573-d6fc84743bc8',
+    '1612804327354-d29af30ac8a6',
+    '1516220362602-dba5272034e7',
+    '1735151226446-1d364b4adc2f',
+  ],
+  pmu: [
+    '1631214499500-2e34edcaccfe',
+    '1585885970325-81cba4494c27',
+    '1622336889416-8d790ad807d7',
+    '1567629307995-b9f33097bd30',
+    '1516975080664-ed2fc6a32937',
+  ],
+  body: [
+    '1573461160327-b450ce3d8e7f',
+    '1619451427882-6aaaded0cc61',
+    '1599817878414-43ef36677cf0',
+    '1654864471383-50ac3ed9b4f6',
+    '1519823551278-64ac92734fb1',
+  ],
+} as const;
+
+type ServiceImagePoolKey = keyof typeof SERVICE_IMAGE_POOLS;
+
+const SERVICE_IMAGE_POOL_BY_SLUG: Record<string, ServiceImagePoolKey> = {
+  'massage-da-nong': 'massage',
+  'massage-body-tinh-dau': 'massage',
+  'massage-co-vai-gay': 'massage',
+  'facial-cap-am-phuc-hoi': 'facial',
+  'tam-trang-thao-moc': 'bodyCare',
+  'xong-hoi-detox': 'bodyCare',
+  'body-scrub-muoi-khoang': 'bodyExfoliation',
+  'goi-dau-duong-sinh': 'hairTherapy',
+  'son-gel-han-quoc': 'nail',
+  'dap-gel-builder': 'nail',
+  'nail-art-charm': 'nail',
+  'pedicure-spa': 'nail',
+  'waxing-vung-nho': 'hairRemoval',
+  'noi-mi-tu-nhien': 'lashes',
+  'cat-tao-kieu-nu': 'haircut',
+  'nhuom-phu-bac': 'hairColor',
+  'balayage-thoi-trang': 'hairColor',
+  'uon-setting': 'hairTherapy',
+  'duoi-collagen': 'hairTherapy',
+  'phuc-hoi-keratin': 'hairTherapy',
+  'makeup-du-tiec': 'lipBlush',
+  'classic-haircut': 'barber',
+  'fade-cut': 'barber',
+  'cao-rau-nong': 'barber',
+  'beard-styling': 'barber',
+  'goi-dau-thao-moc-nam': 'barber',
+  'combo-gentleman': 'barber',
+  'facial-lam-sach-sau': 'facial',
+  'tri-mun-chuyen-sau': 'skin',
+  'giam-tham-sau-mun': 'skin',
+  'peel-aha-bha': 'skin',
+  'laser-toning': 'skin',
+  'triet-long-diode': 'hairRemoval',
+  'hatha-yoga': 'yoga',
+  'vinyasa-flow': 'yoga',
+  'reformer-pilates': 'pilates',
+  'breathwork-session': 'yoga',
+  'pt-ca-nhan': 'pilates',
+  'yoga-tri-lieu-dau-lung': 'yoga',
+  'hifu-nang-co': 'botox',
+  'rf-tre-hoa-da': 'botox',
+  'filler-tao-hinh': 'botox',
+  'laser-tri-nam': 'skin',
+  'giam-beo-cavitation': 'bodyCare',
+  'triet-long-toan-than': 'hairRemoval',
+  'noi-mi-classic': 'lashes',
+  'noi-mi-volume': 'lashes',
+  'lift-mi-keratin': 'lashes',
+  'brow-lamination': 'microblading',
+  'thao-mi-an-toan': 'lashes',
+  'combo-lash-brow': 'lashes',
+  'phun-moi-lip-blush': 'lipBlush',
+  'phun-moi-khu-tham': 'lipBlush',
+  'microblading-chan-may': 'microblading',
+  'powder-brow': 'microblading',
+  'phun-mi-eyeliner': 'eyeliner',
+  'tai-kham-bo-sung-mau': 'microblading',
+  'tam-trang-sua-de': 'bodyCare',
+  'tam-trang-carbon': 'bodyCare',
+  'body-scrub-ca-phe': 'bodyExfoliation',
+  'u-body-collagen': 'bodyCare',
+  'xong-hoi-onsen': 'bodyCare',
+  'massage-body-co-ban': 'massage',
+};
+
+function shuffled<T>(items: T[], rand: () => number): T[] {
+  const out = [...items];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+function selectStoreCategories(store: StoreSeed): ShopCategoryTemplate[] {
+  const all = SHOP_CATEGORIES[store.kind.key];
+  const rand = seededRand(store.index * 7331);
+  const max = Math.min(MAX_CATEGORIES_PER_STORE, all.length);
+  const min = Math.min(MIN_CATEGORIES_PER_STORE, max);
+  const count = randInt(min, max, rand);
+  return shuffled(all, rand).slice(0, count);
+}
+
+function buildServiceImageUrls(store: StoreSeed, serviceTemplate: ServiceTemplate, serviceIndex: number, rand: () => number): string[] {
+  const count = randInt(MIN_IMAGES_PER_SERVICE, MAX_IMAGES_PER_SERVICE, rand);
+  const poolKey = SERVICE_IMAGE_POOL_BY_SLUG[serviceTemplate.baseSlug] ?? store.kind.key;
+  const photoIds = SERVICE_IMAGE_POOLS[poolKey] ?? SERVICE_IMAGE_POOLS.spa;
+  const urls: string[] = [];
+
+  for (let imageIndex = 0; imageIndex < count; imageIndex++) {
+    const photoId = photoIds[(store.index + serviceIndex + imageIndex) % photoIds.length];
+    const signature = store.index * 100000 + serviceIndex * 10 + imageIndex;
+    urls.push(`https://images.unsplash.com/photo-${photoId}?auto=format&fit=crop&w=900&h=700&q=80&sig=${signature}`);
+  }
+
+  return urls;
 }
 
 function cityForIndex(index: number): CityPlan {
@@ -928,7 +926,7 @@ function subService(serviceSlug: string, storeSlug: string): string {
 
 function makeStores(): StoreSeed[] {
   const stores: StoreSeed[] = [];
-  for (let index = 1; index <= 200; index++) {
+  for (let index = 1; index <= DEMO_STORE_COUNT; index++) {
     const rand = seededRand(index * 1999);
     const kind = kindForIndex(index);
     const city = cityForIndex(index);
@@ -958,14 +956,18 @@ function personName(seed: number): string {
 function buildStoreDescription(store: StoreSeed, address: string, district: string): string {
   return [
     '<div class="store-description">',
-    `  <h3>${store.name}</h3>`,
-    `  <p>${store.name} la mot diem den demo thuoc nhom ${store.kind.label} tai ${district}, ${store.city.label}. Khong gian duoc mo ta theo huong gan gui, gon gang va de tao cam giac tin cay ngay tu lan dau khach hang xem thong tin. Cua hang phu hop cho nhung nguoi muon tim mot noi co quy trinh ro rang, lich hen linh hoat, thong tin minh bach va trai nghiem on dinh. Dia chi demo tai ${address} giup du lieu co ngu canh dia phuong khi kiem thu ban do, bo loc khu vuc, tim kiem theo thanh pho va trang chi tiet cua tung co so.</p>`,
-    `  <p>Diem manh cua ${store.name} nam o cach sap xep dich vu theo nhom nhu cau thay vi chi liet ke ten goi. Khach hang bat dau tu nhu cau thu gian, cham soc ca nhan, cai thien ngoai hinh, phuc hoi the trang hoac duy tri lich cham soc dinh ky. Tung nhom dich vu duoc mo ta de he thong co noi dung day du hon khi hien thi tren trang public, trong ket qua tim kiem, trong luong dat lich va trong cac man hinh quan tri. Dieu nay giup viec test giao dien, SEO noi bo, chatbot va goi y dich vu co du lieu gan voi ngu canh thuc te hon.</p>`,
-    `  <p>Quy trinh van hanh cua cua hang duoc mo phong theo mot co so dich vu hien dai. Khach hang se duoc xem gio mo cua, chon dich vu, chon nhan vien phu hop, chon khung gio, xac nhan thong tin ca nhan va theo doi trang thai lich hen. Doi ngu store duoc trao quyen quan ly danh muc, gia, thoi luong, nhan su, lich lam viec va danh gia sau khi hoan thanh. Mo ta nay co chu dich dai hon de kiem thu cac thanh phan rich text, layout card, trang chi tiet, cat ngan noi dung va cac truong hop hien thi tren mobile.</p>`,
-    `  <p>Khong gian cua ${store.name} duoc dinh vi la than thien nhung van chuyen nghiep. Khu vuc tiep don can co thong tin lich hen ro rang, nhan vien nam duoc nhu cau cua khach va huong dan tung buoc truoc khi bat dau. Khu vuc thuc hien dich vu uu tien ve sinh, su rieng tu va su thoai mai. Cac vat tu, san pham va dung cu trong du lieu demo duoc mo ta theo huong an toan, nhe diu, co kiem soat va phu hop voi nhieu tinh huong dat lich khac nhau.</p>`,
-    `  <p>Voi nhom ${store.kind.label}, cua hang phuc vu ca khach hang lan dau trai nghiem lan khach hang quay lai theo chu ky. Noi dung mo ta tap trung vao cam giac yen tam, kha nang tu van truoc dich vu, su thong nhat trong thao tac va viec theo doi ket qua sau khi hoan tat. Khi dung du lieu nay trong demo, tung store co du noi dung de kiem tra tim kiem toan van, hien thi do dai khac nhau, loc theo danh muc va danh gia muc do phu hop cua dich vu voi nhu cau ca nhan.</p>`,
-    `  <p>${store.name} cung la mot ban ghi demo de kiem thu cac tinh nang danh cho chu store. Owner duoc phep truy cap bang dieu khien, cap nhat thong tin cua hang, quan ly nhan vien, gan dich vu cho tung nhan vien, dieu chinh lich nghi va theo doi booking. Cac truong mo ta dai giup phat hien som loi tran layout, loi xu ly HTML, loi cat chu, loi ma hoa tieng Viet va loi hieu nang khi trang tai nhieu noi dung cung luc.</p>`,
-    `  <p>Tom lai, ${store.name} khong chi la mot cua hang demo de lap day danh sach. Ban ghi nay dai hon de tao cam giac giong mot ho so kinh doanh that, co boi canh dia phuong, co dinh vi dich vu, co quy trinh van hanh va co ky vong trai nghiem cho khach. Noi dung nay giup cac man hinh frontend, API tim kiem, chatbot, thong bao va cong cu quan tri co du chat lieu de kiem thu trong cac tinh huong gan voi san pham thuc te.</p>`,
+    `  <h1>${store.name} - Nơi chăm sóc và tái tạo năng lượng</h1>`,
+    `  <h2>Về ${store.name}</h2>`,
+    `  <p>${store.name} là một điểm đến demo thuộc nhóm ${store.kind.label} tại ${district}, ${store.city.label}. Không gian được mô tả theo hướng gần gũi, gọn gàng và tạo cảm giác tin cậy ngay từ lần đầu khách hàng xem thông tin. Cửa hàng phù hợp cho những người muốn tìm một nơi có quy trình rõ ràng, lịch hẹn linh hoạt, thông tin minh bạch và trải nghiệm ổn định. Địa chỉ demo tại ${address} giúp dữ liệu có ngữ cảnh địa phương khi kiểm thử bản đồ, bộ lọc khu vực, tìm kiếm theo thành phố và trang chi tiết của từng cơ sở.</p>`,
+    '  <h2>Triết lý chăm sóc</h2>',
+    `  <p>Điểm mạnh của ${store.name} nằm ở cách sắp xếp dịch vụ theo nhóm nhu cầu thay vì chỉ liệt kê tên gói. Khách hàng bắt đầu từ nhu cầu thư giãn, chăm sóc cá nhân, cải thiện ngoại hình, phục hồi thể trạng hoặc duy trì lịch chăm sóc định kỳ. Từng nhóm dịch vụ được mô tả để hệ thống có nội dung đầy đủ hơn khi hiển thị trên trang public, trong kết quả tìm kiếm, trong luồng đặt lịch và trong các màn hình quản trị.</p>`,
+    '  <h2>Dịch vụ nổi bật</h2>',
+    `  <p>Quy trình vận hành của cửa hàng được mô phỏng theo một cơ sở dịch vụ hiện đại. Khách hàng có thể xem giờ mở cửa, chọn dịch vụ, chọn nhân viên phù hợp, chọn khung giờ, xác nhận thông tin cá nhân và theo dõi trạng thái lịch hẹn. Đội ngũ store được trao quyền quản lý danh mục, giá, thời lượng, nhân sự, lịch làm việc và đánh giá sau khi hoàn thành. Mô tả này cố ý dài hơn để kiểm thử rich text, layout card, trang chi tiết, cắt ngắn nội dung và các trường hợp hiển thị trên mobile.</p>`,
+    '  <h2>Không gian và đội ngũ</h2>',
+    `  <p>Không gian của ${store.name} được định vị là thân thiện nhưng vẫn chuyên nghiệp. Khu vực tiếp đón cần có thông tin lịch hẹn rõ ràng, nhân viên nắm được nhu cầu của khách và hướng dẫn từng bước trước khi bắt đầu. Khu vực thực hiện dịch vụ ưu tiên vệ sinh, sự riêng tư và sự thoải mái. Các vật tư, sản phẩm và dụng cụ trong dữ liệu demo được mô tả theo hướng an toàn, nhẹ dịu, có kiểm soát và phù hợp với nhiều tình huống đặt lịch khác nhau.</p>`,
+    `  <p>Với nhóm ${store.kind.label}, cửa hàng phục vụ cả khách hàng lần đầu trải nghiệm lẫn khách hàng quay lại theo chu kỳ. Nội dung mô tả tập trung vào cảm giác yên tâm, khả năng tư vấn trước dịch vụ, sự thống nhất trong thao tác và việc theo dõi kết quả sau khi hoàn tất. Khi dùng dữ liệu này trong demo, từng store có đủ nội dung để kiểm tra tìm kiếm toàn văn, hiển thị độ dài khác nhau, lọc theo danh mục và đánh giá mức độ phù hợp của dịch vụ với nhu cầu cá nhân.</p>`,
+    `  <p>${store.name} cũng là một bản ghi demo để kiểm thử các tính năng dành cho chủ store. Owner được phép truy cập bảng điều khiển, cập nhật thông tin cửa hàng, quản lý nhân viên, gắn dịch vụ cho từng nhân viên, điều chỉnh lịch nghỉ và theo dõi booking. Các trường mô tả dài giúp phát hiện sớm lỗi tràn layout, lỗi xử lý HTML, lỗi cắt chữ, lỗi mã hóa tiếng Việt và lỗi hiệu năng khi trang tải nhiều nội dung cùng lúc.</p>`,
+    `  <p>Tóm lại, ${store.name} không chỉ là một cửa hàng demo để lấp đầy danh sách. Bản ghi này dài hơn để tạo cảm giác giống một hồ sơ kinh doanh thật, có bối cảnh địa phương, có định vị dịch vụ, có quy trình vận hành và có kỳ vọng trải nghiệm cho khách. Nội dung này giúp frontend, API tìm kiếm, chatbot, thông báo và công cụ quản trị có đủ chất liệu để kiểm thử trong các tình huống gần với sản phẩm thực tế.</p>`,
     '</div>',
   ].join('\n');
 }
@@ -973,20 +975,25 @@ function buildStoreDescription(store: StoreSeed, address: string, district: stri
 function buildServiceDescription(store: StoreSeed, serviceName: string, serviceTemplate: ServiceTemplate, categoryName: string): string {
   return [
     '<div class="service-description">',
-    `  <h3>${serviceName}</h3>`,
-    `  <p>${serviceName} tai ${store.name} la goi dich vu demo thuoc nhom ${categoryName}, duoc viet dai hon de mo phong noi dung tu van tren mot trang dat lich that. Dich vu tap trung vao ${serviceTemplate.focus}, phu hop voi khach hang muon co mot trai nghiem duoc giai thich ro truoc khi quyet dinh dat hen. Noi dung nay giup nguoi dung hieu muc tieu cua lieu trinh, cach nhan vien tiep nhan nhu cau, nhung diem can luu y va ly do nen chon khung gio phu hop voi lich sinh hoat ca nhan.</p>`,
-    `  <p>Truoc khi bat dau, nhan vien se ghi nhan tinh trang hien tai, mong muon cua khach va cac yeu to anh huong den ket qua. Voi dich vu ${serviceTemplate.focus}, buoc tu van co vai tro quan trong vi tung khach hang co nen tang, thoi quen cham soc, muc do nhay cam va ky vong khac nhau. Phan mo ta dai nay tao du lieu tot hon cho chatbot, trang chi tiet dich vu, tooltip, ket qua tim kiem va cac man hinh so sanh dich vu trong cung mot cua hang.</p>`,
-    `  <p>Quy trinh thuc hien duoc mo phong theo huong co cau truc: tiep nhan, lam sach hoac chuan bi khu vuc can cham soc, tien hanh cac buoc chinh, kiem tra phan hoi cua khach, hoan thien ket qua va huong dan cham soc sau dich vu. Tung buoc khong nhat thiet dai trong thuc te, nhung can du ro de khach hang cam thay minh biet dieu gi se xay ra. Dieu nay dac biet huu ich khi kiem thu luong dat lich nhieu dich vu, hien thi thoi luong va gan nhan vien co chuyen mon.</p>`,
-    `  <p>Khach hang nen chon ${serviceName} khi can mot phuong an on dinh, de hieu va de lap lai theo chu ky. Goi nay khong duoc mo ta nhu mot cam ket ket qua tuyet doi, ma nhu mot trai nghiem duoc chuan hoa, duoc dieu chinh theo tinh trang thuc te. Neu khach hang co tien su kich ung, dang dieu tri da, vua thuc hien thu thuat khac hoac co lich trinh dac biet, nhan vien nen hoi ky truoc khi bat dau de dam bao viec phuc vu phu hop.</p>`,
-    `  <p>Trong bo du lieu demo, dich vu nay cung giup kiem tra cac chuc nang lien quan den gia, bien the thoi luong, danh muc, anh dai dien, danh gia trung binh va phan cong nhan vien. Khi noi dung mo ta dai hon, frontend duoc thu nghiem voi cac truong hop nhu thu gon van ban, hien thi rich text, can bang chieu cao card, render tren mobile, tim kiem theo tu khoa dai va doc noi dung bang cong cu ho tro truy cap.</p>`,
-    `  <p>Sau khi hoan thanh, khach hang nen duoc nhac ve cach cham soc tai nha, khoang thoi gian nen quay lai va nhung dau hieu can theo doi. Voi ${serviceTemplate.focus}, phan huong dan sau dich vu giup nang cao cam giac chuyen nghiep va lam cho trai nghiem khong ket thuc ngay tai thoi diem thanh toan. Cua hang dung thong tin nay de gui thong bao, tao ghi chu booking, hoac lam noi dung tham khao cho nhan vien vua vao lam.</p>`,
+    `  <h1>${serviceName}</h1>`,
+    `  <p>${serviceName} tại ${store.name} là gói dịch vụ demo thuộc nhóm ${categoryName}, được viết dài hơn để mô phỏng nội dung tư vấn trên một trang đặt lịch thật. Dịch vụ tập trung vào ${serviceTemplate.focus}, phù hợp với khách hàng muốn có một trải nghiệm được giải thích rõ trước khi quyết định đặt hẹn. Nội dung này giúp người dùng hiểu mục tiêu của liệu trình, cách nhân viên tiếp nhận nhu cầu, những điểm cần lưu ý và lý do nên chọn khung giờ phù hợp với lịch sinh hoạt cá nhân.</p>`,
+    '  <h2>Quy trình thực hiện</h2>',
+    '  <h3>Bước 1 - Tư vấn và đánh giá nhu cầu</h3>',
+    `  <p>Trước khi bắt đầu, nhân viên sẽ ghi nhận tình trạng hiện tại, mong muốn của khách và các yếu tố ảnh hưởng đến kết quả. Với dịch vụ ${serviceTemplate.focus}, bước tư vấn có vai trò quan trọng vì từng khách hàng có nền tảng, thói quen chăm sóc, mức độ nhạy cảm và kỳ vọng khác nhau. Phần mô tả dài này tạo dữ liệu tốt hơn cho chatbot, trang chi tiết dịch vụ, tooltip, kết quả tìm kiếm và các màn hình so sánh dịch vụ trong cùng một cửa hàng.</p>`,
+    '  <h3>Bước 2 - Làm sạch và chuẩn bị</h3>',
+    `  <p>Quy trình thực hiện được mô phỏng theo hướng có cấu trúc: tiếp nhận, làm sạch hoặc chuẩn bị khu vực cần chăm sóc, tiến hành các bước chính, kiểm tra phản hồi của khách, hoàn thiện kết quả và hướng dẫn chăm sóc sau dịch vụ. Từng bước không nhất thiết dài trong thực tế, nhưng cần đủ rõ để khách hàng cảm thấy mình biết điều gì sẽ xảy ra. Điều này đặc biệt hữu ích khi kiểm thử luồng đặt lịch nhiều dịch vụ, hiển thị thời lượng và gắn nhân viên có chuyên môn.</p>`,
+    '  <h3>Bước 3 - Thực hiện liệu trình chính</h3>',
+    `  <p>Khách hàng nên chọn ${serviceName} khi cần một phương án ổn định, dễ hiểu và dễ lặp lại theo chu kỳ. Gói này không được mô tả như một cam kết kết quả tuyệt đối, mà như một trải nghiệm được chuẩn hóa, được điều chỉnh theo tình trạng thực tế. Nếu khách hàng có tiền sử kích ứng, đang điều trị da, vừa thực hiện thủ thuật khác hoặc có lịch trình đặc biệt, nhân viên nên hỏi kỹ trước khi bắt đầu để đảm bảo việc phục vụ phù hợp.</p>`,
+    '  <h3>Bước 4 - Hoàn thiện và hướng dẫn sau dịch vụ</h3>',
+    `  <p>Trong bộ dữ liệu demo, dịch vụ này cũng giúp kiểm tra các chức năng liên quan đến giá, biến thể thời lượng, danh mục, ảnh đại diện, đánh giá trung bình và phân công nhân viên. Khi nội dung mô tả dài hơn, frontend được thử nghiệm với các trường hợp như thu gọn văn bản, hiển thị rich text, cân bằng chiều cao card, render trên mobile, tìm kiếm theo từ khóa dài và đọc nội dung bằng công cụ hỗ trợ truy cập.</p>`,
+    `  <p>Sau khi hoàn thành, khách hàng nên được nhắc về cách chăm sóc tại nhà, khoảng thời gian nên quay lại và những dấu hiệu cần theo dõi. Với ${serviceTemplate.focus}, phần hướng dẫn sau dịch vụ giúp nâng cao cảm giác chuyên nghiệp và làm cho trải nghiệm không kết thúc ngay tại thời điểm thanh toán. Cửa hàng dùng thông tin này để gửi thông báo, tạo ghi chú booking hoặc làm nội dung tham khảo cho nhân viên vừa vào làm.</p>`,
     '  <ul>',
-    '    <li>Tu van nhu cau, tinh trang hien tai va muc tieu truoc khi bat dau.</li>',
-    '    <li>Thuc hien theo quy trinh ve sinh, thao tac ro rang va co kiem tra phan hoi.</li>',
-    '    <li>Su dung san pham hoac dung cu phu hop voi tinh huong dich vu da chon.</li>',
-    '    <li>Ghi nhan luu y sau dich vu de khach de theo doi va dat lich lan tiep theo.</li>',
+    '    <li>Tư vấn nhu cầu, tình trạng hiện tại và mục tiêu trước khi bắt đầu.</li>',
+    '    <li>Thực hiện theo quy trình vệ sinh, thao tác rõ ràng và có kiểm tra phản hồi.</li>',
+    '    <li>Sử dụng sản phẩm hoặc dụng cụ phù hợp với tình huống dịch vụ đã chọn.</li>',
+    '    <li>Ghi nhận lưu ý sau dịch vụ để khách dễ theo dõi và đặt lịch lần tiếp theo.</li>',
     '  </ul>',
-    `  <p>${serviceName} duoc tao ra de lam cho du lieu cua ${store.name} co chieu sau hon. Noi dung khong chi phuc vu viec doc mo ta, ma con giup he thong co them ngu lieu de kiem tra tim kiem, sap xep, goi y, hien thi danh sach va xu ly cac truong rich text dai. Khi dung trong demo, goi dich vu nay tao cam giac gan voi mot co so that: co muc tieu, co quy trinh, co canh bao nhe, co huong dan sau dich vu va co ly do de khach hang quay lai.</p>`,
+    `  <p>${serviceName} được tạo ra để làm cho dữ liệu của ${store.name} có chiều sâu hơn. Nội dung không chỉ phục vụ việc đọc mô tả, mà còn giúp hệ thống có thêm ngữ liệu để kiểm tra tìm kiếm, sắp xếp, gợi ý, hiển thị danh sách và xử lý các trường rich text dài. Khi dùng trong demo, gói dịch vụ này tạo cảm giác gần với một cơ sở thật: có mục tiêu, có quy trình, có cảnh báo nhẹ, có hướng dẫn sau dịch vụ và có lý do để khách hàng quay lại.</p>`,
     '</div>',
   ].join('\n');
 }
@@ -996,11 +1003,40 @@ function roundedPrice(value: number, rand: () => number): number {
   return Math.max(80000, Math.round((value + delta) / 10000) * 10000);
 }
 
+function minOf(values: number[]): number {
+  return values.length ? Math.min(...values) : 0;
+}
+
+function maxOf(values: number[]): number {
+  return values.length ? Math.max(...values) : 0;
+}
+
+function assertNoKnownTextIssues(sqlOutput: string, accountsOutput: string): void {
+  const knownBadPatterns = [
+    'khôáng',
+    'khôang',
+    'khôa',
+    'cơ thểm',
+    'móng muon',
+    'Ã',
+    'Ä',
+    'Æ',
+    'áº',
+    'á»',
+  ];
+  const content = `${sqlOutput}\n${accountsOutput}`;
+  const found = knownBadPatterns.filter((pattern) => content.includes(pattern));
+
+  if (found.length) {
+    throw new Error(`Generated seed contains suspicious Vietnamese text: ${found.join(', ')}`);
+  }
+}
+
 function render(): { sql: string; accounts: string; stats: Record<string, number> } {
   const stores = makeStores();
   const sqlLines: string[] = [
     '-- ============================================================',
-    '-- SEED: 200 Demo Stores - Glowora Platform',
+    `-- SEED: ${DEMO_STORE_COUNT} Demo Stores - Glowora Platform`,
     `-- Generated: ${new Date().toISOString()}`,
     '-- Password for all owner/staff accounts: Owner@123456',
     '-- Prerequisite: pnpm run db:seed and prisma/seed_provinces_wards.sql',
@@ -1024,8 +1060,12 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
   const serviceRows: string[] = [];
   const variantRows: string[] = [];
   const staffServiceRows: string[] = [];
+  const storeServiceCounts: number[] = [];
+  const storeCategoryCounts: number[] = [];
+  const serviceImageCounts: number[] = [];
+  const serviceVariantCounts: number[] = [];
   const accounts: string[] = [
-    '# Glowora seed 200 accounts',
+    `# Glowora seed ${DEMO_STORE_COUNT} accounts`,
     '',
     'Password for every account: `Owner@123456`',
     '',
@@ -1039,9 +1079,10 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
     const lng = store.city.lng[0] + rand() * (store.city.lng[1] - store.city.lng[0]);
     const wardId = pick(store.city.wards, rand);
     const district = pick(store.city.districts, rand);
-    const address = `${randInt(1, 199, rand)} ${pick(['Nguyen Hue', 'Le Loi', 'Tran Hung Dao', 'Hai Ba Trung', 'Phan Chu Trinh', 'Ly Thuong Kiet'], rand)}`;
+    const address = `${randInt(1, 199, rand)} ${pick(['Nguyễn Huệ', 'Lê Lợi', 'Trần Hưng Đạo', 'Hai Bà Trưng', 'Phan Chu Trinh', 'Lý Thường Kiệt'], rand)}`;
     const staffCount = randInt(3, 10, seededRand(store.index));
-    const serviceCount = randInt(20, 40, seededRand(store.index + 1000));
+    const serviceCount = randInt(MIN_SERVICES_PER_STORE, MAX_SERVICES_PER_STORE, seededRand(store.index * 4099 + 1000));
+    storeServiceCounts.push(serviceCount);
 
     ownerUserRows.push(
       `(${sql(randomUUID())}, ${sql(personName(store.index - 1))}, ${sql(store.ownerEmail)}, @demo_password_hash, ${sql(`0905${store.code}00`)}, 'ACTIVE', NOW(), NOW())`,
@@ -1078,7 +1119,7 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
         `(${sql(randomUUID())}, ${sql(staffName)}, ${sql(staffEmail)}, @demo_password_hash, ${sql(`091${store.code}${String(staffIndex).padStart(2, '0')}`)}, 'ACTIVE', NOW(), NOW())`,
       );
       staffRows.push(
-        `(${sql(randomUUID())}, ${subUser(staffEmail)}, ${subStore(store.slug)}, ${sql(specialty)}, ${sql(`Phu trach ${specialty.toLowerCase()} tai ${store.name}.`)}, ${(4.1 + rand() * 0.8).toFixed(2)}, ${randInt(6, 90, rand)}, 'ACTIVE', NULL, NULL, NOW(), NOW())`,
+        `(${sql(randomUUID())}, ${subUser(staffEmail)}, ${subStore(store.slug)}, ${sql(specialty)}, ${sql(`Phụ trách ${specialty.toLowerCase()} tại ${store.name}.`)}, ${(4.1 + rand() * 0.8).toFixed(2)}, ${randInt(6, 90, rand)}, 'ACTIVE', NULL, NULL, NOW(), NOW())`,
       );
       staffRoleRows.push(
         `(${sql(randomUUID())}, ${subUser(staffEmail)}, ${subRole('SHOP_STAFF')}, ${subStore(store.slug)}, NOW())`,
@@ -1093,14 +1134,15 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
       }
     }
 
-    const categories = SHOP_CATEGORIES[store.kind.key];
+    const categories = selectStoreCategories(store);
+    storeCategoryCounts.push(categories.length);
     for (const category of categories) {
       shopCategoryRows.push(
         `(${sql(randomUUID())}, ${sql(category.name)}, NULL, ${sql(category.description)}, NULL, ${subStore(store.slug)}, ${subGlobalCategory(category.parentSlug)}, NOW(), NOW())`,
       );
     }
 
-    const templates = SERVICE_TEMPLATES[store.kind.key];
+    const templates = SERVICE_TEMPLATES[store.kind.key].filter((template) => categories.some((category) => category.key === template.categoryKey));
     for (let serviceIndex = 1; serviceIndex <= serviceCount; serviceIndex++) {
       const template = templates[(serviceIndex - 1) % templates.length];
       const localRand = seededRand(store.index * 10000 + serviceIndex);
@@ -1108,18 +1150,21 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
       store.serviceSlugs.push(serviceSlug);
       const serviceName = `${template.name} ${serviceIndex > templates.length ? serviceIndex : ''}`.trim();
       const category = categories.find((item) => item.key === template.categoryKey) ?? categories[0];
+      const imageUrls = buildServiceImageUrls(store, template, serviceIndex, localRand);
+      serviceImageCounts.push(imageUrls.length);
 
       serviceRows.push(
-        `(${sql(randomUUID())}, ${subStore(store.slug)}, ${subShopCategory(category.name, store.slug)}, ${sql(serviceName)}, ${sql(serviceSlug)}, ${sql(buildServiceDescription(store, serviceName, template, category.name))}, ${sql(JSON.stringify([template.imageUrl]))}, 'ACTIVE', ${(4.15 + localRand() * 0.75).toFixed(2)}, NOW(), NOW())`,
+        `(${sql(randomUUID())}, ${subStore(store.slug)}, ${subShopCategory(category.name, store.slug)}, ${sql(serviceName)}, ${sql(serviceSlug)}, ${sql(buildServiceDescription(store, serviceName, template, category.name))}, ${sql(JSON.stringify(imageUrls))}, 'ACTIVE', ${(4.15 + localRand() * 0.75).toFixed(2)}, NOW(), NOW())`,
       );
 
-      const variantCount = serviceIndex <= 10 ? randInt(2, 4, localRand) : randInt(1, 2, localRand);
+      const variantCount = randInt(MIN_VARIANTS_PER_SERVICE, MAX_VARIANTS_PER_SERVICE, localRand);
+      serviceVariantCounts.push(variantCount);
       for (let variantIndex = 0; variantIndex < variantCount; variantIndex++) {
         const duration = template.duration[Math.min(variantIndex, 2)];
         const price = roundedPrice(template.price[Math.min(variantIndex, 2)], localRand);
-        const label = variantIndex === 0 ? 'Co ban' : variantIndex === 1 ? 'Nang cao' : variantIndex === 2 ? 'VIP' : 'Signature';
+        const label = variantIndex === 0 ? 'Cơ bản' : variantIndex === 1 ? 'Nâng cao' : variantIndex === 2 ? 'VIP' : 'Signature';
         variantRows.push(
-          `(${sql(randomUUID())}, ${subService(serviceSlug, store.slug)}, ${sql(`${duration} phut - ${label}`)}, ${sql(`${label} cho ${serviceName}, thoi luong ${duration} phut.`)}, ${duration}, ${money(price)}, ${money(Math.round(price * 0.48))}, ${variantIndex}, 'ACTIVE', NOW(), NOW())`,
+          `(${sql(randomUUID())}, ${subService(serviceSlug, store.slug)}, ${sql(`${duration} phút - ${label}`)}, ${sql(`${label} cho ${serviceName}, thời lượng ${duration} phút.`)}, ${duration}, ${money(price)}, ${money(Math.round(price * 0.48))}, ${variantIndex}, 'ACTIVE', NOW(), NOW())`,
         );
       }
     }
@@ -1140,7 +1185,7 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
       staffServiceRows.push(`(${subStaff(staffEmail, store.slug)}, ${subService(serviceSlug, store.slug)})`);
     }
 
-    accounts.push(`| ${store.code} | ${viText(store.name)} | \`${store.ownerEmail}\` | ${store.staffEmails.map((email) => `\`${email}\``).join('<br>')} |`);
+    accounts.push(`| ${store.code} | ${store.name} | \`${store.ownerEmail}\` | ${store.staffEmails.map((email) => `\`${email}\``).join('<br>')} |`);
   }
 
   sqlLines.push('-- SECTION 0: Safety cleanup for regenerated demo seed');
@@ -1299,6 +1344,14 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
     services: serviceRows.length,
     variants: variantRows.length,
     staffServices: staffServiceRows.length,
+    minServicesPerStore: minOf(storeServiceCounts),
+    maxServicesPerStore: maxOf(storeServiceCounts),
+    minCategoriesPerStore: minOf(storeCategoryCounts),
+    maxCategoriesPerStore: maxOf(storeCategoryCounts),
+    minImagesPerService: minOf(serviceImageCounts),
+    maxImagesPerService: maxOf(serviceImageCounts),
+    minVariantsPerService: minOf(serviceVariantCounts),
+    maxVariantsPerService: maxOf(serviceVariantCounts),
   };
 
   return {
@@ -1310,10 +1363,11 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
 
 function main() {
   const result = render();
+  assertNoKnownTextIssues(result.sql, result.accounts);
   fs.writeFileSync(OUTPUT_SQL, result.sql, 'utf8');
   fs.writeFileSync(OUTPUT_ACCOUNTS, result.accounts, 'utf8');
 
-  console.log('Generated 200-store demo seed');
+  console.log(`Generated ${DEMO_STORE_COUNT}-store demo seed`);
   for (const [key, value] of Object.entries(result.stats)) {
     console.log(`${key}: ${value}`);
   }
