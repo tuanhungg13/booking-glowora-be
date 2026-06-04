@@ -218,9 +218,8 @@ export class SlotsService {
 
     const availableSlots: Array<{ startTime: string; assignments: SlotAssignment[] }> = [];
 
-    // Fix 5: Dùng store.bookingBufferMins thay vì hardcode
     for (let slotMins = storeOpenMins; slotMins + totalDuration <= storeCloseMins; slotMins += store.slotIntervalMins) {
-      if (isToday && slotMins <= nowLocalMins + store.bookingBufferMins) continue;
+      if (isToday && slotMins < nowLocalMins) continue;
 
       let currentMins = slotMins;
       const assignments: SlotAssignment[] = [];

@@ -14,7 +14,7 @@ Tài khoản ngân hàng của Shop  ◄── Tiền về thẳng đây
        │
        │  SePay của shop phát hiện giao dịch
        ▼
-POST /payments/sepay/webhook  ◄── SePay gọi về platform
+POST /payments/sepay/webhook/{storeId}  ◄── SePay gọi về platform (URL riêng mỗi shop)
        │
        ▼
 Platform xác nhận Booking (DEPOSIT_PAID / CONFIRMED)
@@ -23,53 +23,24 @@ Platform xác nhận Booking (DEPOSIT_PAID / CONFIRMED)
 Gửi thông báo cho khách + shop
 ```
 
+Mỗi shop có **URL webhook riêng** và **token bảo mật riêng** — platform tự sinh, không dùng chung.  
+Nếu một shop bị lộ token, các shop khác không bị ảnh hưởng và có thể revoke độc lập.
+
 ---
 
 ## Phần 1: Cài đặt phía Platform (Developer — làm 1 lần)
 
-Việc duy nhất platform cần làm là **tạo một chuỗi bí mật** dùng chung cho tất cả shop.
-
-### Bước 1: Tạo SEPAY_WEBHOOK_SECRET
-
-Tự đặt một chuỗi ngẫu nhiên, đủ dài, khó đoán. Ví dụ sinh bằng lệnh:
-
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-# Kết quả ví dụ: a3f8c2e1d4b7...
-```
-
-### Bước 2: Thêm vào `.env`
+Chỉ cần thêm `APP_URL` vào `.env`. Không cần tạo hay chia sẻ bất kỳ secret nào với shop.
 
 ```env
-SEPAY_WEBHOOK_SECRET=a3f8c2e1d4b7...  # Chuỗi bạn vừa tạo
-```
-
-### Bước 3: Chuẩn bị URL webhook công khai
-
-SePay cần gọi được vào server của platform. URL webhook là:
-
-```
-https://your-domain.com/payments/sepay/webhook
+APP_URL=https://your-domain.com
 ```
 
 > Khi dev local, dùng ngrok:
 > ```bash
 > ngrok http 8080
-> # Lấy URL dạng https://xxxx.ngrok-free.app
-> # → Webhook URL: https://xxxx.ngrok-free.app/payments/sepay/webhook
+> # APP_URL=https://xxxx.ngrok-free.app
 > ```
-
-### Bước 4: Chia sẻ thông tin cho shop owner
-
-Mỗi khi có shop mới muốn bật thanh toán online, cung cấp cho họ 2 thứ:
-
-| Thông tin | Giá trị |
-|---|---|
-| Webhook URL | `https://your-domain.com/payments/sepay/webhook` |
-| Webhook Token | Giá trị `SEPAY_WEBHOOK_SECRET` trong `.env` |
-
-> **Bảo mật:** `SEPAY_WEBHOOK_SECRET` là bí mật chung. Chỉ chia sẻ với shop owner đã được duyệt.  
-> Không thay đổi giá trị này sau khi các shop đã cấu hình xong — sẽ làm hỏng webhook của tất cả.
 
 ---
 
@@ -125,7 +96,22 @@ Content-Type: application/json
 | `bankAccountNo` | Số tài khoản ngân hàng (không phải số thẻ) |
 | `bankAccountName` | **In hoa, không dấu**, đúng với tên trên tài khoản |
 
-Sau bước này, khi khách tạo thanh toán, hệ thống sẽ tự động sinh QR VietQR với thông tin ngân hàng của shop.
+**Response** trả về thêm `webhookUrl` và `webhookSecret` — shop cần dùng ở bước 2:
+
+```json
+{
+  "id": "...",
+  "bankBin": "970422",
+  "bankAccountNo": "0001234567890",
+  "bankAccountName": "NGUYEN VAN A",
+  "webhookSecret": "a3f8c2e1d4b7...",
+  "webhookUrl": "https://your-domain.com/payments/sepay/webhook/{storeId}",
+  "isActive": true
+}
+```
+
+> **Lưu lại `webhookSecret` và `webhookUrl`** — cần dùng để cấu hình SePay ở bước tiếp theo.  
+> Sau này vẫn có thể xem lại qua `GET /stores/{storeId}/payment-config`.
 
 ---
 
@@ -152,14 +138,13 @@ Trong dashboard SePay:
 
 | Trường | Giá trị |
 |---|---|
-| **Webhook URL** | URL do platform cung cấp (ví dụ: `https://glowora.vn/payments/sepay/webhook`) |
-| **Webhook Token** | Chuỗi bí mật do platform cung cấp (`SEPAY_WEBHOOK_SECRET`) |
+| **Webhook URL** | Giá trị `webhookUrl` từ response API (ví dụ: `https://your-domain.com/payments/sepay/webhook/abc123-uuid`) |
+| **Webhook Token** | Giá trị `webhookSecret` từ response API |
 
 3. Lưu lại và bật webhook
 
-> **Lưu ý:** Shop **không tự tạo** Webhook Token — phải dùng đúng giá trị do platform developer cung cấp.  
-> Đây là cơ chế xác thực: khi SePay gọi về platform, nó gửi token này trong header,  
-> platform kiểm tra khớp mới xử lý.
+> **Lưu ý:** `webhookUrl` và `webhookSecret` là riêng của từng shop — không dùng chung với shop khác.  
+> Không tự đặt token tùy ý — phải dùng đúng giá trị platform đã sinh.
 
 #### Bước 2.4: Kiểm tra webhook hoạt động
 
@@ -245,7 +230,13 @@ Gọi lại `POST /payments/sepay/create` để tạo QR mới. Lệnh cũ tự 
 
 1. Cập nhật trong app: `PUT /stores/:id/payment-config`
 2. Vào SePay: xóa tài khoản cũ, thêm tài khoản mới
-3. Giữ nguyên webhook URL và token — không cần cấu hình lại
+3. Webhook URL và token giữ nguyên — không cần cấu hình lại SePay
+
+### Shop muốn đổi webhook token (ví dụ nghi ngờ bị lộ)
+
+Gọi lại `PUT /stores/:id/payment-config` — platform sẽ giữ nguyên token hiện tại.  
+Để sinh token mới, xóa config rồi tạo lại: `DELETE` → `PUT`.  
+Sau đó cập nhật token mới vào SePay dashboard.
 
 ---
 
@@ -254,9 +245,9 @@ Gọi lại `POST /payments/sepay/create` để tạo QR mới. Lệnh cũ tự 
 | Method | Endpoint | Mô tả | Auth |
 |---|---|---|---|
 | `POST` | `/payments/sepay/create` | Tạo lệnh thanh toán | JWT (customer) |
-| `POST` | `/payments/sepay/webhook` | SePay gọi về khi tiền về | Public + Webhook Token |
+| `POST` | `/payments/sepay/webhook/:storeId` | SePay gọi về khi tiền về | Public + Webhook Token |
 | `GET` | `/payments/my` | Lịch sử thanh toán | JWT |
 | `GET` | `/bookings/:id/payment` | Trạng thái thanh toán của booking | JWT |
-| `GET` | `/stores/:id/payment-config` | Xem cấu hình ngân hàng | JWT (owner) |
+| `GET` | `/stores/:id/payment-config` | Xem cấu hình ngân hàng + webhook info | JWT (owner) |
 | `PUT` | `/stores/:id/payment-config` | Cập nhật thông tin tài khoản ngân hàng | JWT (owner) |
 | `DELETE` | `/stores/:id/payment-config` | Xóa cấu hình thanh toán | JWT (owner) |

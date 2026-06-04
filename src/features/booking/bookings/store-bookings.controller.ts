@@ -50,6 +50,20 @@ export class StoreBookingsController {
     );
   }
 
+  @Get(':id')
+  @RequirePermissions(Permissions.APPOINTMENT.VIEW)
+  @ApiOperation({
+    summary: 'Xem chi tiết lịch hẹn của cửa hàng',
+    description: 'Lấy chi tiết một lịch hẹn thuộc cửa hàng. Store ID lấy từ header x-store-id.',
+  })
+  @ApiParam({ name: 'id', description: 'ID của lịch hẹn' })
+  @ApiResponse({ status: 200, description: 'Chi tiết lịch hẹn' })
+  @ApiResponse({ status: 403, description: 'Không có quyền xem lịch hẹn' })
+  @ApiResponse({ status: 404, description: 'Không tìm thấy lịch hẹn' })
+  findOne(@Param('id') id: string, @StoreId() storeId: string) {
+    return this.bookingsService.findOneForStore(id, storeId);
+  }
+
   @Get()
   @RequirePermissions(Permissions.APPOINTMENT.VIEW)
   @ApiOperation({

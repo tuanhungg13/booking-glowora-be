@@ -1,3 +1,4 @@
+import * as crypto from 'crypto';
 import {
   BadRequestException,
   ConflictException,
@@ -5,6 +6,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { DayOfWeek, Prisma, StaffStatus, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { PermissionCacheService } from '../../redis/permission-cache.service';
@@ -69,6 +71,7 @@ export class StoresService {
     private readonly prisma: PrismaService,
     private readonly permissionCache: PermissionCacheService,
     private readonly systemLog: SystemLogService,
+    private readonly config: ConfigService,
   ) { }
 
   async create(dto: CreateStoreDto, ownerId: string) {
@@ -126,7 +129,6 @@ export class StoresService {
           slotIntervalMins: dto.slotIntervalMins,
           cancelBeforeHours: dto.cancelBeforeHours,
           maxAdvanceDays: dto.maxAdvanceDays,
-          bookingBufferMins: dto.bookingBufferMins,
           autoConfirm: dto.autoConfirm,
         },
       });
@@ -410,31 +412,42 @@ export class StoresService {
         bankBin: true,
         bankAccountNo: true,
         bankAccountName: true,
+        webhookSecret: true,
         isActive: true,
         createdAt: true,
         updatedAt: true,
       },
     });
-    return config;
+    if (!config) return null;
+    const appUrl = this.config.get<string>('APP_URL', 'https://your-domain.com');
+    return {
+      ...config,
+      webhookUrl: `${appUrl}/payments/sepay/webhook/${storeId}`,
+    };
   }
 
   async upsertPaymentConfig(storeId: string, ownerId: string, dto: UpsertPaymentConfigDto) {
     await this.checkOwnership(storeId, ownerId);
-    return this.prisma.storePaymentConfig.upsert({
+    const existing = await this.prisma.storePaymentConfig.findUnique({
+      where: { storeId },
+      select: { webhookSecret: true },
+    });
+    const webhookSecret = existing?.webhookSecret ?? crypto.randomBytes(32).toString('hex');
+    const config = await this.prisma.storePaymentConfig.upsert({
       where: { storeId },
       create: {
         storeId,
         bankBin: dto.bankBin,
         bankAccountNo: dto.bankAccountNo,
         bankAccountName: dto.bankAccountName.toUpperCase(),
-        sepayApiKey: dto.sepayApiKey,
+        webhookSecret,
         isActive: true,
       },
       update: {
         bankBin: dto.bankBin,
         bankAccountNo: dto.bankAccountNo,
         bankAccountName: dto.bankAccountName.toUpperCase(),
-        ...(dto.sepayApiKey !== undefined && { sepayApiKey: dto.sepayApiKey }),
+        webhookSecret,
         isActive: true,
       },
       select: {
@@ -442,10 +455,16 @@ export class StoresService {
         bankBin: true,
         bankAccountNo: true,
         bankAccountName: true,
+        webhookSecret: true,
         isActive: true,
         updatedAt: true,
       },
     });
+    const appUrl = this.config.get<string>('APP_URL', 'https://your-domain.com');
+    return {
+      ...config,
+      webhookUrl: `${appUrl}/payments/sepay/webhook/${storeId}`,
+    };
   }
 
   async deletePaymentConfig(storeId: string, ownerId: string) {

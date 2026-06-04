@@ -1,5 +1,5 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString, MaxLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString, MaxLength } from 'class-validator';
 
 export class UpsertPaymentConfigDto {
   @ApiProperty({ description: 'BIN ngân hàng (VD: 970422 = MB, 970436 = Vietcombank)', example: '970422' })
@@ -16,13 +16,4 @@ export class UpsertPaymentConfigDto {
   @IsString()
   @MaxLength(100)
   bankAccountName!: string;
-
-  @ApiPropertyOptional({
-    description: 'API key SePay của shop (dùng để xác thực webhook). Nếu không điền sẽ dùng platform secret.',
-    example: 'sepay_apikey_xxxx',
-  })
-  @IsOptional()
-  @IsString()
-  @MaxLength(200)
-  sepayApiKey?: string;
 }

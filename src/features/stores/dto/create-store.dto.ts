@@ -79,13 +79,6 @@ export class CreateStoreDto {
   @Max(90)
   maxAdvanceDays?: number;
 
-  @ApiPropertyOptional({ example: 30, minimum: 0, maximum: 240 })
-  @IsOptional()
-  @IsInt()
-  @Min(0)
-  @Max(240)
-  bookingBufferMins?: number;
-
   @ApiPropertyOptional({ example: false })
   @IsOptional()
   @IsBoolean()

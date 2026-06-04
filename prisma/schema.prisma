@@ -38,6 +38,7 @@ enum BookingStatus {
   CONFIRMED
   DEPOSIT_PENDING // Đã xác nhận, chờ khách thanh toán cọc
   DEPOSIT_PAID    // Đã cọc, chờ thực hiện dịch vụ
+  PAID            // Đã thanh toán toàn bộ, chờ thực hiện dịch vụ
   COMPLETED
   REJECTED
   CANCELLED
@@ -310,7 +311,6 @@ model Store {
   slotIntervalMins  Int         @default(30) @map("slot_interval_mins")
   cancelBeforeHours Int         @default(2) @map("cancel_before_hours")
   maxAdvanceDays    Int         @default(30) @map("max_advance_days")
-  bookingBufferMins Int         @default(30) @map("booking_buffer_mins")
   autoConfirm       Boolean     @default(false) @map("auto_confirm")
   depositPercent    Int         @default(0) @map("deposit_percent") // 0–100, 0 = không yêu cầu cọc
   avgRating         Decimal     @default(0.00) @map("avg_rating") @db.Decimal(3, 2)
@@ -667,7 +667,7 @@ model StorePaymentConfig {
   bankBin         String   @map("bank_bin") @db.VarChar(10)
   bankAccountNo   String   @map("bank_account_no") @db.VarChar(30)
   bankAccountName String   @map("bank_account_name") @db.VarChar(100)
-  sepayApiKey     String?  @map("sepay_api_key") @db.VarChar(200)
+  webhookSecret   String?  @map("webhook_secret") @db.Char(64)
   isActive        Boolean  @default(true) @map("is_active")
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")

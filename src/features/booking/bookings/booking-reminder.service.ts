@@ -34,7 +34,7 @@ export class BookingReminderService implements OnModuleInit {
 
     const bookings = await this.prisma.booking.findMany({
       where: {
-        status: { in: [BookingStatus.CONFIRMED, BookingStatus.DEPOSIT_PAID] },
+        status: { in: [BookingStatus.CONFIRMED, BookingStatus.DEPOSIT_PAID, BookingStatus.PAID] },
         scheduledAt: { gte: from, lte: to },
         notifications: { none: { type: 'BOOKING_REMINDER_1DAY' } },
       },
@@ -74,7 +74,7 @@ export class BookingReminderService implements OnModuleInit {
 
     const bookings = await this.prisma.booking.findMany({
       where: {
-        status: { in: [BookingStatus.CONFIRMED, BookingStatus.DEPOSIT_PAID] },
+        status: { in: [BookingStatus.CONFIRMED, BookingStatus.DEPOSIT_PAID, BookingStatus.PAID] },
         scheduledAt: { gte: from, lte: to },
         notifications: { none: { type: 'BOOKING_REMINDER_1HOUR' } },
       },

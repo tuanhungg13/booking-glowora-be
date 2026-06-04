@@ -344,6 +344,12 @@ export class BookingsService {
     return booking;
   }
 
+  async findOneForStore(id: string, storeId: string) {
+    const booking = await this.findOne(id);
+    if (booking.storeId !== storeId) throw new NotFoundException('Booking not found');
+    return booking;
+  }
+
   async confirm(id: string, userId: string, ipAddress?: string, requestId?: string) {
     const booking = await this.findOne(id);
     if (booking.status !== BookingStatus.PENDING) {
@@ -450,7 +456,11 @@ export class BookingsService {
 
   async complete(id: string, userId: string, ipAddress?: string, requestId?: string) {
     const booking = await this.findOne(id);
-    if (booking.status !== BookingStatus.CONFIRMED && booking.status !== BookingStatus.DEPOSIT_PAID) {
+    if (
+      booking.status !== BookingStatus.CONFIRMED &&
+      booking.status !== BookingStatus.DEPOSIT_PAID &&
+      booking.status !== BookingStatus.PAID
+    ) {
       throw new BadRequestException('Only confirmed bookings can be completed');
     }
     await this.assertStoreMember(userId, booking.storeId);
@@ -487,6 +497,7 @@ export class BookingsService {
       BookingStatus.CONFIRMED,
       BookingStatus.DEPOSIT_PENDING,
       BookingStatus.DEPOSIT_PAID,
+      BookingStatus.PAID,
     ];
     if (!cancellableStatuses.includes(booking.status)) {
       throw new BadRequestException('Only pending or confirmed bookings can be cancelled');
@@ -598,7 +609,7 @@ export class BookingsService {
     const busyItems = await tx.bookingItem.findMany({
       where: {
         staffId,
-        booking: { status: { in: [BookingStatus.PENDING, BookingStatus.CONFIRMED, BookingStatus.DEPOSIT_PENDING, BookingStatus.DEPOSIT_PAID] } },
+        booking: { status: { in: [BookingStatus.PENDING, BookingStatus.CONFIRMED, BookingStatus.DEPOSIT_PENDING, BookingStatus.DEPOSIT_PAID, BookingStatus.PAID] } },
         startTime: { gte: windowMin, lte: windowMax },
       },
       select: { startTime: true, duration: true },

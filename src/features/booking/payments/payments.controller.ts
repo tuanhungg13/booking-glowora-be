@@ -4,6 +4,7 @@ import {
   Get,
   Headers,
   Param,
+  ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -33,12 +34,13 @@ export class PaymentsController {
 
   @ApiOperation({ summary: 'SePay webhook — nhận thông báo khi tiền về tài khoản shop' })
   @Public()
-  @Post('payments/sepay/webhook')
+  @Post('payments/sepay/webhook/:storeId')
   sepayWebhook(
+    @Param('storeId', ParseUUIDPipe) storeId: string,
     @Body() body: SepayWebhookDto,
     @Headers('authorization') authHeader: string,
   ) {
-    return this.paymentsService.handleSepayWebhook(body, authHeader);
+    return this.paymentsService.handleSepayWebhook(body, authHeader, storeId);
   }
 
   @ApiOperation({ summary: 'Lịch sử thanh toán của tôi' })

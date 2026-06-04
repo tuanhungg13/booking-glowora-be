@@ -3,7 +3,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import {
   BookingStatus,
   LogType,
@@ -39,7 +38,6 @@ const PAYMENT_EXPIRY_MS = 15 * 60 * 1000; // 15 phút
 export class PaymentsService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly config: ConfigService,
     private readonly notifications: NotificationsService,
     private readonly systemLog: SystemLogService,
   ) {}
@@ -151,9 +149,12 @@ export class PaymentsService {
     };
   }
 
-  async handleSepayWebhook(payload: SepayWebhookDto, authHeader: string | undefined) {
-    const secret = this.config.get<string>('SEPAY_WEBHOOK_SECRET') ?? '';
-    if (!verifySepayWebhook(authHeader, secret)) {
+  async handleSepayWebhook(payload: SepayWebhookDto, authHeader: string | undefined, storeId: string) {
+    const config = await this.prisma.storePaymentConfig.findUnique({
+      where: { storeId },
+      select: { webhookSecret: true },
+    });
+    if (!config?.webhookSecret || !verifySepayWebhook(authHeader, config.webhookSecret)) {
       return { success: false, message: 'Unauthorized' };
     }
 
@@ -312,8 +313,17 @@ export class PaymentsService {
       await this.prisma.$transaction([
         paymentUpdate,
         this.prisma.booking.updateMany({
-          where: { id: bookingId, status: BookingStatus.DEPOSIT_PENDING },
-          data: { status: BookingStatus.CONFIRMED },
+          where: {
+            id: bookingId,
+            status: {
+              in: [
+                BookingStatus.CONFIRMED,
+                BookingStatus.DEPOSIT_PENDING,
+                BookingStatus.DEPOSIT_PAID,
+              ],
+            },
+          },
+          data: { status: BookingStatus.PAID },
         }),
       ]);
     }

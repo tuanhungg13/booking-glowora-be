@@ -1048,7 +1048,7 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
     );
 
     storeRows.push(
-      `(${sql(randomUUID())}, ${sql(store.slug)}, ${subUser(store.ownerEmail)}, ${sql(store.name)}, ${sql(`02871${store.code}00`)}, ${sql(`hello.s${store.code}@glowora.local`)}, ${sql(`https://${store.slug}.glowora.local`)}, ${sql(buildStoreDescription(store, address, district))}, ${sql(address)}, ${store.city.provinceId}, ${wardId}, ${lat.toFixed(6)}, ${lng.toFixed(6)}, NULL, ${sql(store.kind.imageUrl)}, 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, 30, ${store.index % 2 === 0 ? 'TRUE' : 'FALSE'}, ${(4.2 + rand() * 0.7).toFixed(2)}, ${randInt(12, 180, rand)}, NOW(), NOW())`,
+      `(${sql(randomUUID())}, ${sql(store.slug)}, ${subUser(store.ownerEmail)}, ${sql(store.name)}, ${sql(`02871${store.code}00`)}, ${sql(`hello.s${store.code}@glowora.local`)}, ${sql(`https://${store.slug}.glowora.local`)}, ${sql(buildStoreDescription(store, address, district))}, ${sql(address)}, ${store.city.provinceId}, ${wardId}, ${lat.toFixed(6)}, ${lng.toFixed(6)}, NULL, ${sql(store.kind.imageUrl)}, 'ACTIVE', NOW(), 'Asia/Ho_Chi_Minh', 30, 2, 30, ${store.index % 2 === 0 ? 'TRUE' : 'FALSE'}, ${(4.2 + rand() * 0.7).toFixed(2)}, ${randInt(12, 180, rand)}, NOW(), NOW())`,
     );
 
     ownerRoleRows.push(
@@ -1200,7 +1200,6 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
         'slot_interval_mins',
         'cancel_before_hours',
         'max_advance_days',
-        'booking_buffer_mins',
         'auto_confirm',
         'avg_rating',
         'total_reviews',

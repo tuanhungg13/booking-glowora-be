@@ -559,7 +559,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Role Flow Spa {{runId}}\",\n  \"address\": \"12 Nguyen Hue\",\n  \"district\": \"Quan 1\",\n  \"phone\": \"0287000000\",\n  \"email\": \"role-flow-{{runId}}@glowora.local\",\n  \"website\": \"https://glowora.vn\",\n  \"description\": \"Shop created by role workflow Postman collection.\",\n  \"slotIntervalMins\": 30,\n  \"cancelBeforeHours\": 2,\n  \"maxAdvanceDays\": 30,\n  \"bookingBufferMins\": 30,\n  \"autoConfirm\": false\n}",
+              "raw": "{\n  \"name\": \"Role Flow Spa {{runId}}\",\n  \"address\": \"12 Nguyen Hue\",\n  \"district\": \"Quan 1\",\n  \"phone\": \"0287000000\",\n  \"email\": \"role-flow-{{runId}}@glowora.local\",\n  \"website\": \"https://glowora.vn\",\n  \"description\": \"Shop created by role workflow Postman collection.\",\n  \"slotIntervalMins\": 30,\n  \"cancelBeforeHours\": 2,\n  \"maxAdvanceDays\": 30,\n  \"autoConfirm\": false\n}",
               "options": {
                 "raw": {
                   "language": "json"
