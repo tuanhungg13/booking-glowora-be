@@ -256,6 +256,201 @@ export class PaymentsService {
     return { success: true, message: 'Payment confirmed' };
   }
 
+  async recordStorePayment(
+    bookingId: string,
+    storeId: string,
+    staffId: string,
+    method: PaymentMethod,
+    chosenType?: PaymentType,
+  ) {
+    const booking = await this.prisma.booking.findFirst({
+      where: { id: bookingId, storeId },
+      include: {
+        store: { include: { paymentConfig: true } },
+        items: { include: { service: true } },
+      },
+    });
+    if (!booking) throw new NotFoundException('Booking not found');
+
+    const payableStatuses: BookingStatus[] = [
+      BookingStatus.CONFIRMED,
+      BookingStatus.DEPOSIT_PENDING,
+      BookingStatus.DEPOSIT_PAID,
+    ];
+    if (!payableStatuses.includes(booking.status)) {
+      throw new BadRequestException('Lịch hẹn không ở trạng thái có thể thanh toán');
+    }
+
+    if (method === PaymentMethod.SEPAY && !booking.store.paymentConfig?.isActive) {
+      throw new BadRequestException('Cửa hàng chưa cấu hình thanh toán chuyển khoản');
+    }
+
+    // Tính số tiền — logic giống createSepayPayment
+    const isDepositPending = booking.status === BookingStatus.DEPOSIT_PENDING;
+    let chargeAmount: Prisma.Decimal;
+    let paymentType: PaymentType;
+
+    if (isDepositPending) {
+      const actualType = chosenType ?? PaymentType.FULL;
+
+      if (actualType === PaymentType.DEPOSIT) {
+        const paidDeposit = await this.prisma.payment.findFirst({
+          where: { bookingId, type: PaymentType.DEPOSIT, status: PaymentStatus.PAID },
+        });
+        if (paidDeposit) throw new BadRequestException('Tiền cọc đã được thanh toán');
+        chargeAmount = booking.depositAmount!;
+        paymentType = PaymentType.DEPOSIT;
+      } else {
+        const paidFull = await this.prisma.payment.findFirst({
+          where: { bookingId, type: PaymentType.FULL, status: PaymentStatus.PAID },
+        });
+        if (paidFull) throw new BadRequestException('Booking này đã được thanh toán đầy đủ');
+        const total =
+          Number(booking.finalPrice) > 0 ? Number(booking.finalPrice) : Number(booking.totalPrice);
+        chargeAmount = new Prisma.Decimal(total);
+        paymentType = PaymentType.FULL;
+      }
+    } else {
+      const paidFull = await this.prisma.payment.findFirst({
+        where: { bookingId, type: PaymentType.FULL, status: PaymentStatus.PAID },
+      });
+      if (paidFull) throw new BadRequestException('Booking này đã được thanh toán');
+      const total =
+        Number(booking.finalPrice) > 0 ? Number(booking.finalPrice) : Number(booking.totalPrice);
+      const depositPaid =
+        booking.status === BookingStatus.DEPOSIT_PAID && booking.depositAmount
+          ? Number(booking.depositAmount)
+          : 0;
+      const remaining = total - depositPaid;
+      if (remaining <= 0) throw new BadRequestException('Không còn số tiền cần thanh toán');
+      chargeAmount = new Prisma.Decimal(remaining);
+      paymentType = PaymentType.FULL;
+    }
+
+    if (method === PaymentMethod.CASH) {
+      return this.recordCashPayment(bookingId, storeId, staffId, chargeAmount, paymentType, booking.customerId);
+    }
+
+    return this.createTransferQr(bookingId, storeId, chargeAmount, paymentType, booking.customerId, booking.store.paymentConfig!);
+  }
+
+  private async recordCashPayment(
+    bookingId: string,
+    storeId: string,
+    staffId: string,
+    amount: Prisma.Decimal,
+    paymentType: PaymentType,
+    customerId: string,
+  ) {
+    const now = new Date();
+    const paymentCreate = this.prisma.payment.create({
+      data: {
+        bookingId,
+        customerId,
+        amount,
+        type: paymentType,
+        status: PaymentStatus.PAID,
+        method: PaymentMethod.CASH,
+        paidAt: now,
+      },
+    });
+
+    if (paymentType === PaymentType.DEPOSIT) {
+      await this.prisma.$transaction([
+        paymentCreate,
+        this.prisma.booking.update({
+          where: { id: bookingId },
+          data: { status: BookingStatus.DEPOSIT_PAID, depositPaidAt: now },
+        }),
+      ]);
+      this.systemLog.log({
+        type: LogType.BOOKING_DEPOSIT_PAID,
+        actorId: staffId,
+        storeId,
+        targetId: bookingId,
+        targetType: 'Payment',
+        metadata: { bookingId, amount: Number(amount), method: 'CASH' },
+      });
+    } else {
+      await this.prisma.$transaction([
+        paymentCreate,
+        this.prisma.booking.updateMany({
+          where: {
+            id: bookingId,
+            status: {
+              in: [
+                BookingStatus.CONFIRMED,
+                BookingStatus.DEPOSIT_PENDING,
+                BookingStatus.DEPOSIT_PAID,
+              ],
+            },
+          },
+          data: { status: BookingStatus.PAID },
+        }),
+      ]);
+      this.systemLog.log({
+        type: LogType.PAYMENT_COMPLETED,
+        actorId: staffId,
+        storeId,
+        targetId: bookingId,
+        targetType: 'Payment',
+        metadata: { bookingId, amount: Number(amount), method: 'CASH' },
+      });
+    }
+
+    return { recorded: true, amount: Number(amount), paymentType };
+  }
+
+  private async createTransferQr(
+    bookingId: string,
+    storeId: string,
+    amount: Prisma.Decimal,
+    paymentType: PaymentType,
+    customerId: string,
+    paymentConfig: { bankBin: string; bankAccountNo: string; bankAccountName: string },
+  ) {
+    await this.prisma.payment.updateMany({
+      where: { bookingId, type: paymentType, status: PaymentStatus.PENDING },
+      data: { status: PaymentStatus.FAILED, failedReason: 'Thay thế bởi lần thanh toán mới' },
+    });
+
+    const sepayCode = generateSepayCode();
+    const payment = await this.prisma.payment.create({
+      data: {
+        bookingId,
+        customerId,
+        amount,
+        type: paymentType,
+        status: PaymentStatus.PENDING,
+        method: PaymentMethod.SEPAY,
+        sepayCode,
+      },
+    });
+
+    const expiredAt = new Date(Date.now() + PAYMENT_EXPIRY_MS);
+    const qrUrl = buildVietQrUrl({
+      bankBin: paymentConfig.bankBin,
+      accountNo: paymentConfig.bankAccountNo,
+      accountName: paymentConfig.bankAccountName,
+      amount: Number(amount),
+      content: sepayCode,
+    });
+
+    return {
+      paymentId: payment.id,
+      sepayCode,
+      amount: Number(amount),
+      content: sepayCode,
+      bankInfo: {
+        bankBin: paymentConfig.bankBin,
+        accountNo: paymentConfig.bankAccountNo,
+        accountName: paymentConfig.bankAccountName,
+      },
+      qrUrl,
+      expiredAt,
+    };
+  }
+
   async findMyPayments(userId: string) {
     return this.prisma.payment.findMany({
       where: { customerId: userId },

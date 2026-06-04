@@ -50,7 +50,9 @@ export class BookingsService {
       where: { userId: customerId, storeId: dto.storeId },
     });
     if (isStoreMember) {
-      throw new ForbiddenException('Không thể đặt lịch tại cơ sở bạn đang làm việc');
+      throw new ForbiddenException(
+        'Bạn là chủ hoặc nhân viên của cơ sở này nên không thể đặt lịch tại đây. Vui lòng sử dụng tài khoản khách hàng khác để đặt lịch.',
+      );
     }
 
     const booking = await this.prisma.$transaction(
@@ -363,12 +365,20 @@ export class BookingsService {
     let needsDeposit = false;
 
     if (depositPercent > 0) {
-      const deadline = this.calcDepositDeadline(now, booking.scheduledAt);
-      if (deadline) {
-        const rawPrice = Number(booking.finalPrice) > 0 ? Number(booking.finalPrice) : Number(booking.totalPrice);
-        const depositAmount = new Prisma.Decimal(Math.ceil(rawPrice * depositPercent / 100));
-        updateData = { status: BookingStatus.DEPOSIT_PENDING, confirmedAt: now, depositAmount, depositDeadline: deadline };
-        needsDeposit = true;
+      const paymentConfig = await this.prisma.storePaymentConfig.findUnique({
+        where: { storeId: booking.storeId },
+        select: { isActive: true },
+      });
+      if (paymentConfig?.isActive) {
+        const deadline = this.calcDepositDeadline(now, booking.scheduledAt);
+        if (deadline) {
+          const rawPrice = Number(booking.finalPrice) > 0 ? Number(booking.finalPrice) : Number(booking.totalPrice);
+          const depositAmount = new Prisma.Decimal(Math.ceil(rawPrice * depositPercent / 100));
+          updateData = { status: BookingStatus.DEPOSIT_PENDING, confirmedAt: now, depositAmount, depositDeadline: deadline };
+          needsDeposit = true;
+        } else {
+          updateData = { status: BookingStatus.CONFIRMED, confirmedAt: now };
+        }
       } else {
         updateData = { status: BookingStatus.CONFIRMED, confirmedAt: now };
       }

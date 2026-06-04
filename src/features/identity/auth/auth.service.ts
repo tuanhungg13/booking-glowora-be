@@ -18,6 +18,7 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { RedisService } from '../../../redis/redis.service';
 import { MailService } from '../../../mail/mail.service';
+import { WebPushService } from '../../notifications/web-push/web-push.service';
 import { ALL_PERMISSION_CODES } from '../../../common/constants/permissions';
 import { SystemLogService } from '../../../system-log/system-log.service';
 import { LogType } from '@prisma/client';
@@ -32,6 +33,7 @@ export class AuthService {
     private readonly config: ConfigService,
     private readonly redis: RedisService,
     private readonly mail: MailService,
+    private readonly webPush: WebPushService,
     private readonly systemLog: SystemLogService,
   ) { }
 
@@ -181,7 +183,10 @@ export class AuthService {
     if (ttl > 0) {
       await this.redis.set(`blacklist:refresh:${refreshToken}`, '1', ttl);
     }
-    await this.prisma.user.update({ where: { id: userId }, data: { refreshToken: null } });
+    await Promise.all([
+      this.prisma.user.update({ where: { id: userId }, data: { refreshToken: null } }),
+      this.webPush.deleteAllSubscriptionsForUser(userId),
+    ]);
     this.systemLog.log({ type: LogType.AUTH_LOGOUT, actorId: userId, targetId: userId, targetType: 'User' });
     return { success: true };
   }

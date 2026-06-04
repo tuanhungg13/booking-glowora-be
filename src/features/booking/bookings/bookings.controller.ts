@@ -19,12 +19,11 @@ export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 
   @Post()
-  @RequirePermissions(Permissions.APPOINTMENT.CREATE)
   @AuditLog({ type: LogType.BOOKING_CREATED, targetType: 'Booking' })
-  @ApiOperation({ summary: 'Tạo lịch hẹn mới', description: 'Khách hàng đặt lịch dịch vụ tại cửa hàng. Yêu cầu quyền APPOINTMENT.CREATE.' })
+  @ApiOperation({ summary: 'Tạo lịch hẹn mới', description: 'Khách hàng đặt lịch dịch vụ tại cửa hàng. Chủ shop và nhân viên không thể đặt lịch tại cơ sở của mình.' })
   @ApiResponse({ status: 201, description: 'Tạo lịch hẹn thành công' })
   @ApiResponse({ status: 400, description: 'Dữ liệu không hợp lệ hoặc slot đã bị đặt' })
-  @ApiResponse({ status: 403, description: 'Không có quyền tạo lịch hẹn' })
+  @ApiResponse({ status: 403, description: 'Chủ shop / nhân viên không thể đặt lịch tại cơ sở của mình' })
   create(@Body() dto: CreateBookingDto, @CurrentUser() user: CurrentUserPayload, @Req() req: Request) {
     const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ?? req.ip ?? '';
     return this.bookingsService.create(dto, user.id, ip);

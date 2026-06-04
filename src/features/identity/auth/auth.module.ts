@@ -8,6 +8,7 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { MailModule } from '../../../mail/mail.module';
+import { WebPushModule } from '../../notifications/web-push/web-push.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { MailModule } from '../../../mail/mail.module';
       inject: [ConfigService],
     }),
     MailModule,
+    WebPushModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, LocalStrategy],

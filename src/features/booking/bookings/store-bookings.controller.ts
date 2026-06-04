@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Query, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, Req } from '@nestjs/common';
 import type { Request } from 'express';
 import {
   ApiBearerAuth,
@@ -15,9 +15,11 @@ import { AuditLog } from '../../../common/decorators/audit-log.decorator';
 import { Permissions } from '../../../common/constants/permissions';
 import { StoreId } from '../../../common/decorators/store-id.decorator';
 import { BookingsService } from './bookings.service';
+import { PaymentsService } from '../payments/payments.service';
 import { BookingFilterDto } from './dto/booking-filter.dto';
 import { CalendarQueryDto } from './dto/calendar-query.dto';
 import { RejectBookingDto } from './dto/reject-booking.dto';
+import { RecordStorePaymentDto } from '../payments/dto/record-store-payment.dto';
 import { LogType } from '@prisma/client';
 
 @ApiTags('store-bookings')
@@ -25,7 +27,10 @@ import { LogType } from '@prisma/client';
 @ApiHeader({ name: 'x-store-id', required: true, description: 'ID của cửa hàng' })
 @Controller('store-bookings')
 export class StoreBookingsController {
-  constructor(private readonly bookingsService: BookingsService) {}
+  constructor(
+    private readonly bookingsService: BookingsService,
+    private readonly paymentsService: PaymentsService,
+  ) {}
 
   // calendar MUST be before the root @Get() to avoid route conflict
   @Get('calendar')
@@ -122,6 +127,27 @@ export class StoreBookingsController {
   ) {
     const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ?? req.ip ?? '';
     return this.bookingsService.reject(id, user.id, dto.reason, ip);
+  }
+
+  @Post(':id/record-payment')
+  @RequirePermissions(Permissions.APPOINTMENT.UPDATE)
+  @ApiOperation({
+    summary: 'Ghi nhận thanh toán tại cửa hàng',
+    description:
+      'CASH: ghi nhận tiền mặt ngay lập tức, cập nhật trạng thái booking. ' +
+      'SEPAY: tạo QR chuyển khoản cho khách quét tại chỗ — webhook tự động xác nhận khi tiền về.',
+  })
+  @ApiParam({ name: 'id', description: 'ID của lịch hẹn' })
+  @ApiResponse({ status: 201, description: 'Ghi nhận thành công (CASH) hoặc QR data (SEPAY)' })
+  @ApiResponse({ status: 400, description: 'Lịch hẹn không ở trạng thái có thể thanh toán' })
+  @ApiResponse({ status: 404, description: 'Không tìm thấy lịch hẹn' })
+  recordPayment(
+    @Param('id') id: string,
+    @StoreId() storeId: string,
+    @CurrentUser() user: CurrentUserPayload,
+    @Body() dto: RecordStorePaymentDto,
+  ) {
+    return this.paymentsService.recordStorePayment(id, storeId, user.id, dto.method, dto.paymentType);
   }
 
   @Patch(':id/complete')

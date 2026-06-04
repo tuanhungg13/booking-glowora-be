@@ -325,6 +325,16 @@ export class StoresService {
   async update(id: string, ownerId: string, dto: UpdateStoreDto) {
     const store = await this.checkOwnership(id, ownerId);
 
+    if (dto.depositPercent !== undefined && dto.depositPercent > 0) {
+      const paymentConfig = await this.prisma.storePaymentConfig.findUnique({
+        where: { storeId: id },
+        select: { isActive: true },
+      });
+      if (!paymentConfig?.isActive) {
+        throw new BadRequestException('Cần cấu hình tài khoản thanh toán trước khi bật yêu cầu đặt cọc');
+      }
+    }
+
     if (dto.name && dto.name !== store.name) {
       const duplicate = await this.prisma.store.findFirst({
         where: { name: { equals: dto.name }, id: { not: id } },
@@ -471,7 +481,10 @@ export class StoresService {
     await this.checkOwnership(storeId, ownerId);
     const existing = await this.prisma.storePaymentConfig.findUnique({ where: { storeId } });
     if (!existing) throw new NotFoundException('Chưa có cấu hình thanh toán để xóa');
-    await this.prisma.storePaymentConfig.delete({ where: { storeId } });
+    await this.prisma.$transaction([
+      this.prisma.storePaymentConfig.delete({ where: { storeId } }),
+      this.prisma.store.update({ where: { id: storeId }, data: { depositPercent: 0 } }),
+    ]);
   }
 
   async checkOwnership(storeId: string, userId: string) {

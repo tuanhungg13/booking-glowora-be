@@ -43,6 +43,10 @@ export class WebPushService implements OnModuleInit {
     return { deleted: true };
   }
 
+  async deleteAllSubscriptionsForUser(userId: string) {
+    await this.prisma.pushSubscription.deleteMany({ where: { userId } });
+  }
+
   async sendToUser(userId: string, payload: { title: string; body: string; data?: Record<string, unknown> }) {
     if (!this.enabled) return;
 
