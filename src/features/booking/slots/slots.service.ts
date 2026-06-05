@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { BookingStatus, DayOfWeek, ServiceStatus, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { AvailableSlotsDto } from './dto/available-slots-query.dto';
+import { AvailableStaffQueryDto } from './dto/available-staff-query.dto';
 
 const TZ_OFFSETS: Record<string, number> = {
   'Asia/Ho_Chi_Minh': 7 * 60,
@@ -110,19 +111,35 @@ export class SlotsService {
     const serviceQualifiedStaff: string[][] = await Promise.all(
       serviceDetails.map(async (svc, i) => {
         if (svc.staffId) {
-          const [staffRecord, canDo] = await Promise.all([
-            this.prisma.staff.findFirst({ where: { id: svc.staffId, storeId, status: 'ACTIVE' } }),
-            this.prisma.staffService.findFirst({ where: { staffId: svc.staffId, serviceId: svc.serviceId } }),
-          ]);
+          const staffRecord = await this.prisma.staff.findFirst({
+            where: { id: svc.staffId, storeId, status: 'ACTIVE' },
+          });
           if (!staffRecord) throw new NotFoundException(`Nhân viên không tìm thấy (dịch vụ ${i + 1})`);
+          // Hợp lệ nếu: có mapping cụ thể HOẶC chưa được gán dịch vụ nào (làm được hết)
+          const canDo = await this.prisma.staff.findFirst({
+            where: {
+              id: svc.staffId,
+              OR: [
+                { services: { some: { serviceId: svc.serviceId } } },
+                { services: { none: {} } },
+              ],
+            },
+          });
           if (!canDo) throw new BadRequestException(`Nhân viên không thực hiện được dịch vụ ${i + 1}`);
           return [svc.staffId];
         }
-        const mappings = await this.prisma.staffService.findMany({
-          where: { serviceId: svc.serviceId, staff: { storeId, status: 'ACTIVE' } },
-          select: { staffId: true },
+        const qualified = await this.prisma.staff.findMany({
+          where: {
+            storeId,
+            status: 'ACTIVE',
+            OR: [
+              { services: { some: { serviceId: svc.serviceId } } },
+              { services: { none: {} } },
+            ],
+          },
+          select: { id: true },
         });
-        return mappings.map((m) => m.staffId);
+        return qualified.map((s) => s.id);
       }),
     );
 
@@ -143,7 +160,17 @@ export class SlotsService {
       this.prisma.bookingItem.findMany({
         where: {
           staffId: { in: allStaffIds },
-          booking: { status: { in: [BookingStatus.PENDING, BookingStatus.CONFIRMED] } },
+          booking: {
+            status: {
+              in: [
+                BookingStatus.PENDING,
+                BookingStatus.CONFIRMED,
+                BookingStatus.DEPOSIT_PENDING,
+                BookingStatus.DEPOSIT_PAID,
+                BookingStatus.PAID,
+              ],
+            },
+          },
           startTime: { gte: dayStart, lte: dayEnd },
         },
         select: { staffId: true, startTime: true, duration: true },
@@ -282,6 +309,85 @@ export class SlotsService {
       })),
       availableSlots,
     };
+  }
+
+  async getAvailableStaff(storeId: string, dto: AvailableStaffQueryDto) {
+    const { date, services } = dto;
+
+    const store = await this.prisma.store.findUnique({ where: { id: storeId } });
+    if (!store || store.status !== StoreStatus.ACTIVE) {
+      throw new NotFoundException('Store not found or inactive');
+    }
+
+    const tzOffset = TZ_OFFSETS[store.timezone] ?? 7 * 60;
+    const todayStr = this.getTodayDateStr(tzOffset);
+
+    if (date < todayStr) throw new BadRequestException('Ngày đã qua');
+    if (store.maxAdvanceDays > 0) {
+      const maxDate = this.addDays(todayStr, store.maxAdvanceDays);
+      if (date > maxDate) {
+        throw new BadRequestException(`Vượt quá ${store.maxAdvanceDays} ngày đặt trước tối đa`);
+      }
+    }
+
+    const dayOfWeek = this.getDayOfWeek(date);
+    const workingHour = await this.prisma.workingHour.findFirst({ where: { storeId, dayOfWeek } });
+    if (!workingHour || workingHour.isClosed) {
+      return { date, services: [] };
+    }
+
+    const dateUTCMidnight = new Date(`${date}T00:00:00.000Z`);
+
+    const results = await Promise.all(
+      services.map(async (svc, i) => {
+        const variant = await this.prisma.serviceVariant.findFirst({
+          where: {
+            id: svc.variantId,
+            serviceId: svc.serviceId,
+            status: ServiceStatus.ACTIVE,
+            service: { storeId, status: ServiceStatus.ACTIVE },
+          },
+          include: { service: { select: { name: true } } },
+        });
+        if (!variant) throw new NotFoundException(`Variant không tìm thấy cho dịch vụ thứ ${i + 1}`);
+
+        const staffList = await this.prisma.staff.findMany({
+          where: {
+            storeId,
+            status: 'ACTIVE',
+            schedules: { some: { dayOfWeek, isActive: true } },
+            dayOffs: { none: { date: dateUTCMidnight } },
+            OR: [
+              { services: { some: { serviceId: svc.serviceId } } },
+              { services: { none: {} } },
+            ],
+          },
+          select: {
+            id: true,
+            rating: true,
+            user: { select: { fullName: true, avatarUrl: true } },
+          },
+        });
+
+        return {
+          sortOrder: i,
+          serviceId: svc.serviceId,
+          variantId: svc.variantId,
+          serviceName: variant.service.name,
+          variantName: variant.name,
+          duration: variant.duration,
+          price: variant.price,
+          availableStaff: staffList.map((s) => ({
+            staffId: s.id,
+            staffName: s.user.fullName,
+            avatarUrl: s.user.avatarUrl,
+            rating: Number(s.rating),
+          })),
+        };
+      }),
+    );
+
+    return { date, services: results };
   }
 
   // ─── Helpers ─────────────────────────────────────────────────────────────

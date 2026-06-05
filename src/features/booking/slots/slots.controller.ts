@@ -3,13 +3,14 @@ import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from '../../../common/decorators/public.decorator';
 import { SlotsService } from './slots.service';
 import { AvailableSlotsDto } from './dto/available-slots-query.dto';
+import { AvailableStaffQueryDto } from './dto/available-staff-query.dto';
 
 @ApiTags('slots')
-@Controller('stores/:storeId/available-slots')
+@Controller('stores/:storeId')
 export class SlotsController {
   constructor(private readonly slotsService: SlotsService) {}
 
-  @Post()
+  @Post('available-slots')
   @Public()
   @ApiOperation({
     summary: 'Lấy các slot thời gian còn trống',
@@ -24,5 +25,22 @@ export class SlotsController {
     @Body() dto: AvailableSlotsDto,
   ) {
     return this.slotsService.getAvailableSlots(storeId, dto);
+  }
+
+  @Post('available-staff')
+  @Public()
+  @ApiOperation({
+    summary: 'Lấy danh sách nhân viên khả dụng',
+    description: 'Trả về danh sách nhân viên có thể thực hiện các dịch vụ đã chọn vào ngày được chỉ định. Endpoint công khai, không cần đăng nhập.',
+  })
+  @ApiParam({ name: 'storeId', description: 'ID của cửa hàng' })
+  @ApiResponse({ status: 200, description: 'Danh sách nhân viên khả dụng theo từng dịch vụ' })
+  @ApiResponse({ status: 400, description: 'Dữ liệu không hợp lệ' })
+  @ApiResponse({ status: 404, description: 'Không tìm thấy cửa hàng hoặc dịch vụ' })
+  getAvailableStaff(
+    @Param('storeId') storeId: string,
+    @Body() dto: AvailableStaffQueryDto,
+  ) {
+    return this.slotsService.getAvailableStaff(storeId, dto);
   }
 }

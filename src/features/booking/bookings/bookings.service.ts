@@ -5,7 +5,22 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { BookingStatus, LogType, PaymentStatus, Prisma, ServiceStatus, StoreStatus } from '@prisma/client';
+import { BookingStatus, DayOfWeek, LogType, PaymentStatus, Prisma, ServiceStatus, StoreStatus } from '@prisma/client';
+
+const TZ_OFFSETS: Record<string, number> = {
+  'Asia/Ho_Chi_Minh': 7 * 60,
+  'Asia/Bangkok': 7 * 60,
+  'Asia/Saigon': 7 * 60,
+  'Asia/Jakarta': 7 * 60,
+  'Asia/Singapore': 8 * 60,
+  'Asia/Kuala_Lumpur': 8 * 60,
+  UTC: 0,
+};
+
+const DOW_MAP: DayOfWeek[] = [
+  DayOfWeek.SUNDAY, DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,
+  DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY,
+];
 import { PrismaService } from '../../../prisma/prisma.service';
 import { NotificationsService } from '../../notifications/notifications/notifications.service';
 import { SystemLogService } from '../../../system-log/system-log.service';
@@ -94,11 +109,15 @@ export class BookingsService {
 
           let staffId: string;
           if (svc.staffId) {
-            const canDo = await tx.staffService.findFirst({
+            const canDo = await tx.staff.findFirst({
               where: {
-                staffId: svc.staffId,
-                serviceId: svc.serviceId,
-                staff: { storeId: dto.storeId, status: 'ACTIVE' },
+                id: svc.staffId,
+                storeId: dto.storeId,
+                status: 'ACTIVE',
+                OR: [
+                  { services: { some: { serviceId: svc.serviceId } } },
+                  { services: { none: {} } },
+                ],
               },
             });
             if (!canDo) {
@@ -106,7 +125,7 @@ export class BookingsService {
             }
             staffId = svc.staffId;
           } else {
-            const found = await this.pickAvailableStaff(tx, dto.storeId, svc.serviceId, currentTime, variant.duration);
+            const found = await this.pickAvailableStaff(tx, dto.storeId, svc.serviceId, currentTime, variant.duration, store.timezone);
             if (!found) {
               throw new ConflictException(`Không có nhân viên khả dụng cho dịch vụ thứ ${i + 1}`);
             }
@@ -583,16 +602,49 @@ export class BookingsService {
     serviceId: string,
     startTime: Date,
     duration: number,
+    timezone: string,
   ): Promise<string | null> {
-    const mappings = await tx.staffService.findMany({
-      where: { serviceId, staff: { storeId, status: 'ACTIVE' } },
-      select: { staffId: true },
+    const tzOffset = TZ_OFFSETS[timezone] ?? 7 * 60;
+    const localDate = new Date(startTime.getTime() + tzOffset * 60 * 1000);
+    const dayOfWeek = DOW_MAP[localDate.getUTCDay()];
+    const dateStr = `${localDate.getUTCFullYear()}-${String(localDate.getUTCMonth() + 1).padStart(2, '0')}-${String(localDate.getUTCDate()).padStart(2, '0')}`;
+    const dateUTCMidnight = new Date(`${dateStr}T00:00:00.000Z`);
+    const localStartMins = localDate.getUTCHours() * 60 + localDate.getUTCMinutes();
+    const localEndMins = localStartMins + duration;
+
+    const mappings = await tx.staff.findMany({
+      where: {
+        storeId,
+        status: 'ACTIVE',
+        OR: [
+          { services: { some: { serviceId } } },
+          { services: { none: {} } },
+        ],
+      },
+      select: { id: true },
     });
-    for (const { staffId } of mappings) {
+
+    for (const { id: staffId } of mappings) {
+      const [schedule, dayOff] = await Promise.all([
+        tx.staffSchedule.findFirst({ where: { staffId, dayOfWeek, isActive: true } }),
+        tx.staffDayOff.findFirst({ where: { staffId, date: dateUTCMidnight } }),
+      ]);
+
+      if (!schedule || dayOff) continue;
+
+      const scheduleStart = this.parseTimeMins(schedule.startTime);
+      const scheduleEnd = this.parseTimeMins(schedule.endTime);
+      if (localStartMins < scheduleStart || localEndMins > scheduleEnd) continue;
+
       const overlap = await this.findOverlap(tx, staffId, startTime, duration);
       if (!overlap) return staffId;
     }
     return null;
+  }
+
+  private parseTimeMins(timeStr: string): number {
+    const [h, m] = timeStr.split(':').map(Number);
+    return h * 60 + m;
   }
 
   private async assertNoOverlap(
