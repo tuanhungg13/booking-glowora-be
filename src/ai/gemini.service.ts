@@ -66,12 +66,12 @@ export class GeminiService {
       const result = await chat.sendMessage(userMessage);
       const text = result.response.text();
 
-      const suggestMatch = text.match(/\[SUGGEST:([\w\-,]+)\]/);
+      const suggestMatch = text.match(/\[SUGGEST:([\w\-,\s]+)\]/);
       const suggestedCategorySlugs = suggestMatch
         ? suggestMatch[1].split(',').map((s) => s.trim()).filter(Boolean)
         : [];
 
-      const reply = text.replace(/\[SUGGEST:[\w\-,]+\]/, '').trim();
+      const reply = text.replace(/\[SUGGEST:[\w\-,\s]+\]/, '').trim();
 
       return { reply, suggestedCategorySlugs };
     } catch (err) {
@@ -83,10 +83,24 @@ export class GeminiService {
   async fetchServicesByCategories(categorySlugs: string[]): Promise<PlatformServiceSuggestion[]> {
     if (!categorySlugs.length) return [];
 
+    // Match cả top-level category lẫn subcategory (con trực tiếp) của các slug đó
+    const matchingCategories = await this.prisma.serviceCategory.findMany({
+      where: {
+        OR: [
+          { slug: { in: categorySlugs } },
+          { parent: { slug: { in: categorySlugs } } },
+        ],
+      },
+      select: { id: true },
+    });
+
+    const categoryIds = matchingCategories.map((c) => c.id);
+    if (!categoryIds.length) return [];
+
     const services = await this.prisma.service.findMany({
       where: {
         status: 'ACTIVE',
-        category: { slug: { in: categorySlugs } },
+        categoryId: { in: categoryIds },
         store: { status: StoreStatus.ACTIVE },
       },
       select: {

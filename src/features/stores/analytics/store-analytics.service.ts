@@ -17,7 +17,7 @@ export class StoreAnalyticsService {
   async getOverview(storeId: string, from: string, to: string) {
     const { fromDate, toDate } = vnDateRange(from, to);
 
-    const [revenueAgg, bookingStats, ratingAgg, newCustomers] = await Promise.all([
+    const [revenueAgg, bookingStats, ratingAgg, newCustomerRows] = await Promise.all([
       // Tổng doanh thu từ payments đã thanh toán
       this.prisma.payment.aggregate({
         where: {
@@ -50,15 +50,19 @@ export class StoreAnalyticsService {
         _count: { id: true },
       }),
 
-      // Khách hàng mới (lần đầu đặt tại store trong khoảng thời gian)
-      this.prisma.booking.findMany({
-        where: {
-          storeId,
-          scheduledAt: { gte: fromDate, lte: toDate },
-        },
-        select: { customerId: true },
-        distinct: ['customerId'],
-      }),
+      // Khách hàng mới: lần đầu tiên đặt tại store này nằm trong khoảng thời gian
+      this.prisma.$queryRawUnsafe<{ count: string }[]>(
+        `SELECT COUNT(DISTINCT customer_id) AS count
+         FROM bookings
+         WHERE store_id = ?
+           AND scheduled_at >= ?
+           AND scheduled_at <= ?
+           AND customer_id NOT IN (
+             SELECT customer_id FROM bookings
+             WHERE store_id = ? AND scheduled_at < ?
+           )`,
+        storeId, fromDate, toDate, storeId, fromDate,
+      ),
     ]);
 
     const statusMap: Record<string, number> = {};
@@ -78,7 +82,7 @@ export class StoreAnalyticsService {
       confirmedCount: statusMap['CONFIRMED'] ?? 0,
       avgRating: ratingAgg._avg.rating ? Number(ratingAgg._avg.rating.toFixed(2)) : null,
       reviewCount: ratingAgg._count.id,
-      newCustomers: newCustomers.length,
+      newCustomers: Number(newCustomerRows[0]?.count ?? 0),
     };
   }
 

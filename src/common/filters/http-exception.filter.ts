@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { LogType } from '@prisma/client';
 import { SystemLogService } from '../../system-log/system-log.service';
+import { shouldSkipDbErrorLog } from '../constants/skip-db-log';
 
 type LoggableRequest = {
   requestId?: string;
@@ -53,7 +54,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     if (errorCode !== undefined) body.errorCode = errorCode;
     if (requestId !== undefined) body.requestId = requestId;
 
-    if (request && !request.systemLogErrorRecorded) {
+    if (request && !request.systemLogErrorRecorded && !shouldSkipDbErrorLog(request.method, request.originalUrl ?? request.url)) {
       this.systemLog?.logError(
         {
           type: LogType.SYSTEM_ERROR,

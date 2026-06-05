@@ -17,7 +17,7 @@ export class AdminAnalyticsService {
   async getOverview(from: string, to: string) {
     const { fromDate, toDate } = vnDateRange(from, to);
 
-    const [storeStats, userStats, bookingStats, revenueAgg, reviewAgg] = await Promise.all([
+    const [storeStats, userStats, bookingStats, revenueAgg, reviewAgg, paidBookingCountRows] = await Promise.all([
       this.prisma.store.groupBy({
         by: ['status'],
         where: { createdAt: { gte: fromDate, lte: toDate } },
@@ -42,7 +42,6 @@ export class AdminAnalyticsService {
           paidAt: { gte: fromDate, lte: toDate },
         },
         _sum: { amount: true },
-        _count: { id: true },
       }),
 
       this.prisma.review.aggregate({
@@ -53,6 +52,16 @@ export class AdminAnalyticsService {
         _avg: { rating: true },
         _count: { id: true },
       }),
+
+      // Đếm số booking thực sự (distinct) — tránh đếm 2 lần khi có cả deposit lẫn full payment
+      this.prisma.$queryRawUnsafe<{ count: string }[]>(
+        `SELECT COUNT(DISTINCT booking_id) AS count
+         FROM payments
+         WHERE status = 'PAID'
+           AND paid_at >= ?
+           AND paid_at <= ?`,
+        fromDate, toDate,
+      ),
     ]);
 
     const storeMap: Record<string, number> = {};
@@ -92,7 +101,7 @@ export class AdminAnalyticsService {
         rejected: bookingMap['REJECTED'] ?? 0,
       },
       revenue: Number(revenueAgg._sum.amount ?? 0),
-      paidBookingCount: revenueAgg._count.id,
+      paidBookingCount: Number(paidBookingCountRows[0]?.count ?? 0),
       reviews: {
         total: reviewAgg._count.id,
         avgRating: reviewAgg._avg.rating
