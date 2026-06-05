@@ -178,17 +178,32 @@ export class ConversationsService {
   async handleStaffReply(conversationId: string, telegramChatId: string, content: string) {
     this.logger.log(`[handleStaffReply] conversationId=${conversationId} senderChatId=${telegramChatId}`);
 
+    const conversation = await this.prisma.conversation.findUnique({
+      where: { id: conversationId },
+      select: { storeId: true, store: { select: { ownerId: true } } },
+    });
+    if (!conversation) throw new NotFoundException('Conversation not found');
+
     const staff = await this.prisma.staff.findFirst({
-      where: { telegramChatId },
+      where: {
+        telegramChatId,
+        storeId: conversation.storeId,
+        status: 'ACTIVE',
+      },
       select: { userId: true },
     });
 
     if (!staff) {
-      this.logger.warn(`[handleStaffReply] No linked staff found for chatId=${telegramChatId} — message ignored`);
-      return null;
+      this.logger.warn(
+        `[handleStaffReply] No active linked staff found for chatId=${telegramChatId} storeId=${conversation.storeId} - using store owner as STAFF sender`,
+      );
     }
-    const senderId = staff.userId;
-    this.logger.log(`[handleStaffReply] Sender = linked staff userId=${senderId}`);
+    const senderId = staff?.userId ?? conversation.store.ownerId;
+    this.logger.log(
+      staff
+        ? `[handleStaffReply] Sender = linked staff userId=${senderId}`
+        : `[handleStaffReply] Sender = store owner fallback userId=${senderId}`,
+    );
 
     return this.prisma.$transaction(async (tx) => {
       const msg = await tx.message.create({
