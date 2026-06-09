@@ -20,7 +20,6 @@ import { ServicesService } from './services.service';
 import { ServicesImportService } from './services-import.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
-import { AssignStaffDto } from './dto/assign-staff.dto';
 import { RemoveServiceImageDto } from './dto/service-image.dto';
 import { CreateServiceVariantDto, UpdateServiceVariantDto } from './dto/service-variant.dto';
 import { PublicServiceQueryDto, ServiceQueryDto } from './dto/service-filter.dto';
@@ -164,19 +163,6 @@ export class ServicesController {
     @Param('variantId') variantId: string,
   ) {
     return this.servicesService.removeVariant(serviceId, variantId, storeId);
-  }
-
-  @ApiOperation({ summary: 'Gán nhân viên cho dịch vụ' })
-  @ApiBearerAuth()
-  @ApiParam({ name: 'id', description: 'Service ID' })
-  @Patch(':id/staff')
-  @RequirePermissions(Permissions.SERVICE.UPDATE)
-  assignStaff(
-    @StoreId() storeId: string,
-    @Param('id') id: string,
-    @Body() dto: AssignStaffDto,
-  ) {
-    return this.servicesService.assignStaff(id, storeId, dto.staffIds);
   }
 
   @ApiOperation({ summary: 'Upload ảnh cho dịch vụ (tối đa 5 ảnh, field: files)' })

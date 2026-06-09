@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentUser, type CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 import { Public } from '../../../common/decorators/public.decorator';
@@ -21,6 +21,28 @@ export class StoreStaffController {
   @Get()
   findAll(@StoreId() storeId: string) {
     return this.storeStaffService.findAll(storeId);
+  }
+
+  @ApiOperation({ summary: 'Calendar tổng quan lịch làm việc toàn nhân viên' })
+  @ApiBearerAuth()
+  @RequirePermissions(Permissions.STAFF.VIEW)
+  @Get('calendar')
+  getCalendar(
+    @StoreId() storeId: string,
+    @Query('from') from: string,
+    @Query('to') to: string,
+  ) {
+    return this.storeStaffService.getCalendar(storeId, from, to);
+  }
+
+  @ApiOperation({ summary: 'Get current user staff profile for this store' })
+  @ApiBearerAuth()
+  @Get('me')
+  getMyProfile(
+    @StoreId() storeId: string,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return this.storeStaffService.getMyProfile(storeId, user.id);
   }
 
   @ApiOperation({ summary: 'Get current staff Telegram link status' })

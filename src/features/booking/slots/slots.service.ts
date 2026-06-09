@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { BookingStatus, DayOfWeek, ServiceStatus, StoreStatus } from '@prisma/client';
+import { BookingStatus, CallInStatus, DayOfWeek, DayOffStatus, ServiceStatus, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { AvailableSlotsDto } from './dto/available-slots-query.dto';
 import { AvailableStaffQueryDto } from './dto/available-staff-query.dto';
@@ -115,28 +115,10 @@ export class SlotsService {
             where: { id: svc.staffId, storeId, status: 'ACTIVE' },
           });
           if (!staffRecord) throw new NotFoundException(`Nhân viên không tìm thấy (dịch vụ ${i + 1})`);
-          // Hợp lệ nếu: có mapping cụ thể HOẶC chưa được gán dịch vụ nào (làm được hết)
-          const canDo = await this.prisma.staff.findFirst({
-            where: {
-              id: svc.staffId,
-              OR: [
-                { services: { some: { serviceId: svc.serviceId } } },
-                { services: { none: {} } },
-              ],
-            },
-          });
-          if (!canDo) throw new BadRequestException(`Nhân viên không thực hiện được dịch vụ ${i + 1}`);
           return [svc.staffId];
         }
         const qualified = await this.prisma.staff.findMany({
-          where: {
-            storeId,
-            status: 'ACTIVE',
-            OR: [
-              { services: { some: { serviceId: svc.serviceId } } },
-              { services: { none: {} } },
-            ],
-          },
+          where: { storeId, status: 'ACTIVE' },
           select: { id: true },
         });
         return qualified.map((s) => s.id);
@@ -150,12 +132,20 @@ export class SlotsService {
     const nowLocalMins = isToday ? this.getNowLocalMins(tzOffset) : -1;
     const dateUTCMidnight = new Date(`${date}T00:00:00.000Z`);
 
-    const [schedules, dayOffs, busyItems, staffRecords] = await Promise.all([
+    const [schedules, dayOffs, callIns, busyItems, staffRecords] = await Promise.all([
       this.prisma.staffSchedule.findMany({
         where: { staffId: { in: allStaffIds }, dayOfWeek, isActive: true },
       }),
       this.prisma.staffDayOff.findMany({
-        where: { staffId: { in: allStaffIds }, date: dateUTCMidnight },
+        where: {
+          staffId: { in: allStaffIds },
+          date: dateUTCMidnight,
+          status: { in: [DayOffStatus.PENDING, DayOffStatus.APPROVED] },
+        },
+        select: { staffId: true, startTime: true, endTime: true, status: true },
+      }),
+      this.prisma.staffCallIn.findMany({
+        where: { staffId: { in: allStaffIds }, date: dateUTCMidnight, status: CallInStatus.ACCEPTED },
       }),
       this.prisma.bookingItem.findMany({
         where: {
@@ -182,7 +172,8 @@ export class SlotsService {
     ]);
 
     const scheduleMap = new Map(schedules.map((s) => [s.staffId, s]));
-    const dayOffSet = new Set(dayOffs.map((d) => d.staffId));
+    const dayOffMap = new Map(dayOffs.map((d) => [d.staffId, d]));
+    const callInMap = new Map(callIns.map((c) => [c.staffId, c]));
 
     const busyMap = new Map<string, Array<{ start: number; end: number }>>();
     for (const item of busyItems) {
@@ -197,22 +188,41 @@ export class SlotsService {
 
     for (const staffId of allStaffIds) {
       const schedule = scheduleMap.get(staffId);
-      if (!schedule || dayOffSet.has(staffId)) {
+      const callIn = callInMap.get(staffId);
+      const dayOff = dayOffMap.get(staffId);
+
+      // Loại nếu không có lịch tuần VÀ không có call-in accepted
+      if (!schedule && !callIn) {
         staffInfoMap.set(staffId, null);
         continue;
       }
 
-      const windowStart = Math.max(storeOpenMins, this.parseTime(schedule.startTime));
-      const windowEnd = Math.min(storeCloseMins, this.parseTime(schedule.endTime));
+      // Loại nếu có ngày nghỉ cả ngày (startTime = null)
+      if (dayOff && !dayOff.startTime) {
+        staffInfoMap.set(staffId, null);
+        continue;
+      }
+
+      // Giờ làm: ưu tiên schedule → fallback callIn → fallback store hours
+      const startTimeStr = schedule?.startTime ?? callIn?.startTime ?? workingHour.openTime;
+      const endTimeStr = schedule?.endTime ?? callIn?.endTime ?? workingHour.closeTime;
+      const windowStart = Math.max(storeOpenMins, this.parseTime(startTimeStr));
+      const windowEnd = Math.min(storeCloseMins, this.parseTime(endTimeStr));
       if (windowStart >= windowEnd) {
         staffInfoMap.set(staffId, null);
         continue;
       }
 
+      // Nếu nghỉ nửa buổi → thêm vào busyWindows
+      const existingBusy = busyMap.get(staffId) ?? [];
+      const partialBusy = dayOff?.startTime && dayOff?.endTime
+        ? [{ start: this.parseTime(dayOff.startTime), end: this.parseTime(dayOff.endTime) }]
+        : [];
+
       staffInfoMap.set(staffId, {
         windowStart,
         windowEnd,
-        busyWindows: busyMap.get(staffId) ?? [],
+        busyWindows: [...existingBusy, ...partialBusy],
       });
     }
 
@@ -355,11 +365,10 @@ export class SlotsService {
           where: {
             storeId,
             status: 'ACTIVE',
-            schedules: { some: { dayOfWeek, isActive: true } },
-            dayOffs: { none: { date: dateUTCMidnight } },
+            dayOffs: { none: { date: dateUTCMidnight, startTime: null, status: { in: [DayOffStatus.PENDING, DayOffStatus.APPROVED] } } },
             OR: [
-              { services: { some: { serviceId: svc.serviceId } } },
-              { services: { none: {} } },
+              { schedules: { some: { dayOfWeek, isActive: true } } },
+              { callIns: { some: { date: dateUTCMidnight, status: CallInStatus.ACCEPTED } } },
             ],
           },
           select: {

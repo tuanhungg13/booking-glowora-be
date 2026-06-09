@@ -5,7 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { BookingStatus, DayOfWeek, LogType, PaymentStatus, Prisma, ServiceStatus, StoreStatus } from '@prisma/client';
+import { BookingStatus, DayOfWeek, DayOffStatus, LogType, PaymentStatus, Prisma, ServiceStatus, StoreStatus } from '@prisma/client';
 
 const TZ_OFFSETS: Record<string, number> = {
   'Asia/Ho_Chi_Minh': 7 * 60,
@@ -89,6 +89,7 @@ export class BookingsService {
           serviceName: string;
           variantName: string;
           staffName: string | null;
+          isStaffChosenByCustomer: boolean;
         }> = [];
 
         for (let i = 0; i < dto.services.length; i++) {
@@ -108,22 +109,16 @@ export class BookingsService {
           }
 
           let staffId: string;
+          let isStaffChosenByCustomer = false;
           if (svc.staffId) {
             const canDo = await tx.staff.findFirst({
-              where: {
-                id: svc.staffId,
-                storeId: dto.storeId,
-                status: 'ACTIVE',
-                OR: [
-                  { services: { some: { serviceId: svc.serviceId } } },
-                  { services: { none: {} } },
-                ],
-              },
+              where: { id: svc.staffId, storeId: dto.storeId, status: 'ACTIVE' },
             });
             if (!canDo) {
               throw new BadRequestException(`Nhân viên không thực hiện được dịch vụ thứ ${i + 1}`);
             }
             staffId = svc.staffId;
+            isStaffChosenByCustomer = true;
           } else {
             const found = await this.pickAvailableStaff(tx, dto.storeId, svc.serviceId, currentTime, variant.duration, store.timezone);
             if (!found) {
@@ -150,6 +145,7 @@ export class BookingsService {
             serviceName: variant.service.name,
             variantName: variant.name,
             staffName: staffRecord?.user?.fullName ?? null,
+            isStaffChosenByCustomer,
           });
 
           currentTime = new Date(currentTime.getTime() + variant.duration * 60 * 1000);
@@ -613,21 +609,16 @@ export class BookingsService {
     const localEndMins = localStartMins + duration;
 
     const mappings = await tx.staff.findMany({
-      where: {
-        storeId,
-        status: 'ACTIVE',
-        OR: [
-          { services: { some: { serviceId } } },
-          { services: { none: {} } },
-        ],
-      },
+      where: { storeId, status: 'ACTIVE' },
       select: { id: true },
     });
 
     for (const { id: staffId } of mappings) {
       const [schedule, dayOff] = await Promise.all([
         tx.staffSchedule.findFirst({ where: { staffId, dayOfWeek, isActive: true } }),
-        tx.staffDayOff.findFirst({ where: { staffId, date: dateUTCMidnight } }),
+        tx.staffDayOff.findFirst({
+          where: { staffId, date: dateUTCMidnight, startTime: null, status: { in: [DayOffStatus.PENDING, DayOffStatus.APPROVED] } },
+        }),
       ]);
 
       if (!schedule || dayOff) continue;

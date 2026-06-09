@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { LogType, Prisma, ServiceStatus, StaffStatus, StoreStatus } from '@prisma/client';
+import { LogType, Prisma, ServiceStatus, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CloudinaryService } from '../../../cloudinary/cloudinary.service';
 import { SystemLogService } from '../../../system-log/system-log.service';
@@ -13,7 +13,6 @@ type PublicServiceParams = { storeId?: string; categoryId?: string; q?: string; 
 const serviceInclude = {
   category: true,
   variants: { where: { status: ServiceStatus.ACTIVE }, orderBy: { sortOrder: 'asc' as const } },
-  staffs: { include: { staff: { include: { user: { select: { id: true, fullName: true, email: true, avatarUrl: true } } } } } },
   store: { select: { id: true, name: true, slug: true, address: true, logoUrl: true, latitude: true, longitude: true } },
 } as const;
 
@@ -118,7 +117,7 @@ export class ServicesService {
     const ownerInclude = {
       category: true,
       variants: { where: { status: ServiceStatus.ACTIVE }, orderBy: { sortOrder: 'asc' as const } },
-      _count: { select: { staffs: true, bookingItems: true } },
+      _count: { select: { bookingItems: true } },
     };
 
     const [items, total] = await Promise.all([
@@ -165,7 +164,7 @@ export class ServicesService {
     const ownerInclude = {
       category: true,
       variants: { where: { status: ServiceStatus.ACTIVE }, orderBy: { sortOrder: 'asc' as const } },
-      _count: { select: { staffs: true, bookingItems: true } },
+      _count: { select: { bookingItems: true } },
     };
 
     const items = await this.prisma.service.findMany({ where: { id: { in: ids } }, include: ownerInclude });
@@ -500,37 +499,6 @@ export class ServicesService {
       data: { status: ServiceStatus.INACTIVE },
     });
     return { deleted: true };
-  }
-
-  async assignStaff(id: string, storeId: string, staffIds: string[]) {
-    const service = await this.findOne(id, storeId);
-    const uniqueStaffIds = [...new Set(staffIds)];
-    if (uniqueStaffIds.length) {
-      const validCount = await this.prisma.staff.count({
-        where: {
-          id: { in: uniqueStaffIds },
-          storeId,
-          status: StaffStatus.ACTIVE,
-        },
-      });
-      if (validCount !== uniqueStaffIds.length) {
-        throw new BadRequestException('All staff must belong to this store and be active');
-      }
-    }
-
-    await this.prisma.$transaction(async (tx) => {
-      await tx.staffService.deleteMany({ where: { serviceId: id } });
-      if (uniqueStaffIds.length) {
-        await tx.staffService.createMany({
-          data: uniqueStaffIds.map((staffId) => ({ serviceId: id, staffId })),
-          skipDuplicates: true,
-        });
-      }
-    });
-    return this.prisma.service.findUnique({
-      where: { id: service.id },
-      include: serviceInclude,
-    });
   }
 
   async uploadImages(id: string, storeId: string, files: Express.Multer.File[]) {

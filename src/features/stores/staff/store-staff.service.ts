@@ -5,7 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { NotificationType, StaffStatus } from '@prisma/client';
+import { DayOffStatus, NotificationType, StaffStatus } from '@prisma/client';
 import { randomBytes } from 'crypto';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { PermissionCacheService } from '../../../redis/permission-cache.service';
@@ -204,6 +204,50 @@ export class StoreStaffService {
   ): Omit<T, 'telegramChatId' | 'telegramLinkToken'> & { telegramLinked: boolean } {
     const { telegramChatId, telegramLinkToken: _token, ...rest } = staff as any;
     return { ...rest, telegramLinked: telegramChatId !== null };
+  }
+
+  async getCalendar(storeId: string, from: string, to: string) {
+    const fromDate = new Date(`${from}T00:00:00.000Z`);
+    const toDate = new Date(`${to}T23:59:59.999Z`);
+    const dateStr = (d: Date) => d.toISOString().split('T')[0];
+
+    const staffList = await this.prisma.staff.findMany({
+      where: { storeId, status: StaffStatus.ACTIVE },
+      orderBy: { createdAt: 'asc' },
+      select: {
+        id: true,
+        user: { select: { fullName: true } },
+        schedules: {
+          where: { isActive: true },
+          select: { dayOfWeek: true, startTime: true, endTime: true, isActive: true },
+        },
+        dayOffs: {
+          where: { date: { gte: fromDate, lte: toDate }, status: { in: [DayOffStatus.PENDING, DayOffStatus.APPROVED] } },
+          select: { id: true, date: true, startTime: true, endTime: true, reason: true, status: true },
+        },
+        callIns: {
+          where: { date: { gte: fromDate, lte: toDate } },
+          select: { id: true, date: true, startTime: true, endTime: true, status: true, note: true },
+        },
+      },
+    });
+
+    return staffList.map((s) => ({
+      staffId: s.id,
+      staffName: s.user.fullName,
+      schedules: s.schedules,
+      dayOffs: s.dayOffs.map((d) => ({ ...d, date: dateStr(d.date) })),
+      callIns: s.callIns.map((c) => ({ ...c, date: dateStr(c.date) })),
+    }));
+  }
+
+  async getMyProfile(storeId: string, userId: string) {
+    const staff = await this.prisma.staff.findFirst({
+      where: { userId, storeId, status: StaffStatus.ACTIVE },
+      include: staffInclude,
+    });
+    if (!staff) throw new NotFoundException('Bạn không phải nhân viên của cơ sở này');
+    return this.mapStaff(staff);
   }
 
   async getMyTelegramStatus(storeId: string, userId: string) {
