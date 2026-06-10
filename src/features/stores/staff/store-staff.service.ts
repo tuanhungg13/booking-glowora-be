@@ -19,7 +19,6 @@ const INVITE_TTL_DAYS = 7;
 
 const staffInclude = {
   user: { select: { id: true, fullName: true, email: true, phone: true, avatarUrl: true } },
-  services: { include: { service: { select: { id: true, name: true } } } },
 } as const;
 
 @Injectable()

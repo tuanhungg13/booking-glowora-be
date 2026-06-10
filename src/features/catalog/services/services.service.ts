@@ -3,11 +3,12 @@ import { LogType, Prisma, ServiceStatus, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CloudinaryService } from '../../../cloudinary/cloudinary.service';
 import { SystemLogService } from '../../../system-log/system-log.service';
+import { PromotionsService } from '../../booking/promotions/promotions.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 import { CreateServiceVariantDto, UpdateServiceVariantDto } from './dto/service-variant.dto';
 
-type ServiceParams = { storeId?: string; status?: ServiceStatus; categoryId?: string; sort?: 'name' | 'name-desc' | 'price' | 'price-desc' | 'avgRating' | 'avgRating-asc'; page?: number; limit?: number };
+type ServiceParams = { storeId?: string; q?: string; status?: ServiceStatus; categoryId?: string; sort?: 'name' | 'name-desc' | 'price' | 'price-desc' | 'avgRating' | 'avgRating-asc'; page?: number; limit?: number };
 type PublicServiceParams = { storeId?: string; categoryId?: string; q?: string; minPrice?: number; maxPrice?: number; minRating?: number; maxRating?: number; sort?: 'avgRating' | 'price' | 'price-desc' | 'newest' | 'popular'; page?: number; limit?: number };
 
 const serviceInclude = {
@@ -37,13 +38,58 @@ function slugify(value: string): string {
 
 const MAX_IMAGES = 5;
 
+type ActivePromotion = Awaited<ReturnType<PromotionsService['findActiveForStore']>>;
+
 @Injectable()
 export class ServicesService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly cloudinary: CloudinaryService,
     private readonly systemLog: SystemLogService,
+    private readonly promotions: PromotionsService,
   ) {}
+
+  private applyPromoToVariants<T extends { id: string; price: Prisma.Decimal }[]>(
+    variants: T,
+    serviceId: string,
+    categoryId: string | null,
+    promotion: NonNullable<ActivePromotion>,
+  ) {
+    return variants.map((v) => {
+      if (!this.promotions.isServiceInScope(promotion, serviceId, categoryId)) return v;
+      const saving = this.promotions.calcDiscount(promotion, Number(v.price));
+      return {
+        ...v,
+        promotionalPrice: Number(v.price) - saving,
+        promotionSaving: saving,
+        promotionId: promotion.id,
+      };
+    });
+  }
+
+  private async enrichServicesWithPromotion<
+    T extends { id: string; categoryId: string | null; storeId: string; variants: { id: string; price: Prisma.Decimal }[] },
+  >(services: T[], storeId?: string): Promise<{ items: T[]; activePromotion: ActivePromotion }> {
+    if (!services.length) return { items: services, activePromotion: null };
+
+    // Fetch promotion per unique store so multi-store listings each get their own promotion
+    const storeIds = storeId ? [storeId] : [...new Set(services.map((s) => s.storeId))];
+    const promoEntries = await Promise.all(
+      storeIds.map(async (sid) => [sid, await this.promotions.findActiveForStore(sid)] as const),
+    );
+    const promoMap = new Map(
+      promoEntries.filter((e): e is [string, NonNullable<ActivePromotion>] => e[1] !== null),
+    );
+    if (!promoMap.size) return { items: services, activePromotion: null };
+
+    const enriched = services.map((svc) => {
+      const promotion = promoMap.get(svc.storeId);
+      if (!promotion) return svc;
+      return { ...svc, variants: this.applyPromoToVariants(svc.variants, svc.id, svc.categoryId, promotion) };
+    }) as T[];
+
+    return { items: enriched, activePromotion: [...promoMap.values()][0] ?? null };
+  }
 
   private async checkDuplicateName(name: string, storeId: string, excludeId?: string) {
     const existing = await this.prisma.service.findFirst({
@@ -102,6 +148,7 @@ export class ServicesService {
       ...(params?.storeId && { storeId: params.storeId }),
       ...(params?.status && { status: params.status }),
       ...(params?.categoryId && { categoryId: params.categoryId }),
+      ...(params?.q && { name: { contains: params.q } }),
     };
 
     if (params?.sort === 'price' || params?.sort === 'price-desc') {
@@ -120,12 +167,13 @@ export class ServicesService {
       _count: { select: { bookingItems: true } },
     };
 
-    const [items, total] = await Promise.all([
+    const [rawItems, total] = await Promise.all([
       this.prisma.service.findMany({ where, orderBy, skip: (page - 1) * limit, take: limit, include: ownerInclude }),
       this.prisma.service.count({ where }),
     ]);
 
-    return { items, total, page, limit };
+    const { items, activePromotion } = await this.enrichServicesWithPromotion(rawItems, params?.storeId);
+    return { items, total, page, limit, activePromotion };
   }
 
   private async findAllSortedByPrice(params: ServiceParams, page: number, limit: number, direction: 'asc' | 'desc') {
@@ -231,12 +279,13 @@ export class ServicesService {
       params.sort === 'avgRating' ? { avgRating: 'desc' } :
       { avgRating: 'desc' };
 
-    const [items, total] = await Promise.all([
+    const [rawItems, total] = await Promise.all([
       this.prisma.service.findMany({ where, orderBy, skip: (page - 1) * limit, take: limit, include: publicInclude }),
       this.prisma.service.count({ where }),
     ]);
 
-    return { items, total, page, limit };
+    const { items, activePromotion } = await this.enrichServicesWithPromotion(rawItems, params.storeId);
+    return { items, total, page, limit, activePromotion };
   }
 
   private async findPublicSortedByPrice(
@@ -308,17 +357,18 @@ export class ServicesService {
 
     const total = Number(countRows[0]?.total ?? 0);
     const paginatedIds = rows.map((r) => r.id);
-    if (!paginatedIds.length) return { items: [], total, page, limit };
+    if (!paginatedIds.length) return { items: [], total, page, limit, activePromotion: null };
 
-    const items = await this.prisma.service.findMany({
+    const rawItems = await this.prisma.service.findMany({
       where: { id: { in: paginatedIds } },
       include: include as any,
     });
 
     const order = new Map(paginatedIds.map((id, i) => [id, i]));
-    items.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+    rawItems.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
 
-    return { items, total, page, limit };
+    const { items, activePromotion } = await this.enrichServicesWithPromotion(rawItems as any, params.storeId);
+    return { items, total, page, limit, activePromotion };
   }
 
   private async findPublicSortedByPopular(params: PublicServiceParams, include: object, page: number, limit: number) {
@@ -383,17 +433,18 @@ export class ServicesService {
 
     const total = Number(countRows[0]?.total ?? 0);
     const paginatedIds = rows.map((r) => r.id);
-    if (!paginatedIds.length) return { items: [], total, page, limit };
+    if (!paginatedIds.length) return { items: [], total, page, limit, activePromotion: null };
 
-    const items = await this.prisma.service.findMany({
+    const rawItems = await this.prisma.service.findMany({
       where: { id: { in: paginatedIds } },
       include: include as any,
     });
 
     const order = new Map(paginatedIds.map((id, i) => [id, i]));
-    items.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+    rawItems.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
 
-    return { items, total, page, limit };
+    const { items, activePromotion } = await this.enrichServicesWithPromotion(rawItems as any, params.storeId);
+    return { items, total, page, limit, activePromotion };
   }
 
   async findOne(idOrSlug: string, storeId?: string, userLat?: number, userLng?: number) {
@@ -412,7 +463,17 @@ export class ServicesService {
         ? calcDistance(userLat, userLng, latitude, longitude)
         : undefined;
 
-    return { ...service, store: { ...storeWithoutCoords, ...(distance !== undefined && { distance }) } };
+    const promotion = await this.promotions.findActiveForStore(service.storeId);
+    const enrichedVariants = promotion
+      ? this.applyPromoToVariants(service.variants, service.id, service.categoryId, promotion)
+      : service.variants;
+
+    return {
+      ...service,
+      variants: enrichedVariants,
+      activePromotion: promotion ?? null,
+      store: { ...storeWithoutCoords, ...(distance !== undefined && { distance }) },
+    };
   }
 
   async update(id: string, storeId: string, dto: UpdateServiceDto, actorId: string) {

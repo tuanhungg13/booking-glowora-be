@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsBoolean,
+  IsDateString,
   IsEmail,
   IsInt,
   IsOptional,
@@ -83,4 +84,64 @@ export class CreateStoreDto {
   @IsOptional()
   @IsBoolean()
   autoConfirm?: boolean;
+
+  // ── CCCD ────────────────────────────────────────────────────────────────────
+
+  @ApiPropertyOptional({ example: 'Nguyen Van A' })
+  @IsOptional() @IsString() @MaxLength(150)
+  cccdFullName?: string;
+
+  @ApiPropertyOptional({ example: '001234567890' })
+  @IsOptional() @IsString() @MaxLength(20)
+  citizenId?: string;
+
+  @ApiPropertyOptional({ example: '1990-01-15', description: 'ISO date YYYY-MM-DD' })
+  @IsOptional() @IsDateString()
+  cccdDateOfBirth?: string;
+
+  @ApiPropertyOptional({ example: 'Nam', description: 'Nam | Nữ | Khác' })
+  @IsOptional() @IsString() @MaxLength(10)
+  cccdGender?: string;
+
+  @ApiPropertyOptional({ example: 'Việt Nam' })
+  @IsOptional() @IsString() @MaxLength(50)
+  cccdNationality?: string;
+
+  @ApiPropertyOptional({ example: '123 Nguyen Du, Hanoi' })
+  @IsOptional() @IsString() @MaxLength(500)
+  cccdAddress?: string;
+
+  @ApiPropertyOptional({ example: '2021-05-20' })
+  @IsOptional() @IsDateString()
+  cccdIssueDate?: string;
+
+  @ApiPropertyOptional({ example: '2031-05-20' })
+  @IsOptional() @IsDateString()
+  cccdExpiryDate?: string;
+
+  // ── Giấy phép kinh doanh ────────────────────────────────────────────────────
+
+  @ApiPropertyOptional({ example: 'Công ty TNHH Glowora' })
+  @IsOptional() @IsString() @MaxLength(200)
+  bizName?: string;
+
+  @ApiPropertyOptional({ example: '0123456789', description: 'Mã số doanh nghiệp / MST' })
+  @IsOptional() @IsString() @MaxLength(50)
+  bizCode?: string;
+
+  @ApiPropertyOptional({ example: 'Nguyen Van A', description: 'Người đại diện pháp lý' })
+  @IsOptional() @IsString() @MaxLength(150)
+  bizOwnerName?: string;
+
+  @ApiPropertyOptional({ example: '123 Nguyen Du, Hanoi' })
+  @IsOptional() @IsString() @MaxLength(500)
+  bizAddress?: string;
+
+  @ApiPropertyOptional({ example: '2020-01-01' })
+  @IsOptional() @IsDateString()
+  bizIssueDate?: string;
+
+  @ApiPropertyOptional({ example: 'Spa, massage, chăm sóc sức khỏe' })
+  @IsOptional() @IsString()
+  bizLine?: string;
 }

@@ -6,9 +6,10 @@ import { StoreBookingsController } from './store-bookings.controller';
 import { BookingReminderService } from './booking-reminder.service';
 import { CouponsModule } from '../coupons/coupons.module';
 import { PaymentsModule } from '../payments/payments.module';
+import { PromotionsModule } from '../promotions/promotions.module';
 
 @Module({
-  imports: [NotificationsModule, CouponsModule, PaymentsModule],
+  imports: [NotificationsModule, CouponsModule, PaymentsModule, PromotionsModule],
   controllers: [BookingsController, StoreBookingsController],
   providers: [BookingsService, BookingReminderService],
   exports: [BookingsService],

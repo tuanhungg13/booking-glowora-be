@@ -18,6 +18,7 @@ import { UpdateStoreDto } from './dto/update-store.dto';
 import { UpdateWorkingHoursDto } from './dto/update-working-hours.dto';
 import { UpsertPaymentConfigDto } from './dto/upsert-payment-config.dto';
 import { CloudinaryService } from '../../cloudinary/cloudinary.service';
+import { PromotionsService } from '../booking/promotions/promotions.service';
 
 const SHOP_OWNER_ROLE_CODE = 'SHOP_OWNER';
 const MAX_STORE_ROLES_PER_USER = 3;
@@ -75,6 +76,7 @@ export class StoresService {
     private readonly systemLog: SystemLogService,
     private readonly config: ConfigService,
     private readonly cloudinary: CloudinaryService,
+    private readonly promotions: PromotionsService,
   ) { }
 
   async create(dto: CreateStoreDto, ownerId: string) {
@@ -133,6 +135,20 @@ export class StoresService {
           cancelBeforeHours: dto.cancelBeforeHours,
           maxAdvanceDays: dto.maxAdvanceDays,
           autoConfirm: dto.autoConfirm,
+          cccdFullName: dto.cccdFullName,
+          citizenId: dto.citizenId,
+          cccdDateOfBirth: dto.cccdDateOfBirth ? new Date(dto.cccdDateOfBirth) : undefined,
+          cccdGender: dto.cccdGender,
+          cccdNationality: dto.cccdNationality,
+          cccdAddress: dto.cccdAddress,
+          cccdIssueDate: dto.cccdIssueDate ? new Date(dto.cccdIssueDate) : undefined,
+          cccdExpiryDate: dto.cccdExpiryDate ? new Date(dto.cccdExpiryDate) : undefined,
+          bizName: dto.bizName,
+          bizCode: dto.bizCode,
+          bizOwnerName: dto.bizOwnerName,
+          bizAddress: dto.bizAddress,
+          bizIssueDate: dto.bizIssueDate ? new Date(dto.bizIssueDate) : undefined,
+          bizLine: dto.bizLine,
         },
       });
 
@@ -287,7 +303,20 @@ export class StoresService {
       include: storeDetailInclude,
     });
     if (!store) throw new NotFoundException('Store not found');
-    return store;
+
+    const promotion = await this.promotions.findActiveForStore(store.id);
+    if (!promotion) return store;
+
+    const enrichedServices = store.services.map((svc) => ({
+      ...svc,
+      variants: svc.variants.map((v) => {
+        if (!this.promotions.isServiceInScope(promotion, svc.id, svc.categoryId)) return v;
+        const saving = this.promotions.calcDiscount(promotion, Number(v.price));
+        return { ...v, promotionalPrice: Number(v.price) - saving, promotionSaving: saving, promotionId: promotion.id };
+      }),
+    }));
+
+    return { ...store, services: enrichedServices, activePromotion: promotion };
   }
 
   async findMine(ownerId: string) {
@@ -410,6 +439,42 @@ export class StoresService {
       select: { id: true, bannerUrl: true },
     });
     await this.deleteCloudinaryImageIfPresent(store.bannerUrl).catch(() => undefined);
+    return updated;
+  }
+
+  async uploadCccdFront(id: string, ownerId: string, file: Express.Multer.File) {
+    const store = await this.checkOwnership(id, ownerId);
+    const cccdFrontUrl = await this.cloudinary.uploadImage(file, `glowora/stores/${id}/cccd-front`);
+    const updated = await this.prisma.store.update({
+      where: { id },
+      data: { cccdFrontUrl },
+      select: { id: true, cccdFrontUrl: true },
+    });
+    await this.deleteCloudinaryImageIfPresent(store.cccdFrontUrl).catch(() => undefined);
+    return updated;
+  }
+
+  async uploadCccdBack(id: string, ownerId: string, file: Express.Multer.File) {
+    const store = await this.checkOwnership(id, ownerId);
+    const cccdBackUrl = await this.cloudinary.uploadImage(file, `glowora/stores/${id}/cccd-back`);
+    const updated = await this.prisma.store.update({
+      where: { id },
+      data: { cccdBackUrl },
+      select: { id: true, cccdBackUrl: true },
+    });
+    await this.deleteCloudinaryImageIfPresent(store.cccdBackUrl).catch(() => undefined);
+    return updated;
+  }
+
+  async uploadBusinessLicense(id: string, ownerId: string, file: Express.Multer.File) {
+    const store = await this.checkOwnership(id, ownerId);
+    const businessLicenseUrl = await this.cloudinary.uploadImage(file, `glowora/stores/${id}/business-license`);
+    const updated = await this.prisma.store.update({
+      where: { id },
+      data: { businessLicenseUrl },
+      select: { id: true, businessLicenseUrl: true },
+    });
+    await this.deleteCloudinaryImageIfPresent(store.businessLicenseUrl).catch(() => undefined);
     return updated;
   }
 

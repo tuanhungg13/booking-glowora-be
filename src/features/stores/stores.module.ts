@@ -9,9 +9,10 @@ import { AdminAnalyticsController } from './admin-analytics/admin-analytics.cont
 import { AdminAnalyticsService } from './admin-analytics/admin-analytics.service';
 import { TelegramModule } from '../../telegram/telegram.module';
 import { CloudinaryModule } from '../../cloudinary/cloudinary.module';
+import { PromotionsModule } from '../booking/promotions/promotions.module';
 
 @Module({
-  imports: [TelegramModule, CloudinaryModule],
+  imports: [TelegramModule, CloudinaryModule, PromotionsModule],
   controllers: [StoresController, AdminStoresController, StoreAnalyticsController, AdminAnalyticsController],
   providers: [StoresService, AdminStoresService, StoreAnalyticsService, AdminAnalyticsService],
   exports: [StoresService, AdminStoresService],

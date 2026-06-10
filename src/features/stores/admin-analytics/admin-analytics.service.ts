@@ -17,25 +17,46 @@ export class AdminAnalyticsService {
   async getOverview(from: string, to: string) {
     const { fromDate, toDate } = vnDateRange(from, to);
 
-    const [storeStats, userStats, bookingStats, revenueAgg, reviewAgg, paidBookingCountRows] = await Promise.all([
+    const [
+      allStoreStats,          // Tổng tất cả store (không lọc ngày)
+      allUserStats,           // Tổng tất cả user (không lọc ngày)
+      newStoreCount,          // Store mới tạo trong kỳ
+      newUserCount,           // User mới tạo trong kỳ
+      bookingStats,           // Lịch hẹn theo scheduled_at trong kỳ
+      revenueAgg,             // Doanh thu theo paid_at trong kỳ
+      reviewAgg,              // Đánh giá trong kỳ
+      paidBookingCountRows,   // Số booking thực sự có payment trong kỳ
+    ] = await Promise.all([
+      // ALL-TIME: tổng cửa hàng theo trạng thái hiện tại
       this.prisma.store.groupBy({
         by: ['status'],
-        where: { createdAt: { gte: fromDate, lte: toDate } },
         _count: { id: true },
       }),
 
+      // ALL-TIME: tổng người dùng theo trạng thái hiện tại
       this.prisma.user.groupBy({
         by: ['status'],
-        where: { createdAt: { gte: fromDate, lte: toDate } },
         _count: { id: true },
       }),
 
+      // Cửa hàng đăng ký mới trong kỳ
+      this.prisma.store.count({
+        where: { createdAt: { gte: fromDate, lte: toDate } },
+      }),
+
+      // Người dùng đăng ký mới trong kỳ
+      this.prisma.user.count({
+        where: { createdAt: { gte: fromDate, lte: toDate } },
+      }),
+
+      // Lịch hẹn (theo ngày hẹn) trong kỳ
       this.prisma.booking.groupBy({
         by: ['status'],
         where: { scheduledAt: { gte: fromDate, lte: toDate } },
         _count: { id: true },
       }),
 
+      // Doanh thu từ payments đã thanh toán trong kỳ
       this.prisma.payment.aggregate({
         where: {
           status: 'PAID',
@@ -44,6 +65,7 @@ export class AdminAnalyticsService {
         _sum: { amount: true },
       }),
 
+      // Đánh giá trong kỳ
       this.prisma.review.aggregate({
         where: {
           createdAt: { gte: fromDate, lte: toDate },
@@ -53,7 +75,7 @@ export class AdminAnalyticsService {
         _count: { id: true },
       }),
 
-      // Đếm số booking thực sự (distinct) — tránh đếm 2 lần khi có cả deposit lẫn full payment
+      // Đếm distinct booking có payment trong kỳ
       this.prisma.$queryRawUnsafe<{ count: string }[]>(
         `SELECT COUNT(DISTINCT booking_id) AS count
          FROM payments
@@ -65,10 +87,10 @@ export class AdminAnalyticsService {
     ]);
 
     const storeMap: Record<string, number> = {};
-    for (const g of storeStats) storeMap[g.status] = g._count.id;
+    for (const g of allStoreStats) storeMap[g.status] = g._count.id;
 
     const userMap: Record<string, number> = {};
-    for (const g of userStats) userMap[g.status] = g._count.id;
+    for (const g of allUserStats) userMap[g.status] = g._count.id;
 
     const bookingMap: Record<string, number> = {};
     for (const g of bookingStats) bookingMap[g.status] = g._count.id;
@@ -84,6 +106,7 @@ export class AdminAnalyticsService {
         pending: storeMap['PENDING'] ?? 0,
         banned: storeMap['BANNED'] ?? 0,
         inactive: storeMap['INACTIVE'] ?? 0,
+        newInPeriod: newStoreCount,
       },
       users: {
         total: totalUsers,
@@ -91,6 +114,7 @@ export class AdminAnalyticsService {
         banned: userMap['BANNED'] ?? 0,
         inactive: userMap['INACTIVE'] ?? 0,
         suspended: userMap['SUSPENDED'] ?? 0,
+        newInPeriod: newUserCount,
       },
       bookings: {
         total: totalBookings,
@@ -116,23 +140,13 @@ export class AdminAnalyticsService {
 
     const fmt = dateFormat(groupBy);
 
+    // Trả về số cửa hàng đăng ký mới theo từng kỳ (không breakdown status — tránh gây hiểu nhầm)
     const rows = await this.prisma.$queryRawUnsafe<
-      {
-        period: string;
-        total: string;
-        active: string;
-        pending: string;
-        banned: string;
-        inactive: string;
-      }[]
+      { period: string; total: string }[]
     >(
       `SELECT
-         DATE_FORMAT(created_at, ?)                                      AS period,
-         COUNT(*)                                                         AS total,
-         SUM(CASE WHEN status = 'ACTIVE'   THEN 1 ELSE 0 END)           AS active,
-         SUM(CASE WHEN status = 'PENDING'  THEN 1 ELSE 0 END)           AS pending,
-         SUM(CASE WHEN status = 'BANNED'   THEN 1 ELSE 0 END)           AS banned,
-         SUM(CASE WHEN status = 'INACTIVE' THEN 1 ELSE 0 END)           AS inactive
+         DATE_FORMAT(created_at, ?) AS period,
+         COUNT(*)                   AS total
        FROM stores
        WHERE created_at >= ? AND created_at <= ?
        GROUP BY period
@@ -145,10 +159,6 @@ export class AdminAnalyticsService {
     return rows.map((r) => ({
       period: r.period,
       total: Number(r.total),
-      active: Number(r.active),
-      pending: Number(r.pending),
-      banned: Number(r.banned),
-      inactive: Number(r.inactive),
     }));
   }
 
@@ -157,23 +167,13 @@ export class AdminAnalyticsService {
 
     const fmt = dateFormat(groupBy);
 
+    // Trả về số người dùng đăng ký mới theo từng kỳ (không breakdown status)
     const rows = await this.prisma.$queryRawUnsafe<
-      {
-        period: string;
-        total: string;
-        active: string;
-        banned: string;
-        inactive: string;
-        suspended: string;
-      }[]
+      { period: string; total: string }[]
     >(
       `SELECT
-         DATE_FORMAT(created_at, ?)                                        AS period,
-         COUNT(*)                                                           AS total,
-         SUM(CASE WHEN status = 'ACTIVE'    THEN 1 ELSE 0 END)            AS active,
-         SUM(CASE WHEN status = 'BANNED'    THEN 1 ELSE 0 END)            AS banned,
-         SUM(CASE WHEN status = 'INACTIVE'  THEN 1 ELSE 0 END)            AS inactive,
-         SUM(CASE WHEN status = 'SUSPENDED' THEN 1 ELSE 0 END)            AS suspended
+         DATE_FORMAT(created_at, ?) AS period,
+         COUNT(*)                   AS total
        FROM users
        WHERE created_at >= ? AND created_at <= ?
        GROUP BY period
@@ -186,10 +186,6 @@ export class AdminAnalyticsService {
     return rows.map((r) => ({
       period: r.period,
       total: Number(r.total),
-      active: Number(r.active),
-      banned: Number(r.banned),
-      inactive: Number(r.inactive),
-      suspended: Number(r.suspended),
     }));
   }
 

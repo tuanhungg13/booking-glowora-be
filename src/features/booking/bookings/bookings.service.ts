@@ -28,11 +28,13 @@ import { BookingFilterDto } from './dto/booking-filter.dto';
 import { MyBookingFilterDto } from './dto/my-booking-filter.dto';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { CouponsService } from '../coupons/coupons.service';
+import { PromotionsService } from '../promotions/promotions.service';
 
 const bookingInclude = {
   customer: { select: { id: true, fullName: true, email: true, phone: true } },
   store: true,
   coupon: { select: { id: true, code: true, type: true, value: true } },
+  promotion: { select: { id: true, name: true, type: true, value: true, scope: true } },
   items: {
     orderBy: { sortOrder: 'asc' as const },
     include: {
@@ -54,6 +56,7 @@ export class BookingsService {
     private readonly notifications: NotificationsService,
     private readonly systemLog: SystemLogService,
     private readonly coupons: CouponsService,
+    private readonly promotions: PromotionsService,
   ) {}
 
   async create(dto: CreateBookingDto, customerId: string, ipAddress?: string, requestId?: string) {
@@ -70,6 +73,9 @@ export class BookingsService {
       );
     }
 
+    // Fetch active promotion ngoài transaction (read-only, không cần lock)
+    const activePromotion = await this.promotions.findActiveForStore(dto.storeId);
+
     const booking = await this.prisma.$transaction(
       async (tx) => {
         const store = await tx.store.findUnique({ where: { id: dto.storeId } });
@@ -85,6 +91,7 @@ export class BookingsService {
           staffId: string;
           startTime: Date;
           duration: number;
+          originalPrice: Prisma.Decimal | null;
           price: Prisma.Decimal;
           serviceName: string;
           variantName: string;
@@ -134,6 +141,22 @@ export class BookingsService {
             select: { user: { select: { fullName: true } } },
           });
 
+          // Apply promotion per item nếu có và service nằm trong scope
+          let itemPrice = variant.price;
+          let originalPrice: Prisma.Decimal | null = null;
+          if (activePromotion) {
+            const variantWithService = await tx.serviceVariant.findUnique({
+              where: { id: variant.id },
+              include: { service: { select: { categoryId: true } } },
+            });
+            const categoryId = variantWithService?.service.categoryId ?? null;
+            if (this.promotions.isServiceInScope(activePromotion, svc.serviceId, categoryId)) {
+              const saving = this.promotions.calcDiscount(activePromotion, Number(variant.price));
+              originalPrice = variant.price;
+              itemPrice = new Prisma.Decimal(Number(variant.price) - saving);
+            }
+          }
+
           itemsData.push({
             sortOrder: i,
             serviceId: svc.serviceId,
@@ -141,7 +164,8 @@ export class BookingsService {
             staffId,
             startTime: new Date(currentTime),
             duration: variant.duration,
-            price: variant.price,
+            originalPrice,
+            price: itemPrice,
             serviceName: variant.service.name,
             variantName: variant.name,
             staffName: staffRecord?.user?.fullName ?? null,
@@ -152,8 +176,17 @@ export class BookingsService {
         }
 
         const totalDuration = itemsData.reduce((sum, item) => sum + item.duration, 0);
+        // totalPrice = tổng giá đã áp dụng promotion (price per item đã giảm nếu có)
         const totalPriceNum = itemsData.reduce((sum, item) => sum + Number(item.price), 0);
         const totalPrice = new Prisma.Decimal(totalPriceNum);
+
+        // promotionDiscount = tổng tiết kiệm từ promotion (chỉ dùng để hiển thị)
+        const promotionDiscountNum = itemsData.reduce(
+          (sum, item) => sum + (item.originalPrice ? Number(item.originalPrice) - Number(item.price) : 0),
+          0,
+        );
+        const promotionDiscount = new Prisma.Decimal(promotionDiscountNum);
+        const promotionId = promotionDiscountNum > 0 ? activePromotion!.id : null;
 
         let couponId: string | null = null;
         let discountAmount = new Prisma.Decimal(0);
@@ -179,9 +212,11 @@ export class BookingsService {
             scheduledAt: new Date(dto.scheduledAt),
             totalDuration,
             totalPrice,
+            promotionDiscount,
             discountAmount,
             finalPrice,
             couponId,
+            promotionId,
             status: store.autoConfirm ? BookingStatus.CONFIRMED : BookingStatus.PENDING,
             confirmedAt: store.autoConfirm ? new Date() : undefined,
             notes: dto.notes,

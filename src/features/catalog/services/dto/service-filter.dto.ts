@@ -4,6 +4,11 @@ import { IsIn, IsInt, IsNumber, IsOptional, IsString, IsUUID, Max, Min } from 'c
 import { ServiceStatus } from '@prisma/client';
 
 export class ServiceQueryDto {
+  @ApiPropertyOptional({ example: 'cắt tóc' })
+  @IsOptional()
+  @IsString()
+  q?: string;
+
   @ApiPropertyOptional({ enum: ServiceStatus })
   @IsOptional()
   @IsIn(Object.values(ServiceStatus))

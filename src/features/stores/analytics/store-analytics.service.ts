@@ -80,6 +80,9 @@ export class StoreAnalyticsService {
       rejectedCount: statusMap['REJECTED'] ?? 0,
       pendingCount: statusMap['PENDING'] ?? 0,
       confirmedCount: statusMap['CONFIRMED'] ?? 0,
+      depositPendingCount: statusMap['DEPOSIT_PENDING'] ?? 0,
+      depositPaidCount: statusMap['DEPOSIT_PAID'] ?? 0,
+      paidCount: statusMap['PAID'] ?? 0,
       avgRating: ratingAgg._avg.rating ? Number(ratingAgg._avg.rating.toFixed(2)) : null,
       reviewCount: ratingAgg._count.id,
       newCustomers: Number(newCustomerRows[0]?.count ?? 0),
@@ -133,16 +136,22 @@ export class StoreAnalyticsService {
         rejected: string;
         pending: string;
         confirmed: string;
+        deposit_pending: string;
+        deposit_paid: string;
+        paid: string;
       }[]
     >(
       `SELECT
-         DATE_FORMAT(scheduled_at, ?)                                     AS period,
-         COUNT(*)                                                          AS total,
-         SUM(CASE WHEN status = 'COMPLETED' THEN 1 ELSE 0 END)           AS completed,
-         SUM(CASE WHEN status = 'CANCELLED' THEN 1 ELSE 0 END)           AS cancelled,
-         SUM(CASE WHEN status = 'REJECTED'  THEN 1 ELSE 0 END)           AS rejected,
-         SUM(CASE WHEN status = 'PENDING'   THEN 1 ELSE 0 END)           AS pending,
-         SUM(CASE WHEN status = 'CONFIRMED' THEN 1 ELSE 0 END)           AS confirmed
+         DATE_FORMAT(scheduled_at, ?)                                          AS period,
+         COUNT(*)                                                               AS total,
+         SUM(CASE WHEN status = 'COMPLETED'       THEN 1 ELSE 0 END)          AS completed,
+         SUM(CASE WHEN status = 'CANCELLED'       THEN 1 ELSE 0 END)          AS cancelled,
+         SUM(CASE WHEN status = 'REJECTED'        THEN 1 ELSE 0 END)          AS rejected,
+         SUM(CASE WHEN status = 'PENDING'         THEN 1 ELSE 0 END)          AS pending,
+         SUM(CASE WHEN status = 'CONFIRMED'       THEN 1 ELSE 0 END)          AS confirmed,
+         SUM(CASE WHEN status = 'DEPOSIT_PENDING' THEN 1 ELSE 0 END)          AS deposit_pending,
+         SUM(CASE WHEN status = 'DEPOSIT_PAID'    THEN 1 ELSE 0 END)          AS deposit_paid,
+         SUM(CASE WHEN status = 'PAID'            THEN 1 ELSE 0 END)          AS paid
        FROM bookings
        WHERE store_id = ?
          AND scheduled_at >= ?
@@ -163,6 +172,9 @@ export class StoreAnalyticsService {
       rejected: Number(r.rejected),
       pending: Number(r.pending),
       confirmed: Number(r.confirmed),
+      depositPending: Number(r.deposit_pending),
+      depositPaid: Number(r.deposit_paid),
+      paid: Number(r.paid),
     }));
   }
 

@@ -207,6 +207,72 @@ export class StoresController {
     return this.storesService.uploadBanner(id, user.id, file);
   }
 
+  @ApiOperation({ summary: 'Upload CCCD front image for store verification' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+      required: ['file'],
+    },
+  })
+  @ApiBearerAuth()
+  @RequirePermissions(Permissions.STORE.UPDATE)
+  @Post(':id/cccd-front')
+  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
+  uploadCccdFront(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    if (!file) throw new BadRequestException('No file uploaded');
+    return this.storesService.uploadCccdFront(id, user.id, file);
+  }
+
+  @ApiOperation({ summary: 'Upload CCCD back image for store verification' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+      required: ['file'],
+    },
+  })
+  @ApiBearerAuth()
+  @RequirePermissions(Permissions.STORE.UPDATE)
+  @Post(':id/cccd-back')
+  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
+  uploadCccdBack(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    if (!file) throw new BadRequestException('No file uploaded');
+    return this.storesService.uploadCccdBack(id, user.id, file);
+  }
+
+  @ApiOperation({ summary: 'Upload business license image for store verification' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+      required: ['file'],
+    },
+  })
+  @ApiBearerAuth()
+  @RequirePermissions(Permissions.STORE.UPDATE)
+  @Post(':id/business-license')
+  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
+  uploadBusinessLicense(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    if (!file) throw new BadRequestException('No file uploaded');
+    return this.storesService.uploadBusinessLicense(id, user.id, file);
+  }
+
   @ApiOperation({
     summary: 'Generate a one-time Telegram group setup link (valid 10 min)',
   })
