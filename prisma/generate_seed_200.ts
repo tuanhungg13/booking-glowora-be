@@ -1059,7 +1059,6 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
   const shopCategoryRows: string[] = [];
   const serviceRows: string[] = [];
   const variantRows: string[] = [];
-  const staffServiceRows: string[] = [];
   const storeServiceCounts: number[] = [];
   const storeCategoryCounts: number[] = [];
   const serviceImageCounts: number[] = [];
@@ -1169,28 +1168,11 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
       }
     }
 
-    const assignmentSet = new Set<string>();
-    store.serviceSlugs.forEach((serviceSlug, serviceIndex) => {
-      const staffEmail = store.staffEmails[serviceIndex % store.staffEmails.length];
-      assignmentSet.add(`${staffEmail}|${serviceSlug}`);
-    });
-    for (const staffEmail of store.staffEmails) {
-      const staffRand = seededRand(store.index * 7919 + store.staffEmails.indexOf(staffEmail));
-      for (const serviceSlug of store.serviceSlugs) {
-        if (staffRand() < 0.6) assignmentSet.add(`${staffEmail}|${serviceSlug}`);
-      }
-    }
-    for (const assignment of assignmentSet) {
-      const [staffEmail, serviceSlug] = assignment.split('|');
-      staffServiceRows.push(`(${subStaff(staffEmail, store.slug)}, ${subService(serviceSlug, store.slug)})`);
-    }
-
     accounts.push(`| ${store.code} | ${store.name} | \`${store.ownerEmail}\` | ${store.staffEmails.map((email) => `\`${email}\``).join('<br>')} |`);
   }
 
   sqlLines.push('-- SECTION 0: Safety cleanup for regenerated demo seed');
   sqlLines.push('SET FOREIGN_KEY_CHECKS = 0;');
-  sqlLines.push("DELETE FROM `staff_services` WHERE `staff_id` IN (SELECT st.`id` FROM `staff` st JOIN `stores` s ON s.`id` = st.`store_id` WHERE s.`email` LIKE 'hello.s%@glowora.local');");
   sqlLines.push("DELETE FROM `service_variants` WHERE `service_id` IN (SELECT sv.`id` FROM `services` sv JOIN `stores` s ON s.`id` = sv.`store_id` WHERE s.`email` LIKE 'hello.s%@glowora.local');");
   sqlLines.push("DELETE FROM `services` WHERE `store_id` IN (SELECT `id` FROM `stores` WHERE `email` LIKE 'hello.s%@glowora.local');");
   sqlLines.push("DELETE FROM `staff_schedules` WHERE `store_id` IN (SELECT `id` FROM `stores` WHERE `email` LIKE 'hello.s%@glowora.local');");
@@ -1320,14 +1302,6 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
     }),
   );
 
-  sqlLines.push('-- SECTION 12: Staff-service assignments');
-  sqlLines.push(
-    ...batchInsert(staffServiceRows, 'staff_services', ['staff_id', 'service_id'], {
-      batchSize: 400,
-      suffix: 'ON DUPLICATE KEY UPDATE `staff_id` = `staff_id`;',
-    }),
-  );
-
   sqlLines.push('COMMIT;');
   sqlLines.push('');
 
@@ -1343,7 +1317,6 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
     shopCategories: shopCategoryRows.length,
     services: serviceRows.length,
     variants: variantRows.length,
-    staffServices: staffServiceRows.length,
     minServicesPerStore: minOf(storeServiceCounts),
     maxServicesPerStore: maxOf(storeServiceCounts),
     minCategoriesPerStore: minOf(storeCategoryCounts),

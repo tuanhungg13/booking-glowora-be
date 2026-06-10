@@ -138,6 +138,14 @@ export const Permissions = {
     DELETE: 'DELETE_COUPON',
     MANAGE: 'MANAGE_COUPON', // tạo platform-wide coupon (admin only)
   },
+
+  // ─── Promotion ───
+  PROMOTION: {
+    CREATE: 'CREATE_PROMOTION',
+    VIEW: 'VIEW_PROMOTION',
+    UPDATE: 'UPDATE_PROMOTION',
+    DELETE: 'DELETE_PROMOTION',
+  },
 } as const;
 
 type PermissionGroup = (typeof Permissions)[keyof typeof Permissions];

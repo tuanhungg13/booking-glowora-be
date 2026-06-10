@@ -116,6 +116,23 @@ CREATE TABLE `stores` (
     `avg_rating` DECIMAL(3, 2) NOT NULL DEFAULT 0.00,
     `total_reviews` INTEGER NOT NULL DEFAULT 0,
     `telegram_group_id` VARCHAR(50) NULL,
+    `cccd_full_name` VARCHAR(150) NULL,
+    `citizen_id` VARCHAR(20) NULL,
+    `cccd_date_of_birth` DATE NULL,
+    `cccd_gender` VARCHAR(10) NULL,
+    `cccd_nationality` VARCHAR(50) NULL,
+    `cccd_address` VARCHAR(500) NULL,
+    `cccd_issue_date` DATE NULL,
+    `cccd_expiry_date` DATE NULL,
+    `cccd_front_url` VARCHAR(500) NULL,
+    `cccd_back_url` VARCHAR(500) NULL,
+    `biz_name` VARCHAR(200) NULL,
+    `biz_code` VARCHAR(50) NULL,
+    `biz_owner_name` VARCHAR(150) NULL,
+    `biz_address` VARCHAR(500) NULL,
+    `biz_issue_date` DATE NULL,
+    `biz_line` TEXT NULL,
+    `business_license_url` VARCHAR(500) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
@@ -218,14 +235,6 @@ CREATE TABLE `service_variants` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `staff_services` (
-    `staff_id` CHAR(36) NOT NULL,
-    `service_id` CHAR(36) NOT NULL,
-
-    PRIMARY KEY (`staff_id`, `service_id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
 CREATE TABLE `staff_schedules` (
     `id` CHAR(36) NOT NULL,
     `store_id` CHAR(36) NOT NULL,
@@ -234,9 +243,28 @@ CREATE TABLE `staff_schedules` (
     `start_time` VARCHAR(5) NOT NULL,
     `end_time` VARCHAR(5) NOT NULL,
     `is_active` BOOLEAN NOT NULL DEFAULT true,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     INDEX `staff_schedules_store_id_day_of_week_idx`(`store_id`, `day_of_week`),
     UNIQUE INDEX `staff_schedules_staff_id_day_of_week_key`(`staff_id`, `day_of_week`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `staff_schedule_histories` (
+    `id` CHAR(36) NOT NULL,
+    `store_id` CHAR(36) NOT NULL,
+    `staff_id` CHAR(36) NOT NULL,
+    `day_of_week` ENUM('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY') NOT NULL,
+    `start_time` VARCHAR(5) NOT NULL,
+    `end_time` VARCHAR(5) NOT NULL,
+    `is_active` BOOLEAN NOT NULL,
+    `effective_from` DATETIME(3) NOT NULL,
+    `effective_to` DATETIME(3) NOT NULL,
+    `changed_by` CHAR(36) NULL,
+
+    INDEX `staff_schedule_histories_staff_id_effective_to_idx`(`staff_id`, `effective_to`),
+    INDEX `staff_schedule_histories_store_id_effective_to_idx`(`store_id`, `effective_to`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -246,10 +274,35 @@ CREATE TABLE `staff_day_offs` (
     `store_id` CHAR(36) NOT NULL,
     `staff_id` CHAR(36) NOT NULL,
     `date` DATE NOT NULL,
+    `start_time` VARCHAR(5) NULL,
+    `end_time` VARCHAR(5) NULL,
     `reason` VARCHAR(191) NULL,
+    `status` ENUM('PENDING', 'APPROVED', 'REJECTED') NOT NULL DEFAULT 'PENDING',
+    `reviewed_by` CHAR(36) NULL,
+    `reviewed_at` DATETIME(3) NULL,
+    `review_note` VARCHAR(191) NULL,
 
     INDEX `staff_day_offs_store_id_date_idx`(`store_id`, `date`),
+    INDEX `staff_day_offs_store_id_status_idx`(`store_id`, `status`),
     UNIQUE INDEX `staff_day_offs_staff_id_date_key`(`staff_id`, `date`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `staff_call_ins` (
+    `id` CHAR(36) NOT NULL,
+    `staff_id` CHAR(36) NOT NULL,
+    `store_id` CHAR(36) NOT NULL,
+    `date` DATE NOT NULL,
+    `start_time` VARCHAR(5) NULL,
+    `end_time` VARCHAR(5) NULL,
+    `status` ENUM('PENDING', 'ACCEPTED', 'REJECTED') NOT NULL DEFAULT 'PENDING',
+    `note` VARCHAR(191) NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL,
+
+    INDEX `staff_call_ins_store_id_date_idx`(`store_id`, `date`),
+    UNIQUE INDEX `staff_call_ins_staff_id_date_key`(`staff_id`, `date`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -279,8 +332,10 @@ CREATE TABLE `bookings` (
     `total_duration` INTEGER NOT NULL,
     `total_price` DECIMAL(12, 2) NOT NULL,
     `discount_amount` DECIMAL(12, 2) NOT NULL DEFAULT 0,
+    `promotion_discount` DECIMAL(12, 2) NOT NULL DEFAULT 0,
     `final_price` DECIMAL(12, 2) NOT NULL DEFAULT 0,
     `coupon_id` CHAR(36) NULL,
+    `promotion_id` CHAR(36) NULL,
     `status` ENUM('PENDING', 'CONFIRMED', 'DEPOSIT_PENDING', 'DEPOSIT_PAID', 'PAID', 'COMPLETED', 'REJECTED', 'CANCELLED') NOT NULL DEFAULT 'PENDING',
     `deposit_amount` DECIMAL(12, 2) NULL,
     `deposit_deadline` DATETIME(3) NULL,
@@ -308,10 +363,12 @@ CREATE TABLE `booking_items` (
     `staff_id` CHAR(36) NULL,
     `start_time` DATETIME(3) NOT NULL,
     `duration` INTEGER NOT NULL,
+    `original_price` DECIMAL(12, 2) NULL,
     `price` DECIMAL(12, 2) NOT NULL,
     `service_name` VARCHAR(150) NOT NULL,
     `variant_name` VARCHAR(150) NOT NULL,
     `staff_name` VARCHAR(255) NULL,
+    `is_staff_chosen_by_customer` BOOLEAN NOT NULL DEFAULT false,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     INDEX `booking_items_booking_id_idx`(`booking_id`),
@@ -387,7 +444,9 @@ CREATE TABLE `notifications` (
     `id` CHAR(36) NOT NULL,
     `user_id` CHAR(36) NOT NULL,
     `booking_id` CHAR(36) NULL,
-    `type` ENUM('BOOKING_CREATED', 'BOOKING_CONFIRMED', 'BOOKING_REJECTED', 'BOOKING_COMPLETED', 'BOOKING_CANCELLED', 'BOOKING_DEPOSIT_REQUIRED', 'BOOKING_DEPOSIT_PAID', 'BOOKING_DEPOSIT_EXPIRED', 'STORE_APPROVED', 'STORE_REJECTED', 'STORE_LOCKED', 'STAFF_INVITED', 'PAYMENT_SUCCESS', 'BOOKING_REMINDER_1DAY', 'BOOKING_REMINDER_1HOUR') NOT NULL,
+    `call_in_id` CHAR(36) NULL,
+    `day_off_id` CHAR(36) NULL,
+    `type` ENUM('BOOKING_CREATED', 'BOOKING_CONFIRMED', 'BOOKING_REJECTED', 'BOOKING_COMPLETED', 'BOOKING_CANCELLED', 'BOOKING_DEPOSIT_REQUIRED', 'BOOKING_DEPOSIT_PAID', 'BOOKING_DEPOSIT_EXPIRED', 'STORE_APPROVED', 'STORE_REJECTED', 'STORE_LOCKED', 'STAFF_INVITED', 'PAYMENT_SUCCESS', 'BOOKING_REMINDER_1DAY', 'BOOKING_REMINDER_1HOUR', 'STAFF_CALL_IN_REQUEST', 'STAFF_CALL_IN_ACCEPTED', 'STAFF_CALL_IN_REJECTED', 'STAFF_DAY_OFF_REQUEST', 'STAFF_DAY_OFF_APPROVED', 'STAFF_DAY_OFF_REJECTED') NOT NULL,
     `title` VARCHAR(200) NOT NULL,
     `body` TEXT NOT NULL,
     `is_read` BOOLEAN NOT NULL DEFAULT false,
@@ -488,9 +547,46 @@ CREATE TABLE `coupon_usages` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `promotions` (
+    `id` CHAR(36) NOT NULL,
+    `store_id` CHAR(36) NOT NULL,
+    `name` VARCHAR(150) NOT NULL,
+    `description` TEXT NULL,
+    `type` ENUM('PERCENTAGE', 'FIXED') NOT NULL,
+    `value` DECIMAL(12, 2) NOT NULL,
+    `scope` ENUM('STORE', 'CATEGORY', 'SERVICE') NOT NULL DEFAULT 'STORE',
+    `start_at` DATETIME(3) NOT NULL,
+    `end_at` DATETIME(3) NULL,
+    `is_active` BOOLEAN NOT NULL DEFAULT true,
+    `created_by_id` CHAR(36) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL,
+
+    INDEX `promotions_store_id_is_active_idx`(`store_id`, `is_active`),
+    INDEX `promotions_start_at_end_at_idx`(`start_at`, `end_at`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `promotion_categories` (
+    `promotion_id` CHAR(36) NOT NULL,
+    `category_id` CHAR(36) NOT NULL,
+
+    PRIMARY KEY (`promotion_id`, `category_id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `promotion_services` (
+    `promotion_id` CHAR(36) NOT NULL,
+    `service_id` CHAR(36) NOT NULL,
+
+    PRIMARY KEY (`promotion_id`, `service_id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `system_logs` (
     `id` CHAR(36) NOT NULL,
-    `type` ENUM('SYSTEM_ERROR', 'AUTH_REGISTER', 'AUTH_LOGIN', 'AUTH_LOGOUT', 'STORE_CREATED', 'STORE_APPROVED', 'STORE_REJECTED', 'STORE_BANNED', 'STORE_UNLOCKED', 'USER_BANNED', 'USER_UNBANNED', 'PAYMENT_COMPLETED', 'PAYMENT_FAILED', 'REVIEW_HIDDEN', 'REVIEW_SHOWN', 'BOOKING_CREATED', 'BOOKING_CONFIRMED', 'BOOKING_REJECTED', 'BOOKING_COMPLETED', 'BOOKING_CANCELLED', 'BOOKING_DEPOSIT_PAID', 'BOOKING_DEPOSIT_EXPIRED', 'COUPON_CREATED', 'COUPON_UPDATED', 'COUPON_DELETED', 'SERVICE_CREATED', 'SERVICE_UPDATED', 'SERVICE_DELETED') NOT NULL,
+    `type` ENUM('SYSTEM_ERROR', 'AUTH_REGISTER', 'AUTH_LOGIN', 'AUTH_LOGOUT', 'STORE_CREATED', 'STORE_APPROVED', 'STORE_REJECTED', 'STORE_BANNED', 'STORE_UNLOCKED', 'USER_BANNED', 'USER_UNBANNED', 'PAYMENT_COMPLETED', 'PAYMENT_FAILED', 'REVIEW_HIDDEN', 'REVIEW_SHOWN', 'BOOKING_CREATED', 'BOOKING_CONFIRMED', 'BOOKING_REJECTED', 'BOOKING_COMPLETED', 'BOOKING_CANCELLED', 'BOOKING_DEPOSIT_PAID', 'BOOKING_DEPOSIT_EXPIRED', 'COUPON_CREATED', 'COUPON_UPDATED', 'COUPON_DELETED', 'PROMOTION_CREATED', 'PROMOTION_UPDATED', 'PROMOTION_DELETED', 'SERVICE_CREATED', 'SERVICE_UPDATED', 'SERVICE_DELETED') NOT NULL,
     `status` ENUM('SUCCESS', 'ERROR') NOT NULL DEFAULT 'SUCCESS',
     `actor_id` CHAR(36) NULL,
     `store_id` CHAR(36) NULL,
@@ -569,22 +665,28 @@ ALTER TABLE `services` ADD CONSTRAINT `services_category_id_fkey` FOREIGN KEY (`
 ALTER TABLE `service_variants` ADD CONSTRAINT `service_variants_service_id_fkey` FOREIGN KEY (`service_id`) REFERENCES `services`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `staff_services` ADD CONSTRAINT `staff_services_staff_id_fkey` FOREIGN KEY (`staff_id`) REFERENCES `staff`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `staff_services` ADD CONSTRAINT `staff_services_service_id_fkey` FOREIGN KEY (`service_id`) REFERENCES `services`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE `staff_schedules` ADD CONSTRAINT `staff_schedules_store_id_fkey` FOREIGN KEY (`store_id`) REFERENCES `stores`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `staff_schedules` ADD CONSTRAINT `staff_schedules_staff_id_fkey` FOREIGN KEY (`staff_id`) REFERENCES `staff`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `staff_schedule_histories` ADD CONSTRAINT `staff_schedule_histories_store_id_fkey` FOREIGN KEY (`store_id`) REFERENCES `stores`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `staff_schedule_histories` ADD CONSTRAINT `staff_schedule_histories_staff_id_fkey` FOREIGN KEY (`staff_id`) REFERENCES `staff`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `staff_day_offs` ADD CONSTRAINT `staff_day_offs_store_id_fkey` FOREIGN KEY (`store_id`) REFERENCES `stores`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `staff_day_offs` ADD CONSTRAINT `staff_day_offs_staff_id_fkey` FOREIGN KEY (`staff_id`) REFERENCES `staff`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `staff_call_ins` ADD CONSTRAINT `staff_call_ins_staff_id_fkey` FOREIGN KEY (`staff_id`) REFERENCES `staff`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `staff_call_ins` ADD CONSTRAINT `staff_call_ins_store_id_fkey` FOREIGN KEY (`store_id`) REFERENCES `stores`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `staff_invites` ADD CONSTRAINT `staff_invites_store_id_fkey` FOREIGN KEY (`store_id`) REFERENCES `stores`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -600,6 +702,9 @@ ALTER TABLE `bookings` ADD CONSTRAINT `bookings_store_id_fkey` FOREIGN KEY (`sto
 
 -- AddForeignKey
 ALTER TABLE `bookings` ADD CONSTRAINT `bookings_coupon_id_fkey` FOREIGN KEY (`coupon_id`) REFERENCES `coupons`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `bookings` ADD CONSTRAINT `bookings_promotion_id_fkey` FOREIGN KEY (`promotion_id`) REFERENCES `promotions`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `booking_items` ADD CONSTRAINT `booking_items_booking_id_fkey` FOREIGN KEY (`booking_id`) REFERENCES `bookings`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -647,6 +752,12 @@ ALTER TABLE `notifications` ADD CONSTRAINT `notifications_user_id_fkey` FOREIGN 
 ALTER TABLE `notifications` ADD CONSTRAINT `notifications_booking_id_fkey` FOREIGN KEY (`booking_id`) REFERENCES `bookings`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `notifications` ADD CONSTRAINT `notifications_call_in_id_fkey` FOREIGN KEY (`call_in_id`) REFERENCES `staff_call_ins`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `notifications` ADD CONSTRAINT `notifications_day_off_id_fkey` FOREIGN KEY (`day_off_id`) REFERENCES `staff_day_offs`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `push_subscriptions` ADD CONSTRAINT `push_subscriptions_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -678,6 +789,24 @@ ALTER TABLE `coupon_usages` ADD CONSTRAINT `coupon_usages_user_id_fkey` FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE `coupon_usages` ADD CONSTRAINT `coupon_usages_booking_id_fkey` FOREIGN KEY (`booking_id`) REFERENCES `bookings`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `promotions` ADD CONSTRAINT `promotions_store_id_fkey` FOREIGN KEY (`store_id`) REFERENCES `stores`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `promotions` ADD CONSTRAINT `promotions_created_by_id_fkey` FOREIGN KEY (`created_by_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `promotion_categories` ADD CONSTRAINT `promotion_categories_promotion_id_fkey` FOREIGN KEY (`promotion_id`) REFERENCES `promotions`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `promotion_categories` ADD CONSTRAINT `promotion_categories_category_id_fkey` FOREIGN KEY (`category_id`) REFERENCES `service_categories`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `promotion_services` ADD CONSTRAINT `promotion_services_promotion_id_fkey` FOREIGN KEY (`promotion_id`) REFERENCES `promotions`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `promotion_services` ADD CONSTRAINT `promotion_services_service_id_fkey` FOREIGN KEY (`service_id`) REFERENCES `services`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `system_logs` ADD CONSTRAINT `system_logs_actor_id_fkey` FOREIGN KEY (`actor_id`) REFERENCES `users`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

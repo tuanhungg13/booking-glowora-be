@@ -79,6 +79,12 @@ const PERMISSIONS = [
   { code: 'VIEW_WORKING_HOUR', name: 'Xem giờ làm việc' },
   { code: 'UPDATE_WORKING_HOUR', name: 'Cập nhật giờ làm việc' },
   { code: 'DELETE_WORKING_HOUR', name: 'Xóa giờ làm việc' },
+  // Staff day-off & call-in
+  { code: 'REVIEW_STAFF_DAY_OFF', name: 'Duyệt ngày nghỉ nhân viên' },
+  { code: 'CREATE_STAFF_CALL_IN', name: 'Tạo yêu cầu làm thêm' },
+  { code: 'VIEW_STAFF_CALL_IN', name: 'Xem yêu cầu làm thêm' },
+  { code: 'RESPOND_STAFF_CALL_IN', name: 'Phản hồi yêu cầu làm thêm' },
+  { code: 'DELETE_STAFF_CALL_IN', name: 'Xóa yêu cầu làm thêm' },
   // Staff management
   { code: 'INVITE_STAFF', name: 'Mời nhân viên' },
   { code: 'VIEW_STAFF', name: 'Xem nhân viên' },
@@ -106,6 +112,11 @@ const PERMISSIONS = [
   { code: 'UPDATE_COUPON', name: 'Cập nhật mã giảm giá' },
   { code: 'DELETE_COUPON', name: 'Xóa mã giảm giá' },
   { code: 'MANAGE_COUPON', name: 'Quản lý mã giảm giá toàn hệ thống' },
+  // Promotion
+  { code: 'CREATE_PROMOTION', name: 'Tạo chương trình khuyến mãi' },
+  { code: 'VIEW_PROMOTION', name: 'Xem chương trình khuyến mãi' },
+  { code: 'UPDATE_PROMOTION', name: 'Cập nhật chương trình khuyến mãi' },
+  { code: 'DELETE_PROMOTION', name: 'Xóa chương trình khuyến mãi' },
 ];
 
 // ─── Permissions theo từng role ───────────────────────────────────────────────
@@ -129,6 +140,7 @@ const STAFF_PERMISSIONS = [
   'CREATE_CONVERSATION', 'VIEW_CONVERSATION',
   'CREATE_MESSAGE', 'VIEW_MESSAGE',
   'VIEW_STAFF_SCHEDULE', 'VIEW_STAFF_DAY_OFF', 'CREATE_STAFF_DAY_OFF',
+  'VIEW_STAFF_CALL_IN', 'RESPOND_STAFF_CALL_IN',
   'VIEW_NOTIFICATION',
   'VIEW_ROLE',
   'VIEW_STAFF',
@@ -139,20 +151,23 @@ const SHOP_OWNER_PERMISSIONS = [
   'VIEW_ROLE', 'CREATE_ROLE', 'UPDATE_ROLE',
   'VIEW_PERMISSION',
   'CREATE_SERVICE', 'VIEW_SERVICE', 'UPDATE_SERVICE', 'DELETE_SERVICE',
-  'VIEW_CATEGORY',
+  'CREATE_CATEGORY', 'VIEW_CATEGORY', 'UPDATE_CATEGORY', 'DELETE_CATEGORY',
   'CREATE_APPOINTMENT', 'VIEW_APPOINTMENT', 'UPDATE_APPOINTMENT', 'DELETE_APPOINTMENT',
   'CREATE_PAYMENT', 'VIEW_PAYMENT', 'UPDATE_PAYMENT',
-  'VIEW_REVIEW', 'UPDATE_REVIEW', 'DELETE_REVIEW',
+  'VIEW_REVIEW', 'UPDATE_REVIEW', 'DELETE_REVIEW', 'MANAGE_REVIEW',
   'CREATE_CONVERSATION', 'VIEW_CONVERSATION', 'UPDATE_CONVERSATION',
   'CREATE_MESSAGE', 'VIEW_MESSAGE',
   'CREATE_STAFF_SCHEDULE', 'VIEW_STAFF_SCHEDULE', 'UPDATE_STAFF_SCHEDULE', 'DELETE_STAFF_SCHEDULE',
-  'CREATE_STAFF_DAY_OFF', 'VIEW_STAFF_DAY_OFF', 'UPDATE_STAFF_DAY_OFF',
+  'CREATE_STAFF_DAY_OFF', 'VIEW_STAFF_DAY_OFF', 'UPDATE_STAFF_DAY_OFF', 'DELETE_STAFF_DAY_OFF',
+  'REVIEW_STAFF_DAY_OFF',
+  'CREATE_STAFF_CALL_IN', 'VIEW_STAFF_CALL_IN', 'DELETE_STAFF_CALL_IN',
   'CREATE_WORKING_HOUR', 'VIEW_WORKING_HOUR', 'UPDATE_WORKING_HOUR', 'DELETE_WORKING_HOUR',
   'VIEW_NOTIFICATION', 'CREATE_NOTIFICATION',
   'CREATE_STORE', 'UPDATE_STORE',
   'INVITE_STAFF', 'VIEW_STAFF', 'UPDATE_STAFF', 'REMOVE_STAFF',
   'VIEW_REPORT',
   'CREATE_COUPON', 'VIEW_COUPON', 'UPDATE_COUPON', 'DELETE_COUPON',
+  'CREATE_PROMOTION', 'VIEW_PROMOTION', 'UPDATE_PROMOTION', 'DELETE_PROMOTION',
   'VIEW_SHOP_LOG',
 ];
 
