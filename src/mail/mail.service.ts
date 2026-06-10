@@ -74,6 +74,50 @@ export class MailService {
     this.logger.log(`Booking event email (${eventType}) sent to ${email}`);
   }
 
+  async sendStaffNotification(params: {
+    email: string;
+    fullName: string;
+    subject: string;
+    body: string;
+    details?: Array<{ label: string; value: string }>;
+    actionUrl?: string;
+    actionLabel?: string;
+  }): Promise<void> {
+    const { email, fullName, subject, body, details, actionUrl, actionLabel } = params;
+    await this.mailer.sendMail({
+      to: email,
+      subject: `[Glowora] ${subject}`,
+      template: 'staff-notification',
+      context: {
+        fullName,
+        subject,
+        body,
+        hasDetails: !!details?.length,
+        details: details ?? [],
+        hasAction: !!actionUrl,
+        actionUrl,
+        actionLabel,
+      },
+    });
+    this.logger.log(`Staff notification email (${subject}) sent to ${email}`);
+  }
+
+  async sendStaffInvite(params: {
+    email: string;
+    fullName: string;
+    storeName: string;
+    inviteUrl: string;
+  }): Promise<void> {
+    const { email, fullName, storeName, inviteUrl } = params;
+    await this.mailer.sendMail({
+      to: email,
+      subject: `[Glowora] Lời mời làm nhân viên tại ${storeName}`,
+      template: 'staff-invite',
+      context: { fullName, storeName, inviteUrl },
+    });
+    this.logger.log(`Staff invite email sent to ${email}`);
+  }
+
   async sendBookingReminder(params: {
     email: string;
     fullName: string;

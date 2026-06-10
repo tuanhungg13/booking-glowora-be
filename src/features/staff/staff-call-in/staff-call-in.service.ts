@@ -2,11 +2,14 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { CallInStatus, DayOfWeek, NotificationType } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { ChatGateway } from '../../../gateways/chat.gateway';
+import { MailService } from '../../../mail/mail.service';
 import { vnTodayStr } from '../../../common/utils/date.util';
 import { CreateStaffCallInDto } from './dto/create-staff-call-in.dto';
 import { RespondAction } from './dto/respond-staff-call-in.dto';
@@ -28,15 +31,19 @@ const callInInclude = {
 
 @Injectable()
 export class StaffCallInService {
+  private readonly logger = new Logger(StaffCallInService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly gateway: ChatGateway,
+    private readonly mail: MailService,
+    private readonly config: ConfigService,
   ) {}
 
   async create(storeId: string, staffId: string, dto: CreateStaffCallInDto) {
     const staff = await this.prisma.staff.findFirst({
       where: { id: staffId, storeId },
-      include: { user: { select: { id: true, fullName: true } }, store: { select: { name: true } } },
+      include: { user: { select: { id: true, fullName: true, email: true } }, store: { select: { name: true } } },
     });
     if (!staff) throw new NotFoundException('Nhân viên không thuộc cửa hàng này');
 
@@ -73,16 +80,34 @@ export class StaffCallInService {
     // Gửi notification cho nhân viên
     const dateStr = dateUTC.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'UTC' });
     const timeStr = dto.startTime && dto.endTime ? ` (${dto.startTime}–${dto.endTime})` : '';
+    const notifBody = `${staff.store.name} mời bạn làm thêm ngày ${dateStr}${timeStr}${dto.note ? `. Ghi chú: ${dto.note}` : ''}`;
     const notif = await this.prisma.notification.create({
       data: {
         userId: staff.userId,
         callInId: callIn.id,
         type: NotificationType.STAFF_CALL_IN_REQUEST,
         title: 'Yêu cầu làm thêm',
-        body: `${staff.store.name} mời bạn làm thêm ngày ${dateStr}${timeStr}${dto.note ? `. Ghi chú: ${dto.note}` : ''}`,
+        body: notifBody,
       },
     });
     this.gateway.emitToUser(staff.userId, 'notification_received', notif);
+
+    const frontendUrl = this.config.get<string>('FRONTEND_URL', 'http://localhost:3000');
+    const details = [
+      { label: 'Cơ sở', value: staff.store.name },
+      { label: 'Ngày làm', value: dateStr },
+      { label: 'Giờ', value: dto.startTime && dto.endTime ? `${dto.startTime} – ${dto.endTime}` : 'Cả ngày' },
+      ...(dto.note ? [{ label: 'Ghi chú', value: dto.note }] : []),
+    ];
+    this.mail.sendStaffNotification({
+      email: staff.user.email,
+      fullName: staff.user.fullName ?? staff.user.email,
+      subject: `Lời mời làm thêm từ ${staff.store.name}`,
+      body: notifBody,
+      details,
+      actionUrl: `${frontendUrl}/dashboard/my-schedule`,
+      actionLabel: 'Xem và phản hồi lời mời',
+    }).catch((err) => this.logger.error(`Failed to send call-in request email`, err));
 
     return callIn;
   }
@@ -132,20 +157,35 @@ export class StaffCallInService {
     // Gửi notification cho manager
     const ownerRole = await this.prisma.userRole.findFirst({
       where: { storeId: callIn.storeId, role: { code: 'SHOP_OWNER' } },
+      include: { user: { select: { id: true, email: true, fullName: true } } },
     });
     if (ownerRole) {
       const dateStr = callIn.date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'UTC' });
       const isAccepted = action === RespondAction.ACCEPT;
+      const notifBody = `${callIn.staff.user.fullName} đã ${isAccepted ? 'chấp nhận' : 'từ chối'} làm thêm ngày ${dateStr} tại ${callIn.store.name}`;
       const notif = await this.prisma.notification.create({
         data: {
           userId: ownerRole.userId,
           callInId: callIn.id,
           type: isAccepted ? NotificationType.STAFF_CALL_IN_ACCEPTED : NotificationType.STAFF_CALL_IN_REJECTED,
           title: isAccepted ? `${callIn.staff.user.fullName} đã chấp nhận` : `${callIn.staff.user.fullName} từ chối`,
-          body: `${callIn.staff.user.fullName} đã ${isAccepted ? 'chấp nhận' : 'từ chối'} làm thêm ngày ${dateStr} tại ${callIn.store.name}`,
+          body: notifBody,
         },
       });
       this.gateway.emitToUser(ownerRole.userId, 'notification_received', notif);
+
+      const details = [
+        { label: 'Nhân viên', value: callIn.staff.user.fullName },
+        { label: 'Ngày làm', value: dateStr },
+        { label: 'Cơ sở', value: callIn.store.name },
+      ];
+      this.mail.sendStaffNotification({
+        email: ownerRole.user.email,
+        fullName: ownerRole.user.fullName ?? ownerRole.user.email,
+        subject: isAccepted ? `${callIn.staff.user.fullName} đã chấp nhận ca làm thêm` : `${callIn.staff.user.fullName} từ chối ca làm thêm`,
+        body: notifBody,
+        details,
+      }).catch((err) => this.logger.error(`Failed to send call-in respond email`, err));
     }
 
     return updated;

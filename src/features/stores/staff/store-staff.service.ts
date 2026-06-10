@@ -3,12 +3,16 @@ import {
   ConflictException,
   ForbiddenException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { DayOffStatus, NotificationType, StaffStatus } from '@prisma/client';
 import { randomBytes } from 'crypto';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { PermissionCacheService } from '../../../redis/permission-cache.service';
+import { ChatGateway } from '../../../gateways/chat.gateway';
+import { MailService } from '../../../mail/mail.service';
 import { StoresService } from '../stores.service';
 import { AcceptInviteDto } from './dto/accept-invite.dto';
 import { InviteStaffDto } from './dto/invite-staff.dto';
@@ -23,10 +27,15 @@ const staffInclude = {
 
 @Injectable()
 export class StoreStaffService {
+  private readonly logger = new Logger(StoreStaffService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly storesService: StoresService,
     private readonly permissionCache: PermissionCacheService,
+    private readonly mail: MailService,
+    private readonly gateway: ChatGateway,
+    private readonly config: ConfigService,
   ) {}
 
   async invite(storeId: string, ownerId: string, dto: InviteStaffDto) {
@@ -63,7 +72,10 @@ export class StoreStaffService {
       data: { storeId, email: dto.email, token, expiresAt, status: 'PENDING' },
     });
 
-    await this.prisma.notification.create({
+    const frontendUrl = this.config.get<string>('FRONTEND_URL', 'http://localhost:3000');
+    const inviteUrl = `${frontendUrl}/staff-invites/accept?token=${token}`;
+
+    const notif = await this.prisma.notification.create({
       data: {
         userId: invitedUser.id,
         type: NotificationType.STAFF_INVITED,
@@ -71,8 +83,16 @@ export class StoreStaffService {
         body: `Bạn được mời làm nhân viên tại cơ sở "${store.name}". Kiểm tra email để nhận link kích hoạt.`,
       },
     });
+    this.gateway.emitToUser(invitedUser.id, 'notification_received', notif);
 
-    return { invite, token };
+    this.mail.sendStaffInvite({
+      email: dto.email,
+      fullName: invitedUser.fullName ?? dto.email,
+      storeName: store.name,
+      inviteUrl,
+    }).catch((err) => this.logger.error(`Failed to send staff invite email to ${dto.email}`, err));
+
+    return { invite };
   }
 
   async acceptInvite(dto: AcceptInviteDto, userId: string) {
