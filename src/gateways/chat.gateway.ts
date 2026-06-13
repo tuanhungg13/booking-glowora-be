@@ -188,7 +188,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       select: { ownerId: true },
     });
     if (!store) return { error: 'Store not found' };
-    if (store.ownerId !== userId) return { error: 'Forbidden' };
+
+    if (store.ownerId !== userId) {
+      const isStaff = await this.prisma.staff.findFirst({
+        where: { userId, storeId: data.storeId, status: 'ACTIVE' },
+        select: { id: true },
+      });
+      if (!isStaff) return { error: 'Forbidden' };
+    }
 
     await client.join(`store:${data.storeId}`);
     return { joined: true, storeId: data.storeId };

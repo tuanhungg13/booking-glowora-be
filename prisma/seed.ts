@@ -229,6 +229,20 @@ async function main() {
     }
   }
 
+  // Helper: sync permissions từ template xuống tất cả store-specific roles cùng code
+  async function syncToStoreRoles(templateCode: string, codes: string[]) {
+    const storeRoles = await prisma.role.findMany({
+      where: { code: templateCode, storeId: { not: null } },
+      select: { id: true },
+    });
+    for (const role of storeRoles) {
+      await assignPermissions(role.id, codes);
+    }
+    if (storeRoles.length > 0) {
+      console.log(`  → Synced ${storeRoles.length} store-specific ${templateCode} role(s)`);
+    }
+  }
+
   // 3. SUPER_ADMIN → tất cả permissions
   const allPerms = await prisma.permission.findMany({ select: { id: true } });
   await prisma.rolePermission.deleteMany({ where: { roleId: roles['SUPER_ADMIN'] } });
@@ -237,10 +251,14 @@ async function main() {
     skipDuplicates: true,
   });
 
-  // 4. Gán permissions từng role
+  // 4. Gán permissions cho template roles
   await assignPermissions(roles['CUSTOMER'], CUSTOMER_PERMISSIONS);
   await assignPermissions(roles['SHOP_STAFF'], STAFF_PERMISSIONS);
   await assignPermissions(roles['SHOP_OWNER'], SHOP_OWNER_PERMISSIONS);
+
+  // 5. Sync permissions từ template xuống tất cả store-specific roles đã tồn tại
+  await syncToStoreRoles('SHOP_OWNER', SHOP_OWNER_PERMISSIONS);
+  await syncToStoreRoles('SHOP_STAFF', STAFF_PERMISSIONS);
   console.log('✅ Role permissions seeded');
 
   // 5. Super Admin user

@@ -10,7 +10,6 @@ import { SenderType } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { RedisService } from '../../../redis/redis.service';
 import { TelegramService } from '../../../telegram/telegram.service';
-import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 
 const TELEGRAM_ACTIVE_TTL = 7200; // 2 hours
@@ -34,11 +33,29 @@ export class ConversationsService {
     private readonly telegram: TelegramService,
   ) {}
 
-  async create(dto: CreateConversationDto) {
+  async create(storeId: string, customerId: string) {
+    const store = await this.prisma.store.findUnique({
+      where: { id: storeId },
+      select: { ownerId: true },
+    });
+    if (!store) throw new NotFoundException('Store not found');
+
+    if (store.ownerId === customerId) {
+      throw new ForbiddenException('Store owner cannot message their own store');
+    }
+
+    const isStaff = await this.prisma.staff.findFirst({
+      where: { userId: customerId, storeId, status: 'ACTIVE' },
+      select: { id: true },
+    });
+    if (isStaff) {
+      throw new ForbiddenException('Store staff cannot message their own store');
+    }
+
     return this.prisma.conversation.upsert({
-      where: { customerId_storeId: { customerId: dto.customerId, storeId: dto.storeId } },
+      where: { customerId_storeId: { customerId, storeId } },
       update: {},
-      create: { customerId: dto.customerId, storeId: dto.storeId, mode: 'HUMAN' },
+      create: { customerId, storeId, mode: 'HUMAN' },
       include: conversationInclude,
     });
   }

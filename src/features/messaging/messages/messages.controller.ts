@@ -12,6 +12,8 @@ import { MessagesService } from './messages.service';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
+import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 
 @ApiTags('conversations / messages')
 @ApiBearerAuth()
@@ -25,16 +27,17 @@ export class MessagesController {
   @ApiQuery({ name: 'take', required: false, type: Number })
   @ApiResponse({ status: 200, description: 'Danh sách tin nhắn' })
   @Get()
-  @RequirePermissions(Permissions.MESSAGE.VIEW)
   findAll(
     @Param('conversationId') conversationId: string,
+    @CurrentUser() user: CurrentUserPayload,
     @Query('skip') skip?: string,
     @Query('take') take?: string,
   ) {
-    return this.messagesService.findAll(conversationId, {
-      skip: skip ? Number(skip) : undefined,
-      take: take ? Number(take) : undefined,
-    });
+    return this.messagesService.findAll(
+      conversationId,
+      { skip: skip ? Number(skip) : undefined, take: take ? Number(take) : undefined },
+      user.id,
+    );
   }
 
   @ApiOperation({ summary: 'Lấy chi tiết tin nhắn' })
@@ -43,9 +46,8 @@ export class MessagesController {
   @ApiResponse({ status: 200, description: 'Chi tiết tin nhắn' })
   @ApiResponse({ status: 404, description: 'Không tìm thấy tin nhắn' })
   @Get(':id')
-  @RequirePermissions(Permissions.MESSAGE.VIEW)
-  findOne(@Param('id') id: string) {
-    return this.messagesService.findOne(id);
+  findOne(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
+    return this.messagesService.findOne(id, user.id);
   }
 
   @ApiOperation({ summary: 'Chỉnh sửa tin nhắn' })

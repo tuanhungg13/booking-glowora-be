@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { SenderType } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateMessageDto } from './dto/create-message.dto';
@@ -36,11 +36,25 @@ export class MessagesService {
     });
   }
 
-  async findAll(conversationId: string, params?: { skip?: number; take?: number }) {
+  async findAll(conversationId: string, params?: { skip?: number; take?: number }, requesterId?: string) {
     const conversation = await this.prisma.conversation.findUnique({
       where: { id: conversationId },
+      select: { customerId: true, storeId: true, store: { select: { ownerId: true } } },
     });
     if (!conversation) throw new NotFoundException('Conversation not found');
+
+    if (requesterId) {
+      const isCustomer = conversation.customerId === requesterId;
+      const isOwner = conversation.store.ownerId === requesterId;
+      if (!isCustomer && !isOwner) {
+        const isStaff = await this.prisma.staff.findFirst({
+          where: { userId: requesterId, storeId: conversation.storeId, status: 'ACTIVE' },
+          select: { id: true },
+        });
+        if (!isStaff) throw new ForbiddenException();
+      }
+    }
+
     const [items, total] = await Promise.all([
       this.prisma.message.findMany({
         where: { conversationId },
@@ -54,12 +68,29 @@ export class MessagesService {
     return { items, total };
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, requesterId?: string) {
     const message = await this.prisma.message.findUnique({
       where: { id },
-      include: { conversation: true, sender: { select: { id: true, fullName: true, email: true } } },
+      include: {
+        conversation: { include: { store: { select: { ownerId: true } } } },
+        sender: { select: { id: true, fullName: true, email: true } },
+      },
     });
     if (!message) throw new NotFoundException('Message not found');
+
+    if (requesterId) {
+      const conv = message.conversation;
+      const isCustomer = conv.customerId === requesterId;
+      const isOwner = (conv as any).store.ownerId === requesterId;
+      if (!isCustomer && !isOwner) {
+        const isStaff = await this.prisma.staff.findFirst({
+          where: { userId: requesterId, storeId: conv.storeId, status: 'ACTIVE' },
+          select: { id: true },
+        });
+        if (!isStaff) throw new ForbiddenException();
+      }
+    }
+
     return message;
   }
 

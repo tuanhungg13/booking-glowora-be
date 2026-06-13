@@ -303,6 +303,7 @@ export class BookingsService {
           ...(filter.to && { lte: new Date(filter.to) }),
         },
       }),
+      ...(filter.search && { id: { contains: filter.search } }),
     };
 
     const [items, total] = await Promise.all([

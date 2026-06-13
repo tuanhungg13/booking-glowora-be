@@ -39,11 +39,15 @@ export class StoreStaffService {
   ) {}
 
   async invite(storeId: string, ownerId: string, dto: InviteStaffDto) {
-    await this.storesService.checkOwnership(storeId, ownerId);
+    const store = await this.storesService.checkOwnership(storeId, ownerId);
 
     const invitedUser = await this.prisma.user.findUnique({ where: { email: dto.email } });
     if (!invitedUser) {
       throw new NotFoundException('Người dùng chưa đăng ký tài khoản trên hệ thống');
+    }
+
+    if (invitedUser.id === store.ownerId) {
+      throw new ConflictException('Chủ cơ sở đã có quyền quản lý, không thể mời làm nhân viên');
     }
 
     const isAlreadyStaff = await this.prisma.staff.findFirst({
@@ -62,11 +66,6 @@ export class StoreStaffService {
 
     const token = randomBytes(32).toString('hex');
     const expiresAt = new Date(Date.now() + INVITE_TTL_DAYS * 24 * 60 * 60 * 1000);
-
-    const store = await this.prisma.store.findUniqueOrThrow({
-      where: { id: storeId },
-      select: { name: true },
-    });
 
     const invite = await this.prisma.staffInvite.create({
       data: { storeId, email: dto.email, token, expiresAt, status: 'PENDING' },
@@ -171,12 +170,13 @@ export class StoreStaffService {
   }
 
   async findAll(storeId: string) {
+    const store = await this.prisma.store.findUnique({ where: { id: storeId }, select: { ownerId: true } });
     const list = await this.prisma.staff.findMany({
       where: { storeId },
       orderBy: { createdAt: 'asc' },
       include: staffInclude,
     });
-    return list.map((s) => this.mapStaff(s));
+    return list.map((s) => ({ ...this.mapStaff(s), isOwner: s.userId === store?.ownerId }));
   }
 
   async findOne(storeId: string, staffId: string) {
@@ -201,8 +201,12 @@ export class StoreStaffService {
   }
 
   async remove(storeId: string, ownerId: string, staffId: string) {
-    await this.storesService.checkOwnership(storeId, ownerId);
+    const store = await this.storesService.checkOwnership(storeId, ownerId);
     const staff = await this.findOne(storeId, staffId);
+
+    if (staff.userId === store.ownerId) {
+      throw new ForbiddenException('Không thể xóa chủ cơ sở khỏi danh sách nhân viên');
+    }
 
     await this.prisma.$transaction(async (tx) => {
       await tx.staff.update({
@@ -223,6 +227,34 @@ export class StoreStaffService {
   ): Omit<T, 'telegramChatId' | 'telegramLinkToken'> & { telegramLinked: boolean } {
     const { telegramChatId, telegramLinkToken: _token, ...rest } = staff as any;
     return { ...rest, telegramLinked: telegramChatId !== null };
+  }
+
+  /**
+   * Tìm Staff ACTIVE của user trong store. Nếu không tìm thấy:
+   * - Chủ shop: tự động khôi phục (upsert) Staff record về ACTIVE — xử lý store cũ tạo trước khi có auto-tạo Staff
+   * - Không phải chủ shop: ném NotFoundException
+   */
+  private async findActiveStaffOrRestoreOwner(storeId: string, userId: string) {
+    const staff = await this.prisma.staff.findFirst({
+      where: { userId, storeId, status: StaffStatus.ACTIVE },
+      include: staffInclude,
+    });
+    if (staff) return staff;
+
+    const store = await this.prisma.store.findUnique({
+      where: { id: storeId },
+      select: { ownerId: true },
+    });
+    if (store?.ownerId !== userId) {
+      throw new NotFoundException('Bạn không phải nhân viên của cơ sở này');
+    }
+
+    return this.prisma.staff.upsert({
+      where: { userId_storeId: { userId, storeId } },
+      create: { userId, storeId, status: StaffStatus.ACTIVE },
+      update: { status: StaffStatus.ACTIVE },
+      include: staffInclude,
+    });
   }
 
   async getCalendar(storeId: string, from: string, to: string) {
@@ -261,28 +293,17 @@ export class StoreStaffService {
   }
 
   async getMyProfile(storeId: string, userId: string) {
-    const staff = await this.prisma.staff.findFirst({
-      where: { userId, storeId, status: StaffStatus.ACTIVE },
-      include: staffInclude,
-    });
-    if (!staff) throw new NotFoundException('Bạn không phải nhân viên của cơ sở này');
+    const staff = await this.findActiveStaffOrRestoreOwner(storeId, userId);
     return this.mapStaff(staff);
   }
 
   async getMyTelegramStatus(storeId: string, userId: string) {
-    const staff = await this.prisma.staff.findFirst({
-      where: { userId, storeId, status: StaffStatus.ACTIVE },
-      select: { telegramChatId: true },
-    });
-    if (!staff) throw new NotFoundException('Bạn không phải nhân viên của cơ sở này');
+    const staff = await this.findActiveStaffOrRestoreOwner(storeId, userId);
     return { telegramLinked: staff.telegramChatId !== null };
   }
 
   async generateTelegramToken(storeId: string, userId: string) {
-    const staff = await this.prisma.staff.findFirst({
-      where: { userId, storeId, status: StaffStatus.ACTIVE },
-    });
-    if (!staff) throw new NotFoundException('Bạn không phải nhân viên của cơ sở này');
+    const staff = await this.findActiveStaffOrRestoreOwner(storeId, userId);
 
     const token = randomBytes(16).toString('hex');
     await this.prisma.staff.update({

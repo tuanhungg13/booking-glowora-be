@@ -31,7 +31,6 @@ export class BookingsController {
 
   // MUST be before :id to avoid route conflict
   @Get('my')
-  @RequirePermissions(Permissions.APPOINTMENT.VIEW)
   @ApiOperation({ summary: 'Lấy danh sách lịch hẹn của tôi', description: 'Trả về lịch hẹn của người dùng đang đăng nhập, có thể lọc theo trạng thái, khoảng ngày và phân trang.' })
   @ApiResponse({ status: 200, description: 'Danh sách lịch hẹn của người dùng' })
   findMy(@CurrentUser() user: CurrentUserPayload, @Query() filter: MyBookingFilterDto) {
@@ -39,7 +38,6 @@ export class BookingsController {
   }
 
   @Get(':id')
-  @RequirePermissions(Permissions.APPOINTMENT.VIEW)
   @ApiOperation({ summary: 'Xem chi tiết lịch hẹn', description: 'Lấy thông tin chi tiết một lịch hẹn theo ID.' })
   @ApiParam({ name: 'id', description: 'ID của lịch hẹn' })
   @ApiResponse({ status: 200, description: 'Chi tiết lịch hẹn' })
@@ -49,7 +47,6 @@ export class BookingsController {
   }
 
   @Patch(':id/cancel')
-  @RequirePermissions(Permissions.APPOINTMENT.VIEW)
   @AuditLog({ type: LogType.BOOKING_CANCELLED, targetType: 'Booking' })
   @ApiOperation({ summary: 'Hủy lịch hẹn', description: 'Khách hàng hủy lịch hẹn của mình. Chỉ hủy được khi lịch chưa được xác nhận hoặc đang chờ xử lý.' })
   @ApiParam({ name: 'id', description: 'ID của lịch hẹn cần hủy' })

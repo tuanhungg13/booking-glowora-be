@@ -1,0 +1,330 @@
+@startuml Glowora - Class Diagram
+
+skinparam backgroundColor white
+skinparam classBackgroundColor white
+skinparam classBorderColor black
+skinparam classArrowColor black
+skinparam classFontColor black
+skinparam classHeaderBackgroundColor white
+skinparam packageBorderColor black
+skinparam packageBackgroundColor white
+skinparam shadowing false
+skinparam DefaultFontName Arial
+skinparam DefaultFontSize 10
+skinparam TitleFontSize 14
+
+hide circle
+
+title Glowora Booking Platform — Class Diagram
+
+' ==========================================================================
+class User {
+  + id : String
+  + fullName : String
+  + email : String
+  - password : String
+  + phone : String?
+  + status : UserStatus
+  + createdAt : DateTime
+  + updatedAt : DateTime
+  --
+  + updateProfile(dto) : User
+  + changePassword(old, new) : void
+  + ban(reason) : void
+}
+
+class Store {
+  + id : String
+  + slug : String?
+  + ownerId : String
+  + name : String
+  + phone : String
+  + address : String
+  + status : StoreStatus
+  + avgRating : Decimal
+  + totalReviews : Int
+  + slotIntervalMins : Int
+  + cancelBeforeHours : Int
+  + maxAdvanceDays : Int
+  + autoConfirm : Boolean
+  + depositPercent : Int
+  + createdAt : DateTime
+  + updatedAt : DateTime
+  --
+  + approve(approvedById) : void
+  + reject(reason) : void
+  + getAvailableSlots(date, staffId?) : TimeSlot[]
+}
+
+class WorkingHour {
+  + id : String
+  + storeId : String
+  + dayOfWeek : DayOfWeek
+  + openTime : String
+  + closeTime : String
+  + isClosed : Boolean
+  --
+  + update(open, close, isClosed) : WorkingHour
+}
+
+class Staff {
+  + id : String
+  + userId : String
+  + storeId : String
+  + specialty : String?
+  + rating : Decimal
+  + totalReviews : Int
+  + status : StaffStatus
+  + createdAt : DateTime
+  + updatedAt : DateTime
+  --
+  + updateSchedule(schedules) : StaffSchedule[]
+  + requestDayOff(date, reason?) : StaffDayOff
+  + activate() : void
+  + deactivate() : void
+}
+
+class StaffSchedule {
+  + id : String
+  + staffId : String
+  + storeId : String
+  + dayOfWeek : DayOfWeek
+  + startTime : String
+  + endTime : String
+  + isActive : Boolean
+  + createdAt : DateTime
+  --
+  + toggle(isActive) : void
+}
+
+class ServiceCategory {
+  + id : String
+  + name : String
+  + slug : String?
+  + storeId : String?
+  + parentId : String?
+  + createdAt : DateTime
+  + updatedAt : DateTime
+  --
+  + update(name, desc?) : ServiceCategory
+  + getChildren() : ServiceCategory[]
+}
+
+class Service {
+  + id : String
+  + storeId : String
+  + categoryId : String?
+  + name : String
+  + slug : String?
+  + imageUrls : String[]
+  + status : ServiceStatus
+  + avgRating : Decimal
+  + createdAt : DateTime
+  + updatedAt : DateTime
+  --
+  + addVariant(dto) : ServiceVariant
+  + removeVariant(variantId) : void
+  + uploadImages(files) : Service
+  + updateStatus(status) : void
+}
+
+class ServiceVariant {
+  + id : String
+  + serviceId : String
+  + name : String
+  + duration : Int
+  + price : Decimal
+  + costPrice : Decimal?
+  + sortOrder : Int
+  + status : ServiceStatus
+  + createdAt : DateTime
+  + updatedAt : DateTime
+  --
+  + update(dto) : ServiceVariant
+  + updateStatus(status) : void
+}
+
+class Booking {
+  + id : String
+  + customerId : String
+  + storeId : String
+  + scheduledAt : DateTime
+  + totalDuration : Int
+  + totalPrice : Decimal
+  + discountAmount : Decimal
+  + promotionDiscount : Decimal
+  + finalPrice : Decimal
+  + couponId : String?
+  + promotionId : String?
+  + status : BookingStatus
+  + depositAmount : Decimal?
+  + depositDeadline : DateTime?
+  + notes : String?
+  + createdAt : DateTime
+  + updatedAt : DateTime
+  --
+  + confirm() : void
+  + reject(reason) : void
+  + cancel(reason?) : void
+  + complete() : void
+  + applyCoupon(code) : void
+  + calculateFinalPrice() : Decimal
+}
+
+class BookingItem {
+  + id : String
+  + bookingId : String
+  + sortOrder : Int
+  + serviceId : String
+  + variantId : String
+  + staffId : String?
+  + startTime : DateTime
+  + duration : Int
+  + originalPrice : Decimal?
+  + price : Decimal
+  + serviceName : String
+  + variantName : String
+  + staffName : String?
+  + isStaffChosenByCustomer : Boolean
+  + createdAt : DateTime
+  --
+  + assignStaff(staffId) : void
+}
+
+class Payment {
+  + id : String
+  + bookingId : String
+  + customerId : String
+  + amount : Decimal
+  + type : PaymentType
+  + method : PaymentMethod
+  + status : PaymentStatus
+  + sepayCode : String?
+  + paidAt : DateTime?
+  + createdAt : DateTime
+  + updatedAt : DateTime
+  --
+  + createSepayPayment(type) : PaymentResult
+  + handleWebhook(payload) : void
+  + markPaid(transactionId) : void
+  + markFailed(reason) : void
+}
+
+class Coupon {
+  + id : String
+  + code : String
+  + type : CouponType
+  + value : Decimal
+  + minAmount : Decimal?
+  + maxDiscount : Decimal?
+  + usageLimit : Int?
+  + perUserLimit : Int?
+  + usedCount : Int
+  + startAt : DateTime
+  + expiredAt : DateTime?
+  + isActive : Boolean
+  + storeId : String?
+  + createdAt : DateTime
+  + updatedAt : DateTime
+  --
+  + validate(amount, userId) : DiscountResult
+  + applyToBooking(price, userId) : Decimal
+  + deactivate() : void
+}
+
+class Promotion {
+  + id : String
+  + storeId : String
+  + name : String
+  + type : CouponType
+  + value : Decimal
+  + scope : PromotionScope
+  + startAt : DateTime
+  + endAt : DateTime?
+  + isActive : Boolean
+  + createdAt : DateTime
+  + updatedAt : DateTime
+  --
+  + isCurrentlyActive() : Boolean
+  + applyDiscount(price) : Decimal
+  + deactivate() : void
+}
+
+class Review {
+  + id : String
+  + bookingItemId : String
+  + bookingId : String
+  + customerId : String
+  + storeId : String
+  + serviceId : String
+  + staffId : String?
+  + rating : Int
+  + comment : String?
+  + isVisible : Boolean
+  + createdAt : DateTime
+  + updatedAt : DateTime
+  --
+  + submit(rating, comment?) : Review
+  + hide() : void
+  + show() : void
+}
+
+class Notification {
+  + id : String
+  + userId : String
+  + bookingId : String?
+  + type : NotificationType
+  + title : String
+  + body : String
+  + isRead : Boolean
+  + createdAt : DateTime
+  --
+  + markRead() : void
+  + markAllRead(userId) : void
+}
+
+' ==========================================================================
+' RELATIONSHIPS
+' ==========================================================================
+
+' User - Store
+User "1" -- "0..*" Store : owns >
+User "1" -- "0..*" Staff : represented as >
+
+' Store internals
+Store "1" *-- "1..*" WorkingHour : defines >
+Store "1" -- "0..*" Staff : employs >
+Store "1" -- "0..*" ServiceCategory : owns >
+Store "1" -- "0..*" Service : offers >
+Store "0..1" -- "0..*" Coupon : issues >
+Store "1" -- "0..*" Promotion : runs >
+Store "1" -- "0..*" Booking : receives >
+
+' Staff schedule
+Staff "1" *-- "0..*" StaffSchedule : works on >
+
+' Catalog
+ServiceCategory "0..1" -- "0..*" ServiceCategory : parent / child >
+ServiceCategory "0..1" -- "0..*" Service : classifies >
+Service "1" *-- "1..*" ServiceVariant : has >
+
+' Booking
+User "1" -- "0..*" Booking : places >
+Booking "1" *-- "1..*" BookingItem : contains >
+BookingItem "0..*" --> "1" Service : uses >
+BookingItem "0..*" --> "1" ServiceVariant : uses >
+BookingItem "0..*" --> "0..1" Staff : assigned to >
+Booking "0..*" --> "0..1" Coupon : applies >
+Booking "0..*" --> "0..1" Promotion : discounted by >
+Booking "1" -- "0..*" Payment : paid via >
+
+' Review
+BookingItem "1" -- "0..1" Review : reviewed via >
+Review "0..*" --> "1" Service : about >
+Review "0..*" --> "0..1" Staff : about >
+
+' Notification
+User "1" -- "0..*" Notification : receives >
+Notification "0..*" --> "0..1" Booking : references >
+
+@enduml

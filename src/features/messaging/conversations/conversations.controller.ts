@@ -26,9 +26,8 @@ export class ConversationsController {
   @ApiOperation({ summary: 'Tạo cuộc hội thoại mới' })
   @ApiBearerAuth()
   @Post()
-  @RequirePermissions(Permissions.CONVERSATION.CREATE)
-  create(@Body() dto: CreateConversationDto) {
-    return this.conversationsService.create(dto);
+  create(@Body() dto: CreateConversationDto, @CurrentUser() user: CurrentUserPayload) {
+    return this.conversationsService.create(dto.storeId, user.id);
   }
 
   @ApiOperation({ summary: 'Lấy danh sách tất cả hội thoại (admin)' })

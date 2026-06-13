@@ -1,9 +1,14 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { BookingStatus } from '@prisma/client';
 import { Type } from 'class-transformer';
-import { IsDateString, IsEnum, IsInt, IsOptional, Max, Min } from 'class-validator';
+import { IsDateString, IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class MyBookingFilterDto {
+  @ApiPropertyOptional({ description: 'Tìm theo mã lịch hẹn (booking ID)' })
+  @IsOptional()
+  @IsString()
+  search?: string;
+
   @ApiPropertyOptional({ enum: BookingStatus, description: 'Lọc theo trạng thái lịch hẹn' })
   @IsOptional()
   @IsEnum(BookingStatus)
