@@ -4,7 +4,7 @@ import { Type } from 'class-transformer';
 import { IsDateString, IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class MyBookingFilterDto {
-  @ApiPropertyOptional({ description: 'Tìm theo mã lịch hẹn (booking ID)' })
+  @ApiPropertyOptional({ description: 'Tìm theo mã lịch hẹn (booking ID) hoặc tên cơ sở' })
   @IsOptional()
   @IsString()
   search?: string;

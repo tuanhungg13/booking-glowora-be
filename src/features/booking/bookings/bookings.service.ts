@@ -303,7 +303,12 @@ export class BookingsService {
           ...(filter.to && { lte: new Date(filter.to) }),
         },
       }),
-      ...(filter.search && { id: { contains: filter.search } }),
+      ...(filter.search && {
+        OR: [
+          { id: { contains: filter.search } },
+          { store: { name: { contains: filter.search } } },
+        ],
+      }),
     };
 
     const [items, total] = await Promise.all([
@@ -356,7 +361,7 @@ export class BookingsService {
         where,
         skip,
         take: limit,
-        orderBy: { scheduledAt: 'desc' },
+        orderBy: { createdAt: 'desc' },
         include: bookingInclude,
       }),
       this.prisma.booking.count({ where }),
