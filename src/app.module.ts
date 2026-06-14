@@ -21,12 +21,14 @@ import { TelegramModule } from './telegram/telegram.module';
 import { GatewaysModule } from './gateways/gateways.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { SystemLogModule } from './system-log/system-log.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     SystemLogModule,
     CloudinaryModule,
+    UploadModule,
     PrismaModule,
     RedisModule,
     IdentityModule,

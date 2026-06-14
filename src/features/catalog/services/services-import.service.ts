@@ -106,7 +106,7 @@ export class ServicesImportService {
     let totalRows = 0;
 
     sheet.eachRow((row, rowNumber) => {
-      if (rowNumber === 1) return; // bỏ header
+      if (rowNumber <= 3) return; // bỏ 2 dòng tiêu đề/hướng dẫn + 1 dòng header cột
 
       // Bỏ qua dòng trống hoàn toàn
       const rawCells = [1, 2, 3, 4, 5, 6, 7, 8].map(c => getCellString(row.getCell(c)));

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { AsyncLocalStorage } from 'async_hooks';
 import { randomUUID } from 'crypto';
 import type { NextFunction, Request, Response } from 'express';
@@ -14,14 +14,25 @@ type RequestContextStore = {
   requestId: string;
 };
 
+const SKIP_PATHS = ['/auth/refresh', '/auth/me', '/auth/getMatrix', '/', '/notifications', '/slots/available'];
+
 @Injectable()
 export class RequestContextService {
+  private readonly logger = new Logger('HTTP');
   private readonly storage = new AsyncLocalStorage<RequestContextStore>();
 
   middleware() {
     return (request: RequestWithContext, response: Response, next: NextFunction) => {
       const requestId = randomUUID();
       request.requestId = requestId;
+
+      const path = (request.originalUrl ?? request.url ?? '').split('?')[0];
+      if (!SKIP_PATHS.includes(path)) {
+        this.logger.log(`→ [${requestId}] ${request.method} ${request.originalUrl ?? request.url} ip=${request.ip}`);
+        response.on('finish', () => {
+          this.logger.log(`← [${requestId}] ${request.method} ${request.originalUrl ?? request.url} | ${response.statusCode}`);
+        });
+      }
 
       this.storage.run({ request, response, requestId }, next);
     };

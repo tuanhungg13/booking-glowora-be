@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsEnum, IsOptional, IsString, IsUUID, ValidateNested, ArrayMinSize } from 'class-validator';
+import { IsArray, IsEnum, IsOptional, IsString, IsUUID, IsUrl, ValidateNested, ArrayMinSize, ArrayMaxSize } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ServiceStatus } from '@prisma/client';
 import { CreateServiceVariantDto } from './service-variant.dto';
@@ -23,6 +23,17 @@ export class CreateServiceDto {
   @IsOptional()
   @IsEnum(ServiceStatus)
   status?: ServiceStatus;
+
+  @ApiPropertyOptional({
+    type: [String],
+    description: 'Danh sách URL ảnh (tối đa 5, đã upload qua POST /upload)',
+    maxItems: 5,
+  })
+  @IsOptional()
+  @IsArray()
+  @ArrayMaxSize(5)
+  @IsUrl({}, { each: true })
+  imageUrls?: string[];
 
   @ApiProperty({
     type: [CreateServiceVariantDto],

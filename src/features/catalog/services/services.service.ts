@@ -6,7 +6,6 @@ import { SystemLogService } from '../../../system-log/system-log.service';
 import { PromotionsService } from '../../booking/promotions/promotions.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
-import { CreateServiceVariantDto, UpdateServiceVariantDto } from './dto/service-variant.dto';
 
 type ServiceParams = { storeId?: string; q?: string; status?: ServiceStatus; categoryId?: string; sort?: 'name' | 'name-desc' | 'price' | 'price-desc' | 'avgRating' | 'avgRating-asc'; page?: number; limit?: number };
 type PublicServiceParams = { storeId?: string; categoryId?: string; q?: string; minPrice?: number; maxPrice?: number; minRating?: number; maxRating?: number; sort?: 'avgRating' | 'price' | 'price-desc' | 'newest' | 'popular'; page?: number; limit?: number };
@@ -35,8 +34,6 @@ function slugify(value: string): string {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
 }
-
-const MAX_IMAGES = 5;
 
 type ActivePromotion = Awaited<ReturnType<PromotionsService['findActiveForStore']>>;
 
@@ -114,6 +111,7 @@ export class ServicesService {
         description: dto.description,
         status: dto.status ?? ServiceStatus.ACTIVE,
         categoryId: dto.categoryId,
+        imageUrls: dto.imageUrls ?? [],
         variants: {
           create: dto.variants.map((v, i) => ({
             name: v.name,
@@ -501,6 +499,41 @@ export class ServicesService {
       },
     });
 
+    if (dto.variants !== undefined) {
+      const activeCount = dto.variants.filter((v) => (v.status ?? ServiceStatus.ACTIVE) === ServiceStatus.ACTIVE).length;
+      if (activeCount === 0) {
+        throw new BadRequestException('Dịch vụ phải có ít nhất 1 gói đang hoạt động');
+      }
+
+      const existing = await this.prisma.serviceVariant.findMany({
+        where: { serviceId: id },
+        select: { id: true },
+      });
+      const existingIds = existing.map((v) => v.id);
+      const incomingIds = dto.variants.filter((v) => v.id).map((v) => v.id!);
+      const toDeactivate = existingIds.filter((vId) => !incomingIds.includes(vId));
+
+      await this.prisma.$transaction(async (tx) => {
+        if (toDeactivate.length > 0) {
+          await tx.serviceVariant.updateMany({
+            where: { id: { in: toDeactivate } },
+            data: { status: ServiceStatus.INACTIVE },
+          });
+        }
+        for (const v of dto.variants!.filter((v) => v.id)) {
+          await tx.serviceVariant.update({
+            where: { id: v.id },
+            data: { name: v.name, description: v.description, duration: v.duration, price: v.price, costPrice: v.costPrice, sortOrder: v.sortOrder, status: v.status },
+          });
+        }
+        for (const [i, v] of dto.variants!.filter((v) => !v.id).entries()) {
+          await tx.serviceVariant.create({
+            data: { serviceId: id, name: v.name, description: v.description, duration: v.duration, price: v.price, costPrice: v.costPrice, sortOrder: v.sortOrder ?? i, status: v.status ?? ServiceStatus.ACTIVE },
+          });
+        }
+      });
+    }
+
     this.systemLog.log({
       type: LogType.SERVICE_UPDATED,
       actorId,
@@ -511,93 +544,6 @@ export class ServicesService {
     });
 
     return this.findOne(id, storeId);
-  }
-
-  async addVariant(serviceId: string, storeId: string, dto: CreateServiceVariantDto) {
-    await this.findOne(serviceId, storeId);
-    return this.prisma.serviceVariant.create({
-      data: {
-        serviceId,
-        name: dto.name,
-        description: dto.description,
-        duration: dto.duration,
-        price: dto.price,
-        costPrice: dto.costPrice,
-        sortOrder: dto.sortOrder ?? 0,
-        status: dto.status ?? ServiceStatus.ACTIVE,
-      },
-    });
-  }
-
-  async updateVariant(serviceId: string, variantId: string, storeId: string, dto: UpdateServiceVariantDto) {
-    await this.findVariantOrThrow(serviceId, variantId, storeId);
-    return this.prisma.serviceVariant.update({
-      where: { id: variantId },
-      data: {
-        name: dto.name,
-        description: dto.description,
-        duration: dto.duration,
-        price: dto.price,
-        costPrice: dto.costPrice,
-        sortOrder: dto.sortOrder,
-        status: dto.status,
-      },
-    });
-  }
-
-  async removeVariant(serviceId: string, variantId: string, storeId: string) {
-    await this.findVariantOrThrow(serviceId, variantId, storeId);
-
-    const activeCount = await this.prisma.serviceVariant.count({
-      where: { serviceId, status: ServiceStatus.ACTIVE },
-    });
-    if (activeCount <= 1) {
-      throw new BadRequestException('Dịch vụ phải có ít nhất 1 gói đang hoạt động');
-    }
-
-    await this.prisma.serviceVariant.update({
-      where: { id: variantId },
-      data: { status: ServiceStatus.INACTIVE },
-    });
-    return { deleted: true };
-  }
-
-  async uploadImages(id: string, storeId: string, files: Express.Multer.File[]) {
-    const service = await this.findOne(id, storeId);
-    const current = Array.isArray(service.imageUrls) ? (service.imageUrls as string[]) : [];
-
-    if (current.length + files.length > MAX_IMAGES) {
-      throw new BadRequestException(
-        `Dịch vụ không được có quá ${MAX_IMAGES} hình ảnh (hiện có ${current.length})`,
-      );
-    }
-
-    const uploaded = await Promise.all(
-      files.map((f) => this.cloudinary.uploadImage(f, `glowora/services/${storeId}`)),
-    );
-
-    return this.prisma.service.update({
-      where: { id },
-      data: { imageUrls: [...current, ...uploaded] },
-      include: serviceInclude,
-    });
-  }
-
-  async removeImage(id: string, storeId: string, url: string) {
-    const service = await this.findOne(id, storeId);
-    const current = Array.isArray(service.imageUrls) ? (service.imageUrls as string[]) : [];
-
-    if (!current.includes(url)) {
-      throw new BadRequestException('Ảnh không tồn tại trong dịch vụ');
-    }
-
-    await this.cloudinary.deleteImage(this.cloudinary.extractPublicId(url));
-
-    return this.prisma.service.update({
-      where: { id },
-      data: { imageUrls: current.filter((u) => u !== url) },
-      include: serviceInclude,
-    });
   }
 
   async remove(id: string, storeId: string, actorId: string) {
@@ -617,14 +563,6 @@ export class ServicesService {
     });
 
     return { deleted: true };
-  }
-
-  private async findVariantOrThrow(serviceId: string, variantId: string, storeId: string) {
-    const variant = await this.prisma.serviceVariant.findFirst({
-      where: { id: variantId, serviceId, service: { storeId } },
-    });
-    if (!variant) throw new NotFoundException('Variant not found');
-    return variant;
   }
 
   private async generateUniqueSlug(name: string, storeId: string, excludeId?: string) {

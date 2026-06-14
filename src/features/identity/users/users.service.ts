@@ -53,17 +53,19 @@ export class UsersService {
         { email: { contains: q } },
       ]
     }
+    const limit = params?.take ?? 20
+    const skip = params?.skip ?? 0
     const [items, total] = await Promise.all([
       this.prisma.user.findMany({
         where,
-        skip: params?.skip,
-        take: params?.take ?? 20,
+        skip,
+        take: limit,
         select: this.selectSafe(),
         orderBy: { createdAt: 'desc' },
       }),
       this.prisma.user.count({ where }),
     ]);
-    return { items, total };
+    return { items, total, page: Math.floor(skip / limit) + 1, limit };
   }
 
   async findOne(id: string) {
