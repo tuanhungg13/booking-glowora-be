@@ -1,5 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import {
   GoogleGenerativeAI,
   Content,
@@ -7,9 +9,16 @@ import {
 import { StoreStatus } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 
+const PLATFORM_GUIDE = (() => {
+  try {
+    return readFileSync(join(__dirname, 'platform-guide.md'), 'utf-8');
+  } catch {
+    return '';
+  }
+})();
+
 export interface PlatformContext {
   categories: string;
-  categorySlugRef: string;
   storeCount: number;
   cityOverview: string;
 }
@@ -50,11 +59,12 @@ export class GeminiService {
     history: ChatMessage[],
     userMessage: string,
     ctx: PlatformContext,
-  ): Promise<{ reply: string; suggestedCategorySlugs: string[] }> {
+    userLocation?: { lat: number; lng: number; cityName?: string | null },
+  ): Promise<{ reply: string; suggestedKeywords: string[] }> {
     try {
       const model = this.genAI.getGenerativeModel({
         model: this.model,
-        systemInstruction: this.buildPlatformPrompt(ctx),
+        systemInstruction: this.buildPlatformPrompt(ctx, userLocation),
       });
 
       const geminiHistory: Content[] = history.map((m) => ({
@@ -66,42 +76,33 @@ export class GeminiService {
       const result = await chat.sendMessage(userMessage);
       const text = result.response.text();
 
-      const suggestMatch = text.match(/\[SUGGEST:([\w\-,\s]+)\]/);
-      const suggestedCategorySlugs = suggestMatch
+      const suggestMatch = text.match(/\[SUGGEST_KW:([^\]]+)\]/);
+      const suggestedKeywords = suggestMatch
         ? suggestMatch[1].split(',').map((s) => s.trim()).filter(Boolean)
         : [];
 
-      const reply = text.replace(/\[SUGGEST:[\w\-,\s]+\]/, '').trim();
+      const reply = text.replace(/\[SUGGEST_KW:[^\]]+\]/, '').trim();
 
-      return { reply, suggestedCategorySlugs };
+      return { reply, suggestedKeywords };
     } catch (err) {
       this.logger.error('Gemini platform chat error', err);
-      return { reply: 'Xin lỗi, tôi đang gặp sự cố kỹ thuật. Vui lòng thử lại sau.', suggestedCategorySlugs: [] };
+      return { reply: 'Xin lỗi, tôi đang gặp sự cố kỹ thuật. Vui lòng thử lại sau.', suggestedKeywords: [] };
     }
   }
 
-  async fetchServicesByCategories(categorySlugs: string[]): Promise<PlatformServiceSuggestion[]> {
-    if (!categorySlugs.length) return [];
+  async fetchServicesByKeywords(keywords: string[]): Promise<PlatformServiceSuggestion[]> {
+    if (!keywords.length) return [];
 
-    // Match cả top-level category lẫn subcategory (con trực tiếp) của các slug đó
-    const matchingCategories = await this.prisma.serviceCategory.findMany({
-      where: {
-        OR: [
-          { slug: { in: categorySlugs } },
-          { parent: { slug: { in: categorySlugs } } },
-        ],
-      },
-      select: { id: true },
-    });
-
-    const categoryIds = matchingCategories.map((c) => c.id);
-    if (!categoryIds.length) return [];
+    const orConditions = keywords.flatMap((kw) => [
+      { name: { contains: kw, mode: 'insensitive' as const } },
+      { description: { contains: kw, mode: 'insensitive' as const } },
+    ]);
 
     const services = await this.prisma.service.findMany({
       where: {
         status: 'ACTIVE',
-        categoryId: { in: categoryIds },
         store: { status: StoreStatus.ACTIVE },
+        OR: orConditions,
       },
       select: {
         id: true,
@@ -143,7 +144,7 @@ export class GeminiService {
     const [categories, storesByProvince] = await Promise.all([
       this.prisma.serviceCategory.findMany({
         where: { storeId: null, parentId: null },
-        select: { name: true, slug: true },
+        select: { name: true },
         take: 20,
       }),
       this.prisma.store.groupBy({
@@ -175,27 +176,28 @@ export class GeminiService {
 
     return {
       categories: categories.map((c) => c.name).join(', ') || 'Đang cập nhật',
-      categorySlugRef: categories
-        .filter((c) => c.slug)
-        .map((c) => `${c.slug}=${c.name}`)
-        .join(', '),
       storeCount,
       cityOverview,
     };
   }
 
-  private buildPlatformPrompt(ctx: PlatformContext): string {
+  private buildPlatformPrompt(ctx: PlatformContext, userLocation?: { lat: number; lng: number; cityName?: string | null }): string {
+    const locationLine = userLocation
+      ? `- Vị trí hiện tại của người dùng: ${userLocation.cityName ? userLocation.cityName + ` (${userLocation.lat.toFixed(4)}, ${userLocation.lng.toFixed(4)})` : `tọa độ ${userLocation.lat.toFixed(4)}, ${userLocation.lng.toFixed(4)}`}`
+      : '- Vị trí người dùng: chưa cung cấp';
+
     return `Bạn là trợ lý AI của Glowora — nền tảng đặt lịch dịch vụ làm đẹp trực tuyến.
 
 Thông tin nền tảng:
 - Tổng số cửa hàng đang hoạt động: ${ctx.storeCount}
 - Danh mục dịch vụ: ${ctx.categories}
 - Phân bố cửa hàng theo thành phố: ${ctx.cityOverview}
+${locationLine}
 
 Nhiệm vụ của bạn:
 1. Giúp khách hàng tìm kiếm dịch vụ và cửa hàng phù hợp với nhu cầu.
 2. Tư vấn tổng quan về các dịch vụ làm đẹp phổ biến.
-3. Hướng dẫn khách hàng sử dụng nền tảng (đặt lịch, thanh toán, đánh giá).
+3. Hướng dẫn khách hàng và chủ spa/nhân viên sử dụng nền tảng (đặt lịch, tạo coupon, mời nhân viên, v.v.).
 
 Quy tắc bắt buộc:
 1. Trả lời ngắn gọn, thân thiện bằng tiếng Việt.
@@ -203,10 +205,16 @@ Quy tắc bắt buộc:
 3. Nếu khách hỏi chi tiết về một cửa hàng cụ thể → hướng dẫn họ vào trang của cửa hàng đó để xem thông tin và chat trực tiếp với nhân viên.
 4. Không bịa thông tin không có trong dữ liệu.
 5. Không tư vấn y tế chuyên sâu.
-6. Chỉ thêm tag [SUGGEST:slug1,slug2] ở DÒNG CUỐI khi đã tư vấn đủ và gợi ý dịch vụ cụ thể. KHÔNG thêm khi mới nhận mô tả vấn đề, chào hỏi, hay hỏi thông tin chung. Tối đa 3 danh mục.
+6. Chỉ thêm tag [SUGGEST_KW:keyword1,keyword2,keyword3] ở DÒNG CUỐI (không xuống dòng) khi đã tư vấn đủ và muốn gợi ý dịch vụ cụ thể. KHÔNG thêm khi chào hỏi, hỏi làm rõ, hoặc hỏi thông tin chung.
+   - Keywords là cụm từ tiếng Việt ngắn (1-4 từ) mô tả chính xác dịch vụ người dùng cần. Ví dụ: "massage vai cổ", "chăm sóc da mụn", "triệt lông nách", "uốn tóc xoăn"
+   - Chọn tối đa 3 keywords, càng cụ thể với nhu cầu người dùng càng tốt
+   - Tag này ẩn — KHÔNG hiển thị ra câu trả lời người dùng đọc
 
-Bảng mã slug (CHỈ dùng trong tag [SUGGEST:...], KHÔNG hiển thị ra câu trả lời):
-${ctx.categorySlugRef}`;
+---
+
+## Tài liệu hướng dẫn nền tảng (dùng để trả lời câu hỏi về cách sử dụng)
+
+${PLATFORM_GUIDE}`;
   }
 
 }

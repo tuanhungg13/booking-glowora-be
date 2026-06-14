@@ -107,55 +107,6 @@ export class TelegramService implements OnModuleInit {
       );
   }
 
-  // ─── DM methods (fallback khi store chưa setup group) ─────────────────────
-
-  async sendEscalationAlert(
-    chatId: string,
-    customerName: string,
-    lastMessages: Array<{ content: string; senderType: string }>,
-    conversationId: string,
-  ): Promise<void> {
-    if (!this.bot) return;
-
-    const preview = lastMessages
-      .slice(-3)
-      .map((m) => `  ${m.senderType === 'BOT' ? '🤖' : '👤'} ${m.content}`)
-      .join('\n');
-
-    const text =
-      `🔔 *Khách hàng cần tư vấn trực tiếp*\n\n` +
-      `👤 Khách: *${customerName}*\n\n` +
-      `📋 Lịch sử gần đây:\n${preview || '  (Chưa có tin nhắn)'}\n\n` +
-      `💬 Nhắn tin vào đây để trả lời khách hàng.\n` +
-      `🆔 ConvID: \`${conversationId}\``;
-
-    await this.bot.sendMessage(chatId, text, { parse_mode: 'Markdown' }).catch((err) =>
-      this.logger.error(`Failed to send escalation alert to ${chatId}`, err),
-    );
-  }
-
-  async sendNewMessage(
-    chatId: string,
-    customerName: string,
-    content: string,
-  ): Promise<void> {
-    if (!this.bot) {
-      this.logger.warn('[sendNewMessage] Bot is NULL — skipping DM');
-      return;
-    }
-    this.logger.log(`[sendNewMessage] chatId=${chatId} customer="${customerName}"`);
-    const text = `💬 *${customerName}*:\n${content}`;
-    await this.bot
-      .sendMessage(chatId, text, { parse_mode: 'Markdown' })
-      .then(() => this.logger.log(`[sendNewMessage] ✅ DM sent to chatId=${chatId}`))
-      .catch((err: any) =>
-        this.logger.error(
-          `[sendNewMessage] ❌ Failed to send DM to chatId=${chatId} | error: ${err?.message ?? err}`,
-          err?.stack,
-        ),
-      );
-  }
-
   async sendConfirmation(chatId: string, message: string): Promise<void> {
     if (!this.bot) return;
     this.logger.log(`[sendConfirmation] chatId=${chatId}`);
@@ -166,4 +117,29 @@ export class TelegramService implements OnModuleInit {
         this.logger.error(`[sendConfirmation] ❌ Failed chatId=${chatId} | ${err?.message ?? err}`),
       );
   }
+
+  async sendPhotoToGroupTopic(groupId: string, topicId: number, photoUrl: string, caption?: string): Promise<void> {
+    if (!this.bot) return;
+    await this.bot
+      .sendPhoto(groupId, photoUrl, { caption, message_thread_id: topicId } as any)
+      .catch((err: any) => this.logger.error(`[sendPhotoToGroupTopic] Failed groupId=${groupId}`, err?.message));
+  }
+
+  async sendVideoToGroupTopic(groupId: string, topicId: number, videoUrl: string, caption?: string): Promise<void> {
+    if (!this.bot) return;
+    await this.bot
+      .sendVideo(groupId, videoUrl, { caption, message_thread_id: topicId } as any)
+      .catch((err: any) => this.logger.error(`[sendVideoToGroupTopic] Failed groupId=${groupId}`, err?.message));
+  }
+
+  async getFileUrl(fileId: string): Promise<string | null> {
+    if (!this.bot) return null;
+    try {
+      return await this.bot.getFileLink(fileId);
+    } catch (err: any) {
+      this.logger.error(`[getFileUrl] Failed for fileId=${fileId}`, err?.message);
+      return null;
+    }
+  }
+
 }

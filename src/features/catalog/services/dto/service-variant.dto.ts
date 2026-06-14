@@ -22,12 +22,6 @@ export class CreateServiceVariantDto {
   @Min(0)
   price!: number;
 
-  @ApiPropertyOptional({ example: 80000, minimum: 0 })
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  costPrice?: number;
-
   @ApiPropertyOptional({ example: 0, description: 'Thứ tự hiển thị' })
   @IsOptional()
   @IsInt()
@@ -62,12 +56,6 @@ export class UpdateServiceVariantDto {
   @IsNumber()
   @Min(0)
   price?: number;
-
-  @ApiPropertyOptional({ example: 130000, minimum: 0 })
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  costPrice?: number;
 
   @ApiPropertyOptional({ example: 1 })
   @IsOptional()

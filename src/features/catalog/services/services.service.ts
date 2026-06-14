@@ -118,7 +118,6 @@ export class ServicesService {
             description: v.description,
             duration: v.duration,
             price: v.price,
-            costPrice: v.costPrice,
             sortOrder: v.sortOrder ?? i,
             status: v.status ?? ServiceStatus.ACTIVE,
           })),
@@ -523,12 +522,12 @@ export class ServicesService {
         for (const v of dto.variants!.filter((v) => v.id)) {
           await tx.serviceVariant.update({
             where: { id: v.id },
-            data: { name: v.name, description: v.description, duration: v.duration, price: v.price, costPrice: v.costPrice, sortOrder: v.sortOrder, status: v.status },
+            data: { name: v.name, description: v.description, duration: v.duration, price: v.price, sortOrder: v.sortOrder, status: v.status },
           });
         }
         for (const [i, v] of dto.variants!.filter((v) => !v.id).entries()) {
           await tx.serviceVariant.create({
-            data: { serviceId: id, name: v.name, description: v.description, duration: v.duration, price: v.price, costPrice: v.costPrice, sortOrder: v.sortOrder ?? i, status: v.status ?? ServiceStatus.ACTIVE },
+            data: { serviceId: id, name: v.name, description: v.description, duration: v.duration, price: v.price, sortOrder: v.sortOrder ?? i, status: v.status ?? ServiceStatus.ACTIVE },
           });
         }
       });

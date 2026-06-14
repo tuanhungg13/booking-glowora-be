@@ -13,6 +13,18 @@ import { TelegramService } from '../../../telegram/telegram.service';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 
 const TELEGRAM_ACTIVE_TTL = 7200; // 2 hours
+
+export interface MessageAttachmentInput {
+  type: 'image' | 'video';
+  url: string;
+  publicId: string;
+  fileName: string;
+  fileSize: number;
+  mimeType: string;
+  width?: number;
+  height?: number;
+  duration?: number;
+}
 const TOPIC_KEY = (groupId: string, topicId: number) =>
   `telegram:topic:${groupId}:${topicId}`;
 
@@ -151,6 +163,7 @@ export class ConversationsService {
     conversationId: string,
     senderId: string,
     content: string,
+    attachments: MessageAttachmentInput[],
     emitFn: (event: string, data: unknown) => void,
   ) {
     this.logger.log(`[processMessage] conversationId=${conversationId} senderId=${senderId}`);
@@ -160,7 +173,6 @@ export class ConversationsService {
       include: {
         customer: { select: { id: true, fullName: true } },
         store: { select: { telegramGroupId: true } },
-        assignedStaff: { select: { telegramChatId: true } },
       },
     });
     if (!conversation) throw new NotFoundException('Không tìm thấy cuộc trò chuyện');
@@ -168,18 +180,29 @@ export class ConversationsService {
 
     this.logger.log(
       `[processMessage] store.telegramGroupId=${conversation.store.telegramGroupId ?? 'NULL'} ` +
-      `assignedStaff.telegramChatId=${conversation.assignedStaff?.telegramChatId ?? 'NULL'} ` +
       `telegramTopicId=${conversation.telegramTopicId ?? 'NULL'}`,
     );
 
+    const preview = content.trim()
+      ? content.slice(0, 200)
+      : attachments.length > 0
+        ? (attachments[0].type === 'video' ? '[Video]' : attachments.length > 1 ? `[${attachments.length} ảnh]` : '[Ảnh]')
+        : '';
+
     const customerMsg = await this.prisma.$transaction(async (tx) => {
       const msg = await tx.message.create({
-        data: { conversationId, senderId, senderType: SenderType.CUSTOMER, content },
+        data: {
+          conversationId,
+          senderId,
+          senderType: SenderType.CUSTOMER,
+          content,
+          ...(attachments.length > 0 && { attachments: attachments as any }),
+        },
         include: { sender: { select: { id: true, fullName: true, avatarUrl: true } } },
       });
       await tx.conversation.update({
         where: { id: conversationId },
-        data: { lastMessageAt: msg.createdAt, lastMessageBody: content.slice(0, 200) },
+        data: { lastMessageAt: msg.createdAt, lastMessageBody: preview },
       });
       return msg;
     });
@@ -189,11 +212,11 @@ export class ConversationsService {
     emitFn('message_received', customerMsg);
     this.logger.log(`[processMessage] WebSocket broadcast sent`);
 
-    await this.forwardToStaff(conversation, content);
+    await this.forwardToStaff(conversation, content, attachments);
   }
 
-  async handleStaffReply(conversationId: string, telegramChatId: string, content: string) {
-    this.logger.log(`[handleStaffReply] conversationId=${conversationId} senderChatId=${telegramChatId}`);
+  async handleStaffReply(conversationId: string, _senderChatId: string, content: string, attachments: MessageAttachmentInput[] = []) {
+    this.logger.log(`[handleStaffReply] conversationId=${conversationId}`);
 
     const conversation = await this.prisma.conversation.findUnique({
       where: { id: conversationId },
@@ -201,26 +224,8 @@ export class ConversationsService {
     });
     if (!conversation) throw new NotFoundException('Không tìm thấy cuộc trò chuyện');
 
-    const staff = await this.prisma.staff.findFirst({
-      where: {
-        telegramChatId,
-        storeId: conversation.storeId,
-        status: 'ACTIVE',
-      },
-      select: { userId: true },
-    });
-
-    if (!staff) {
-      this.logger.warn(
-        `[handleStaffReply] No active linked staff found for chatId=${telegramChatId} storeId=${conversation.storeId} - using store owner as STAFF sender`,
-      );
-    }
-    const senderId = staff?.userId ?? conversation.store.ownerId;
-    this.logger.log(
-      staff
-        ? `[handleStaffReply] Sender = linked staff userId=${senderId}`
-        : `[handleStaffReply] Sender = store owner fallback userId=${senderId}`,
-    );
+    const senderId = conversation.store.ownerId;
+    this.logger.log(`[handleStaffReply] Sender = store owner userId=${senderId}`);
 
     return this.prisma.$transaction(async (tx) => {
       const msg = await tx.message.create({
@@ -229,15 +234,17 @@ export class ConversationsService {
           senderId,
           senderType: SenderType.STAFF,
           content,
+          ...(attachments.length > 0 && { attachments: attachments as any }),
         },
         include: {
           sender: { select: { id: true, fullName: true, avatarUrl: true } },
-          conversation: { select: { store: { select: { id: true, name: true, logoUrl: true } } } },
+          conversation: { select: { customerId: true, store: { select: { id: true, name: true, logoUrl: true } } } },
         },
       });
+      const preview = content.slice(0, 200) || (attachments.length > 0 ? (attachments[0].type === 'video' ? '[Video]' : '[Ảnh]') : '');
       await tx.conversation.update({
         where: { id: conversationId },
-        data: { lastMessageAt: msg.createdAt, lastMessageBody: content.slice(0, 200) },
+        data: { lastMessageAt: msg.createdAt, lastMessageBody: preview },
       });
       return msg;
     });
@@ -247,11 +254,20 @@ export class ConversationsService {
     conversationId: string,
     staffUserId: string,
     content: string,
+    attachments: MessageAttachmentInput[],
     emitFn: (event: string, data: unknown) => void,
+    emitToUserFn: (userId: string, event: string, data: unknown) => void,
   ) {
     const conversation = await this.prisma.conversation.findUnique({
       where: { id: conversationId },
-      select: { id: true, storeId: true },
+      select: {
+        id: true,
+        storeId: true,
+        customerId: true,
+        telegramTopicId: true,
+        store: { select: { telegramGroupId: true } },
+        customer: { select: { fullName: true } },
+      },
     });
     if (!conversation) throw new NotFoundException('Không tìm thấy cuộc trò chuyện');
 
@@ -261,6 +277,12 @@ export class ConversationsService {
     });
     if (!staff) throw new ForbiddenException('Bạn không phải nhân viên của cửa hàng này');
 
+    const preview = content.trim()
+      ? content.slice(0, 200)
+      : attachments.length > 0
+        ? (attachments[0].type === 'video' ? '[Video]' : attachments.length > 1 ? `[${attachments.length} ảnh]` : '[Ảnh]')
+        : '';
+
     const msg = await this.prisma.$transaction(async (tx) => {
       const m = await tx.message.create({
         data: {
@@ -268,6 +290,7 @@ export class ConversationsService {
           senderId: staffUserId,
           senderType: SenderType.STAFF,
           content,
+          ...(attachments.length > 0 && { attachments: attachments as any }),
         },
         include: {
           sender: { select: { id: true, fullName: true, avatarUrl: true } },
@@ -276,12 +299,19 @@ export class ConversationsService {
       });
       await tx.conversation.update({
         where: { id: conversationId },
-        data: { lastMessageAt: m.createdAt, lastMessageBody: content.slice(0, 200) },
+        data: { lastMessageAt: m.createdAt, lastMessageBody: preview },
       });
       return m;
     });
 
     emitFn('message_received', msg);
+    emitToUserFn(conversation.customerId, 'new_message_notification', {
+      conversationId,
+      storeName: (msg as any).conversation.store.name,
+      preview,
+    });
+    const staffName = (msg as any).sender?.fullName ?? 'Nhân viên';
+    await this.forwardToStaff(conversation, content, attachments, `👤 *Nhân viên - ${staffName}*`);
     return msg;
   }
 
@@ -292,71 +322,55 @@ export class ConversationsService {
       id: string;
       telegramTopicId?: number | null;
       store: { telegramGroupId: string | null };
-      assignedStaff: { telegramChatId: string | null } | null;
       customer: { fullName: string };
     },
     content: string,
+    attachments: MessageAttachmentInput[] = [],
+    senderLabel?: string,
   ) {
-    this.logger.log(`[forwardToStaff] conversationId=${conversation.id} telegramEnabled=${this.telegram.isEnabled}`);
-
     const groupId = conversation.store.telegramGroupId;
-
-    if (groupId) {
-      this.logger.log(`[forwardToStaff] PATH=GROUP_TOPIC groupId=${groupId}`);
-
-      let topicId = conversation.telegramTopicId ?? null;
-      this.logger.log(`[forwardToStaff] existing telegramTopicId=${topicId ?? 'NULL (will create new)'}`);
-
-      if (!topicId) {
-        const topicName = `${conversation.customer.fullName} — ${new Date().toLocaleDateString('vi-VN')}`;
-        this.logger.log(`[forwardToStaff] Creating new topic: "${topicName}"`);
-        topicId = await this.telegram.createGroupTopic(groupId, topicName);
-        this.logger.log(`[forwardToStaff] createGroupTopic result: topicId=${topicId ?? 'NULL (FAILED)'}`);
-
-        if (topicId) {
-          await this.prisma.conversation.update({
-            where: { id: conversation.id },
-            data: { telegramTopicId: topicId },
-          });
-          await this.redis.set(TOPIC_KEY(groupId, topicId), conversation.id, TELEGRAM_ACTIVE_TTL);
-          this.logger.log(`[forwardToStaff] Saved topicId=${topicId} to DB and Redis`);
-        } else {
-          this.logger.warn(
-            `[forwardToStaff] ❌ Topic creation FAILED — message will NOT be forwarded to Telegram. ` +
-            `Check: (1) bot is admin in group ${groupId}, (2) group has Topics/Forum enabled, ` +
-            `(3) groupId format is correct (should be -100xxxxxxxxxx).`,
-          );
-        }
-      }
-
-      if (topicId) {
-        // Refresh TTL mỗi lần có tin nhắn mới, tránh key hết hạn giữa chừng
-        await this.redis.set(TOPIC_KEY(groupId, topicId), conversation.id, TELEGRAM_ACTIVE_TTL);
-        const text = `💬 *${conversation.customer.fullName}*:\n${content}`;
-        this.logger.log(`[forwardToStaff] Sending to group topic groupId=${groupId} topicId=${topicId}`);
-        await this.telegram.sendToGroupTopic(groupId, topicId, text);
-        this.logger.log(`[forwardToStaff] ✅ Message forwarded to Telegram group topic`);
-      } else {
-        this.logger.warn(`[forwardToStaff] ❌ No topicId available — Telegram forwarding skipped`);
-      }
+    if (!groupId) {
+      this.logger.warn(`[forwardToStaff] Store has no telegramGroupId — message not forwarded`);
       return;
     }
 
-    // Fallback: DM nếu store chưa setup group
-    this.logger.log(`[forwardToStaff] PATH=DM_FALLBACK (store has no telegramGroupId)`);
-    const chatId = conversation.assignedStaff?.telegramChatId;
-    if (chatId) {
-      this.logger.log(`[forwardToStaff] Sending DM to assignedStaff chatId=${chatId}`);
-      // Set key để handleDmReply biết conversationId khi staff reply
-      await this.redis.set(`telegram:active:${chatId}`, conversation.id, TELEGRAM_ACTIVE_TTL);
-      await this.telegram.sendNewMessage(chatId, conversation.customer.fullName, content);
-      this.logger.log(`[forwardToStaff] ✅ DM sent to staff`);
-    } else {
-      this.logger.warn(
-        `[forwardToStaff] ❌ DM_FALLBACK skipped — assignedStaff=${conversation.assignedStaff ? 'exists but telegramChatId=NULL' : 'NULL (no assigned staff)'}. ` +
-        `Message saved to DB but NOT forwarded to Telegram.`,
-      );
+    this.logger.log(`[forwardToStaff] groupId=${groupId}`);
+
+    let topicId = conversation.telegramTopicId ?? null;
+
+    if (!topicId) {
+      const topicName = `${conversation.customer.fullName} — ${new Date().toLocaleDateString('vi-VN')}`;
+      topicId = await this.telegram.createGroupTopic(groupId, topicName);
+
+      if (topicId) {
+        await this.prisma.conversation.update({
+          where: { id: conversation.id },
+          data: { telegramTopicId: topicId },
+        });
+        await this.redis.set(TOPIC_KEY(groupId, topicId), conversation.id, TELEGRAM_ACTIVE_TTL);
+      } else {
+        this.logger.warn(
+          `[forwardToStaff] ❌ Topic creation FAILED — groupId=${groupId}. ` +
+          `Check: bot is admin, Topics enabled, groupId format (-100xxxxxxxxxx).`,
+        );
+        return;
+      }
     }
+
+    await this.redis.set(TOPIC_KEY(groupId, topicId), conversation.id, TELEGRAM_ACTIVE_TTL);
+
+    if (content.trim()) {
+      const label = senderLabel ?? `💬 *${conversation.customer.fullName}*`;
+      await this.telegram.sendToGroupTopic(groupId, topicId, `${label}:\n${content}`);
+    }
+    for (const att of attachments) {
+      if (att.type === 'image') {
+        await this.telegram.sendPhotoToGroupTopic(groupId, topicId, att.url);
+      } else {
+        await this.telegram.sendVideoToGroupTopic(groupId, topicId, att.url);
+      }
+    }
+    this.logger.log(`[forwardToStaff] ✅ Forwarded to group topic topicId=${topicId}`);
   }
 
 }

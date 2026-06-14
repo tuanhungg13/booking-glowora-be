@@ -1163,7 +1163,7 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
         const price = roundedPrice(template.price[Math.min(variantIndex, 2)], localRand);
         const label = variantIndex === 0 ? 'Cơ bản' : variantIndex === 1 ? 'Nâng cao' : variantIndex === 2 ? 'VIP' : 'Signature';
         variantRows.push(
-          `(${sql(randomUUID())}, ${subService(serviceSlug, store.slug)}, ${sql(`${duration} phút - ${label}`)}, ${sql(`${label} cho ${serviceName}, thời lượng ${duration} phút.`)}, ${duration}, ${money(price)}, ${money(Math.round(price * 0.48))}, ${variantIndex}, 'ACTIVE', NOW(), NOW())`,
+          `(${sql(randomUUID())}, ${subService(serviceSlug, store.slug)}, ${sql(`${duration} phút - ${label}`)}, ${sql(`${label} cho ${serviceName}, thời lượng ${duration} phút.`)}, ${duration}, ${money(price)}, ${variantIndex}, 'ACTIVE', NOW(), NOW())`,
         );
       }
     }
@@ -1297,7 +1297,7 @@ function render(): { sql: string; accounts: string; stats: Record<string, number
 
   sqlLines.push('-- SECTION 11: Service variants');
   sqlLines.push(
-    ...batchInsert(variantRows, 'service_variants', ['id', 'service_id', 'name', 'description', 'duration', 'price', 'cost_price', 'sort_order', 'status', 'created_at', 'updated_at'], {
+    ...batchInsert(variantRows, 'service_variants', ['id', 'service_id', 'name', 'description', 'duration', 'price', 'sort_order', 'status', 'created_at', 'updated_at'], {
       batchSize: 150,
     }),
   );

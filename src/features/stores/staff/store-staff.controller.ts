@@ -45,26 +45,6 @@ export class StoreStaffController {
     return this.storeStaffService.getMyProfile(storeId, user.id);
   }
 
-  @ApiOperation({ summary: 'Get current staff Telegram link status' })
-  @ApiBearerAuth()
-  @Get('me/telegram-status')
-  getMyTelegramStatus(
-    @StoreId() storeId: string,
-    @CurrentUser() user: CurrentUserPayload,
-  ) {
-    return this.storeStaffService.getMyTelegramStatus(storeId, user.id);
-  }
-
-  @ApiOperation({ summary: 'Generate Telegram deep link to link staff account' })
-  @ApiBearerAuth()
-  @Post('me/telegram-token')
-  generateTelegramToken(
-    @StoreId() storeId: string,
-    @CurrentUser() user: CurrentUserPayload,
-  ) {
-    return this.storeStaffService.generateTelegramToken(storeId, user.id);
-  }
-
   @ApiOperation({ summary: 'Get staff detail' })
   @Public()
   @Get(':staffId')

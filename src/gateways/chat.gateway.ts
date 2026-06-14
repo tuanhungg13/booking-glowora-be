@@ -95,17 +95,21 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('send_message')
   async handleMessage(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: { conversationId: string; content: string },
+    @MessageBody() data: { conversationId: string; content: string; attachments?: any[] },
   ) {
     const userId = client.data.userId as string;
     if (!userId) return { error: 'Không có quyền truy cập' };
-    if (!data.content?.trim()) return { error: 'Nội dung tin nhắn không được để trống' };
+
+    const hasContent = !!data.content?.trim();
+    const hasAttachments = Array.isArray(data.attachments) && data.attachments.length > 0;
+    if (!hasContent && !hasAttachments) return { error: 'Tin nhắn phải có nội dung hoặc file đính kèm' };
 
     try {
       await this.conversations.processMessage(
         data.conversationId,
         userId,
-        data.content.trim(),
+        data.content?.trim() ?? '',
+        data.attachments ?? [],
         (event, payload) => this.emitToConversation(data.conversationId, event, payload),
       );
       return { sent: true };
@@ -117,18 +121,23 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('staff_send_message')
   async handleStaffMessage(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: { conversationId: string; content: string },
+    @MessageBody() data: { conversationId: string; content: string; attachments?: any[] },
   ) {
     const userId = client.data.userId as string;
     if (!userId) return { error: 'Không có quyền truy cập' };
-    if (!data.content?.trim()) return { error: 'Nội dung tin nhắn không được để trống' };
+
+    const hasContent = !!data.content?.trim();
+    const hasAttachments = Array.isArray(data.attachments) && data.attachments.length > 0;
+    if (!hasContent && !hasAttachments) return { error: 'Tin nhắn phải có nội dung hoặc file đính kèm' };
 
     try {
       await this.conversations.processStaffMessage(
         data.conversationId,
         userId,
-        data.content.trim(),
+        data.content?.trim() ?? '',
+        data.attachments ?? [],
         (event, payload) => this.emitToConversation(data.conversationId, event, payload),
+        (toUserId, event, payload) => this.emitToUser(toUserId, event, payload),
       );
       return { sent: true };
     } catch (err: any) {
@@ -141,7 +150,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('ai_chat')
   async handleAiChat(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: { message: string },
+    @MessageBody() data: { message: string; location?: { lat: number; lng: number; cityName?: string | null } },
   ) {
     const message = data.message?.trim();
     if (!message) return { error: 'Nội dung tin nhắn không được để trống' };
@@ -150,9 +159,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const history = this.aiSessions.get(client.id) ?? [];
 
     const context = await this.gemini.buildPlatformContext();
-    const { reply, suggestedCategorySlugs } = await this.gemini.chatGlobal(history, message, context);
+    const { reply, suggestedKeywords } = await this.gemini.chatGlobal(history, message, context, data.location);
 
-    const suggestions = await this.gemini.fetchServicesByCategories(suggestedCategorySlugs);
+    const suggestions = await this.gemini.fetchServicesByKeywords(suggestedKeywords);
 
     // Cập nhật history, giới hạn AI_HISTORY_MAX_TURNS lượt gần nhất
     const updated: ChatMessage[] = [

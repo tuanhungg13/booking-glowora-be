@@ -14,8 +14,8 @@ export class AiController {
   @Post('chat')
   async chat(@Body() dto: PlatformChatDto) {
     const context = await this.gemini.buildPlatformContext();
-    const { reply, suggestedCategorySlugs } = await this.gemini.chatGlobal(dto.history ?? [], dto.message, context);
-    const suggestions = await this.gemini.fetchServicesByCategories(suggestedCategorySlugs);
+    const { reply, suggestedKeywords } = await this.gemini.chatGlobal(dto.history ?? [], dto.message, context);
+    const suggestions = await this.gemini.fetchServicesByKeywords(suggestedKeywords);
     return { reply, suggestions };
   }
 }

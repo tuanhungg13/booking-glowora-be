@@ -4,7 +4,7 @@ import { Public } from '../common/decorators/public.decorator';
 import { TelegramService } from './telegram.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { RedisService } from '../redis/redis.service';
-import { ConversationsService } from '../features/messaging/conversations/conversations.service';
+import { ConversationsService, MessageAttachmentInput } from '../features/messaging/conversations/conversations.service';
 import { ChatGateway } from '../gateways/chat.gateway';
 
 @ApiExcludeController()
@@ -31,9 +31,9 @@ export class TelegramController {
         `[webhook] chat.id=${message.chat.id} chat.type=${message.chat.type} chat.title="${message.chat.title ?? 'DM'}"`,
       );
     }
-    if (!message?.text) return { ok: true };
+    if (!message?.text && !message?.photo && !message?.video) return { ok: true };
 
-    const text: string = message.text;
+    const text: string = message.text ?? message.caption ?? '';
     const threadId: number | undefined = message.message_thread_id;
 
     // /start <token> — link staff (DM) hoặc setup group store (supergroup)
@@ -45,22 +45,14 @@ export class TelegramController {
         this.logger.warn(`[webhook] /start received but no token — text="${text}"`);
         return { ok: true };
       }
-      if (token) {
-        if (message.chat.type === 'private') {
-          await this.handleLinkToken(String(message.chat.id), token);
-        } else {
-          await this.handleGroupSetupToken(String(message.chat.id), token);
-        }
+      if (message.chat.type !== 'private') {
+        await this.handleGroupSetupToken(String(message.chat.id), token);
       }
       return { ok: true };
     }
 
     if (threadId) {
-      // Reply trong group topic
       await this.handleGroupTopicReply(message, threadId, text);
-    } else {
-      // DM từ staff (fallback mode)
-      await this.handleDmReply(message, text);
     }
 
     return { ok: true };
@@ -82,47 +74,60 @@ export class TelegramController {
 
     this.logger.log(`[handleGroupTopicReply] conversationId=${conversationId}`);
 
+    const attachments: MessageAttachmentInput[] = [];
+    if (message.photo) {
+      const photo = message.photo[message.photo.length - 1];
+      const url = await this.telegram.getFileUrl(photo.file_id);
+      if (url) {
+        attachments.push({
+          type: 'image',
+          url,
+          publicId: photo.file_id,
+          fileName: `photo_${photo.file_id}.jpg`,
+          fileSize: photo.file_size ?? 0,
+          mimeType: 'image/jpeg',
+          width: photo.width,
+          height: photo.height,
+        });
+      }
+    } else if (message.video) {
+      const video = message.video;
+      const url = await this.telegram.getFileUrl(video.file_id);
+      if (url) {
+        attachments.push({
+          type: 'video',
+          url,
+          publicId: video.file_id,
+          fileName: video.file_name ?? `video_${video.file_id}.mp4`,
+          fileSize: video.file_size ?? 0,
+          mimeType: video.mime_type ?? 'video/mp4',
+          width: video.width,
+          height: video.height,
+          duration: video.duration,
+        });
+      }
+    }
+
     try {
-      const msg = await this.conversations.handleStaffReply(conversationId, senderChatId, text);
+      const msg = await this.conversations.handleStaffReply(conversationId, senderChatId, text, attachments);
       if (msg) {
         this.chatGateway.emitToConversation(conversationId, 'message_received', msg);
+        const storeId = (msg as any).conversation?.store?.id as string | undefined;
+        const storeName = (msg as any).conversation?.store?.name as string | undefined;
+        const customerId = (msg as any).conversation?.customerId as string | undefined;
+        const preview = (msg.content ?? '').slice(0, 100) || (attachments.length > 0 ? (attachments[0].type === 'video' ? '[Video]' : '[Ảnh]') : '');
+        if (storeId) {
+          this.chatGateway.emitToStore(storeId, 'new_message_notification', { conversationId, storeName: storeName ?? '', preview });
+        }
+        if (customerId) {
+          this.chatGateway.emitToUser(customerId, 'new_message_notification', { conversationId, storeName: storeName ?? 'Nhân viên', preview });
+        }
         this.logger.log(`[handleGroupTopicReply] ✅ Message emitted to WebSocket room conv:${conversationId}`);
       } else {
         this.logger.warn(`[handleGroupTopicReply] handleStaffReply returned null — message not emitted`);
       }
     } catch (err) {
       this.logger.error('Failed to handle group topic reply', err);
-    }
-  }
-
-  // ─── DM reply (fallback) ───────────────────────────────────────────────────
-
-  private async handleDmReply(message: any, text: string) {
-    const chatId = String(message.chat.id);
-    this.logger.log(`[handleDmReply] chatId=${chatId}`);
-
-    const conversationId = await this.redis.get(`telegram:active:${chatId}`);
-    if (!conversationId) {
-      this.logger.warn(`[handleDmReply] No active conversation for chatId=${chatId}`);
-      await this.telegram.sendConfirmation(
-        chatId,
-        '⚠️ Không có cuộc hội thoại nào đang hoạt động. Vui lòng chờ khách hàng nhắn tin trước.',
-      );
-      return;
-    }
-
-    this.logger.log(`[handleDmReply] conversationId=${conversationId}`);
-
-    try {
-      const msg = await this.conversations.handleStaffReply(conversationId, chatId, text);
-      if (msg) {
-        this.chatGateway.emitToConversation(conversationId, 'message_received', msg);
-        this.logger.log(`[handleDmReply] ✅ Message emitted to WebSocket room conv:${conversationId}`);
-      } else {
-        this.logger.warn(`[handleDmReply] handleStaffReply returned null — message not emitted`);
-      }
-    } catch (err) {
-      this.logger.error('Failed to handle DM reply', err);
     }
   }
 
@@ -153,27 +158,4 @@ export class TelegramController {
     );
   }
 
-  // ─── Link token ────────────────────────────────────────────────────────────
-
-  private async handleLinkToken(chatId: string, token: string) {
-    const staff = await this.prisma.staff.findFirst({
-      where: { telegramLinkToken: token },
-      select: { id: true },
-    });
-
-    if (!staff) {
-      await this.telegram.sendConfirmation(chatId, '❌ Token không hợp lệ hoặc đã hết hạn.');
-      return;
-    }
-
-    await this.prisma.staff.update({
-      where: { id: staff.id },
-      data: { telegramChatId: chatId, telegramLinkToken: null },
-    });
-
-    await this.telegram.sendConfirmation(
-      chatId,
-      '✅ Tài khoản Telegram đã được liên kết thành công! Bạn sẽ nhận được thông báo khi khách hàng cần tư vấn.',
-    );
-  }
 }

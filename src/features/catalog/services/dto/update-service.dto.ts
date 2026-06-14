@@ -28,12 +28,6 @@ export class UpsertServiceVariantDto {
   @Min(0)
   price!: number;
 
-  @ApiPropertyOptional({ example: 80000, minimum: 0 })
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  costPrice?: number;
-
   @ApiPropertyOptional({ example: 0, description: 'Thứ tự hiển thị' })
   @IsOptional()
   @IsInt()

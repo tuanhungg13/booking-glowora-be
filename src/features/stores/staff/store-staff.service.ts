@@ -1,3 +1,4 @@
+import { randomBytes } from 'crypto';
 import {
   BadRequestException,
   ConflictException,
@@ -8,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DayOffStatus, NotificationType, StaffStatus } from '@prisma/client';
-import { randomBytes } from 'crypto';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { PermissionCacheService } from '../../../redis/permission-cache.service';
 import { ChatGateway } from '../../../gateways/chat.gateway';
@@ -31,11 +31,11 @@ export class StoreStaffService {
 
   constructor(
     private readonly prisma: PrismaService,
+    private readonly config: ConfigService,
     private readonly storesService: StoresService,
     private readonly permissionCache: PermissionCacheService,
     private readonly mail: MailService,
     private readonly gateway: ChatGateway,
-    private readonly config: ConfigService,
   ) {}
 
   async invite(storeId: string, ownerId: string, dto: InviteStaffDto) {
@@ -222,11 +222,9 @@ export class StoreStaffService {
     return { removed: true };
   }
 
-  private mapStaff<T extends { telegramChatId: string | null; telegramLinkToken?: string | null }>(
-    staff: T,
-  ): Omit<T, 'telegramChatId' | 'telegramLinkToken'> & { telegramLinked: boolean } {
-    const { telegramChatId, telegramLinkToken: _token, ...rest } = staff as any;
-    return { ...rest, telegramLinked: telegramChatId !== null };
+
+  private mapStaff(staff: any) {
+    return staff;
   }
 
   /**
@@ -293,25 +291,6 @@ export class StoreStaffService {
   }
 
   async getMyProfile(storeId: string, userId: string) {
-    const staff = await this.findActiveStaffOrRestoreOwner(storeId, userId);
-    return this.mapStaff(staff);
-  }
-
-  async getMyTelegramStatus(storeId: string, userId: string) {
-    const staff = await this.findActiveStaffOrRestoreOwner(storeId, userId);
-    return { telegramLinked: staff.telegramChatId !== null };
-  }
-
-  async generateTelegramToken(storeId: string, userId: string) {
-    const staff = await this.findActiveStaffOrRestoreOwner(storeId, userId);
-
-    const token = randomBytes(16).toString('hex');
-    await this.prisma.staff.update({
-      where: { id: staff.id },
-      data: { telegramLinkToken: token },
-    });
-
-    const botName = process.env.TELEGRAM_BOT_USERNAME ?? 'GloworaBot';
-    return { linkUrl: `https://t.me/${botName}?start=${token}`, token };
+    return this.findActiveStaffOrRestoreOwner(storeId, userId);
   }
 }

@@ -11,7 +11,6 @@ interface ParsedRow {
   variantName: string;
   duration: number;
   price: number;
-  costPrice?: number;
   status: ServiceStatus;
 }
 
@@ -109,7 +108,7 @@ export class ServicesImportService {
       if (rowNumber <= 3) return; // bỏ 2 dòng tiêu đề/hướng dẫn + 1 dòng header cột
 
       // Bỏ qua dòng trống hoàn toàn
-      const rawCells = [1, 2, 3, 4, 5, 6, 7, 8].map(c => getCellString(row.getCell(c)));
+      const rawCells = [1, 2, 3, 4, 5, 6, 7].map(c => getCellString(row.getCell(c)));
       if (rawCells.every(c => !c)) return;
 
       totalRows++;
@@ -120,8 +119,7 @@ export class ServicesImportService {
       const variantName = getCellString(row.getCell(4)) || 'Gói cơ bản';
       const durationRaw = getCellNumber(row.getCell(5));
       const priceRaw = getCellNumber(row.getCell(6));
-      const costPriceRaw = getCellNumber(row.getCell(7));
-      const statusRaw = getCellString(row.getCell(8)).toUpperCase();
+      const statusRaw = getCellString(row.getCell(7)).toUpperCase();
 
       if (!serviceName) {
         rowErrors.push({ row: rowNumber, message: 'Thiếu Tên Dịch Vụ' });
@@ -139,10 +137,6 @@ export class ServicesImportService {
         rowErrors.push({ row: rowNumber, message: 'Giá Bán không hợp lệ (phải >= 0)' });
         return;
       }
-      if (costPriceRaw != null && costPriceRaw < 0) {
-        rowErrors.push({ row: rowNumber, message: 'Giá Vốn không hợp lệ (phải >= 0)' });
-        return;
-      }
 
       const status = statusRaw === 'INACTIVE' ? ServiceStatus.INACTIVE : ServiceStatus.ACTIVE;
 
@@ -154,7 +148,6 @@ export class ServicesImportService {
         variantName,
         duration: durationRaw,
         price: priceRaw,
-        costPrice: costPriceRaw ?? undefined,
         status,
       });
     });
@@ -267,7 +260,6 @@ export class ServicesImportService {
                   name: row.variantName,
                   duration: row.duration,
                   price: row.price,
-                  costPrice: row.costPrice,
                   sortOrder: i,
                   status: row.status,
                 })),
