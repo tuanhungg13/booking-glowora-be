@@ -61,7 +61,7 @@ export class NotificationsService {
       where: { id },
       include: { user: { select: { id: true, email: true, fullName: true } } },
     });
-    if (!notif) throw new NotFoundException('Notification not found');
+    if (!notif) throw new NotFoundException('Không tìm thấy thông báo');
     return notif;
   }
 
@@ -90,7 +90,7 @@ export class NotificationsService {
 
   async markOneAsRead(id: string, userId: string) {
     const notif = await this.prisma.notification.findFirst({ where: { id, userId } });
-    if (!notif) throw new NotFoundException('Notification not found');
+    if (!notif) throw new NotFoundException('Không tìm thấy thông báo');
     return this.prisma.notification.update({ where: { id }, data: { isRead: true } });
   }
 

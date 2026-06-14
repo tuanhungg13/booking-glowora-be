@@ -122,7 +122,7 @@ export class StaffScheduleService {
       where: { id, ...(storeId && { storeId }), ...(staffId && { staffId }) },
       include: { staff: { include: { user: { select: { id: true, fullName: true, email: true, phone: true } } } } },
     });
-    if (!schedule) throw new NotFoundException('Staff schedule not found');
+    if (!schedule) throw new NotFoundException('Không tìm thấy lịch làm việc');
     return schedule;
   }
 
@@ -162,6 +162,6 @@ export class StaffScheduleService {
 
   private async assertStaffInStore(storeId: string, staffId: string) {
     const staff = await this.prisma.staff.findFirst({ where: { id: staffId, storeId }, select: { id: true } });
-    if (!staff) throw new NotFoundException('Staff not found in this store');
+    if (!staff) throw new NotFoundException('Không tìm thấy nhân viên trong cửa hàng này');
   }
 }

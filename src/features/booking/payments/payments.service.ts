@@ -50,7 +50,7 @@ export class PaymentsService {
         items: { include: { service: true } },
       },
     });
-    if (!booking) throw new NotFoundException('Booking not found');
+    if (!booking) throw new NotFoundException('Không tìm thấy lịch đặt');
 
     const paymentConfig = booking.store.paymentConfig;
     if (!paymentConfig || !paymentConfig.isActive) {
@@ -155,17 +155,17 @@ export class PaymentsService {
       select: { webhookSecret: true },
     });
     if (!config?.webhookSecret || !verifySepayWebhook(authHeader, config.webhookSecret)) {
-      return { success: false, message: 'Unauthorized' };
+      return { success: false, message: 'Không có quyền truy cập' };
     }
 
     if (payload.transferType !== 'in') {
-      return { success: true, message: 'Skipped non-incoming transfer' };
+      return { success: true, message: 'Bỏ qua giao dịch không hợp lệ' };
     }
 
     const rawContent = payload.code ?? payload.content ?? '';
     const sepayCode = extractSepayCode(rawContent);
     if (!sepayCode) {
-      return { success: true, message: 'No sepayCode in content' };
+      return { success: true, message: 'Không tìm thấy mã giao dịch trong nội dung' };
     }
 
     const payment = await this.prisma.payment.findFirst({
@@ -177,7 +177,7 @@ export class PaymentsService {
     });
 
     if (!payment) {
-      return { success: true, message: 'Payment not found or already processed' };
+      return { success: true, message: 'Không tìm thấy thanh toán hoặc đã được xử lý' };
     }
 
     if (payload.transferAmount < Number(payment.amount)) {
@@ -200,7 +200,7 @@ export class PaymentsService {
           requiredAmount: Number(payment.amount),
         },
       });
-      return { success: false, message: 'Insufficient amount' };
+      return { success: false, message: 'Số tiền thanh toán không đủ' };
     }
 
     await this.updatePaymentSuccess(payment.id, payment.type, payment.bookingId, {
@@ -253,7 +253,7 @@ export class PaymentsService {
         .catch(() => {});
     }
 
-    return { success: true, message: 'Payment confirmed' };
+    return { success: true, message: 'Thanh toán đã được xác nhận' };
   }
 
   async recordStorePayment(
@@ -270,7 +270,7 @@ export class PaymentsService {
         items: { include: { service: true } },
       },
     });
-    if (!booking) throw new NotFoundException('Booking not found');
+    if (!booking) throw new NotFoundException('Không tìm thấy lịch đặt');
 
     const payableStatuses: BookingStatus[] = [
       BookingStatus.CONFIRMED,
@@ -475,7 +475,7 @@ export class PaymentsService {
       where: { id },
       include: paymentInclude,
     });
-    if (!payment) throw new NotFoundException('Payment not found');
+    if (!payment) throw new NotFoundException('Không tìm thấy thông tin thanh toán');
     return payment;
   }
 

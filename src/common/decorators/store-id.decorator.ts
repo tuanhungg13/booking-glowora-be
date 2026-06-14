@@ -21,7 +21,7 @@ export const StoreId = createParamDecorator(
     }
 
     if (typeof value !== 'string' || !value.trim()) {
-      throw new BadRequestException('x-store-id header is required');
+      throw new BadRequestException('Thiếu header x-store-id');
     }
 
     return value.trim();

@@ -119,7 +119,7 @@ export class PermissionsGuard implements CanActivate {
       return this.extractStoreId(value[0]);
     }
     if (typeof value !== 'string') {
-      throw new BadRequestException('x-store-id must be a string');
+      throw new BadRequestException('x-store-id phải là chuỗi ký tự');
     }
     return value.trim() || null;
   }

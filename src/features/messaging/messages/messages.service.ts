@@ -12,7 +12,7 @@ export class MessagesService {
     const conversation = await this.prisma.conversation.findUnique({
       where: { id: dto.conversationId },
     });
-    if (!conversation) throw new NotFoundException('Conversation not found');
+    if (!conversation) throw new NotFoundException('Không tìm thấy cuộc trò chuyện');
 
     return this.prisma.$transaction(async (tx) => {
       const message = await tx.message.create({
@@ -41,7 +41,7 @@ export class MessagesService {
       where: { id: conversationId },
       select: { customerId: true, storeId: true, store: { select: { ownerId: true } } },
     });
-    if (!conversation) throw new NotFoundException('Conversation not found');
+    if (!conversation) throw new NotFoundException('Không tìm thấy cuộc trò chuyện');
 
     if (requesterId) {
       const isCustomer = conversation.customerId === requesterId;
@@ -76,7 +76,7 @@ export class MessagesService {
         sender: { select: { id: true, fullName: true, email: true } },
       },
     });
-    if (!message) throw new NotFoundException('Message not found');
+    if (!message) throw new NotFoundException('Không tìm thấy tin nhắn');
 
     if (requesterId) {
       const conv = message.conversation;

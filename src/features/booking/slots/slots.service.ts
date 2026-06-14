@@ -39,7 +39,7 @@ export class SlotsService {
 
     const store = await this.prisma.store.findUnique({ where: { id: storeId } });
     if (!store || store.status !== StoreStatus.ACTIVE) {
-      throw new NotFoundException('Store not found or inactive');
+      throw new NotFoundException('Cửa hàng không tồn tại hoặc chưa hoạt động');
     }
 
     // Fix 4: Guard — tránh vòng lặp vô hạn nếu store config sai
@@ -326,7 +326,7 @@ export class SlotsService {
 
     const store = await this.prisma.store.findUnique({ where: { id: storeId } });
     if (!store || store.status !== StoreStatus.ACTIVE) {
-      throw new NotFoundException('Store not found or inactive');
+      throw new NotFoundException('Cửa hàng không tồn tại hoặc chưa hoạt động');
     }
 
     const tzOffset = TZ_OFFSETS[store.timezone] ?? 7 * 60;

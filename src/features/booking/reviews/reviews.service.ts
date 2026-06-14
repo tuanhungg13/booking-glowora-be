@@ -28,15 +28,15 @@ export class ReviewsService {
 
   async create(dto: CreateReviewDto, customerId?: string, bookingItemIdOverride?: string) {
     const itemId = bookingItemIdOverride ?? dto.bookingItemId;
-    if (!itemId) throw new BadRequestException('bookingItemId is required');
+    if (!itemId) throw new BadRequestException('Thiếu thông tin bookingItemId');
 
     const bookingItem = await this.prisma.bookingItem.findUnique({
       where: { id: itemId },
       include: { booking: true },
     });
-    if (!bookingItem) throw new NotFoundException('BookingItem not found');
+    if (!bookingItem) throw new NotFoundException('Không tìm thấy dịch vụ trong lịch đặt');
     if (customerId && bookingItem.booking.customerId !== customerId) {
-      throw new BadRequestException('Cannot review another customer booking');
+      throw new BadRequestException('Không thể đánh giá lịch đặt của người khác');
     }
     if (bookingItem.booking.status !== BookingStatus.COMPLETED) {
       throw new BadRequestException('Chỉ đánh giá sau khi dịch vụ hoàn thành');
@@ -168,7 +168,7 @@ export class ReviewsService {
       where: { id },
       include: reviewInclude,
     });
-    if (!review) throw new NotFoundException('Review not found');
+    if (!review) throw new NotFoundException('Không tìm thấy đánh giá');
     return review;
   }
 

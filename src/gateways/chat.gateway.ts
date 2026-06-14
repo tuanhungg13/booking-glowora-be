@@ -72,21 +72,21 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() data: { conversationId: string },
   ) {
     const userId = client.data.userId as string;
-    if (!userId) return { error: 'Unauthorized' };
+    if (!userId) return { error: 'Không có quyền truy cập' };
 
     const conversation = await this.prisma.conversation.findUnique({
       where: { id: data.conversationId },
       select: { customerId: true, storeId: true },
     });
 
-    if (!conversation) return { error: 'Conversation not found' };
+    if (!conversation) return { error: 'Không tìm thấy cuộc trò chuyện' };
 
     const isCustomer = conversation.customerId === userId;
     const isStaff = await this.prisma.staff.findFirst({
       where: { userId, storeId: conversation.storeId, status: 'ACTIVE' },
     });
 
-    if (!isCustomer && !isStaff) return { error: 'Forbidden' };
+    if (!isCustomer && !isStaff) return { error: 'Truy cập bị từ chối' };
 
     await client.join(`conv:${data.conversationId}`);
     return { joined: true, conversationId: data.conversationId };
@@ -98,8 +98,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() data: { conversationId: string; content: string },
   ) {
     const userId = client.data.userId as string;
-    if (!userId) return { error: 'Unauthorized' };
-    if (!data.content?.trim()) return { error: 'Empty message' };
+    if (!userId) return { error: 'Không có quyền truy cập' };
+    if (!data.content?.trim()) return { error: 'Nội dung tin nhắn không được để trống' };
 
     try {
       await this.conversations.processMessage(
@@ -120,8 +120,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() data: { conversationId: string; content: string },
   ) {
     const userId = client.data.userId as string;
-    if (!userId) return { error: 'Unauthorized' };
-    if (!data.content?.trim()) return { error: 'Empty message' };
+    if (!userId) return { error: 'Không có quyền truy cập' };
+    if (!data.content?.trim()) return { error: 'Nội dung tin nhắn không được để trống' };
 
     try {
       await this.conversations.processStaffMessage(
@@ -144,7 +144,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() data: { message: string },
   ) {
     const message = data.message?.trim();
-    if (!message) return { error: 'Empty message' };
+    if (!message) return { error: 'Nội dung tin nhắn không được để trống' };
 
     // Lấy lịch sử của session này (theo socketId)
     const history = this.aiSessions.get(client.id) ?? [];
@@ -181,20 +181,20 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() data: { storeId: string },
   ) {
     const userId = client.data.userId as string;
-    if (!userId) return { error: 'Unauthorized' };
+    if (!userId) return { error: 'Không có quyền truy cập' };
 
     const store = await this.prisma.store.findUnique({
       where: { id: data.storeId },
       select: { ownerId: true },
     });
-    if (!store) return { error: 'Store not found' };
+    if (!store) return { error: 'Không tìm thấy cửa hàng' };
 
     if (store.ownerId !== userId) {
       const isStaff = await this.prisma.staff.findFirst({
         where: { userId, storeId: data.storeId, status: 'ACTIVE' },
         select: { id: true },
       });
-      if (!isStaff) return { error: 'Forbidden' };
+      if (!isStaff) return { error: 'Truy cập bị từ chối' };
     }
 
     await client.join(`store:${data.storeId}`);

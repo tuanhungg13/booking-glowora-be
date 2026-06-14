@@ -34,7 +34,7 @@ export class WorkingHourService {
     const wh = await this.prisma.workingHour.findUnique({
       where: { id },
     });
-    if (!wh) throw new NotFoundException('Working hour not found');
+    if (!wh) throw new NotFoundException('Không tìm thấy giờ làm việc');
     return wh;
   }
 

@@ -56,7 +56,7 @@ export class CategoriesService {
         _count: { select: { services: true } },
       },
     });
-    if (!category) throw new NotFoundException('Category not found');
+    if (!category) throw new NotFoundException('Không tìm thấy danh mục');
     return category;
   }
 

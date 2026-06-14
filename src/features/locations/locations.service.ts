@@ -13,7 +13,7 @@ export class LocationsService {
 
   async findWardsByProvince(provinceId: number) {
     const province = await this.prisma.province.findUnique({ where: { id: provinceId } });
-    if (!province) throw new NotFoundException(`Province ${provinceId} not found`);
+    if (!province) throw new NotFoundException('Không tìm thấy tỉnh/thành phố');
 
     const wards = await this.prisma.ward.findMany({
       where: { provinceId },

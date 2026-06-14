@@ -453,7 +453,7 @@ export class ServicesService {
       },
       include: serviceInclude,
     });
-    if (!service) throw new NotFoundException('Service not found');
+    if (!service) throw new NotFoundException('Không tìm thấy dịch vụ');
 
     const { latitude, longitude, ...storeWithoutCoords } = service.store as typeof service.store & { latitude: number | null; longitude: number | null };
     const distance =

@@ -71,7 +71,7 @@ export class AuthService {
 
   async register(dto: RegisterDto) {
     const existing = await this.prisma.user.findUnique({ where: { email: dto.email } });
-    if (existing) throw new ConflictException('Email already registered');
+    if (existing) throw new ConflictException('Email đã được đăng ký');
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const hashedPassword = await bcrypt.hash(dto.password, 10);
@@ -109,7 +109,7 @@ export class AuthService {
     if (pending.otp !== dto.otp) throw new BadRequestException('OTP không chính xác');
 
     const existing = await this.prisma.user.findUnique({ where: { email: dto.email } });
-    if (existing) throw new ConflictException('Email already registered');
+    if (existing) throw new ConflictException('Email đã được đăng ký');
 
     const customerRole = await this.prisma.role.findFirst({
       where: { code: CUSTOMER_ROLE_CODE, storeId: null },
@@ -138,7 +138,7 @@ export class AuthService {
   async refresh(refreshToken: string) {
     const blacklistKey = `blacklist:refresh:${refreshToken}`;
     const isBlacklisted = await this.redis.exists(blacklistKey);
-    if (isBlacklisted) throw new UnauthorizedException('Refresh token has been revoked');
+    if (isBlacklisted) throw new UnauthorizedException('Phiên đăng nhập đã bị thu hồi');
 
     let payload: { sub: string; email: string };
     try {
@@ -147,7 +147,7 @@ export class AuthService {
           this.config.get<string>('JWT_REFRESH_SECRET') || 'refresh-secret',
       });
     } catch {
-      throw new UnauthorizedException('Invalid or expired refresh token');
+      throw new UnauthorizedException('Phiên đăng nhập không hợp lệ hoặc đã hết hạn');
     }
 
     const user = await this.prisma.user.findUnique({
@@ -155,10 +155,10 @@ export class AuthService {
       include: { userRoles: { include: { role: { select: { name: true } } } } },
     });
     if (!user || user.status !== UserStatus.ACTIVE) {
-      throw new UnauthorizedException('User not found or inactive');
+      throw new UnauthorizedException('Tài khoản không tồn tại hoặc đã bị vô hiệu hóa');
     }
     if (!user.refreshToken || !(await bcrypt.compare(refreshToken, user.refreshToken))) {
-      throw new UnauthorizedException('Refresh token mismatch');
+      throw new UnauthorizedException('Phiên đăng nhập không khớp');
     }
 
     const newAccess = this._signAccess(user.id, user.email);
@@ -210,7 +210,7 @@ export class AuthService {
         },
       },
     });
-    if (!user) throw new NotFoundException('User not found');
+    if (!user) throw new NotFoundException('Không tìm thấy tài khoản');
     return {
       ...user,
       roles: user.userRoles.map((ur) => ({
@@ -304,7 +304,7 @@ export class AuthService {
       where: { id: userId },
       select: { id: true, password: true },
     });
-    if (!user) throw new NotFoundException('User not found');
+    if (!user) throw new NotFoundException('Không tìm thấy tài khoản');
 
     const isMatch = await bcrypt.compare(dto.currentPassword, user.password ?? '');
     if (!isMatch) throw new BadRequestException('Mật khẩu hiện tại không chính xác');

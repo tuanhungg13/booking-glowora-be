@@ -82,13 +82,13 @@ export class StoresService {
   async create(dto: CreateStoreDto, ownerId: string) {
     if (dto.provinceId) {
       const province = await this.prisma.province.findUnique({ where: { id: dto.provinceId } });
-      if (!province) throw new BadRequestException(`Province ${dto.provinceId} not found`);
+      if (!province) throw new BadRequestException('Không tìm thấy tỉnh/thành phố');
     }
     if (dto.wardId) {
       const ward = await this.prisma.ward.findUnique({ where: { id: dto.wardId } });
-      if (!ward) throw new BadRequestException(`Ward ${dto.wardId} not found`);
+      if (!ward) throw new BadRequestException('Không tìm thấy phường/xã');
       if (dto.provinceId && ward.provinceId !== dto.provinceId) {
-        throw new BadRequestException('Ward does not belong to the specified province');
+        throw new BadRequestException('Phường/xã không thuộc tỉnh/thành phố đã chọn');
       }
     }
 
@@ -104,7 +104,7 @@ export class StoresService {
       where: { userId: ownerId, storeId: { not: null } },
     });
     if (storeRoleCount >= MAX_STORE_ROLES_PER_USER) {
-      throw new BadRequestException('User has reached the maximum of 3 store roles');
+      throw new BadRequestException('Tài khoản đã đạt giới hạn tối đa 3 cửa hàng');
     }
 
     const templateRole = await this.prisma.role.findFirst({
@@ -112,7 +112,7 @@ export class StoresService {
       include: { permissions: true },
     });
     if (!templateRole) {
-      throw new BadRequestException('SHOP_OWNER template role is missing. Run database seed first.');
+      throw new BadRequestException('Thiếu vai trò mặc định SHOP_OWNER. Vui lòng chạy seed database.');
     }
 
     const slug = await this.generateUniqueSlug(dto.name, dto.provinceId);
@@ -302,7 +302,7 @@ export class StoresService {
       },
       include: storeDetailInclude,
     });
-    if (!store) throw new NotFoundException('Store not found');
+    if (!store) throw new NotFoundException('Không tìm thấy cửa hàng');
 
     const promotion = await this.promotions.findActiveForStore(store.id);
     if (!promotion) return store;
@@ -568,12 +568,12 @@ export class StoresService {
 
   async checkOwnership(storeId: string, userId: string) {
     const store = await this.prisma.store.findUnique({ where: { id: storeId } });
-    if (!store) throw new NotFoundException('Store not found');
+    if (!store) throw new NotFoundException('Không tìm thấy cửa hàng');
     if (store.ownerId !== userId) {
-      throw new ForbiddenException('You do not have permission to manage this store');
+      throw new ForbiddenException('Bạn không có quyền quản lý cửa hàng này');
     }
     if (store.status === StoreStatus.BANNED) {
-      throw new ForbiddenException('Store is locked');
+      throw new ForbiddenException('Cửa hàng đang bị khóa');
     }
     return store;
   }

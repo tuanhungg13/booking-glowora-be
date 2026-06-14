@@ -15,7 +15,7 @@ export class PermissionsService {
     const existing = await this.prisma.permission.findUnique({
       where: { code: dto.code },
     });
-    if (existing) throw new ConflictException('Permission code already exists');
+    if (existing) throw new ConflictException('Mã quyền hạn đã tồn tại');
     return this.prisma.permission.create({
       data: {
         code: dto.code,
@@ -33,7 +33,7 @@ export class PermissionsService {
 
   async findOne(id: string) {
     const perm = await this.prisma.permission.findUnique({ where: { id } });
-    if (!perm) throw new NotFoundException('Permission not found');
+    if (!perm) throw new NotFoundException('Không tìm thấy quyền hạn');
     return perm;
   }
 
@@ -43,7 +43,7 @@ export class PermissionsService {
       const existing = await this.prisma.permission.findFirst({
         where: { code: dto.code, NOT: { id } },
       });
-      if (existing) throw new ConflictException('Permission code already exists');
+      if (existing) throw new ConflictException('Mã quyền hạn đã tồn tại');
     }
     const result = await this.prisma.permission.update({
       where: { id },

@@ -30,7 +30,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       where: { id: payload.sub },
     });
     if (!user || user.status !== UserStatus.ACTIVE) {
-      throw new UnauthorizedException({ message: 'User not found or inactive', errorCode: 'USER_INACTIVE' });
+      throw new UnauthorizedException({ message: 'Tài khoản không tồn tại hoặc đã bị vô hiệu hóa', errorCode: 'USER_INACTIVE' });
     }
     return {
       id: user.id,

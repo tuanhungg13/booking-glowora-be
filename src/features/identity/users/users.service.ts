@@ -19,7 +19,7 @@ export class UsersService {
     const existing = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
-    if (existing) throw new ConflictException('Email already exists');
+    if (existing) throw new ConflictException('Email đã tồn tại');
     const hashed = await bcrypt.hash(dto.password, 10);
     const dedupedRoles = this.deduplicateRoles(dto.roleAssignments ?? []);
     const user = await this.prisma.user.create({
@@ -81,7 +81,7 @@ export class UsersService {
         },
       },
     });
-    if (!user) throw new NotFoundException('User not found');
+    if (!user) throw new NotFoundException('Không tìm thấy tài khoản');
     return user;
   }
 
@@ -91,7 +91,7 @@ export class UsersService {
       const existing = await this.prisma.user.findFirst({
         where: { email: dto.email, NOT: { id } },
       });
-      if (existing) throw new ConflictException('Email already exists');
+      if (existing) throw new ConflictException('Email đã tồn tại');
     }
     const data: Prisma.UserUpdateInput = {
       email: dto.email,

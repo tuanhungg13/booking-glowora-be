@@ -17,7 +17,7 @@ export class RolesService {
       where: { code: dto.code, storeId: dto.storeId ?? null },
     });
     if (existing) {
-      throw new ConflictException('Role code already exists for this store');
+      throw new ConflictException('Mã vai trò đã tồn tại trong cửa hàng này');
     }
     return this.prisma.role.create({
       data: {
@@ -45,7 +45,7 @@ export class RolesService {
       where: { id },
       include: { permissions: { include: { permission: true } } },
     });
-    if (!role) throw new NotFoundException('Role not found');
+    if (!role) throw new NotFoundException('Không tìm thấy vai trò');
     return role;
   }
 
@@ -56,7 +56,7 @@ export class RolesService {
       const existing = await this.prisma.role.findFirst({
         where: { code: dto.code, storeId: storeId ?? null, NOT: { id } },
       });
-      if (existing) throw new ConflictException('Role code already exists for this store');
+      if (existing) throw new ConflictException('Mã vai trò đã tồn tại trong cửa hàng này');
     }
     const data: Prisma.RoleUpdateInput = {
       name: dto.name,

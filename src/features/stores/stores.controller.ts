@@ -177,7 +177,7 @@ export class StoresController {
     @UploadedFile() file: Express.Multer.File,
     @CurrentUser() user: CurrentUserPayload,
   ) {
-    if (!file) throw new BadRequestException('No file uploaded');
+    if (!file) throw new BadRequestException('Chưa có file nào được tải lên');
     return this.storesService.uploadLogo(id, user.id, file);
   }
 
@@ -203,7 +203,7 @@ export class StoresController {
     @UploadedFile() file: Express.Multer.File,
     @CurrentUser() user: CurrentUserPayload,
   ) {
-    if (!file) throw new BadRequestException('No file uploaded');
+    if (!file) throw new BadRequestException('Chưa có file nào được tải lên');
     return this.storesService.uploadBanner(id, user.id, file);
   }
 
@@ -225,7 +225,7 @@ export class StoresController {
     @UploadedFile() file: Express.Multer.File,
     @CurrentUser() user: CurrentUserPayload,
   ) {
-    if (!file) throw new BadRequestException('No file uploaded');
+    if (!file) throw new BadRequestException('Chưa có file nào được tải lên');
     return this.storesService.uploadCccdFront(id, user.id, file);
   }
 
@@ -247,7 +247,7 @@ export class StoresController {
     @UploadedFile() file: Express.Multer.File,
     @CurrentUser() user: CurrentUserPayload,
   ) {
-    if (!file) throw new BadRequestException('No file uploaded');
+    if (!file) throw new BadRequestException('Chưa có file nào được tải lên');
     return this.storesService.uploadCccdBack(id, user.id, file);
   }
 
@@ -269,7 +269,7 @@ export class StoresController {
     @UploadedFile() file: Express.Multer.File,
     @CurrentUser() user: CurrentUserPayload,
   ) {
-    if (!file) throw new BadRequestException('No file uploaded');
+    if (!file) throw new BadRequestException('Chưa có file nào được tải lên');
     return this.storesService.uploadBusinessLicense(id, user.id, file);
   }
 

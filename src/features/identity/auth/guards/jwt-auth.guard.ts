@@ -26,9 +26,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (err) throw err;
     if (!user) {
       if (info?.name === 'TokenExpiredError') {
-        throw new UnauthorizedException({ message: 'Access token has expired', errorCode: 'TOKEN_EXPIRED' });
+        throw new UnauthorizedException({ message: 'Phiên đăng nhập đã hết hạn', errorCode: 'TOKEN_EXPIRED' });
       }
-      throw new UnauthorizedException({ message: 'Invalid or missing token', errorCode: 'TOKEN_INVALID' });
+      throw new UnauthorizedException({ message: 'Token không hợp lệ hoặc bị thiếu', errorCode: 'TOKEN_INVALID' });
     }
     return user;
   }

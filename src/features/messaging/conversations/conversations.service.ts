@@ -38,10 +38,10 @@ export class ConversationsService {
       where: { id: storeId },
       select: { ownerId: true },
     });
-    if (!store) throw new NotFoundException('Store not found');
+    if (!store) throw new NotFoundException('Không tìm thấy cửa hàng');
 
     if (store.ownerId === customerId) {
-      throw new ForbiddenException('Store owner cannot message their own store');
+      throw new ForbiddenException('Chủ cửa hàng không thể nhắn tin với cửa hàng của mình');
     }
 
     const isStaff = await this.prisma.staff.findFirst({
@@ -49,7 +49,7 @@ export class ConversationsService {
       select: { id: true },
     });
     if (isStaff) {
-      throw new ForbiddenException('Store staff cannot message their own store');
+      throw new ForbiddenException('Nhân viên không thể nhắn tin với cửa hàng của mình');
     }
 
     return this.prisma.conversation.upsert({
@@ -65,14 +65,14 @@ export class ConversationsService {
       where: { id: storeId },
       select: { ownerId: true },
     });
-    if (!store) throw new NotFoundException('Store not found');
+    if (!store) throw new NotFoundException('Không tìm thấy cửa hàng');
 
     if (store.ownerId !== requesterId) {
       const isStaff = await this.prisma.staff.findFirst({
         where: { userId: requesterId, storeId, status: 'ACTIVE' },
         select: { id: true },
       });
-      if (!isStaff) throw new ForbiddenException('Not an owner or active staff of this store');
+      if (!isStaff) throw new ForbiddenException('Bạn không phải chủ hoặc nhân viên của cửa hàng này');
     }
 
     return this.findAll({ storeId, ...params });
@@ -108,7 +108,7 @@ export class ConversationsService {
         },
       },
     });
-    if (!conversation) throw new NotFoundException('Conversation not found');
+    if (!conversation) throw new NotFoundException('Không tìm thấy cuộc trò chuyện');
 
     conversation.messages.reverse();
 
@@ -163,7 +163,7 @@ export class ConversationsService {
         assignedStaff: { select: { telegramChatId: true } },
       },
     });
-    if (!conversation) throw new NotFoundException('Conversation not found');
+    if (!conversation) throw new NotFoundException('Không tìm thấy cuộc trò chuyện');
     if (conversation.customerId !== senderId) throw new ForbiddenException();
 
     this.logger.log(
@@ -199,7 +199,7 @@ export class ConversationsService {
       where: { id: conversationId },
       select: { storeId: true, store: { select: { ownerId: true } } },
     });
-    if (!conversation) throw new NotFoundException('Conversation not found');
+    if (!conversation) throw new NotFoundException('Không tìm thấy cuộc trò chuyện');
 
     const staff = await this.prisma.staff.findFirst({
       where: {
@@ -253,13 +253,13 @@ export class ConversationsService {
       where: { id: conversationId },
       select: { id: true, storeId: true },
     });
-    if (!conversation) throw new NotFoundException('Conversation not found');
+    if (!conversation) throw new NotFoundException('Không tìm thấy cuộc trò chuyện');
 
     const staff = await this.prisma.staff.findFirst({
       where: { userId: staffUserId, storeId: conversation.storeId, status: 'ACTIVE' },
       select: { id: true },
     });
-    if (!staff) throw new ForbiddenException('Not a staff member of this store');
+    if (!staff) throw new ForbiddenException('Bạn không phải nhân viên của cửa hàng này');
 
     const msg = await this.prisma.$transaction(async (tx) => {
       const m = await tx.message.create({

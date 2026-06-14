@@ -80,7 +80,7 @@ export class BookingsService {
       async (tx) => {
         const store = await tx.store.findUnique({ where: { id: dto.storeId } });
         if (!store || store.status !== StoreStatus.ACTIVE) {
-          throw new NotFoundException('Store not found or inactive');
+          throw new NotFoundException('Cửa hàng không tồn tại hoặc chưa hoạt động');
         }
 
         let currentTime = new Date(dto.scheduledAt);
@@ -392,7 +392,7 @@ export class BookingsService {
       where: { id },
       include: bookingInclude,
     });
-    if (!booking) throw new NotFoundException('Booking not found');
+    if (!booking) throw new NotFoundException('Không tìm thấy lịch đặt');
     return booking;
   }
 
@@ -404,14 +404,14 @@ export class BookingsService {
 
   async findOneForStore(id: string, storeId: string) {
     const booking = await this.findOne(id);
-    if (booking.storeId !== storeId) throw new NotFoundException('Booking not found');
+    if (booking.storeId !== storeId) throw new NotFoundException('Không tìm thấy lịch đặt');
     return booking;
   }
 
   async confirm(id: string, userId: string, ipAddress?: string, requestId?: string) {
     const booking = await this.findOne(id);
     if (booking.status !== BookingStatus.PENDING) {
-      throw new BadRequestException('Only pending bookings can be confirmed');
+      throw new BadRequestException('Chỉ có thể xác nhận lịch đặt đang chờ');
     }
     await this.assertStoreMember(userId, booking.storeId);
 
@@ -494,7 +494,7 @@ export class BookingsService {
   async reject(id: string, userId: string, reason: string, ipAddress?: string, requestId?: string) {
     const booking = await this.findOne(id);
     if (booking.status !== BookingStatus.PENDING) {
-      throw new BadRequestException('Only pending bookings can be rejected');
+      throw new BadRequestException('Chỉ có thể từ chối lịch đặt đang chờ');
     }
     await this.assertStoreMember(userId, booking.storeId);
 
@@ -527,7 +527,7 @@ export class BookingsService {
       booking.status !== BookingStatus.DEPOSIT_PAID &&
       booking.status !== BookingStatus.PAID
     ) {
-      throw new BadRequestException('Only confirmed bookings can be completed');
+      throw new BadRequestException('Chỉ có thể hoàn thành lịch đặt đã xác nhận');
     }
     await this.assertStoreMember(userId, booking.storeId);
 
@@ -566,7 +566,7 @@ export class BookingsService {
       BookingStatus.PAID,
     ];
     if (!cancellableStatuses.includes(booking.status)) {
-      throw new BadRequestException('Only pending or confirmed bookings can be cancelled');
+      throw new BadRequestException('Chỉ có thể hủy lịch đặt đang chờ hoặc đã xác nhận');
     }
 
     const deadline = booking.scheduledAt.getTime() - booking.store.cancelBeforeHours * 60 * 60 * 1000;

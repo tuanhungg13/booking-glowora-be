@@ -93,17 +93,17 @@ export class AdminStoresService {
       where: { id },
       include: adminStoreInclude,
     });
-    if (!store) throw new NotFoundException('Store not found');
+    if (!store) throw new NotFoundException('Không tìm thấy cửa hàng');
     return store;
   }
 
   async approve(id: string, adminId: string, ipAddress?: string, requestId?: string) {
     const store = await this.findOne(id);
     if (store.status !== StoreStatus.PENDING && store.status !== StoreStatus.INACTIVE) {
-      throw new BadRequestException('Only pending or inactive stores can be approved');
+      throw new BadRequestException('Chỉ có thể duyệt cửa hàng đang chờ hoặc chưa kích hoạt');
     }
     if (store.ownerId === adminId) {
-      throw new BadRequestException('Admin cannot approve their own store');
+      throw new BadRequestException('Admin không thể tự duyệt cửa hàng của mình');
     }
 
     const updated = await this.prisma.store.update({
@@ -133,12 +133,12 @@ export class AdminStoresService {
 
   async reject(id: string, dto: AdminStoreActionDto, adminId: string, ipAddress?: string, requestId?: string) {
     if (!dto.reason?.trim()) {
-      throw new BadRequestException('Reject reason is required');
+      throw new BadRequestException('Vui lòng nhập lý do từ chối');
     }
 
     const store = await this.findOne(id);
     if (store.status !== StoreStatus.PENDING && store.status !== StoreStatus.INACTIVE) {
-      throw new BadRequestException('Only pending or inactive stores can be rejected');
+      throw new BadRequestException('Chỉ có thể từ chối cửa hàng đang chờ hoặc chưa kích hoạt');
     }
 
     const updated = await this.prisma.store.update({
@@ -166,12 +166,12 @@ export class AdminStoresService {
 
   async lock(id: string, dto: AdminStoreActionDto, adminId: string, ipAddress?: string, requestId?: string) {
     if (!dto.reason?.trim()) {
-      throw new BadRequestException('Lock reason is required');
+      throw new BadRequestException('Vui lòng nhập lý do khóa');
     }
 
     const store = await this.findOne(id);
     if (store.status !== StoreStatus.ACTIVE) {
-      throw new BadRequestException('Only active stores can be locked');
+      throw new BadRequestException('Chỉ có thể khóa cửa hàng đang hoạt động');
     }
 
     const updated = await this.prisma.store.update({
@@ -200,7 +200,7 @@ export class AdminStoresService {
   async unlock(id: string, adminId: string, ipAddress?: string, requestId?: string) {
     const store = await this.findOne(id);
     if (store.status !== StoreStatus.BANNED) {
-      throw new BadRequestException('Only banned stores can be unlocked');
+      throw new BadRequestException('Chỉ có thể mở khóa cửa hàng đang bị khóa');
     }
 
     const updated = await this.prisma.store.update({
