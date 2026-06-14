@@ -54,7 +54,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     if (errorCode !== undefined) body.errorCode = errorCode;
     if (requestId !== undefined) body.requestId = requestId;
 
-    if (request && !request.systemLogErrorRecorded && !shouldSkipDbErrorLog(request.method, request.originalUrl ?? request.url)) {
+    if (request && !request.systemLogErrorRecorded && !shouldSkipDbErrorLog(request.method, request.originalUrl ?? request.url, status, message)) {
       this.systemLog?.logError(
         {
           type: LogType.SYSTEM_ERROR,
