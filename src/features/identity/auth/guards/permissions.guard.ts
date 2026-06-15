@@ -44,7 +44,7 @@ export class PermissionsGuard implements CanActivate {
     const user = request.user;
     if (!user?.id) {
       throw new ForbiddenException({
-        message: 'Authentication required',
+        message: 'Yêu cầu xác thực',
         errorCode: 'FORBIDDEN',
       });
     }
@@ -62,7 +62,7 @@ export class PermissionsGuard implements CanActivate {
         [...required].every((code) => userPermissionCodes.has(code));
       if (!hasAll) {
         throw new ForbiddenException({
-          message: `Insufficient permissions. Required: ${options.codes.join(', ')}`,
+          message: `Không đủ quyền hạn. Yêu cầu: ${options.codes.join(', ')}`,
           errorCode: 'FORBIDDEN',
         });
       }
@@ -72,7 +72,7 @@ export class PermissionsGuard implements CanActivate {
     const hasAny = [...required].some((code) => userPermissionCodes.has(code));
     if (!hasAny) {
       throw new ForbiddenException({
-        message: `Insufficient permissions. One of required: ${options.codes.join(', ')}`,
+        message: `Không đủ quyền hạn. Một trong các quyền yêu cầu: ${options.codes.join(', ')}`,
         errorCode: 'FORBIDDEN',
       });
     }
@@ -113,7 +113,7 @@ export class PermissionsGuard implements CanActivate {
     if (Array.isArray(value)) {
       if (value.length !== 1) {
         throw new BadRequestException(
-          'x-store-id must contain exactly one store id',
+          'x-store-id phải chứa đúng một store id',
         );
       }
       return this.extractStoreId(value[0]);

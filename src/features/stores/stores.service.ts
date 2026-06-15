@@ -650,11 +650,11 @@ export class StoresService {
     const seen = new Set<DayOfWeek>();
     for (const hour of dto.hours) {
       if (seen.has(hour.dayOfWeek)) {
-        throw new BadRequestException(`Duplicate working hour for ${hour.dayOfWeek}`);
+        throw new BadRequestException(`Giờ làm việc bị trùng lặp cho ngày ${hour.dayOfWeek}`);
       }
       seen.add(hour.dayOfWeek);
       if (!hour.isClosed && this.toMinutes(hour.openTime) >= this.toMinutes(hour.closeTime)) {
-        throw new BadRequestException('openTime must be before closeTime');
+        throw new BadRequestException('Giờ mở cửa phải trước giờ đóng cửa');
       }
     }
   }

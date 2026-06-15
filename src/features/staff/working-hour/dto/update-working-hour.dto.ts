@@ -11,13 +11,13 @@ export class UpdateWorkingHourDto {
   @ApiPropertyOptional({ example: '09:00', description: 'Giờ mở cửa (HH:MM)' })
   @IsOptional()
   @IsString()
-  @Matches(/^([01]\d|2[0-3]):[0-5]\d$/, { message: 'openTime must be in HH:MM format' })
+  @Matches(/^([01]\d|2[0-3]):[0-5]\d$/, { message: 'openTime phải có dạng HH:MM' })
   openTime?: string;
 
   @ApiPropertyOptional({ example: '21:00', description: 'Giờ đóng cửa (HH:MM)' })
   @IsOptional()
   @IsString()
-  @Matches(/^([01]\d|2[0-3]):[0-5]\d$/, { message: 'closeTime must be in HH:MM format' })
+  @Matches(/^([01]\d|2[0-3]):[0-5]\d$/, { message: 'closeTime phải có dạng HH:MM' })
   closeTime?: string;
 
   @ApiPropertyOptional({ example: false, description: 'Đóng cửa cả ngày' })

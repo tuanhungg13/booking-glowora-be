@@ -56,7 +56,7 @@ export class CreateStoreDto {
   @ApiPropertyOptional({ example: 'Spa cham soc da va massage thu gian.' })
   @IsOptional()
   @IsString()
-  @MaxLength(2000)
+  @MaxLength(4500)
   description?: string;
 
   @ApiPropertyOptional({ example: 30, minimum: 15, maximum: 120 })
