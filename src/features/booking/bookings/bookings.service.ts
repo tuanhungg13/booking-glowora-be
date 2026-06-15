@@ -32,6 +32,8 @@ import { PromotionsService } from '../promotions/promotions.service';
 
 const bookingInclude = {
   customer: { select: { id: true, fullName: true, email: true, phone: true } },
+  customerProvince: { select: { id: true, name: true } },
+  customerWard: { select: { id: true, name: true } },
   store: true,
   coupon: { select: { id: true, code: true, type: true, value: true } },
   promotion: { select: { id: true, name: true, type: true, value: true, scope: true } },
@@ -187,6 +189,7 @@ export class BookingsService {
         );
         const promotionDiscount = new Prisma.Decimal(promotionDiscountNum);
         const promotionId = promotionDiscountNum > 0 ? activePromotion!.id : null;
+        const promotionName = promotionDiscountNum > 0 ? activePromotion!.name : null;
 
         let couponId: string | null = null;
         let discountAmount = new Prisma.Decimal(0);
@@ -205,20 +208,32 @@ export class BookingsService {
 
         const finalPrice = totalPrice.sub(discountAmount);
 
+        const userProfile = await tx.user.findUnique({
+          where: { id: customerId },
+          select: { fullName: true, phone: true, email: true },
+        });
+
         const booking = await tx.booking.create({
           data: {
             customerId,
+            customerName: dto.customerName?.trim() || userProfile?.fullName || null,
+            customerPhone: dto.customerPhone?.trim() || userProfile?.phone || null,
+            customerEmail: dto.customerEmail?.trim() || userProfile?.email || null,
             storeId: dto.storeId,
             scheduledAt: new Date(dto.scheduledAt),
             totalDuration,
             totalPrice,
             promotionDiscount,
+            promotionName,
             discountAmount,
             finalPrice,
             couponId,
             promotionId,
             status: store.autoConfirm ? BookingStatus.CONFIRMED : BookingStatus.PENDING,
             confirmedAt: store.autoConfirm ? new Date() : undefined,
+            customerAddress: dto.address,
+            customerProvinceId: dto.provinceId,
+            customerWardId: dto.wardId,
             notes: dto.notes,
             items: { create: itemsData },
           },
@@ -655,14 +670,12 @@ export class BookingsService {
     });
 
     for (const { id: staffId } of mappings) {
-      const [schedule, dayOff] = await Promise.all([
+      const [schedule, dayOffConflict] = await Promise.all([
         tx.staffSchedule.findFirst({ where: { staffId, dayOfWeek, isActive: true } }),
-        tx.staffDayOff.findFirst({
-          where: { staffId, date: dateUTCMidnight, startTime: null, status: { in: [DayOffStatus.PENDING, DayOffStatus.APPROVED] } },
-        }),
+        this.hasDayOffConflict(tx, staffId, dateUTCMidnight, localStartMins, localEndMins),
       ]);
 
-      if (!schedule || dayOff) continue;
+      if (!schedule || dayOffConflict) continue;
 
       const scheduleStart = this.parseTimeMins(schedule.startTime);
       const scheduleEnd = this.parseTimeMins(schedule.endTime);
@@ -677,6 +690,25 @@ export class BookingsService {
   private parseTimeMins(timeStr: string): number {
     const [h, m] = timeStr.split(':').map(Number);
     return h * 60 + m;
+  }
+
+  private async hasDayOffConflict(
+    client: Prisma.TransactionClient,
+    staffId: string,
+    dateUTCMidnight: Date,
+    localStartMins: number,
+    localEndMins: number,
+  ): Promise<boolean> {
+    const dayOffs = await client.staffDayOff.findMany({
+      where: { staffId, date: dateUTCMidnight, status: { in: [DayOffStatus.PENDING, DayOffStatus.APPROVED] } },
+      select: { startTime: true, endTime: true },
+    });
+    return dayOffs.some((d) => {
+      if (d.startTime === null) return true;
+      const offStart = this.parseTimeMins(d.startTime);
+      const offEnd = this.parseTimeMins(d.endTime!);
+      return localStartMins < offEnd && offStart < localEndMins;
+    });
   }
 
   private async assertNoOverlap(
@@ -694,6 +726,7 @@ export class BookingsService {
     staffId: string,
     startTime: Date,
     duration: number,
+    excludeItemId?: string,
   ) {
     const endTime = new Date(startTime.getTime() + duration * 60 * 1000);
     // Widen query window ±24h to handle all timezone offsets safely
@@ -703,6 +736,7 @@ export class BookingsService {
     const busyItems = await tx.bookingItem.findMany({
       where: {
         staffId,
+        ...(excludeItemId && { id: { not: excludeItemId } }),
         booking: { status: { in: [BookingStatus.PENDING, BookingStatus.CONFIRMED, BookingStatus.DEPOSIT_PENDING, BookingStatus.DEPOSIT_PAID, BookingStatus.PAID] } },
         startTime: { gte: windowMin, lte: windowMax },
       },
@@ -713,5 +747,110 @@ export class BookingsService {
       const itemEnd = new Date(item.startTime.getTime() + item.duration * 60 * 1000);
       return startTime < itemEnd && item.startTime < endTime;
     });
+  }
+
+  async findAvailableStaffForSlot(bookingId: string, itemId: string, storeId: string) {
+    const booking = await this.findOne(bookingId);
+    if (booking.storeId !== storeId) throw new NotFoundException('Không tìm thấy lịch đặt');
+
+    const item = booking.items.find((i) => i.id === itemId);
+    if (!item) throw new NotFoundException('Không tìm thấy dịch vụ trong lịch hẹn');
+
+    const { startTime, duration } = item;
+    const timezone = booking.store.timezone;
+    const tzOffset = TZ_OFFSETS[timezone] ?? 7 * 60;
+    const localDate = new Date(startTime.getTime() + tzOffset * 60 * 1000);
+    const dayOfWeek = DOW_MAP[localDate.getUTCDay()];
+    const dateStr = `${localDate.getUTCFullYear()}-${String(localDate.getUTCMonth() + 1).padStart(2, '0')}-${String(localDate.getUTCDate()).padStart(2, '0')}`;
+    const dateUTCMidnight = new Date(`${dateStr}T00:00:00.000Z`);
+    const localStartMins = localDate.getUTCHours() * 60 + localDate.getUTCMinutes();
+    const localEndMins = localStartMins + duration;
+
+    const staffList = await this.prisma.staff.findMany({
+      where: { storeId, status: 'ACTIVE' },
+      include: { user: { select: { id: true, fullName: true, avatarUrl: true } } },
+    });
+
+    const available: typeof staffList = [];
+    for (const staff of staffList) {
+      const [schedule, dayOffConflict] = await Promise.all([
+        this.prisma.staffSchedule.findFirst({ where: { staffId: staff.id, dayOfWeek, isActive: true } }),
+        this.hasDayOffConflict(this.prisma, staff.id, dateUTCMidnight, localStartMins, localEndMins),
+      ]);
+      if (!schedule || dayOffConflict) continue;
+
+      const scheduleStart = this.parseTimeMins(schedule.startTime);
+      const scheduleEnd = this.parseTimeMins(schedule.endTime);
+      if (localStartMins < scheduleStart || localEndMins > scheduleEnd) continue;
+
+      // Loại trừ booking item hiện tại để nhân viên đang phụ trách cũng được hiển thị
+      const overlap = await this.findOverlap(this.prisma, staff.id, startTime, duration, itemId);
+      if (!overlap) available.push(staff);
+    }
+
+    return available;
+  }
+
+  async updateBookingItemStaff(
+    bookingId: string,
+    itemId: string,
+    newStaffId: string,
+    storeId: string,
+    userId: string,
+    ipAddress?: string,
+  ) {
+    const booking = await this.findOne(bookingId);
+    if (booking.storeId !== storeId) throw new NotFoundException('Không tìm thấy lịch đặt');
+
+    const forbidden: BookingStatus[] = [BookingStatus.COMPLETED, BookingStatus.CANCELLED, BookingStatus.REJECTED];
+    if (forbidden.includes(booking.status)) {
+      throw new BadRequestException('Không thể thay đổi nhân viên cho lịch hẹn đã kết thúc');
+    }
+
+    const item = booking.items.find((i) => i.id === itemId);
+    if (!item) throw new NotFoundException('Không tìm thấy dịch vụ trong lịch hẹn');
+
+    const newStaff = await this.prisma.staff.findFirst({
+      where: { id: newStaffId, storeId, status: 'ACTIVE' },
+      include: { user: { select: { fullName: true } } },
+    });
+    if (!newStaff) throw new BadRequestException('Nhân viên không tồn tại hoặc không hoạt động');
+
+    const overlap = await this.findOverlap(this.prisma, newStaffId, item.startTime, item.duration, itemId);
+    if (overlap) throw new ConflictException('Nhân viên đã có lịch vào thời điểm này');
+
+    await this.prisma.bookingItem.update({
+      where: { id: itemId },
+      data: {
+        staffId: newStaffId,
+        staffName: newStaff.user.fullName,
+        isStaffChosenByCustomer: false,
+      },
+    });
+
+    this.notifications
+      .notifyStaffChanged({
+        bookingId,
+        customerId: booking.customer.id,
+        customerName: booking.customer.fullName,
+        customerEmail: booking.customer.email,
+        storeName: booking.store.name,
+        serviceName: item.service.name,
+        newStaffName: newStaff.user.fullName,
+        scheduledAt: booking.scheduledAt,
+      })
+      .catch(() => undefined);
+
+    this.systemLog.log({
+      type: LogType.BOOKING_STAFF_CHANGED,
+      actorId: userId,
+      storeId,
+      targetId: bookingId,
+      targetType: 'Booking',
+      metadata: { itemId, newStaffId, newStaffName: newStaff.user.fullName },
+      ipAddress,
+    });
+
+    return this.findOne(bookingId);
   }
 }

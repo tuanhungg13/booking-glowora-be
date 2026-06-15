@@ -31,6 +31,7 @@ enum StoreStatus {
 enum StaffStatus {
   ACTIVE
   INACTIVE
+  DELETED
 }
 
 enum BookingStatus {
@@ -83,6 +84,7 @@ enum NotificationType {
   STAFF_DAY_OFF_REQUEST
   STAFF_DAY_OFF_APPROVED
   STAFF_DAY_OFF_REJECTED
+  BOOKING_STAFF_CHANGED
 }
 
 enum DayOffStatus {
@@ -110,6 +112,7 @@ enum DayOfWeek {
 enum ServiceStatus {
   ACTIVE
   INACTIVE
+  DELETED
 }
 
 enum StaffInviteStatus {
@@ -147,6 +150,7 @@ enum LogType {
   BOOKING_CANCELLED
   BOOKING_DEPOSIT_PAID
   BOOKING_DEPOSIT_EXPIRED
+  BOOKING_STAFF_CHANGED
   COUPON_CREATED
   COUPON_UPDATED
   COUPON_DELETED
@@ -251,6 +255,9 @@ model User {
   email        String     @unique @db.VarChar(150)
   password     String
   phone        String?    @db.VarChar(20)
+  address      String?    @db.VarChar(300)
+  provinceId   Int?       @map("province_id")
+  wardId       Int?       @map("ward_id")
   avatarUrl    String?    @map("avatar_url") @db.VarChar(500)
   status       UserStatus @default(ACTIVE)
   refreshToken String?    @map("refresh_token")
@@ -259,6 +266,8 @@ model User {
   createdAt    DateTime   @default(now()) @map("created_at")
   updatedAt    DateTime   @updatedAt @map("updated_at")
 
+  province       Province?      @relation("UserProvince", fields: [provinceId], references: [id])
+  ward           Ward?          @relation("UserWard", fields: [wardId], references: [id])
   userRoles      UserRole[]
   ownedStores    Store[]        @relation("StoreOwner")
   approvedStores Store[]        @relation("StoreApprover")
@@ -288,8 +297,11 @@ model Province {
   name   String @db.VarChar(100)
   type   String @db.VarChar(10)
 
-  wards  Ward[]
-  stores Store[]
+  wards            Ward[]
+  stores           Store[]
+  users            User[]    @relation("UserProvince")
+  staffs           Staff[]   @relation("StaffProvince")
+  customerBookings Booking[] @relation("BookingCustomerProvince")
 
   @@map("provinces")
 }
@@ -304,8 +316,11 @@ model Ward {
   name       String   @db.VarChar(100)
   type       String   @db.VarChar(10)
 
-  province   Province @relation(fields: [provinceId], references: [id])
-  stores     Store[]
+  province         Province  @relation(fields: [provinceId], references: [id])
+  stores           Store[]
+  users            User[]    @relation("UserWard")
+  staffs           Staff[]   @relation("StaffWard")
+  customerBookings Booking[] @relation("BookingCustomerWard")
 
   @@index([provinceId])
   @@map("wards")
@@ -423,6 +438,10 @@ model Staff {
   storeId           String      @map("store_id") @db.Char(36)
   specialty         String?     @db.VarChar(200)
   bio               String?     @db.Text
+  phone             String?     @db.VarChar(20)
+  address           String?     @db.VarChar(300)
+  provinceId        Int?        @map("province_id")
+  wardId            Int?        @map("ward_id")
   rating            Decimal     @default(0.00) @db.Decimal(3, 2)
   totalReviews      Int         @default(0) @map("total_reviews")
   status            StaffStatus @default(ACTIVE)
@@ -431,6 +450,8 @@ model Staff {
 
   user                  User                   @relation(fields: [userId], references: [id])
   store                 Store                  @relation(fields: [storeId], references: [id])
+  province              Province?              @relation("StaffProvince", fields: [provinceId], references: [id])
+  ward                  Ward?                  @relation("StaffWard", fields: [wardId], references: [id])
   bookingItems          BookingItem[]
   reviews               Review[]               @relation("StaffReviews")
   schedules             StaffSchedule[]
@@ -653,6 +674,9 @@ model StaffInvite {
 model Booking {
   id                 String        @id @default(uuid()) @db.Char(36)
   customerId         String        @map("customer_id") @db.Char(36)
+  customerName       String?       @map("customer_name") @db.VarChar(150)
+  customerPhone      String?       @map("customer_phone") @db.VarChar(20)
+  customerEmail      String?       @map("customer_email") @db.VarChar(150)
   storeId            String        @map("store_id") @db.Char(36)
   scheduledAt        DateTime      @map("scheduled_at") // giờ bắt đầu dịch vụ đầu tiên
   totalDuration      Int           @map("total_duration") // tổng phút của toàn bộ items
@@ -662,10 +686,14 @@ model Booking {
   finalPrice         Decimal       @default(0) @map("final_price") @db.Decimal(12, 2)
   couponId           String?       @map("coupon_id") @db.Char(36)
   promotionId        String?       @map("promotion_id") @db.Char(36)
+  promotionName      String?       @map("promotion_name") @db.VarChar(150) // snapshot tên KM tại thời điểm đặt
   status             BookingStatus @default(PENDING)
   depositAmount      Decimal?      @map("deposit_amount") @db.Decimal(12, 2)
   depositDeadline    DateTime?     @map("deposit_deadline")
   depositPaidAt      DateTime?     @map("deposit_paid_at")
+  customerAddress    String?       @map("customer_address") @db.VarChar(300)
+  customerProvinceId Int?          @map("customer_province_id")
+  customerWardId     Int?          @map("customer_ward_id")
   notes              String?       @db.Text
   cancellationReason String?       @map("cancellation_reason") @db.Text
   confirmedAt        DateTime?     @map("confirmed_at")
@@ -674,15 +702,17 @@ model Booking {
   createdAt          DateTime      @default(now()) @map("created_at")
   updatedAt          DateTime      @updatedAt @map("updated_at")
 
-  customer      User           @relation("CustomerBookings", fields: [customerId], references: [id])
-  store         Store          @relation(fields: [storeId], references: [id])
-  coupon        Coupon?        @relation(fields: [couponId], references: [id])
-  promotion     Promotion?     @relation("PromotionBookings", fields: [promotionId], references: [id])
-  items         BookingItem[]
-  payments      Payment[]
-  reviews       Review[]
-  notifications Notification[]
-  couponUsage   CouponUsage?
+  customer         User           @relation("CustomerBookings", fields: [customerId], references: [id])
+  customerProvince Province?      @relation("BookingCustomerProvince", fields: [customerProvinceId], references: [id])
+  customerWard     Ward?          @relation("BookingCustomerWard", fields: [customerWardId], references: [id])
+  store            Store          @relation(fields: [storeId], references: [id])
+  coupon           Coupon?        @relation(fields: [couponId], references: [id])
+  promotion        Promotion?     @relation("PromotionBookings", fields: [promotionId], references: [id])
+  items            BookingItem[]
+  payments         Payment[]
+  reviews          Review[]
+  notifications    Notification[]
+  couponUsage      CouponUsage?
 
   @@index([customerId, status])
   @@index([storeId, status, scheduledAt])

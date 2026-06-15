@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { LogType, Prisma, ServiceStatus, StoreStatus } from '@prisma/client';
+import { BookingStatus, LogType, Prisma, ServiceStatus, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CloudinaryService } from '../../../cloudinary/cloudinary.service';
 import { SystemLogService } from '../../../system-log/system-log.service';
@@ -143,7 +143,7 @@ export class ServicesService {
     const limit = params?.limit ?? 20;
     const where: Prisma.ServiceWhereInput = {
       ...(params?.storeId && { storeId: params.storeId }),
-      ...(params?.status && { status: params.status }),
+      status: params?.status ?? { not: ServiceStatus.DELETED },
       ...(params?.categoryId && { categoryId: params.categoryId }),
       ...(params?.q && { name: { contains: params.q } }),
     };
@@ -179,7 +179,7 @@ export class ServicesService {
 
     const conds: Prisma.Sql[] = [Prisma.sql`sv.status = 'ACTIVE'`];
     if (params.storeId) conds.push(Prisma.sql`s.store_id = ${params.storeId}`);
-    if (params.status) conds.push(Prisma.sql`s.status = ${params.status}`);
+    conds.push(params.status ? Prisma.sql`s.status = ${params.status}` : Prisma.sql`s.status != 'DELETED'`);
     if (params.categoryId) conds.push(Prisma.sql`s.category_id = ${params.categoryId}`);
 
     const whereClause = Prisma.join(conds, ' AND ');
@@ -448,6 +448,7 @@ export class ServicesService {
     const service = await this.prisma.service.findFirst({
       where: {
         OR: [{ id: idOrSlug }, { slug: idOrSlug }],
+        status: { not: ServiceStatus.DELETED },
         ...(storeId && { storeId }),
       },
       include: serviceInclude,
@@ -475,6 +476,7 @@ export class ServicesService {
 
   async update(id: string, storeId: string, dto: UpdateServiceDto, actorId: string) {
     const service = await this.findOne(id, storeId);
+    if (dto.status === ServiceStatus.INACTIVE) await this.checkNoUpcomingBookings(id);
     if (dto.name) await this.checkDuplicateName(dto.name, storeId, id);
     const slug = dto.name ? await this.generateUniqueSlug(dto.name, storeId, id) : undefined;
 
@@ -545,11 +547,27 @@ export class ServicesService {
     return this.findOne(id, storeId);
   }
 
+  private async checkNoUpcomingBookings(serviceId: string) {
+    const count = await this.prisma.booking.count({
+      where: {
+        status: { in: [BookingStatus.PENDING, BookingStatus.CONFIRMED, BookingStatus.DEPOSIT_PENDING, BookingStatus.DEPOSIT_PAID, BookingStatus.PAID] },
+        scheduledAt: { gt: new Date() },
+        items: { some: { serviceId } },
+      },
+    });
+    if (count > 0) {
+      throw new BadRequestException(
+        `Dịch vụ đang có ${count} lịch hẹn sắp tới. Vui lòng hủy hoặc hoàn thành các lịch hẹn trước khi thực hiện thao tác này.`,
+      );
+    }
+  }
+
   async remove(id: string, storeId: string, actorId: string) {
     const service = await this.findOne(id, storeId);
+    await this.checkNoUpcomingBookings(id);
     await this.prisma.service.update({
       where: { id },
-      data: { status: ServiceStatus.INACTIVE },
+      data: { status: ServiceStatus.DELETED },
     });
 
     this.systemLog.log({

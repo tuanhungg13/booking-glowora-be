@@ -585,6 +585,47 @@ export class NotificationsService {
       .catch((err: Error) => this.logger.warn(`Reminder 1-hour email failed for ${customerEmail}: ${err?.message}`));
   }
 
+  async notifyStaffChanged(params: {
+    bookingId: string;
+    customerId: string;
+    customerName: string;
+    customerEmail: string;
+    storeName: string;
+    serviceName: string;
+    newStaffName: string;
+    scheduledAt: Date;
+  }) {
+    const { bookingId, customerId, customerName, customerEmail, storeName, serviceName, newStaffName, scheduledAt } = params;
+    const timeStr = this.formatDateTime(scheduledAt);
+
+    const notif = await this.prisma.notification.create({
+      data: {
+        userId: customerId,
+        bookingId,
+        type: NotificationType.BOOKING_STAFF_CHANGED,
+        title: 'Nhân viên thực hiện dịch vụ đã thay đổi',
+        body: `Dịch vụ ${serviceName} tại ${storeName} vào ${timeStr} sẽ được thực hiện bởi ${newStaffName}.`,
+      },
+    });
+    this.gateway.emitToUser(customerId, 'notification_received', notif);
+    this.push(customerId, notif.title, notif.body, { bookingId });
+
+    this.mail
+      .sendStaffNotification({
+        email: customerEmail,
+        fullName: customerName,
+        subject: `Nhân viên thực hiện dịch vụ đã thay đổi`,
+        body: `Dịch vụ ${serviceName} tại ${storeName} vào ${timeStr} sẽ được thực hiện bởi ${newStaffName}.`,
+        details: [
+          { label: 'Dịch vụ', value: serviceName },
+          { label: 'Nhân viên mới', value: newStaffName },
+          { label: 'Thời gian', value: timeStr },
+          { label: 'Cơ sở', value: storeName },
+        ],
+      })
+      .catch((err: Error) => this.logger.warn(`Email STAFF_CHANGED failed for ${customerEmail}: ${err?.message}`));
+  }
+
   private push(userId: string, title: string, body: string, data?: Record<string, unknown>) {
     this.webPush
       .sendToUser(userId, { title, body, data })

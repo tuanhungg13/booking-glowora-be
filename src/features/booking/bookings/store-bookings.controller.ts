@@ -150,6 +150,48 @@ export class StoreBookingsController {
     return this.paymentsService.recordStorePayment(id, storeId, user.id, dto.method, dto.paymentType);
   }
 
+  @Get(':bookingId/items/:itemId/available-staff')
+  @RequirePermissions(Permissions.APPOINTMENT.VIEW)
+  @ApiOperation({
+    summary: 'Danh sách nhân viên khả dụng cho một dịch vụ trong lịch hẹn',
+    description: 'Trả về tất cả nhân viên ACTIVE của cửa hàng có thể thực hiện dịch vụ tại slot thời gian đó (kiểm tra lịch làm việc, ngày nghỉ, không bị trùng lịch). Nhân viên đang phụ trách item cũng được hiển thị.',
+  })
+  @ApiParam({ name: 'bookingId', description: 'ID lịch hẹn' })
+  @ApiParam({ name: 'itemId', description: 'ID dịch vụ trong lịch hẹn' })
+  @ApiResponse({ status: 200, description: 'Danh sách nhân viên khả dụng (có thể rỗng)' })
+  @ApiResponse({ status: 404, description: 'Không tìm thấy lịch hẹn hoặc dịch vụ' })
+  getAvailableStaff(
+    @Param('bookingId') bookingId: string,
+    @Param('itemId') itemId: string,
+    @StoreId() storeId: string,
+  ) {
+    return this.bookingsService.findAvailableStaffForSlot(bookingId, itemId, storeId);
+  }
+
+  @Patch(':bookingId/items/:itemId/staff')
+  @RequirePermissions(Permissions.APPOINTMENT.UPDATE)
+  @AuditLog({ type: LogType.BOOKING_STAFF_CHANGED, targetType: 'Booking' })
+  @ApiOperation({
+    summary: 'Thay đổi nhân viên thực hiện dịch vụ',
+    description: 'Cho phép quản lý thay đổi nhân viên phụ trách một dịch vụ trong lịch hẹn. Không áp dụng cho lịch hẹn đã hoàn thành, đã hủy hoặc bị từ chối.',
+  })
+  @ApiParam({ name: 'bookingId', description: 'ID lịch hẹn' })
+  @ApiParam({ name: 'itemId', description: 'ID dịch vụ trong lịch hẹn' })
+  @ApiResponse({ status: 200, description: 'Cập nhật nhân viên thành công, trả về lịch hẹn đầy đủ' })
+  @ApiResponse({ status: 400, description: 'Lịch hẹn đã kết thúc hoặc nhân viên không hợp lệ' })
+  @ApiResponse({ status: 409, description: 'Nhân viên đã có lịch vào thời điểm này' })
+  updateItemStaff(
+    @Param('bookingId') bookingId: string,
+    @Param('itemId') itemId: string,
+    @Body() body: { staffId: string },
+    @CurrentUser() user: CurrentUserPayload,
+    @StoreId() storeId: string,
+    @Req() req: Request,
+  ) {
+    const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ?? req.ip ?? '';
+    return this.bookingsService.updateBookingItemStaff(bookingId, itemId, body.staffId, storeId, user.id, ip);
+  }
+
   @Patch(':id/complete')
   @RequirePermissions(Permissions.APPOINTMENT.UPDATE)
   @AuditLog({ type: LogType.BOOKING_COMPLETED, targetType: 'Booking' })

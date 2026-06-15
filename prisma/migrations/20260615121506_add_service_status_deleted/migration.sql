@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `service_variants` MODIFY `status` ENUM('ACTIVE', 'INACTIVE', 'DELETED') NOT NULL DEFAULT 'ACTIVE';
+
+-- AlterTable
+ALTER TABLE `services` MODIFY `status` ENUM('ACTIVE', 'INACTIVE', 'DELETED') NOT NULL DEFAULT 'ACTIVE';

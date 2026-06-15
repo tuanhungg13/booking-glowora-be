@@ -4,6 +4,7 @@ import {
   ArrayMinSize,
   IsArray,
   IsDateString,
+  IsInt,
   IsOptional,
   IsString,
   IsUUID,
@@ -41,6 +42,40 @@ export class CreateBookingDto {
   @ValidateNested({ each: true })
   @Type(() => BookingServiceItemDto)
   services!: BookingServiceItemDto[];
+
+  @ApiPropertyOptional({ description: 'Tên khách hàng (snapshot)', maxLength: 150 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(150)
+  customerName?: string;
+
+  @ApiPropertyOptional({ description: 'Số điện thoại khách hàng (snapshot)', maxLength: 20 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  customerPhone?: string;
+
+  @ApiPropertyOptional({ description: 'Email khách hàng (snapshot)', maxLength: 150 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(150)
+  customerEmail?: string;
+
+  @ApiPropertyOptional({ description: 'Địa chỉ chi tiết của khách hàng', maxLength: 300 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(300)
+  address?: string;
+
+  @ApiPropertyOptional({ description: 'ID tỉnh/thành phố của khách hàng' })
+  @IsOptional()
+  @IsInt()
+  provinceId?: number;
+
+  @ApiPropertyOptional({ description: 'ID xã/phường của khách hàng' })
+  @IsOptional()
+  @IsInt()
+  wardId?: number;
 
   @ApiPropertyOptional({ description: 'Ghi chú thêm cho lịch hẹn', maxLength: 1000, example: 'Khách muốn phòng riêng' })
   @IsOptional()

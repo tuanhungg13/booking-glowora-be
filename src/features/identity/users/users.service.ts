@@ -129,8 +129,21 @@ export class UsersService {
     await this.findOne(userId);
     return this.prisma.user.update({
       where: { id: userId },
-      data: { fullName: dto.fullName, phone: dto.phone, avatarUrl: dto.avatarUrl },
-      select: { id: true, email: true, fullName: true, phone: true, avatarUrl: true, updatedAt: true },
+      data: {
+        fullName: dto.fullName,
+        phone: dto.phone,
+        avatarUrl: dto.avatarUrl,
+        address: dto.address,
+        provinceId: dto.provinceId,
+        wardId: dto.wardId,
+      },
+      select: {
+        id: true, email: true, fullName: true, phone: true, avatarUrl: true,
+        address: true, provinceId: true, wardId: true,
+        province: { select: { id: true, name: true, code: true, type: true } },
+        ward: { select: { id: true, name: true, type: true, provinceId: true } },
+        updatedAt: true,
+      },
     });
   }
 
@@ -146,6 +159,11 @@ export class UsersService {
       email: true,
       fullName: true,
       phone: true,
+      address: true,
+      provinceId: true,
+      wardId: true,
+      province: { select: { id: true, name: true, code: true, type: true } },
+      ward: { select: { id: true, name: true, type: true, provinceId: true } },
       status: true,
       createdAt: true,
       updatedAt: true,

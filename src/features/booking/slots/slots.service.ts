@@ -166,7 +166,7 @@ export class SlotsService {
         select: { staffId: true, startTime: true, duration: true },
       }),
       this.prisma.staff.findMany({
-        where: { id: { in: allStaffIds } },
+        where: { id: { in: allStaffIds }, status: 'ACTIVE' },
         include: { user: { select: { fullName: true, avatarUrl: true } } },
       }),
     ]);

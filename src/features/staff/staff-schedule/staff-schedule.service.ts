@@ -161,7 +161,7 @@ export class StaffScheduleService {
   }
 
   private async assertStaffInStore(storeId: string, staffId: string) {
-    const staff = await this.prisma.staff.findFirst({ where: { id: staffId, storeId }, select: { id: true } });
+    const staff = await this.prisma.staff.findFirst({ where: { id: staffId, storeId, status: 'ACTIVE' }, select: { id: true } });
     if (!staff) throw new NotFoundException('Không tìm thấy nhân viên trong cửa hàng này');
   }
 }

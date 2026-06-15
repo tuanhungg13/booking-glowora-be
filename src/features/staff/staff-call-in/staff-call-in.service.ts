@@ -42,7 +42,7 @@ export class StaffCallInService {
 
   async create(storeId: string, staffId: string, dto: CreateStaffCallInDto) {
     const staff = await this.prisma.staff.findFirst({
-      where: { id: staffId, storeId },
+      where: { id: staffId, storeId, status: 'ACTIVE' },
       include: { user: { select: { id: true, fullName: true, email: true } }, store: { select: { name: true } } },
     });
     if (!staff) throw new NotFoundException('Nhân viên không thuộc cửa hàng này');

@@ -23,6 +23,8 @@ const INVITE_TTL_DAYS = 7;
 
 const staffInclude = {
   user: { select: { id: true, fullName: true, email: true, phone: true, avatarUrl: true } },
+  province: { select: { id: true, name: true, code: true, type: true } },
+  ward: { select: { id: true, name: true, type: true, provinceId: true } },
 } as const;
 
 @Injectable()
@@ -115,7 +117,15 @@ export class StoreStaffService {
 
     const staff = await this.prisma.$transaction(async (tx) => {
       const createdStaff = await tx.staff.create({
-        data: { userId, storeId: invite.storeId, status: StaffStatus.ACTIVE },
+        data: {
+          userId,
+          storeId: invite.storeId,
+          status: StaffStatus.ACTIVE,
+          phone: user.phone ?? null,
+          address: user.address ?? null,
+          provinceId: user.provinceId ?? null,
+          wardId: user.wardId ?? null,
+        },
       });
 
       let storeStaffRole = await tx.role.findFirst({
@@ -172,7 +182,7 @@ export class StoreStaffService {
   async findAll(storeId: string) {
     const store = await this.prisma.store.findUnique({ where: { id: storeId }, select: { ownerId: true } });
     const list = await this.prisma.staff.findMany({
-      where: { storeId },
+      where: { storeId, status: { not: StaffStatus.DELETED } },
       orderBy: { createdAt: 'asc' },
       include: staffInclude,
     });
@@ -181,7 +191,7 @@ export class StoreStaffService {
 
   async findOne(storeId: string, staffId: string) {
     const staff = await this.prisma.staff.findFirst({
-      where: { id: staffId, storeId },
+      where: { id: staffId, storeId, status: { not: StaffStatus.DELETED } },
       include: staffInclude,
     });
     if (!staff) throw new NotFoundException('Nhân viên không tồn tại trong cơ sở này');
@@ -211,7 +221,7 @@ export class StoreStaffService {
     await this.prisma.$transaction(async (tx) => {
       await tx.staff.update({
         where: { id: staffId },
-        data: { status: StaffStatus.INACTIVE },
+        data: { status: StaffStatus.DELETED },
       });
       await tx.userRole.deleteMany({
         where: { userId: staff.userId, storeId },
