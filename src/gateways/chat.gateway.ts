@@ -21,7 +21,7 @@ const AI_HISTORY_MAX_TURNS = 10;
 @WebSocketGateway({ cors: { origin: '*' } })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
-  private server: Server;
+  private server!: Server;
 
   private readonly logger = new Logger(ChatGateway.name);
 
@@ -111,6 +111,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         data.content?.trim() ?? '',
         data.attachments ?? [],
         (event, payload) => this.emitToConversation(data.conversationId, event, payload),
+        (storeId, event, payload) => this.emitToStore(storeId, event, payload),
       );
       return { sent: true };
     } catch (err: any) {

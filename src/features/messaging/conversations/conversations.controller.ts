@@ -8,6 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { SenderType } from '@prisma/client';
 import { ApiBearerAuth, ApiHeader, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ConversationsService } from './conversations.service';
 import { CreateConversationDto } from './dto/create-conversation.dto';
@@ -66,6 +67,7 @@ export class ConversationsController {
       customerId: user.id,
       skip: skip ? Number(skip) : undefined,
       take: take ? Number(take) : undefined,
+      callerSenderType: SenderType.CUSTOMER,
     });
   }
 
@@ -84,7 +86,16 @@ export class ConversationsController {
     return this.conversationsService.findByStore(user.id, storeId, {
       skip: skip ? Number(skip) : undefined,
       take: take ? Number(take) : undefined,
+      callerSenderType: SenderType.STAFF,
     });
+  }
+
+  @ApiOperation({ summary: 'Đánh dấu tất cả tin nhắn chưa đọc trong hội thoại là đã đọc' })
+  @ApiParam({ name: 'id', description: 'Conversation ID' })
+  @ApiBearerAuth()
+  @Patch(':id/mark-read')
+  markAsRead(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
+    return this.conversationsService.markAsRead(id, user.id);
   }
 
   @ApiOperation({ summary: 'Lấy chi tiết hội thoại' })

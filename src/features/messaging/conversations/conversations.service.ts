@@ -72,7 +72,7 @@ export class ConversationsService {
     });
   }
 
-  async findByStore(requesterId: string, storeId: string, params?: { skip?: number; take?: number }) {
+  async findByStore(requesterId: string, storeId: string, params?: { skip?: number; take?: number; callerSenderType?: SenderType }) {
     const store = await this.prisma.store.findUnique({
       where: { id: storeId },
       select: { ownerId: true },
@@ -90,7 +90,7 @@ export class ConversationsService {
     return this.findAll({ storeId, ...params });
   }
 
-  async findAll(params?: { customerId?: string; storeId?: string; skip?: number; take?: number }) {
+  async findAll(params?: { customerId?: string; storeId?: string; skip?: number; take?: number; callerSenderType?: SenderType }) {
     const where = {
       ...(params?.customerId && { customerId: params.customerId }),
       ...(params?.storeId && { storeId: params.storeId }),
@@ -105,7 +105,27 @@ export class ConversationsService {
       }),
       this.prisma.conversation.count({ where }),
     ]);
-    return { items, total };
+
+    if (!params?.callerSenderType || items.length === 0) {
+      return { items, total };
+    }
+
+    const unreadGroups = await this.prisma.message.groupBy({
+      by: ['conversationId'],
+      where: {
+        conversationId: { in: items.map((c) => c.id) },
+        isRead: false,
+        senderType: { not: params.callerSenderType },
+      },
+      _count: { _all: true },
+    });
+
+    const unreadMap = new Map(unreadGroups.map((g) => [g.conversationId, g._count._all]));
+
+    return {
+      items: items.map((c) => ({ ...c, unreadCount: unreadMap.get(c.id) ?? 0 })),
+      total,
+    };
   }
 
   async findOne(id: string, requesterId?: string) {
@@ -157,6 +177,39 @@ export class ConversationsService {
     return { deleted: true };
   }
 
+  async markAsRead(conversationId: string, callerId: string) {
+    const conversation = await this.prisma.conversation.findUnique({
+      where: { id: conversationId },
+      select: { customerId: true, storeId: true, store: { select: { ownerId: true } } },
+    });
+    if (!conversation) throw new NotFoundException('Không tìm thấy cuộc trò chuyện');
+
+    const isCustomer = conversation.customerId === callerId;
+    if (!isCustomer) {
+      const isOwner = conversation.store.ownerId === callerId;
+      if (!isOwner) {
+        const isStaff = await this.prisma.staff.findFirst({
+          where: { userId: callerId, storeId: conversation.storeId, status: 'ACTIVE' },
+          select: { id: true },
+        });
+        if (!isStaff) throw new ForbiddenException();
+      }
+    }
+
+    const callerSenderType = isCustomer ? SenderType.CUSTOMER : SenderType.STAFF;
+
+    await this.prisma.message.updateMany({
+      where: {
+        conversationId,
+        isRead: false,
+        senderType: { not: callerSenderType },
+      },
+      data: { isRead: true, readAt: new Date() },
+    });
+
+    return { success: true };
+  }
+
   // ─── Core chat processing ──────────────────────────────────────────────────
 
   async processMessage(
@@ -165,6 +218,7 @@ export class ConversationsService {
     content: string,
     attachments: MessageAttachmentInput[],
     emitFn: (event: string, data: unknown) => void,
+    emitToStoreFn: (storeId: string, event: string, data: unknown) => void,
   ) {
     this.logger.log(`[processMessage] conversationId=${conversationId} senderId=${senderId}`);
 
@@ -210,6 +264,13 @@ export class ConversationsService {
     this.logger.log(`[processMessage] Message saved to DB, messageId=${customerMsg.id}`);
 
     emitFn('message_received', customerMsg);
+    emitToStoreFn(conversation.storeId, 'new_customer_message', {
+      conversationId,
+      preview,
+      customerId: conversation.customerId,
+      customerName: conversation.customer.fullName,
+      messageAt: customerMsg.createdAt,
+    });
     this.logger.log(`[processMessage] WebSocket broadcast sent`);
 
     await this.forwardToStaff(conversation, content, attachments);
