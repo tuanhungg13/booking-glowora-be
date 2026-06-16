@@ -34,7 +34,7 @@ type StaffInfo = {
 export class SlotsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getAvailableSlots(storeId: string, dto: AvailableSlotsDto) {
+  async getAvailableSlots(storeId: string, dto: AvailableSlotsDto, customerId: string) {
     const { date, services } = dto;
 
     const store = await this.prisma.store.findUnique({ where: { id: storeId } });
@@ -132,7 +132,15 @@ export class SlotsService {
     const nowLocalMins = isToday ? this.getNowLocalMins(tzOffset) : -1;
     const dateUTCMidnight = new Date(`${date}T00:00:00.000Z`);
 
-    const [schedules, dayOffs, callIns, busyItems, staffRecords] = await Promise.all([
+    const activeBookingStatuses = [
+      BookingStatus.PENDING,
+      BookingStatus.CONFIRMED,
+      BookingStatus.DEPOSIT_PENDING,
+      BookingStatus.DEPOSIT_PAID,
+      BookingStatus.PAID,
+    ];
+
+    const [schedules, dayOffs, callIns, busyItems, staffRecords, customerBookings] = await Promise.all([
       this.prisma.staffSchedule.findMany({
         where: { staffId: { in: allStaffIds }, dayOfWeek, isActive: true },
       }),
@@ -150,17 +158,7 @@ export class SlotsService {
       this.prisma.bookingItem.findMany({
         where: {
           staffId: { in: allStaffIds },
-          booking: {
-            status: {
-              in: [
-                BookingStatus.PENDING,
-                BookingStatus.CONFIRMED,
-                BookingStatus.DEPOSIT_PENDING,
-                BookingStatus.DEPOSIT_PAID,
-                BookingStatus.PAID,
-              ],
-            },
-          },
+          booking: { status: { in: activeBookingStatuses } },
           startTime: { gte: dayStart, lte: dayEnd },
         },
         select: { staffId: true, startTime: true, duration: true },
@@ -168,6 +166,14 @@ export class SlotsService {
       this.prisma.staff.findMany({
         where: { id: { in: allStaffIds }, status: 'ACTIVE' },
         include: { user: { select: { fullName: true, avatarUrl: true } } },
+      }),
+      this.prisma.booking.findMany({
+        where: {
+          customerId,
+          status: { in: activeBookingStatuses },
+          scheduledAt: { gte: dayStart, lte: dayEnd },
+        },
+        select: { scheduledAt: true, totalDuration: true },
       }),
     ]);
 
@@ -308,6 +314,19 @@ export class SlotsService {
       }
     }
 
+    const customerBusyWindows = customerBookings.map((b) => ({
+      start: this.getLocalMinsFromUTC(b.scheduledAt, tzOffset),
+      end: this.getLocalMinsFromUTC(b.scheduledAt, tzOffset) + b.totalDuration,
+    }));
+
+    const filteredSlots = customerBusyWindows.length === 0
+      ? availableSlots
+      : availableSlots.filter((slot) => {
+          const slotStart = this.parseTime(slot.startTime);
+          const slotEnd = slotStart + totalDuration;
+          return !customerBusyWindows.some((w) => slotStart < w.end && w.start < slotEnd);
+        });
+
     return {
       date,
       totalDuration,
@@ -317,7 +336,7 @@ export class SlotsService {
         variantId: s.variantId,
         duration: s.duration,
       })),
-      availableSlots,
+      availableSlots: filteredSlots,
     };
   }
 

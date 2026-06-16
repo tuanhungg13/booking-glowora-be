@@ -54,7 +54,6 @@ export class ReviewsController {
   @ApiOperation({ summary: 'Đánh giá một dịch vụ trong booking đã hoàn thành' })
   @ApiBearerAuth()
   @Post('booking-items/:bookingItemId/review')
-  @RequirePermissions(Permissions.REVIEW.CREATE)
   createForBookingItem(
     @Param('bookingItemId') bookingItemId: string,
     @Body() dto: CreateReviewDto,

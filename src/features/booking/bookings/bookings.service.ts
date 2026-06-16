@@ -5,7 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { BookingStatus, DayOfWeek, DayOffStatus, LogType, PaymentStatus, Prisma, ServiceStatus, StoreStatus } from '@prisma/client';
+import { BookingStatus, CallInStatus, DayOfWeek, DayOffStatus, LogType, PaymentStatus, Prisma, ServiceStatus, StoreStatus } from '@prisma/client';
 
 const TZ_OFFSETS: Record<string, number> = {
   'Asia/Ho_Chi_Minh': 7 * 60,
@@ -178,6 +178,27 @@ export class BookingsService {
         }
 
         const totalDuration = itemsData.reduce((sum, item) => sum + item.duration, 0);
+
+        // Kiểm tra khách hàng không có lịch hẹn trùng giờ
+        const newStart = new Date(dto.scheduledAt);
+        const newEnd = new Date(newStart.getTime() + totalDuration * 60 * 1000);
+        const windowMin = new Date(newStart.getTime() - 24 * 60 * 60 * 1000);
+        const customerBookings = await tx.booking.findMany({
+          where: {
+            customerId,
+            status: { in: [BookingStatus.PENDING, BookingStatus.CONFIRMED, BookingStatus.DEPOSIT_PENDING, BookingStatus.DEPOSIT_PAID, BookingStatus.PAID] },
+            scheduledAt: { gte: windowMin, lte: newEnd },
+          },
+          select: { scheduledAt: true, totalDuration: true },
+        });
+        const hasCustomerConflict = customerBookings.some((b) => {
+          const bEnd = new Date(b.scheduledAt.getTime() + b.totalDuration * 60 * 1000);
+          return newStart < bEnd && b.scheduledAt < newEnd;
+        });
+        if (hasCustomerConflict) {
+          throw new ConflictException('Bạn đã có lịch hẹn trong khoảng thời gian này');
+        }
+
         // totalPrice = tổng giá đã áp dụng promotion (price per item đã giảm nếu có)
         const totalPriceNum = itemsData.reduce((sum, item) => sum + Number(item.price), 0);
         const totalPrice = new Prisma.Decimal(totalPriceNum);
@@ -537,12 +558,8 @@ export class BookingsService {
 
   async complete(id: string, userId: string, ipAddress?: string, requestId?: string) {
     const booking = await this.findOne(id);
-    if (
-      booking.status !== BookingStatus.CONFIRMED &&
-      booking.status !== BookingStatus.DEPOSIT_PAID &&
-      booking.status !== BookingStatus.PAID
-    ) {
-      throw new BadRequestException('Chỉ có thể hoàn thành lịch đặt đã xác nhận');
+    if (booking.status !== BookingStatus.PAID) {
+      throw new BadRequestException('Chỉ có thể hoàn thành lịch đặt đã thanh toán đầy đủ');
     }
     await this.assertStoreMember(userId, booking.storeId);
 
@@ -670,16 +687,21 @@ export class BookingsService {
     });
 
     for (const { id: staffId } of mappings) {
-      const [schedule, dayOffConflict] = await Promise.all([
+      const [schedule, callIn, dayOffConflict] = await Promise.all([
         tx.staffSchedule.findFirst({ where: { staffId, dayOfWeek, isActive: true } }),
+        tx.staffCallIn.findFirst({ where: { staffId, date: dateUTCMidnight, status: CallInStatus.ACCEPTED } }),
         this.hasDayOffConflict(tx, staffId, dateUTCMidnight, localStartMins, localEndMins),
       ]);
 
-      if (!schedule || dayOffConflict) continue;
+      if (!schedule && !callIn) continue;
+      if (dayOffConflict) continue;
 
-      const scheduleStart = this.parseTimeMins(schedule.startTime);
-      const scheduleEnd = this.parseTimeMins(schedule.endTime);
-      if (localStartMins < scheduleStart || localEndMins > scheduleEnd) continue;
+      const windowStartStr = schedule?.startTime ?? callIn!.startTime;
+      const windowEndStr = schedule?.endTime ?? callIn!.endTime;
+      if (!windowStartStr || !windowEndStr) continue;
+      const windowStart = this.parseTimeMins(windowStartStr);
+      const windowEnd = this.parseTimeMins(windowEndStr);
+      if (localStartMins < windowStart || localEndMins > windowEnd) continue;
 
       const overlap = await this.findOverlap(tx, staffId, startTime, duration);
       if (!overlap) return staffId;
