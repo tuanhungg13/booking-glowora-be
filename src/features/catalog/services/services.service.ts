@@ -7,8 +7,8 @@ import { PromotionsService } from '../../booking/promotions/promotions.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 
-type ServiceParams = { storeId?: string; q?: string; status?: ServiceStatus; categoryId?: string; sort?: 'name' | 'name-desc' | 'price' | 'price-desc' | 'avgRating' | 'avgRating-asc'; page?: number; limit?: number };
-type PublicServiceParams = { storeId?: string; categoryId?: string; q?: string; minPrice?: number; maxPrice?: number; minRating?: number; maxRating?: number; sort?: 'avgRating' | 'price' | 'price-desc' | 'newest' | 'popular'; page?: number; limit?: number };
+type ServiceParams = { storeId?: string; q?: string; status?: ServiceStatus; categoryId?: string; sort?: 'name' | 'name-desc' | 'price' | 'price-desc' | 'avgRating' | 'avgRating-asc' | 'popular'; page?: number; limit?: number };
+type PublicServiceParams = { storeId?: string; categoryId?: string; q?: string; minPrice?: number; maxPrice?: number; minRating?: number; maxRating?: number; minDuration?: number; maxDuration?: number; sort?: 'avgRating' | 'price' | 'price-desc' | 'newest' | 'popular'; page?: number; limit?: number };
 
 const serviceInclude = {
   category: true,
@@ -152,6 +152,10 @@ export class ServicesService {
       return this.findAllSortedByPrice(params, page, limit, params.sort === 'price-desc' ? 'desc' : 'asc');
     }
 
+    if (params?.sort === 'popular') {
+      return this.findAllSortedByPopular(params, page, limit);
+    }
+
     const orderBy: Prisma.ServiceOrderByWithRelationInput =
       params?.sort === 'name-desc' ? { name: 'desc' } :
       params?.sort === 'avgRating' ? { avgRating: 'desc' } :
@@ -219,6 +223,57 @@ export class ServicesService {
     return { items, total, page, limit };
   }
 
+  private async findAllSortedByPopular(params: ServiceParams, page: number, limit: number) {
+    const offset = (page - 1) * limit;
+
+    const conds: Prisma.Sql[] = [
+      params?.status ? Prisma.sql`s.status = ${params.status}` : Prisma.sql`s.status != 'DELETED'`,
+    ];
+    if (params?.storeId) conds.push(Prisma.sql`s.store_id = ${params.storeId}`);
+    if (params?.categoryId) conds.push(Prisma.sql`s.category_id = ${params.categoryId}`);
+    if (params?.q) {
+      const like = `%${params.q}%`;
+      conds.push(Prisma.sql`s.name LIKE ${like}`);
+    }
+
+    const where = Prisma.join(conds, ' AND ');
+
+    const ownerInclude = {
+      category: true,
+      variants: { where: { status: ServiceStatus.ACTIVE }, orderBy: { sortOrder: 'asc' as const } },
+      _count: { select: { bookingItems: true } },
+    };
+
+    const [rows, countRows] = await Promise.all([
+      this.prisma.$queryRaw<{ id: string }[]>(Prisma.sql`
+        SELECT s.id
+        FROM services s
+        LEFT JOIN booking_items bi ON bi.service_id = s.id
+        LEFT JOIN bookings b ON b.id = bi.booking_id AND b.status = 'COMPLETED'
+        WHERE ${where}
+        GROUP BY s.id
+        ORDER BY COUNT(bi.id) DESC, s.avg_rating DESC, s.id ASC
+        LIMIT ${limit} OFFSET ${offset}
+      `),
+      this.prisma.$queryRaw<{ total: bigint }[]>(Prisma.sql`
+        SELECT COUNT(DISTINCT s.id) AS total
+        FROM services s
+        WHERE ${where}
+      `),
+    ]);
+
+    const total = Number(countRows[0]?.total ?? 0);
+    const ids = rows.map((r) => r.id);
+    if (!ids.length) return { items: [], total, page, limit, activePromotion: null };
+
+    const items = await this.prisma.service.findMany({ where: { id: { in: ids } }, include: ownerInclude });
+    const order = new Map(ids.map((id, i) => [id, i]));
+    items.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+
+    const { items: enriched, activePromotion } = await this.enrichServicesWithPromotion(items, params?.storeId);
+    return { items: enriched, total, page, limit, activePromotion };
+  }
+
   async findPublic(params: PublicServiceParams) {
     const page = params.page ?? 1;
     const limit = params.limit ?? 20;
@@ -238,14 +293,22 @@ export class ServicesService {
           { description: { contains: params.q } },
         ],
       }),
-      ...((params.minPrice !== undefined || params.maxPrice !== undefined) && {
+      ...((params.minPrice !== undefined || params.maxPrice !== undefined || params.minDuration !== undefined || params.maxDuration !== undefined) && {
         variants: {
           some: {
             status: ServiceStatus.ACTIVE,
-            price: {
-              ...(params.minPrice !== undefined && { gte: params.minPrice }),
-              ...(params.maxPrice !== undefined && { lte: params.maxPrice }),
-            },
+            ...(( params.minPrice !== undefined || params.maxPrice !== undefined) && {
+              price: {
+                ...(params.minPrice !== undefined && { gte: params.minPrice }),
+                ...(params.maxPrice !== undefined && { lte: params.maxPrice }),
+              },
+            }),
+            ...(( params.minDuration !== undefined || params.maxDuration !== undefined) && {
+              duration: {
+                ...(params.minDuration !== undefined && { gte: params.minDuration }),
+                ...(params.maxDuration !== undefined && { lte: params.maxDuration }),
+              },
+            }),
           },
         },
       }),
@@ -317,14 +380,17 @@ export class ServicesService {
       conds.push(Prisma.sql`(s.name LIKE ${like} OR s.description LIKE ${like})`);
     }
 
-    if (params.minPrice !== undefined || params.maxPrice !== undefined) {
-      const priceConds: Prisma.Sql[] = [
+    const hasVariantFilter = params.minPrice !== undefined || params.maxPrice !== undefined || params.minDuration !== undefined || params.maxDuration !== undefined;
+    if (hasVariantFilter) {
+      const variantConds: Prisma.Sql[] = [
         Prisma.sql`pv.service_id = s.id`,
         Prisma.sql`pv.status = 'ACTIVE'`,
       ];
-      if (params.minPrice !== undefined) priceConds.push(Prisma.sql`pv.price >= ${params.minPrice}`);
-      if (params.maxPrice !== undefined) priceConds.push(Prisma.sql`pv.price <= ${params.maxPrice}`);
-      conds.push(Prisma.sql`EXISTS (SELECT 1 FROM service_variants pv WHERE ${Prisma.join(priceConds, ' AND ')})`);
+      if (params.minPrice !== undefined) variantConds.push(Prisma.sql`pv.price >= ${params.minPrice}`);
+      if (params.maxPrice !== undefined) variantConds.push(Prisma.sql`pv.price <= ${params.maxPrice}`);
+      if (params.minDuration !== undefined) variantConds.push(Prisma.sql`pv.duration >= ${params.minDuration}`);
+      if (params.maxDuration !== undefined) variantConds.push(Prisma.sql`pv.duration <= ${params.maxDuration}`);
+      conds.push(Prisma.sql`EXISTS (SELECT 1 FROM service_variants pv WHERE ${Prisma.join(variantConds, ' AND ')})`);
     }
 
     if (params.minRating !== undefined) conds.push(Prisma.sql`s.avg_rating >= ${params.minRating}`);
@@ -393,14 +459,17 @@ export class ServicesService {
       conds.push(Prisma.sql`(s.name LIKE ${like} OR s.description LIKE ${like})`);
     }
 
-    if (params.minPrice !== undefined || params.maxPrice !== undefined) {
-      const priceConds: Prisma.Sql[] = [
+    const hasVariantFilterPopular = params.minPrice !== undefined || params.maxPrice !== undefined || params.minDuration !== undefined || params.maxDuration !== undefined;
+    if (hasVariantFilterPopular) {
+      const variantConds: Prisma.Sql[] = [
         Prisma.sql`pv.service_id = s.id`,
         Prisma.sql`pv.status = 'ACTIVE'`,
       ];
-      if (params.minPrice !== undefined) priceConds.push(Prisma.sql`pv.price >= ${params.minPrice}`);
-      if (params.maxPrice !== undefined) priceConds.push(Prisma.sql`pv.price <= ${params.maxPrice}`);
-      conds.push(Prisma.sql`EXISTS (SELECT 1 FROM service_variants pv WHERE ${Prisma.join(priceConds, ' AND ')})`);
+      if (params.minPrice !== undefined) variantConds.push(Prisma.sql`pv.price >= ${params.minPrice}`);
+      if (params.maxPrice !== undefined) variantConds.push(Prisma.sql`pv.price <= ${params.maxPrice}`);
+      if (params.minDuration !== undefined) variantConds.push(Prisma.sql`pv.duration >= ${params.minDuration}`);
+      if (params.maxDuration !== undefined) variantConds.push(Prisma.sql`pv.duration <= ${params.maxDuration}`);
+      conds.push(Prisma.sql`EXISTS (SELECT 1 FROM service_variants pv WHERE ${Prisma.join(variantConds, ' AND ')})`);
     }
 
     if (params.minRating !== undefined) conds.push(Prisma.sql`s.avg_rating >= ${params.minRating}`);

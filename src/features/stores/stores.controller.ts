@@ -107,7 +107,6 @@ export class StoresController {
 
   @ApiOperation({ summary: 'Create a store for current owner' })
   @ApiBearerAuth()
-  @RequirePermissions(Permissions.STORE.CREATE)
   @AuditLog({ type: LogType.STORE_CREATED, targetType: 'Store' })
   @Post()
   create(@Body() dto: CreateStoreDto, @CurrentUser() user: CurrentUserPayload) {

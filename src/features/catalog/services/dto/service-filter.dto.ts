@@ -19,10 +19,10 @@ export class ServiceQueryDto {
   @IsUUID('all')
   categoryId?: string;
 
-  @ApiPropertyOptional({ enum: ['name', 'name-desc', 'price', 'price-desc', 'avgRating', 'avgRating-asc'], example: 'name' })
+  @ApiPropertyOptional({ enum: ['name', 'name-desc', 'price', 'price-desc', 'avgRating', 'avgRating-asc', 'popular'], example: 'name' })
   @IsOptional()
-  @IsIn(['name', 'name-desc', 'price', 'price-desc', 'avgRating', 'avgRating-asc'])
-  sort?: 'name' | 'name-desc' | 'price' | 'price-desc' | 'avgRating' | 'avgRating-asc';
+  @IsIn(['name', 'name-desc', 'price', 'price-desc', 'avgRating', 'avgRating-asc', 'popular'])
+  sort?: 'name' | 'name-desc' | 'price' | 'price-desc' | 'avgRating' | 'avgRating-asc' | 'popular';
 
   @ApiPropertyOptional({ example: 1, minimum: 1 })
   @IsOptional()
@@ -85,6 +85,20 @@ export class PublicServiceQueryDto {
   @Min(1)
   @Max(5)
   maxRating?: number;
+
+  @ApiPropertyOptional({ example: 30, description: 'Thời gian tối thiểu của variant (phút)' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(0)
+  minDuration?: number;
+
+  @ApiPropertyOptional({ example: 90, description: 'Thời gian tối đa của variant (phút)' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(0)
+  maxDuration?: number;
 
   @ApiPropertyOptional({ enum: ['avgRating', 'price', 'price-desc', 'newest', 'popular'], example: 'avgRating' })
   @IsOptional()
