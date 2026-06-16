@@ -6,8 +6,18 @@ import {
   GoogleGenerativeAI,
   Content,
 } from '@google/generative-ai';
-import { StoreStatus } from '@prisma/client';
+import { ServiceStatus, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+
+function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLng = ((lng2 - lng1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
 
 const PLATFORM_GUIDE = (() => {
   try {
@@ -35,6 +45,18 @@ export interface PlatformServiceSuggestion {
   variants: { name: string; price: number; duration: number }[];
 }
 
+export interface PlatformStoreSuggestion {
+  id: string;
+  name: string;
+  slug: string | null;
+  logoUrl: string | null;
+  avgRating: number;
+  totalReviews: number;
+  address: string;
+  provinceName: string | null;
+  distanceKm?: number;
+}
+
 export interface ChatMessage {
   role: 'user' | 'model';
   content: string;
@@ -60,7 +82,7 @@ export class GeminiService {
     userMessage: string,
     ctx: PlatformContext,
     userLocation?: { lat: number; lng: number; cityName?: string | null },
-  ): Promise<{ reply: string; suggestedKeywords: string[] }> {
+  ): Promise<{ reply: string; suggestedKeywords: string[]; suggestedStoreKeywords: string[] }> {
     try {
       const model = this.genAI.getGenerativeModel({
         model: this.model,
@@ -81,12 +103,20 @@ export class GeminiService {
         ? suggestMatch[1].split(',').map((s) => s.trim()).filter(Boolean)
         : [];
 
-      const reply = text.replace(/\[SUGGEST_KW:[^\]]+\]/, '').trim();
+      const storeMatch = text.match(/\[SUGGEST_STORE:([^\]]+)\]/);
+      const suggestedStoreKeywords = storeMatch
+        ? storeMatch[1].split(',').map((s) => s.trim()).filter(Boolean)
+        : [];
 
-      return { reply, suggestedKeywords };
+      const reply = text
+        .replace(/\[SUGGEST_KW:[^\]]+\]/, '')
+        .replace(/\[SUGGEST_STORE:[^\]]+\]/, '')
+        .trim();
+
+      return { reply, suggestedKeywords, suggestedStoreKeywords };
     } catch (err) {
       this.logger.error('Gemini platform chat error', err);
-      return { reply: 'Xin lỗi, tôi đang gặp sự cố kỹ thuật. Vui lòng thử lại sau.', suggestedKeywords: [] };
+      return { reply: 'Xin lỗi, tôi đang gặp sự cố kỹ thuật. Vui lòng thử lại sau.', suggestedKeywords: [], suggestedStoreKeywords: [] };
     }
   }
 
@@ -94,8 +124,8 @@ export class GeminiService {
     if (!keywords.length) return [];
 
     const orConditions = keywords.flatMap((kw) => [
-      { name: { contains: kw, mode: 'insensitive' as const } },
-      { description: { contains: kw, mode: 'insensitive' as const } },
+      { name: { contains: kw } },
+      { description: { contains: kw } },
     ]);
 
     const services = await this.prisma.service.findMany({
@@ -137,6 +167,86 @@ export class GeminiService {
         price: Number(v.price),
         duration: v.duration,
       })),
+    }));
+  }
+
+  async fetchStoresByKeywords(
+    keywords: string[],
+    userLocation?: { lat: number; lng: number },
+  ): Promise<PlatformStoreSuggestion[]> {
+    const NEAR_ME = '__near_me__';
+    const TOP_RATED = '__top_rated__';
+
+    const nearMe = keywords.includes(NEAR_ME);
+    const topRated = keywords.includes(TOP_RATED);
+    const realKeywords = keywords.filter((k) => k !== NEAR_ME && k !== TOP_RATED);
+
+    if (!realKeywords.length && !nearMe && !topRated) return [];
+
+    const sortByDistance = nearMe && !!userLocation;
+
+    const orConditions = realKeywords.flatMap((kw) => [
+      { name: { contains: kw } },
+      { description: { contains: kw } },
+      { address: { contains: kw } },
+      { province: { name: { contains: kw } } },
+      { services: { some: { name: { contains: kw }, status: ServiceStatus.ACTIVE } } },
+      { services: { some: { description: { contains: kw }, status: ServiceStatus.ACTIVE } } },
+    ]);
+
+    const stores = await this.prisma.store.findMany({
+      where: {
+        status: StoreStatus.ACTIVE,
+        ...(realKeywords.length ? { OR: orConditions } : {}),
+      },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        logoUrl: true,
+        avgRating: true,
+        totalReviews: true,
+        address: true,
+        latitude: true,
+        longitude: true,
+        province: { select: { name: true } },
+      },
+      orderBy: { avgRating: 'desc' },
+      // Lấy nhiều hơn khi sort distance để có đủ kết quả sau khi lọc
+      take: sortByDistance ? 50 : 3,
+    });
+
+    if (sortByDistance && userLocation) {
+      return stores
+        .filter((s) => s.latitude !== null && s.longitude !== null)
+        .map((s) => ({
+          ...s,
+          distanceKm: haversineKm(userLocation.lat, userLocation.lng, s.latitude!, s.longitude!),
+        }))
+        .sort((a, b) => a.distanceKm! - b.distanceKm!)
+        .slice(0, 3)
+        .map((s) => ({
+          id: s.id,
+          name: s.name,
+          slug: s.slug,
+          logoUrl: s.logoUrl,
+          avgRating: Number(s.avgRating),
+          totalReviews: s.totalReviews,
+          address: s.address,
+          provinceName: s.province?.name ?? null,
+          distanceKm: Math.round(s.distanceKm! * 10) / 10,
+        }));
+    }
+
+    return stores.slice(0, 3).map((s) => ({
+      id: s.id,
+      name: s.name,
+      slug: s.slug,
+      logoUrl: s.logoUrl,
+      avgRating: Number(s.avgRating),
+      totalReviews: s.totalReviews,
+      address: s.address,
+      provinceName: s.province?.name ?? null,
     }));
   }
 
@@ -208,6 +318,16 @@ Quy tắc bắt buộc:
 6. Chỉ thêm tag [SUGGEST_KW:keyword1,keyword2,keyword3] ở DÒNG CUỐI (không xuống dòng) khi đã tư vấn đủ và muốn gợi ý dịch vụ cụ thể. KHÔNG thêm khi chào hỏi, hỏi làm rõ, hoặc hỏi thông tin chung.
    - Keywords là cụm từ tiếng Việt ngắn (1-4 từ) mô tả chính xác dịch vụ người dùng cần. Ví dụ: "massage vai cổ", "chăm sóc da mụn", "triệt lông nách", "uốn tóc xoăn"
    - Chọn tối đa 3 keywords, càng cụ thể với nhu cầu người dùng càng tốt
+   - Tag này ẩn — KHÔNG hiển thị ra câu trả lời người dùng đọc
+7. Chỉ thêm tag [SUGGEST_STORE:keyword1,keyword2] ở DÒNG CUỐI (không xuống dòng) khi khách muốn tìm cửa hàng spa.
+   - Keywords là tên tỉnh/thành phố, quận/huyện, tên spa, hoặc loại dịch vụ spa cung cấp. Ví dụ: "Hà Nội", "quận 1", "chăm sóc da mặt", "cắt tóc"
+   - Hai từ khóa đặc biệt (không phải địa điểm hay dịch vụ, chỉ là tín hiệu kỹ thuật):
+     * __near_me__ : thêm khi khách hỏi "gần tôi", "gần đây", "xung quanh tôi" — hệ thống sẽ sort theo khoảng cách GPS
+     * __top_rated__ : thêm khi khách hỏi "đánh giá cao", "tốt nhất", "uy tín nhất" mà không nêu địa điểm hay dịch vụ — hệ thống trả về top spa theo rating toàn nền tảng
+   - Ví dụ cách dùng: "spa gần tôi" → [SUGGEST_STORE:__near_me__] | "spa massage đánh giá cao" → [SUGGEST_STORE:massage,__top_rated__] | "spa chăm sóc da gần tôi ở Hà Nội" → [SUGGEST_STORE:chăm sóc da,__near_me__]
+   - Chọn tối đa 2 keywords thường (không tính __near_me__ và __top_rated__)
+   - Phân biệt với [SUGGEST_KW:...]: dùng [SUGGEST_STORE:...] khi user muốn xem danh sách SPA; dùng [SUGGEST_KW:...] khi user muốn xem chi tiết GIÁ/THỜI GIAN của một dịch vụ cụ thể
+   - Có thể kết hợp cả hai tag trong cùng câu trả lời nếu phù hợp
    - Tag này ẩn — KHÔNG hiển thị ra câu trả lời người dùng đọc
 
 ---

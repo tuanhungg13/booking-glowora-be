@@ -93,6 +93,7 @@ export class ServicesService {
       where: {
         storeId,
         name: { equals: name },
+        status: { not: ServiceStatus.DELETED },
         ...(excludeId && { id: { not: excludeId } }),
       },
       select: { id: true },
@@ -636,7 +637,7 @@ export class ServicesService {
     await this.checkNoUpcomingBookings(id);
     await this.prisma.service.update({
       where: { id },
-      data: { status: ServiceStatus.DELETED },
+      data: { status: ServiceStatus.DELETED, slug: null },
     });
 
     this.systemLog.log({
@@ -657,7 +658,7 @@ export class ServicesService {
     let suffix = 2;
     while (true) {
       const existing = await this.prisma.service.findFirst({
-        where: { storeId, slug, ...(excludeId && { id: { not: excludeId } }) },
+        where: { storeId, slug, status: { not: ServiceStatus.DELETED }, ...(excludeId && { id: { not: excludeId } }) },
       });
       if (!existing) return slug;
       slug = `${base}-${suffix++}`;

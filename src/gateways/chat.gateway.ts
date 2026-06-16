@@ -160,9 +160,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const history = this.aiSessions.get(client.id) ?? [];
 
     const context = await this.gemini.buildPlatformContext();
-    const { reply, suggestedKeywords } = await this.gemini.chatGlobal(history, message, context, data.location);
+    const { reply, suggestedKeywords, suggestedStoreKeywords } = await this.gemini.chatGlobal(history, message, context, data.location);
 
-    const suggestions = await this.gemini.fetchServicesByKeywords(suggestedKeywords);
+    const [suggestions, storeSuggestions] = await Promise.all([
+      this.gemini.fetchServicesByKeywords(suggestedKeywords),
+      this.gemini.fetchStoresByKeywords(suggestedStoreKeywords, data.location),
+    ]);
 
     // Cập nhật history, giới hạn AI_HISTORY_MAX_TURNS lượt gần nhất
     const updated: ChatMessage[] = [
@@ -173,7 +176,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const trimmed = updated.slice(-AI_HISTORY_MAX_TURNS * 2);
     this.aiSessions.set(client.id, trimmed);
 
-    client.emit('ai_reply', { reply, suggestions });
+    client.emit('ai_reply', { reply, suggestions, storeSuggestions });
     return { sent: true };
   }
 
