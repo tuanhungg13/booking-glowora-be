@@ -40,10 +40,13 @@ export class CategoriesService {
 
   // ── Public: danh mục hệ thống ──────────────────────────────────────────────
 
-  async findAll() {
+  async findAll(sortBy?: 'createdAt') {
+    const orderBy = sortBy === 'createdAt'
+      ? { createdAt: 'desc' as const }
+      : { services: { _count: 'desc' as const } };
     return this.prisma.serviceCategory.findMany({
       where: { storeId: null },
-      orderBy: { name: 'asc' },
+      orderBy,
       include: { _count: { select: { services: true, children: true } } },
     });
   }
@@ -112,7 +115,7 @@ export class CategoriesService {
   async findStoreCategories(storeId: string) {
     return this.prisma.serviceCategory.findMany({
       where: { storeId },
-      orderBy: { name: 'asc' },
+      orderBy: { createdAt: 'desc' },
       include: {
         parent: { select: { id: true, name: true, slug: true } },
         _count: { select: { services: true } },

@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -62,8 +63,8 @@ export class CategoriesController {
   @ApiOperation({ summary: 'Danh sách danh mục hệ thống (public)' })
   @Public()
   @Get()
-  findAll() {
-    return this.categoriesService.findAll();
+  findAll(@Query('sortBy') sortBy?: string) {
+    return this.categoriesService.findAll(sortBy === 'createdAt' ? 'createdAt' : undefined);
   }
 
   @ApiOperation({
