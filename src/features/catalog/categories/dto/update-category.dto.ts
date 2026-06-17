@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, ValidateIf } from 'class-validator';
 
 export class UpdateCategoryDto {
   @ApiPropertyOptional({
@@ -18,8 +18,9 @@ export class UpdateCategoryDto {
   @IsString()
   description?: string;
 
-  @ApiPropertyOptional({ example: 'https://cdn.example.com/icons/massage.png' })
+  @ApiPropertyOptional({ example: 'https://cdn.example.com/banners/massage.jpg', nullable: true })
   @IsOptional()
+  @ValidateIf((o) => o.bannerUrl !== null)
   @IsString()
-  iconUrl?: string;
+  bannerUrl?: string | null;
 }

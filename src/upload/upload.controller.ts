@@ -102,6 +102,24 @@ export class UploadController {
     return { attachments };
   }
 
+  @ApiOperation({ summary: 'Upload ảnh danh mục hệ thống (admin)' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+      required: ['file'],
+    },
+  })
+  @Post('category')
+  @RequirePermissions(Permissions.CATEGORY.UPDATE)
+  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
+  async uploadCategoryImage(@UploadedFile() file: Express.Multer.File) {
+    if (!file) throw new BadRequestException('Không có ảnh nào được tải lên');
+    const url = await this.cloudinary.uploadImage(file, 'glowora/categories');
+    return { url };
+  }
+
   @ApiOperation({ summary: 'Upload nhiều ảnh, trả về danh sách URL. type: services | store' })
   @ApiHeader({ name: 'x-store-id', description: 'ID của store', required: true })
   @ApiQuery({ name: 'type', enum: ['services', 'store'], description: 'Loại ảnh (xác định thư mục lưu trữ)' })

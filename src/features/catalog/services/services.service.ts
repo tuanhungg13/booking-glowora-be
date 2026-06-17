@@ -7,7 +7,7 @@ import { PromotionsService } from '../../booking/promotions/promotions.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 
-type ServiceParams = { storeId?: string; q?: string; status?: ServiceStatus; categoryId?: string; sort?: 'name' | 'name-desc' | 'price' | 'price-desc' | 'avgRating' | 'avgRating-asc' | 'popular'; page?: number; limit?: number };
+type ServiceParams = { storeId?: string; q?: string; status?: ServiceStatus; categoryId?: string; sort?: 'newest' | 'name' | 'name-desc' | 'price' | 'price-desc' | 'avgRating' | 'avgRating-asc' | 'popular'; page?: number; limit?: number };
 type PublicServiceParams = { storeId?: string; categoryId?: string; q?: string; minPrice?: number; maxPrice?: number; minRating?: number; maxRating?: number; minDuration?: number; maxDuration?: number; sort?: 'avgRating' | 'price' | 'price-desc' | 'newest' | 'popular'; page?: number; limit?: number };
 
 const serviceInclude = {
@@ -158,10 +158,11 @@ export class ServicesService {
     }
 
     const orderBy: Prisma.ServiceOrderByWithRelationInput =
+      params?.sort === 'name' ? { name: 'asc' } :
       params?.sort === 'name-desc' ? { name: 'desc' } :
       params?.sort === 'avgRating' ? { avgRating: 'desc' } :
       params?.sort === 'avgRating-asc' ? { avgRating: 'asc' } :
-      { name: 'asc' };
+      { createdAt: 'desc' };
 
     const ownerInclude = {
       category: true,

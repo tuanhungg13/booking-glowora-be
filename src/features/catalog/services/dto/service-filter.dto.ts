@@ -19,10 +19,10 @@ export class ServiceQueryDto {
   @IsUUID('all')
   categoryId?: string;
 
-  @ApiPropertyOptional({ enum: ['name', 'name-desc', 'price', 'price-desc', 'avgRating', 'avgRating-asc', 'popular'], example: 'name' })
+  @ApiPropertyOptional({ enum: ['newest', 'name', 'name-desc', 'price', 'price-desc', 'avgRating', 'avgRating-asc', 'popular'], example: 'newest' })
   @IsOptional()
-  @IsIn(['name', 'name-desc', 'price', 'price-desc', 'avgRating', 'avgRating-asc', 'popular'])
-  sort?: 'name' | 'name-desc' | 'price' | 'price-desc' | 'avgRating' | 'avgRating-asc' | 'popular';
+  @IsIn(['newest', 'name', 'name-desc', 'price', 'price-desc', 'avgRating', 'avgRating-asc', 'popular'])
+  sort?: 'newest' | 'name' | 'name-desc' | 'price' | 'price-desc' | 'avgRating' | 'avgRating-asc' | 'popular';
 
   @ApiPropertyOptional({ example: 1, minimum: 1 })
   @IsOptional()

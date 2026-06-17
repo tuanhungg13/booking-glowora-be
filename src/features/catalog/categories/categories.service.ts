@@ -33,7 +33,7 @@ export class CategoriesService {
         name: dto.name,
         slug,
         description: dto.description,
-        iconUrl: dto.iconUrl,
+        bannerUrl: dto.bannerUrl,
       },
     });
   }
@@ -71,7 +71,7 @@ export class CategoriesService {
         name: dto.name,
         slug,
         description: dto.description,
-        iconUrl: dto.iconUrl,
+        bannerUrl: dto.bannerUrl,
       },
     });
   }
@@ -114,7 +114,7 @@ export class CategoriesService {
       where: { storeId },
       orderBy: { name: 'asc' },
       include: {
-        parent: { select: { id: true, name: true, slug: true, iconUrl: true } },
+        parent: { select: { id: true, name: true, slug: true } },
         _count: { select: { services: true } },
       },
     });
@@ -134,7 +134,7 @@ export class CategoriesService {
       where: { id },
       data: { name: dto.name, description: dto.description },
       include: {
-        parent: { select: { id: true, name: true, slug: true, iconUrl: true } },
+        parent: { select: { id: true, name: true, slug: true } },
       },
     });
   }

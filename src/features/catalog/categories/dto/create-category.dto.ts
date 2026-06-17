@@ -14,8 +14,8 @@ export class CreateCategoryDto {
   @MaxLength(500)
   description?: string;
 
-  @ApiPropertyOptional({ example: 'https://cdn.example.com/icons/massage.png' })
+  @ApiPropertyOptional({ example: 'https://cdn.example.com/banners/massage.jpg' })
   @IsOptional()
   @IsUrl()
-  iconUrl?: string;
+  bannerUrl?: string;
 }
