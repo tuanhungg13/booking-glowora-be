@@ -653,6 +653,44 @@ export class ServicesService {
     return { deleted: true };
   }
 
+  async bulkHardDelete(storeId: string, ids: string[], actorId: string) {
+    const services = await this.prisma.service.findMany({
+      where: { id: { in: ids }, storeId },
+      select: { id: true, name: true, imageUrls: true },
+    });
+
+    let deletedCount = 0;
+    const failedIds: string[] = [];
+
+    await Promise.allSettled(
+      services.map(async (service) => {
+        try {
+          const urls = Array.isArray(service.imageUrls) ? (service.imageUrls as string[]) : [];
+          await Promise.allSettled(
+            urls.map((url) => this.cloudinary.deleteImage(this.cloudinary.extractPublicId(url))),
+          );
+
+          await this.prisma.service.delete({ where: { id: service.id } });
+
+          this.systemLog.log({
+            type: LogType.SERVICE_DELETED,
+            actorId,
+            storeId,
+            targetId: service.id,
+            targetType: 'Service',
+            metadata: { name: service.name, permanent: true },
+          });
+
+          deletedCount++;
+        } catch {
+          failedIds.push(service.id);
+        }
+      }),
+    );
+
+    return { deletedCount, failedCount: failedIds.length, failedIds };
+  }
+
   private async generateUniqueSlug(name: string, storeId: string, excludeId?: string) {
     const base = slugify(name) || 'service';
     let slug = base;

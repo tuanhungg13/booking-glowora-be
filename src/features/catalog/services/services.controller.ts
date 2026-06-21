@@ -19,6 +19,7 @@ import { ServicesService } from './services.service';
 import { ServicesImportService } from './services-import.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
+import { BulkDeleteServicesDto } from './dto/bulk-delete-services.dto';
 import { PublicServiceQueryDto, ServiceQueryDto } from './dto/service-filter.dto';
 import { Public } from '../../../common/decorators/public.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
@@ -118,6 +119,18 @@ export class ServicesController {
     @CurrentUser() user: CurrentUserPayload,
   ) {
     return this.servicesService.update(id, storeId, dto, user.id);
+  }
+
+  @ApiOperation({ summary: 'Xóa cứng nhiều dịch vụ cùng lúc (admin)' })
+  @ApiBearerAuth()
+  @Delete('bulk')
+  @RequirePermissions(Permissions.SERVICE.DELETE)
+  bulkHardDelete(
+    @StoreId() storeId: string,
+    @Body() dto: BulkDeleteServicesDto,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return this.servicesService.bulkHardDelete(storeId, dto.ids, user.id);
   }
 
   @ApiOperation({ summary: 'Xóa dịch vụ' })

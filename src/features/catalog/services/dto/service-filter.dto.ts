@@ -31,12 +31,12 @@ export class ServiceQueryDto {
   @Min(1)
   page?: number;
 
-  @ApiPropertyOptional({ example: 20, minimum: 1, maximum: 50 })
+  @ApiPropertyOptional({ example: 20, minimum: 1, maximum: 120 })
   @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  @Max(50)
+  @Max(120)
   limit?: number;
 }
 
@@ -112,11 +112,11 @@ export class PublicServiceQueryDto {
   @Min(1)
   page?: number;
 
-  @ApiPropertyOptional({ example: 20, minimum: 1, maximum: 50 })
+  @ApiPropertyOptional({ example: 20, minimum: 1, maximum: 120 })
   @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  @Max(50)
+  @Max(120)
   limit?: number;
 }
