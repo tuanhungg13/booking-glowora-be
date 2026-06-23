@@ -10,8 +10,6 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Public } from '../../../common/decorators/public.decorator';
 import { CurrentUser, type CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
-import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
-import { Permissions } from '../../../common/constants/permissions';
 import { PaymentsService } from './payments.service';
 import { CreateSepayPaymentDto } from './dto/create-sepay-payment.dto';
 import { SepayWebhookDto } from './dto/sepay-webhook.dto';
@@ -24,7 +22,6 @@ export class PaymentsController {
   @ApiOperation({ summary: 'Tạo lệnh thanh toán SePay (chuyển khoản) cho booking' })
   @ApiBearerAuth()
   @Post('payments/sepay/create')
-  @RequirePermissions(Permissions.PAYMENT.CREATE)
   createSepay(
     @Body() dto: CreateSepayPaymentDto,
     @CurrentUser() user: CurrentUserPayload,

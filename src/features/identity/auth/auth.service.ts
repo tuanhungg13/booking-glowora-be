@@ -122,7 +122,7 @@ export class AuthService {
         fullName: pending.fullName,
         phone: pending.phone ?? undefined,
         ...(customerRole
-          ? { userRoles: { create: { roleId: customerRole.id, storeId: null } } }
+          ? { userRoles: { create: { roleId: customerRole.id, storeId: null } } } // tạo user role cho user vừa đăng ký
           : {}),
       },
       select: { id: true, email: true, fullName: true, phone: true, createdAt: true },
