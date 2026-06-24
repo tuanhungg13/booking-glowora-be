@@ -16,7 +16,7 @@ async function bootstrap() {
   app.use(cookieParser());
   app.use(app.get(RequestContextService).middleware());
 
-  const allowedOrigins = (process.env.FRONTEND_URL ?? 'http://localhost:3000')
+  const allowedOrigins = (process.env.FRONTEND_CORS_ORIGINS ?? 'http://localhost:3000')
     .split(',')
     .map((o) => o.trim());
   app.enableCors({
