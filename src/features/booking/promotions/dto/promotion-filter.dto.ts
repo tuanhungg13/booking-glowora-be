@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsIn, IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { IsBoolean, IsDateString, IsIn, IsInt, IsOptional, IsString, Min } from 'class-validator';
 import { CouponType, PromotionScope } from '@prisma/client';
 
 export class PromotionFilterDto {
@@ -8,6 +8,16 @@ export class PromotionFilterDto {
   @IsOptional()
   @IsString()
   q?: string;
+
+  @ApiPropertyOptional({ description: 'Lọc từ ngày (ISO 8601)', example: '2026-06-01T00:00:00.000Z' })
+  @IsOptional()
+  @IsDateString()
+  from?: string;
+
+  @ApiPropertyOptional({ description: 'Lọc đến ngày (ISO 8601)', example: '2026-06-30T23:59:59.000Z' })
+  @IsOptional()
+  @IsDateString()
+  to?: string;
 
   @ApiPropertyOptional({ enum: CouponType })
   @IsOptional()

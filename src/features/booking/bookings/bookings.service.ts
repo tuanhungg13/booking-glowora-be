@@ -27,6 +27,7 @@ import { SystemLogService } from '../../../system-log/system-log.service';
 import { BookingFilterDto } from './dto/booking-filter.dto';
 import { MyBookingFilterDto } from './dto/my-booking-filter.dto';
 import { CreateBookingDto } from './dto/create-booking.dto';
+import { CreateWalkInBookingDto } from './dto/create-walkin-booking.dto';
 import { CouponsService } from '../coupons/coupons.service';
 import { PromotionsService } from '../promotions/promotions.service';
 
@@ -276,15 +277,173 @@ export class BookingsService {
         bookingId: booking.id,
         storeId: booking.store.id,
         storeName: booking.store.name,
-        customerId: booking.customer.id,
-        customerName: booking.customer.fullName,
-        customerEmail: booking.customer.email,
+        customerId: booking.customer?.id,
+        customerName: booking.customer?.fullName,
+        customerEmail: booking.customer?.email,
         serviceNames,
         scheduledAt: booking.scheduledAt,
       })
       .catch(() => undefined);
 
     this.systemLog.log({ type: LogType.BOOKING_CREATED, actorId: customerId, storeId: booking.storeId, targetId: booking.id, targetType: 'Booking', metadata: { scheduledAt: booking.scheduledAt, totalPrice: Number(booking.totalPrice) }, ipAddress, requestId });
+
+    return booking;
+  }
+
+  async createWalkIn(dto: CreateWalkInBookingDto, storeId: string, actorId: string, ipAddress?: string) {
+    if (dto.services.length === 0) {
+      throw new BadRequestException('Phải chọn ít nhất 1 dịch vụ');
+    }
+
+    const activePromotion = await this.promotions.findActiveForStore(storeId);
+
+    const booking = await this.prisma.$transaction(
+      async (tx) => {
+        const store = await tx.store.findUnique({ where: { id: storeId } });
+        if (!store || store.status !== StoreStatus.ACTIVE) {
+          throw new NotFoundException('Cửa hàng không tồn tại hoặc chưa hoạt động');
+        }
+
+        let currentTime = new Date(dto.scheduledAt);
+        const itemsData: Array<{
+          sortOrder: number;
+          serviceId: string;
+          variantId: string;
+          staffId: string;
+          startTime: Date;
+          duration: number;
+          originalPrice: Prisma.Decimal | null;
+          price: Prisma.Decimal;
+          serviceName: string;
+          variantName: string;
+          staffName: string | null;
+          isStaffChosenByCustomer: boolean;
+        }> = [];
+
+        for (let i = 0; i < dto.services.length; i++) {
+          const svc = dto.services[i];
+
+          const variant = await tx.serviceVariant.findFirst({
+            where: {
+              id: svc.variantId,
+              serviceId: svc.serviceId,
+              status: ServiceStatus.ACTIVE,
+              service: { storeId, status: ServiceStatus.ACTIVE },
+            },
+            include: { service: { select: { name: true } } },
+          });
+          if (!variant) {
+            throw new NotFoundException(`Variant không tìm thấy cho dịch vụ thứ ${i + 1}`);
+          }
+
+          let staffId: string;
+          let isStaffChosenByCustomer = false;
+          if (svc.staffId) {
+            const canDo = await tx.staff.findFirst({
+              where: { id: svc.staffId, storeId, status: 'ACTIVE' },
+            });
+            if (!canDo) {
+              throw new BadRequestException(`Nhân viên không thực hiện được dịch vụ thứ ${i + 1}`);
+            }
+            staffId = svc.staffId;
+            isStaffChosenByCustomer = true;
+          } else {
+            const found = await this.pickAvailableStaff(tx, storeId, svc.serviceId, currentTime, variant.duration, store.timezone);
+            if (!found) {
+              throw new ConflictException(`Không có nhân viên khả dụng cho dịch vụ thứ ${i + 1}`);
+            }
+            staffId = found;
+          }
+
+          await this.assertNoOverlap(tx, staffId, currentTime, variant.duration);
+
+          const staffRecord = await tx.staff.findUnique({
+            where: { id: staffId },
+            select: { user: { select: { fullName: true } } },
+          });
+
+          let itemPrice = variant.price;
+          let originalPrice: Prisma.Decimal | null = null;
+          if (activePromotion) {
+            const variantWithService = await tx.serviceVariant.findUnique({
+              where: { id: variant.id },
+              include: { service: { select: { categoryId: true } } },
+            });
+            const categoryId = variantWithService?.service.categoryId ?? null;
+            if (this.promotions.isServiceInScope(activePromotion, svc.serviceId, categoryId)) {
+              const saving = this.promotions.calcDiscount(activePromotion, Number(variant.price));
+              originalPrice = variant.price;
+              itemPrice = new Prisma.Decimal(Number(variant.price) - saving);
+            }
+          }
+
+          itemsData.push({
+            sortOrder: i,
+            serviceId: svc.serviceId,
+            variantId: variant.id,
+            staffId,
+            startTime: new Date(currentTime),
+            duration: variant.duration,
+            originalPrice,
+            price: itemPrice,
+            serviceName: variant.service.name,
+            variantName: variant.name,
+            staffName: staffRecord?.user?.fullName ?? null,
+            isStaffChosenByCustomer,
+          });
+
+          currentTime = new Date(currentTime.getTime() + variant.duration * 60 * 1000);
+        }
+
+        const totalDuration = itemsData.reduce((sum, item) => sum + item.duration, 0);
+        const totalPriceNum = itemsData.reduce((sum, item) => sum + Number(item.price), 0);
+        const totalPrice = new Prisma.Decimal(totalPriceNum);
+        const promotionDiscountNum = itemsData.reduce(
+          (sum, item) => sum + (item.originalPrice ? Number(item.originalPrice) - Number(item.price) : 0),
+          0,
+        );
+        const promotionDiscount = new Prisma.Decimal(promotionDiscountNum);
+        const promotionId = promotionDiscountNum > 0 ? activePromotion!.id : null;
+        const promotionName = promotionDiscountNum > 0 ? activePromotion!.name : null;
+
+        return tx.booking.create({
+          data: {
+            customerId: null,
+            customerName: dto.guestName.trim(),
+            customerPhone: dto.guestPhone?.trim() ?? null,
+            storeId,
+            scheduledAt: new Date(dto.scheduledAt),
+            totalDuration,
+            totalPrice,
+            promotionDiscount,
+            promotionName,
+            discountAmount: new Prisma.Decimal(0),
+            finalPrice: totalPrice.sub(promotionDiscount),
+            promotionId,
+            status: BookingStatus.CONFIRMED,
+            confirmedAt: new Date(),
+            notes: dto.notes,
+            items: { create: itemsData },
+          },
+          include: bookingInclude,
+        });
+      },
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+    );
+
+    const serviceNames = booking.items.map((item) => item.service.name).join(', ');
+    this.notifications
+      .notifyBookingCreated({
+        bookingId: booking.id,
+        storeId: booking.store.id,
+        storeName: booking.store.name,
+        customerName: booking.customerName ?? undefined,
+        serviceNames,
+        scheduledAt: booking.scheduledAt,
+      })
+      .catch(() => undefined);
+
+    this.systemLog.log({ type: LogType.BOOKING_CREATED, actorId, storeId: booking.storeId, targetId: booking.id, targetType: 'Booking', metadata: { scheduledAt: booking.scheduledAt, totalPrice: Number(booking.totalPrice), walkIn: true }, ipAddress });
 
     return booking;
   }
@@ -336,7 +495,7 @@ export class BookingsService {
       ...((filter.from || filter.to) && {
         scheduledAt: {
           ...(filter.from && { gte: new Date(filter.from) }),
-          ...(filter.to && { lte: new Date(filter.to) }),
+          ...(filter.to && { lte: new Date(filter.to + 'T23:59:59.999Z') }),
         },
       }),
       ...(filter.search && {
@@ -378,7 +537,7 @@ export class BookingsService {
       ...((filter.from || filter.to) && {
         scheduledAt: {
           ...(filter.from && { gte: new Date(filter.from) }),
-          ...(filter.to && { lte: new Date(filter.to) }),
+          ...(filter.to && { lte: new Date(filter.to + 'T23:59:59.999Z') }),
         },
       }),
       ...(filter.search && {
@@ -386,6 +545,7 @@ export class BookingsService {
           { customer: { fullName: { contains: filter.search } } },
           { customer: { email: { contains: filter.search } } },
           { customer: { phone: { contains: filter.search } } },
+          { customerName: { contains: filter.search } },
           { id: { contains: filter.search } },
         ],
       }),
@@ -490,9 +650,9 @@ export class BookingsService {
       this.notifications
         .notifyDepositRequired({
           bookingId: id,
-          customerId: updated.customer.id,
-          customerEmail: updated.customer.email,
-          customerName: updated.customer.fullName,
+          customerId: updated.customer?.id,
+          customerEmail: updated.customer?.email,
+          customerName: updated.customer?.fullName,
           storeName: updated.store.name,
           serviceNames,
           scheduledAt: updated.scheduledAt,
@@ -504,8 +664,8 @@ export class BookingsService {
       this.notifications
         .notifyBookingConfirmed({
           bookingId: id,
-          customerId: updated.customer.id,
-          customerEmail: updated.customer.email,
+          customerId: updated.customer?.id,
+          customerEmail: updated.customer?.email,
           storeName: updated.store.name,
           serviceNames,
           scheduledAt: updated.scheduledAt,
@@ -543,8 +703,8 @@ export class BookingsService {
     this.notifications
       .notifyBookingRejected({
         bookingId: id,
-        customerId: updated.customer.id,
-        customerEmail: updated.customer.email,
+        customerId: updated.customer?.id,
+        customerEmail: updated.customer?.email,
         storeName: updated.store.name,
         serviceNames: updated.items.map((i) => i.service.name).join(', '),
         reason,
@@ -572,8 +732,8 @@ export class BookingsService {
     this.notifications
       .notifyBookingCompleted({
         bookingId: id,
-        customerId: updated.customer.id,
-        customerEmail: updated.customer.email,
+        customerId: updated.customer?.id,
+        customerEmail: updated.customer?.email,
         storeName: updated.store.name,
         serviceNames: updated.items.map((i) => i.service.name).join(', '),
       })
@@ -627,9 +787,9 @@ export class BookingsService {
         bookingId: id,
         storeId: updated.store.id,
         storeName: updated.store.name,
-        customerId: updated.customer.id,
-        customerName: updated.customer.fullName,
-        customerEmail: updated.customer.email,
+        customerId: updated.customer?.id,
+        customerName: updated.customer?.fullName,
+        customerEmail: updated.customer?.email,
         serviceNames: updated.items.map((i) => i.service.name).join(', '),
         reason,
       })
@@ -649,7 +809,7 @@ export class BookingsService {
 
   private async assertBookingReadable(
     userId: string,
-    booking: { customerId: string; storeId: string },
+    booking: { customerId: string | null; storeId: string },
   ) {
     if (booking.customerId === userId) return;
     await this.assertStoreMember(userId, booking.storeId);
@@ -853,9 +1013,9 @@ export class BookingsService {
     this.notifications
       .notifyStaffChanged({
         bookingId,
-        customerId: booking.customer.id,
-        customerName: booking.customer.fullName,
-        customerEmail: booking.customer.email,
+        customerId: booking.customer?.id,
+        customerName: booking.customer?.fullName,
+        customerEmail: booking.customer?.email,
         storeName: booking.store.name,
         serviceName: item.service.name,
         newStaffName: newStaff.user.fullName,

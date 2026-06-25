@@ -78,8 +78,8 @@ export class CouponsService {
       ...(filter.search && { code: { contains: filter.search.toUpperCase() } }),
       ...(filter.type !== undefined && { type: filter.type }),
       ...(filter.isActive !== undefined && { isActive: filter.isActive }),
-      ...(filter.from && { startAt: { gte: new Date(filter.from) } }),
-      ...(filter.to && { OR: [{ expiredAt: { lte: new Date(filter.to) } }, { expiredAt: null }] }),
+      ...(filter.to && { startAt: { lte: new Date(filter.to) } }),
+      ...(filter.from && { OR: [{ expiredAt: { gte: new Date(filter.from) } }, { expiredAt: null }] }),
     };
 
     const [items, total] = await Promise.all([

@@ -20,6 +20,7 @@ import { BookingFilterDto } from './dto/booking-filter.dto';
 import { CalendarQueryDto } from './dto/calendar-query.dto';
 import { RejectBookingDto } from './dto/reject-booking.dto';
 import { RecordStorePaymentDto } from '../payments/dto/record-store-payment.dto';
+import { CreateWalkInBookingDto } from './dto/create-walkin-booking.dto';
 import { LogType } from '@prisma/client';
 
 @ApiTags('store-bookings')
@@ -190,6 +191,26 @@ export class StoreBookingsController {
   ) {
     const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ?? req.ip ?? '';
     return this.bookingsService.updateBookingItemStaff(bookingId, itemId, body.staffId, storeId, user.id, ip);
+  }
+
+  @Post('walk-in')
+  @RequirePermissions(Permissions.APPOINTMENT.CREATE)
+  @AuditLog({ type: LogType.BOOKING_CREATED, targetType: 'Booking' })
+  @ApiOperation({
+    summary: 'Tạo lịch hẹn cho khách vãng lai',
+    description: 'Nhân viên / quản lý tạo lịch hẹn tại quầy cho khách đến trực tiếp mà không có tài khoản.',
+  })
+  @ApiResponse({ status: 201, description: 'Tạo lịch hẹn vãng lai thành công' })
+  @ApiResponse({ status: 400, description: 'Dữ liệu không hợp lệ hoặc slot đã bị đặt' })
+  @ApiResponse({ status: 403, description: 'Không có quyền tạo lịch hẹn' })
+  createWalkIn(
+    @Body() dto: CreateWalkInBookingDto,
+    @StoreId() storeId: string,
+    @CurrentUser() user: CurrentUserPayload,
+    @Req() req: Request,
+  ) {
+    const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ?? req.ip ?? '';
+    return this.bookingsService.createWalkIn(dto, storeId, user.id, ip);
   }
 
   @Patch(':id/complete')

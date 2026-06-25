@@ -46,6 +46,7 @@ export class BookingReminderService implements OnModuleInit {
     });
 
     for (const booking of bookings) {
+      if (!booking.customer) continue;
       const serviceNames = booking.items.map((i) => i.service.name).join(', ');
       await this.notifications
         .notifyBookingReminder1Day({
@@ -86,6 +87,7 @@ export class BookingReminderService implements OnModuleInit {
     });
 
     for (const booking of bookings) {
+      if (!booking.customer) continue;
       const serviceNames = booking.items.map((i) => i.service.name).join(', ');
       await this.notifications
         .notifyBookingReminder1Hour({
@@ -124,6 +126,7 @@ export class BookingReminderService implements OnModuleInit {
     });
 
     for (const booking of bookings) {
+      if (!booking.customer) continue;
       const serviceNames = booking.items.map((i) => i.service.name).join(', ');
       await this.notifications
         .notifyDepositReminder({
@@ -154,6 +157,7 @@ export class BookingReminderService implements OnModuleInit {
     });
 
     for (const booking of bookings) {
+      if (!booking.customer) continue;
       const result = await this.prisma.booking.updateMany({
         where: { id: booking.id, status: BookingStatus.DEPOSIT_PENDING },
         data: {

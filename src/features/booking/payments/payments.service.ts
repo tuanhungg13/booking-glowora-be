@@ -190,7 +190,7 @@ export class PaymentsService {
       });
       this.systemLog.log({
         type: LogType.PAYMENT_FAILED,
-        actorId: payment.customer.id,
+        actorId: payment.customer?.id,
         storeId: payment.booking.storeId,
         targetId: payment.id,
         targetType: 'Payment',
@@ -213,7 +213,7 @@ export class PaymentsService {
     if (payment.type === PaymentType.DEPOSIT) {
       this.systemLog.log({
         type: LogType.BOOKING_DEPOSIT_PAID,
-        actorId: payment.customer.id,
+        actorId: payment.customer?.id,
         storeId: payment.booking.storeId,
         targetId: payment.id,
         targetType: 'Payment',
@@ -224,9 +224,9 @@ export class PaymentsService {
           bookingId: payment.bookingId,
           storeId: payment.booking.storeId,
           storeName: payment.booking.store.name,
-          customerId: payment.customer.id,
-          customerName: payment.customer.fullName,
-          customerEmail: payment.customer.email,
+          customerId: payment.customer?.id,
+          customerName: payment.customer?.fullName,
+          customerEmail: payment.customer?.email,
           serviceNames,
           depositAmount: Number(payment.amount),
         })
@@ -234,7 +234,7 @@ export class PaymentsService {
     } else {
       this.systemLog.log({
         type: LogType.PAYMENT_COMPLETED,
-        actorId: payment.customer.id,
+        actorId: payment.customer?.id,
         storeId: payment.booking.storeId,
         targetId: payment.id,
         targetType: 'Payment',
@@ -243,9 +243,9 @@ export class PaymentsService {
       this.notifications
         .notifyPaymentSuccess({
           bookingId: payment.bookingId,
-          customerId: payment.customer.id,
-          customerEmail: payment.customer.email,
-          customerName: payment.customer.fullName,
+          customerId: payment.customer?.id,
+          customerEmail: payment.customer?.email,
+          customerName: payment.customer?.fullName,
           amount: Number(payment.amount),
           storeName: payment.booking.store.name,
           serviceNames,
@@ -340,7 +340,7 @@ export class PaymentsService {
     staffId: string,
     amount: Prisma.Decimal,
     paymentType: PaymentType,
-    customerId: string,
+    customerId: string | null,
   ) {
     const now = new Date();
     const paymentCreate = this.prisma.payment.create({
@@ -406,7 +406,7 @@ export class PaymentsService {
     storeId: string,
     amount: Prisma.Decimal,
     paymentType: PaymentType,
-    customerId: string,
+    customerId: string | null,
     paymentConfig: { bankBin: string; bankAccountNo: string; bankAccountName: string },
   ) {
     await this.prisma.payment.updateMany({

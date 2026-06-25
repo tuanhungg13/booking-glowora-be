@@ -35,6 +35,9 @@ export class ReviewsService {
       include: { booking: true },
     });
     if (!bookingItem) throw new NotFoundException('Không tìm thấy dịch vụ trong lịch đặt');
+    if (!bookingItem.booking.customerId) {
+      throw new BadRequestException('Lịch hẹn vãng lai không hỗ trợ đánh giá');
+    }
     if (customerId && bookingItem.booking.customerId !== customerId) {
       throw new BadRequestException('Không thể đánh giá lịch đặt của người khác');
     }
@@ -52,7 +55,7 @@ export class ReviewsService {
         data: {
           bookingItemId: itemId,
           bookingId: bookingItem.bookingId,
-          customerId: bookingItem.booking.customerId,
+          customerId: bookingItem.booking.customerId!,
           storeId: bookingItem.booking.storeId,
           serviceId: bookingItem.serviceId,
           staffId: bookingItem.staffId,

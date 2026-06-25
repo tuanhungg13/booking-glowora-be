@@ -105,14 +105,15 @@ export class NotificationsService {
     bookingId: string;
     storeId: string;
     storeName: string;
-    customerId: string;
-    customerName: string;
-    customerEmail: string;
+    customerId?: string;
+    customerName?: string;
+    customerEmail?: string;
     serviceNames: string;
     scheduledAt: Date;
   }) {
     const { bookingId, storeId, storeName, customerId, customerName, customerEmail, serviceNames, scheduledAt } = params;
     const timeStr = this.formatDateTime(scheduledAt);
+    const displayName = customerName ?? 'Khách vãng lai';
 
     const ownerRole = await this.prisma.userRole.findFirst({
       where: { storeId, role: { code: 'SHOP_OWNER' } },
@@ -124,47 +125,52 @@ export class NotificationsService {
           bookingId,
           type: NotificationType.BOOKING_CREATED,
           title: `Lịch hẹn mới tại ${storeName}`,
-          body: `${customerName} đã đặt ${serviceNames} vào ${timeStr}`,
+          body: `${displayName} đã đặt ${serviceNames} vào ${timeStr}`,
         },
       });
       this.gateway.emitToUser(ownerRole.userId, 'notification_received', ownerNotif);
       this.push(ownerRole.userId, ownerNotif.title, ownerNotif.body, { bookingId });
     }
 
-    const customerNotif = await this.prisma.notification.create({
-      data: {
-        userId: customerId,
-        bookingId,
-        type: NotificationType.BOOKING_CREATED,
-        title: 'Đặt lịch thành công',
-        body: `Lịch hẹn ${serviceNames} tại ${storeName} vào ${timeStr} đang chờ xác nhận.`,
-      },
-    });
-    this.gateway.emitToUser(customerId, 'notification_received', customerNotif);
-    this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
+    if (customerId) {
+      const customerNotif = await this.prisma.notification.create({
+        data: {
+          userId: customerId,
+          bookingId,
+          type: NotificationType.BOOKING_CREATED,
+          title: 'Đặt lịch thành công',
+          body: `Lịch hẹn ${serviceNames} tại ${storeName} vào ${timeStr} đang chờ xác nhận.`,
+        },
+      });
+      this.gateway.emitToUser(customerId, 'notification_received', customerNotif);
+      this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
+    }
 
-    this.mail
-      .sendBookingEvent({
-        email: customerEmail,
-        fullName: customerName,
-        storeName,
-        serviceNames,
-        scheduledAt: timeStr,
-        eventType: 'CREATED',
-      })
-      .catch((err: Error) => this.logger.warn(`Email CREATED failed for ${customerEmail}: ${err?.message}`));
+    if (customerEmail) {
+      this.mail
+        .sendBookingEvent({
+          email: customerEmail,
+          fullName: displayName,
+          storeName,
+          serviceNames,
+          scheduledAt: timeStr,
+          eventType: 'CREATED',
+        })
+        .catch((err: Error) => this.logger.warn(`Email CREATED failed for ${customerEmail}: ${err?.message}`));
+    }
   }
 
   async notifyBookingConfirmed(params: {
     bookingId: string;
-    customerId: string;
-    customerEmail: string;
+    customerId?: string;
+    customerEmail?: string;
     customerName?: string;
     storeName: string;
     serviceNames: string;
     scheduledAt: Date;
   }) {
     const { bookingId, customerId, customerEmail, customerName, storeName, serviceNames, scheduledAt } = params;
+    if (!customerId) return;
     const timeStr = this.formatDateTime(scheduledAt);
 
     const notif = await this.prisma.notification.create({
@@ -179,28 +185,31 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    this.mail
-      .sendBookingEvent({
-        email: customerEmail,
-        fullName: customerName ?? customerEmail,
-        storeName,
-        serviceNames,
-        scheduledAt: timeStr,
-        eventType: 'CONFIRMED',
-      })
-      .catch((err: Error) => this.logger.warn(`Email CONFIRMED failed for ${customerEmail}: ${err?.message}`));
+    if (customerEmail) {
+      this.mail
+        .sendBookingEvent({
+          email: customerEmail,
+          fullName: customerName ?? customerEmail,
+          storeName,
+          serviceNames,
+          scheduledAt: timeStr,
+          eventType: 'CONFIRMED',
+        })
+        .catch((err: Error) => this.logger.warn(`Email CONFIRMED failed for ${customerEmail}: ${err?.message}`));
+    }
   }
 
   async notifyBookingRejected(params: {
     bookingId: string;
-    customerId: string;
-    customerEmail: string;
+    customerId?: string;
+    customerEmail?: string;
     customerName?: string;
     storeName: string;
     serviceNames: string;
     reason: string;
   }) {
     const { bookingId, customerId, customerEmail, customerName, storeName, serviceNames, reason } = params;
+    if (!customerId) return;
 
     const notif = await this.prisma.notification.create({
       data: {
@@ -214,27 +223,30 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    this.mail
-      .sendBookingEvent({
-        email: customerEmail,
-        fullName: customerName ?? customerEmail,
-        storeName,
-        serviceNames,
-        reason,
-        eventType: 'REJECTED',
-      })
-      .catch((err: Error) => this.logger.warn(`Email REJECTED failed for ${customerEmail}: ${err?.message}`));
+    if (customerEmail) {
+      this.mail
+        .sendBookingEvent({
+          email: customerEmail,
+          fullName: customerName ?? customerEmail,
+          storeName,
+          serviceNames,
+          reason,
+          eventType: 'REJECTED',
+        })
+        .catch((err: Error) => this.logger.warn(`Email REJECTED failed for ${customerEmail}: ${err?.message}`));
+    }
   }
 
   async notifyBookingCompleted(params: {
     bookingId: string;
-    customerId: string;
-    customerEmail: string;
+    customerId?: string;
+    customerEmail?: string;
     customerName?: string;
     storeName: string;
     serviceNames: string;
   }) {
     const { bookingId, customerId, customerEmail, customerName, storeName, serviceNames } = params;
+    if (!customerId) return;
 
     const notif = await this.prisma.notification.create({
       data: {
@@ -248,28 +260,31 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    this.mail
-      .sendBookingEvent({
-        email: customerEmail,
-        fullName: customerName ?? customerEmail,
-        storeName,
-        serviceNames,
-        eventType: 'COMPLETED',
-      })
-      .catch((err: Error) => this.logger.warn(`Email COMPLETED failed for ${customerEmail}: ${err?.message}`));
+    if (customerEmail) {
+      this.mail
+        .sendBookingEvent({
+          email: customerEmail,
+          fullName: customerName ?? customerEmail,
+          storeName,
+          serviceNames,
+          eventType: 'COMPLETED',
+        })
+        .catch((err: Error) => this.logger.warn(`Email COMPLETED failed for ${customerEmail}: ${err?.message}`));
+    }
   }
 
   async notifyBookingCancelled(params: {
     bookingId: string;
     storeId: string;
     storeName: string;
-    customerId: string;
-    customerName: string;
-    customerEmail: string;
+    customerId?: string;
+    customerName?: string;
+    customerEmail?: string;
     serviceNames: string;
     reason?: string;
   }) {
     const { bookingId, storeId, storeName, customerId, customerName, customerEmail, serviceNames, reason } = params;
+    const displayName = customerName ?? 'Khách vãng lai';
 
     const ownerRole = await this.prisma.userRole.findFirst({
       where: { storeId, role: { code: 'SHOP_OWNER' } },
@@ -280,48 +295,53 @@ export class NotificationsService {
           userId: ownerRole.userId,
           bookingId,
           type: NotificationType.BOOKING_CANCELLED,
-          title: 'Khách đã hủy lịch hẹn',
-          body: `${customerName} đã hủy lịch hẹn ${serviceNames}.${reason ? ` Lý do: ${reason}` : ''}`,
+          title: 'Lịch hẹn đã bị hủy',
+          body: `${displayName} đã hủy lịch hẹn ${serviceNames}.${reason ? ` Lý do: ${reason}` : ''}`,
         },
       });
       this.gateway.emitToUser(ownerRole.userId, 'notification_received', ownerNotif);
       this.push(ownerRole.userId, ownerNotif.title, ownerNotif.body, { bookingId });
     }
 
-    const customerNotif = await this.prisma.notification.create({
-      data: {
-        userId: customerId,
-        bookingId,
-        type: NotificationType.BOOKING_CANCELLED,
-        title: 'Lịch hẹn đã bị hủy',
-        body: `Lịch hẹn ${serviceNames} tại ${storeName} đã được hủy.`,
-      },
-    });
-    this.gateway.emitToUser(customerId, 'notification_received', customerNotif);
-    this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
+    if (customerId) {
+      const customerNotif = await this.prisma.notification.create({
+        data: {
+          userId: customerId,
+          bookingId,
+          type: NotificationType.BOOKING_CANCELLED,
+          title: 'Lịch hẹn đã bị hủy',
+          body: `Lịch hẹn ${serviceNames} tại ${storeName} đã được hủy.`,
+        },
+      });
+      this.gateway.emitToUser(customerId, 'notification_received', customerNotif);
+      this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
+    }
 
-    this.mail
-      .sendBookingEvent({
-        email: customerEmail,
-        fullName: customerName,
-        storeName,
-        serviceNames,
-        reason,
-        eventType: 'CANCELLED',
-      })
-      .catch((err: Error) => this.logger.warn(`Email CANCELLED failed for ${customerEmail}: ${err?.message}`));
+    if (customerEmail) {
+      this.mail
+        .sendBookingEvent({
+          email: customerEmail,
+          fullName: displayName,
+          storeName,
+          serviceNames,
+          reason,
+          eventType: 'CANCELLED',
+        })
+        .catch((err: Error) => this.logger.warn(`Email CANCELLED failed for ${customerEmail}: ${err?.message}`));
+    }
   }
 
   async notifyPaymentSuccess(params: {
     bookingId: string;
-    customerId: string;
-    customerEmail: string;
-    customerName: string;
+    customerId?: string;
+    customerEmail?: string;
+    customerName?: string;
     amount: number;
     storeName: string;
     serviceNames: string;
   }) {
     const { bookingId, customerId, customerEmail, customerName, storeName, serviceNames, amount } = params;
+    if (!customerId) return;
     const formattedAmount = amount.toLocaleString('vi-VN');
 
     const notif = await this.prisma.notification.create({
@@ -336,16 +356,18 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    this.mail
-      .sendBookingEvent({
-        email: customerEmail,
-        fullName: customerName,
-        storeName,
-        serviceNames,
-        amount: `${formattedAmount}₫`,
-        eventType: 'PAYMENT_SUCCESS',
-      })
-      .catch((err: Error) => this.logger.warn(`Email PAYMENT_SUCCESS failed for ${customerEmail}: ${err?.message}`));
+    if (customerEmail) {
+      this.mail
+        .sendBookingEvent({
+          email: customerEmail,
+          fullName: customerName ?? customerEmail,
+          storeName,
+          serviceNames,
+          amount: `${formattedAmount}₫`,
+          eventType: 'PAYMENT_SUCCESS',
+        })
+        .catch((err: Error) => this.logger.warn(`Email PAYMENT_SUCCESS failed for ${customerEmail}: ${err?.message}`));
+    }
   }
 
   async notifyDepositReminder(params: {
@@ -368,8 +390,8 @@ export class NotificationsService {
 
   async notifyDepositRequired(params: {
     bookingId: string;
-    customerId: string;
-    customerEmail: string;
+    customerId?: string;
+    customerEmail?: string;
     customerName?: string;
     storeName: string;
     serviceNames: string;
@@ -378,6 +400,7 @@ export class NotificationsService {
     depositDeadline: Date;
   }) {
     const { bookingId, customerId, customerEmail, customerName, storeName, serviceNames, scheduledAt, depositAmount, depositDeadline } = params;
+    if (!customerId) return;
     const timeStr = this.formatDateTime(scheduledAt);
     const deadlineStr = this.formatDateTime(depositDeadline);
     const formattedAmount = depositAmount.toLocaleString('vi-VN');
@@ -394,32 +417,35 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    this.mail
-      .sendBookingEvent({
-        email: customerEmail,
-        fullName: customerName ?? customerEmail,
-        storeName,
-        serviceNames,
-        scheduledAt: timeStr,
-        amount: `${formattedAmount}₫`,
-        depositDeadline: deadlineStr,
-        eventType: 'DEPOSIT_REQUIRED',
-      })
-      .catch((err: Error) => this.logger.warn(`Email DEPOSIT_REQUIRED failed for ${customerEmail}: ${err?.message}`));
+    if (customerEmail) {
+      this.mail
+        .sendBookingEvent({
+          email: customerEmail,
+          fullName: customerName ?? customerEmail,
+          storeName,
+          serviceNames,
+          scheduledAt: timeStr,
+          amount: `${formattedAmount}₫`,
+          depositDeadline: deadlineStr,
+          eventType: 'DEPOSIT_REQUIRED',
+        })
+        .catch((err: Error) => this.logger.warn(`Email DEPOSIT_REQUIRED failed for ${customerEmail}: ${err?.message}`));
+    }
   }
 
   async notifyDepositPaid(params: {
     bookingId: string;
     storeId: string;
     storeName: string;
-    customerId: string;
-    customerName: string;
-    customerEmail: string;
+    customerId?: string;
+    customerName?: string;
+    customerEmail?: string;
     serviceNames: string;
     depositAmount: number;
   }) {
     const { bookingId, storeId, storeName, customerId, customerName, customerEmail, serviceNames, depositAmount } = params;
     const formattedAmount = depositAmount.toLocaleString('vi-VN');
+    const displayName = customerName ?? 'Khách vãng lai';
 
     const ownerRole = await this.prisma.userRole.findFirst({
       where: { storeId, role: { code: 'SHOP_OWNER' } },
@@ -431,47 +457,52 @@ export class NotificationsService {
           bookingId,
           type: NotificationType.BOOKING_DEPOSIT_PAID,
           title: 'Khách đã thanh toán tiền cọc',
-          body: `${customerName} đã đặt cọc ${formattedAmount}₫ cho lịch hẹn ${serviceNames}.`,
+          body: `${displayName} đã đặt cọc ${formattedAmount}₫ cho lịch hẹn ${serviceNames}.`,
         },
       });
       this.gateway.emitToUser(ownerRole.userId, 'notification_received', ownerNotif);
       this.push(ownerRole.userId, ownerNotif.title, ownerNotif.body, { bookingId });
     }
 
-    const customerNotif = await this.prisma.notification.create({
-      data: {
-        userId: customerId,
-        bookingId,
-        type: NotificationType.BOOKING_DEPOSIT_PAID,
-        title: 'Đặt cọc thành công',
-        body: `Bạn đã đặt cọc ${formattedAmount}₫ cho ${serviceNames} tại ${storeName}. Lịch hẹn của bạn đã được giữ chỗ.`,
-      },
-    });
-    this.gateway.emitToUser(customerId, 'notification_received', customerNotif);
-    this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
+    if (customerId) {
+      const customerNotif = await this.prisma.notification.create({
+        data: {
+          userId: customerId,
+          bookingId,
+          type: NotificationType.BOOKING_DEPOSIT_PAID,
+          title: 'Đặt cọc thành công',
+          body: `Bạn đã đặt cọc ${formattedAmount}₫ cho ${serviceNames} tại ${storeName}. Lịch hẹn của bạn đã được giữ chỗ.`,
+        },
+      });
+      this.gateway.emitToUser(customerId, 'notification_received', customerNotif);
+      this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
+    }
 
-    this.mail
-      .sendBookingEvent({
-        email: customerEmail,
-        fullName: customerName,
-        storeName,
-        serviceNames,
-        amount: `${formattedAmount}₫`,
-        eventType: 'DEPOSIT_PAID',
-      })
-      .catch((err: Error) => this.logger.warn(`Email DEPOSIT_PAID failed for ${customerEmail}: ${err?.message}`));
+    if (customerEmail) {
+      this.mail
+        .sendBookingEvent({
+          email: customerEmail,
+          fullName: displayName,
+          storeName,
+          serviceNames,
+          amount: `${formattedAmount}₫`,
+          eventType: 'DEPOSIT_PAID',
+        })
+        .catch((err: Error) => this.logger.warn(`Email DEPOSIT_PAID failed for ${customerEmail}: ${err?.message}`));
+    }
   }
 
   async notifyDepositExpired(params: {
     bookingId: string;
     storeId: string;
     storeName: string;
-    customerId: string;
-    customerName: string;
-    customerEmail: string;
+    customerId?: string;
+    customerName?: string;
+    customerEmail?: string;
     serviceNames: string;
   }) {
     const { bookingId, storeId, storeName, customerId, customerName, customerEmail, serviceNames } = params;
+    const displayName = customerName ?? 'Khách vãng lai';
 
     const ownerRole = await this.prisma.userRole.findFirst({
       where: { storeId, role: { code: 'SHOP_OWNER' } },
@@ -483,46 +514,51 @@ export class NotificationsService {
           bookingId,
           type: NotificationType.BOOKING_DEPOSIT_EXPIRED,
           title: 'Lịch hẹn bị hủy do không cọc đúng hạn',
-          body: `${customerName} không thanh toán cọc đúng hạn. Lịch hẹn ${serviceNames} đã được hủy tự động.`,
+          body: `${displayName} không thanh toán cọc đúng hạn. Lịch hẹn ${serviceNames} đã được hủy tự động.`,
         },
       });
       this.gateway.emitToUser(ownerRole.userId, 'notification_received', ownerNotif);
       this.push(ownerRole.userId, ownerNotif.title, ownerNotif.body, { bookingId });
     }
 
-    const customerNotif = await this.prisma.notification.create({
-      data: {
-        userId: customerId,
-        bookingId,
-        type: NotificationType.BOOKING_DEPOSIT_EXPIRED,
-        title: 'Lịch hẹn đã bị hủy',
-        body: `Lịch hẹn ${serviceNames} tại ${storeName} đã bị hủy do bạn không thanh toán tiền cọc đúng hạn.`,
-      },
-    });
-    this.gateway.emitToUser(customerId, 'notification_received', customerNotif);
-    this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
+    if (customerId) {
+      const customerNotif = await this.prisma.notification.create({
+        data: {
+          userId: customerId,
+          bookingId,
+          type: NotificationType.BOOKING_DEPOSIT_EXPIRED,
+          title: 'Lịch hẹn đã bị hủy',
+          body: `Lịch hẹn ${serviceNames} tại ${storeName} đã bị hủy do bạn không thanh toán tiền cọc đúng hạn.`,
+        },
+      });
+      this.gateway.emitToUser(customerId, 'notification_received', customerNotif);
+      this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
+    }
 
-    this.mail
-      .sendBookingEvent({
-        email: customerEmail,
-        fullName: customerName,
-        storeName,
-        serviceNames,
-        eventType: 'CANCELLED',
-      })
-      .catch((err: Error) => this.logger.warn(`Email DEPOSIT_EXPIRED failed for ${customerEmail}: ${err?.message}`));
+    if (customerEmail) {
+      this.mail
+        .sendBookingEvent({
+          email: customerEmail,
+          fullName: displayName,
+          storeName,
+          serviceNames,
+          eventType: 'CANCELLED',
+        })
+        .catch((err: Error) => this.logger.warn(`Email DEPOSIT_EXPIRED failed for ${customerEmail}: ${err?.message}`));
+    }
   }
 
   async notifyBookingReminder1Day(params: {
     bookingId: string;
-    customerId: string;
-    customerEmail: string;
-    customerName: string;
+    customerId?: string;
+    customerEmail?: string;
+    customerName?: string;
     storeName: string;
     serviceNames: string;
     scheduledAt: Date;
   }) {
     const { bookingId, customerId, customerEmail, customerName, storeName, serviceNames, scheduledAt } = params;
+    if (!customerId) return;
     const timeStr = this.formatDateTime(scheduledAt);
 
     const notif = await this.prisma.notification.create({
@@ -537,28 +573,31 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    this.mail
-      .sendBookingReminder({
-        email: customerEmail,
-        fullName: customerName,
-        storeName,
-        serviceNames,
-        scheduledAt: timeStr,
-        isOneDayReminder: true,
-      })
-      .catch((err: Error) => this.logger.warn(`Reminder 1-day email failed for ${customerEmail}: ${err?.message}`));
+    if (customerEmail) {
+      this.mail
+        .sendBookingReminder({
+          email: customerEmail,
+          fullName: customerName ?? customerEmail,
+          storeName,
+          serviceNames,
+          scheduledAt: timeStr,
+          isOneDayReminder: true,
+        })
+        .catch((err: Error) => this.logger.warn(`Reminder 1-day email failed for ${customerEmail}: ${err?.message}`));
+    }
   }
 
   async notifyBookingReminder1Hour(params: {
     bookingId: string;
-    customerId: string;
-    customerEmail: string;
-    customerName: string;
+    customerId?: string;
+    customerEmail?: string;
+    customerName?: string;
     storeName: string;
     serviceNames: string;
     scheduledAt: Date;
   }) {
     const { bookingId, customerId, customerEmail, customerName, storeName, serviceNames, scheduledAt } = params;
+    if (!customerId) return;
     const timeStr = this.formatDateTime(scheduledAt);
 
     const notif = await this.prisma.notification.create({
@@ -573,29 +612,32 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    this.mail
-      .sendBookingReminder({
-        email: customerEmail,
-        fullName: customerName,
-        storeName,
-        serviceNames,
-        scheduledAt: timeStr,
-        isOneDayReminder: false,
-      })
-      .catch((err: Error) => this.logger.warn(`Reminder 1-hour email failed for ${customerEmail}: ${err?.message}`));
+    if (customerEmail) {
+      this.mail
+        .sendBookingReminder({
+          email: customerEmail,
+          fullName: customerName ?? customerEmail,
+          storeName,
+          serviceNames,
+          scheduledAt: timeStr,
+          isOneDayReminder: false,
+        })
+        .catch((err: Error) => this.logger.warn(`Reminder 1-hour email failed for ${customerEmail}: ${err?.message}`));
+    }
   }
 
   async notifyStaffChanged(params: {
     bookingId: string;
-    customerId: string;
-    customerName: string;
-    customerEmail: string;
+    customerId?: string;
+    customerName?: string;
+    customerEmail?: string;
     storeName: string;
     serviceName: string;
     newStaffName: string;
     scheduledAt: Date;
   }) {
     const { bookingId, customerId, customerName, customerEmail, storeName, serviceName, newStaffName, scheduledAt } = params;
+    if (!customerId) return;
     const timeStr = this.formatDateTime(scheduledAt);
 
     const notif = await this.prisma.notification.create({
@@ -610,20 +652,22 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    this.mail
-      .sendStaffNotification({
-        email: customerEmail,
-        fullName: customerName,
-        subject: `Nhân viên thực hiện dịch vụ đã thay đổi`,
-        body: `Dịch vụ ${serviceName} tại ${storeName} vào ${timeStr} sẽ được thực hiện bởi ${newStaffName}.`,
-        details: [
-          { label: 'Dịch vụ', value: serviceName },
-          { label: 'Nhân viên mới', value: newStaffName },
-          { label: 'Thời gian', value: timeStr },
-          { label: 'Cơ sở', value: storeName },
-        ],
-      })
-      .catch((err: Error) => this.logger.warn(`Email STAFF_CHANGED failed for ${customerEmail}: ${err?.message}`));
+    if (customerEmail) {
+      this.mail
+        .sendStaffNotification({
+          email: customerEmail,
+          fullName: customerName ?? customerEmail,
+          subject: `Nhân viên thực hiện dịch vụ đã thay đổi`,
+          body: `Dịch vụ ${serviceName} tại ${storeName} vào ${timeStr} sẽ được thực hiện bởi ${newStaffName}.`,
+          details: [
+            { label: 'Dịch vụ', value: serviceName },
+            { label: 'Nhân viên mới', value: newStaffName },
+            { label: 'Thời gian', value: timeStr },
+            { label: 'Cơ sở', value: storeName },
+          ],
+        })
+        .catch((err: Error) => this.logger.warn(`Email STAFF_CHANGED failed for ${customerEmail}: ${err?.message}`));
+    }
   }
 
   private push(userId: string, title: string, body: string, data?: Record<string, unknown>) {

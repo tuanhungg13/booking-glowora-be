@@ -37,6 +37,10 @@ export class PromotionsService {
       throw new BadRequestException('Phải chọn ít nhất 1 dịch vụ khi scope = SERVICE');
     }
 
+    if (dto.type === CouponType.FIXED) {
+      await this.assertFixedValueBelowMinPrice(dto.value, dto.scope, storeId, dto.serviceIds, dto.categoryIds);
+    }
+
     // Promotion mới mặc định isActive=true — kiểm tra trùng lịch ngay khi tạo
     await this.assertNoOverlappingActive(
       storeId,
@@ -88,6 +92,8 @@ export class PromotionsService {
       ...(filter.q && { name: { contains: filter.q } }),
       ...(filter.type && { type: filter.type }),
       ...(filter.scope && { scope: filter.scope }),
+      ...(filter.to && { startAt: { lte: new Date(filter.to) } }),
+      ...(filter.from && { OR: [{ endAt: { gte: new Date(filter.from) } }, { endAt: null }] }),
     };
 
     const [items, total] = await Promise.all([
@@ -217,6 +223,36 @@ export class PromotionsService {
   assertStoreOwner(promotionStoreId: string, storeId: string) {
     if (promotionStoreId !== storeId) {
       throw new ForbiddenException('Bạn không có quyền thao tác promotion này');
+    }
+  }
+
+  private async assertFixedValueBelowMinPrice(
+    value: number,
+    scope: PromotionScope,
+    storeId: string,
+    serviceIds?: string[],
+    categoryIds?: string[],
+  ): Promise<void> {
+    const result = await this.prisma.serviceVariant.aggregate({
+      _min: { price: true },
+      where: {
+        status: 'ACTIVE',
+        service: {
+          status: 'ACTIVE',
+          ...(scope === PromotionScope.SERVICE && { id: { in: serviceIds } }),
+          ...(scope === PromotionScope.CATEGORY && { categoryId: { in: categoryIds }, storeId }),
+          ...(scope === PromotionScope.STORE && { storeId }),
+        },
+      },
+    });
+
+    const minPrice = result._min.price;
+    if (minPrice === null) return;
+
+    if (value >= Number(minPrice)) {
+      throw new BadRequestException(
+        `Giá trị giảm cố định (${value.toLocaleString('vi-VN')}đ) phải nhỏ hơn giá thấp nhất của dịch vụ áp dụng (${Number(minPrice).toLocaleString('vi-VN')}đ)`,
+      );
     }
   }
 
