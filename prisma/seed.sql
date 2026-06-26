@@ -81,10 +81,11 @@ INSERT IGNORE INTO `permissions` (id, code, name, description) VALUES
   ('cee1ed31-bbac-4887-9351-add6aed386ca', 'UPDATE_STAFF_SCHEDULE','Cap nhat lich lam',  'Chinh sua lich lam viec'),
   ('70a58ac0-8455-4cfc-9a42-9577ddeecfaf', 'DELETE_STAFF_SCHEDULE','Xoa lich lam viec',  'Xoa lich lam viec'),
 
-  ('99d45ffc-361d-4ed0-82cd-9b77d05859d8', 'CREATE_STAFF_DAY_OFF','Tao ngay nghi',       'Tao ngay nghi cho nhan vien'),
-  ('6e46d656-ae2b-42da-b296-936528b3ff20', 'VIEW_STAFF_DAY_OFF',  'Xem ngay nghi',       'Xem danh sach ngay nghi'),
-  ('de6e6f36-8ce0-4b18-9e89-c080fabb5df0', 'UPDATE_STAFF_DAY_OFF','Cap nhat ngay nghi',  'Chinh sua ngay nghi'),
-  ('85de9f10-aeab-4669-a1d1-c51a66355ef7', 'DELETE_STAFF_DAY_OFF','Xoa ngay nghi',       'Xoa ngay nghi'),
+  ('99d45ffc-361d-4ed0-82cd-9b77d05859d8', 'CREATE_STAFF_DAY_OFF','Tao ngay nghi cho nhan vien', 'Tao ngay nghi cho bat ky nhan vien'),
+  ('f1a2b3c4-d5e6-7890-abcd-ef1234567890', 'REQUEST_OWN_DAY_OFF', 'Tu dang ky ngay nghi',       'Nhan vien tu xin nghi cho ban than'),
+  ('6e46d656-ae2b-42da-b296-936528b3ff20', 'VIEW_STAFF_DAY_OFF',  'Xem ngay nghi',              'Xem danh sach ngay nghi'),
+  ('de6e6f36-8ce0-4b18-9e89-c080fabb5df0', 'UPDATE_STAFF_DAY_OFF','Cap nhat ngay nghi',         'Chinh sua ngay nghi'),
+  ('85de9f10-aeab-4669-a1d1-c51a66355ef7', 'DELETE_STAFF_DAY_OFF','Xoa ngay nghi',              'Xoa ngay nghi'),
 
   ('4e3159ad-05b0-4ea1-8303-aa725dc7928d', 'CREATE_WORKING_HOUR','Tao gio lam viec',     'Tao gio lam viec cua hang'),
   ('3b973fcf-4562-4d00-8cfc-36669caaaa87', 'VIEW_WORKING_HOUR',  'Xem gio lam viec',     'Xem gio lam viec cua hang'),
@@ -166,9 +167,9 @@ WHERE code IN (
   -- Messaging
   'CREATE_CONVERSATION', 'VIEW_CONVERSATION',
   'CREATE_MESSAGE',      'VIEW_MESSAGE',
-  -- View own schedule
+  -- View own schedule & self-request day-off
   'VIEW_STAFF_SCHEDULE', 'VIEW_STAFF_DAY_OFF',
-  'CREATE_STAFF_DAY_OFF',
+  'REQUEST_OWN_DAY_OFF',
   -- Notifications
   'VIEW_NOTIFICATION'
 );

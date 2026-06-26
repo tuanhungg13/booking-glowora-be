@@ -102,6 +102,19 @@ export class StaffDayOffController {
     return this.staffDayOffService.update(id, storeId, staffId, dto);
   }
 
+  @ApiOperation({ summary: 'Nhân viên tự hủy yêu cầu nghỉ PENDING của mình' })
+  @ApiParam({ name: 'staffId', description: 'Staff ID' })
+  @ApiParam({ name: 'id', description: 'Day-off ID' })
+  @Delete(':id/cancel')
+  cancelOwn(
+    @StoreId() storeId: string,
+    @Param('staffId') staffId: string,
+    @Param('id') id: string,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return this.staffDayOffService.cancelOwn(id, storeId, staffId, user.id);
+  }
+
   @ApiOperation({ summary: 'Hủy ngày nghỉ (không được hủy nếu đã APPROVED)' })
   @ApiParam({ name: 'staffId', description: 'Staff ID' })
   @ApiParam({ name: 'id', description: 'Day-off ID' })

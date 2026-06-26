@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DayOffStatus, NotificationType } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
@@ -93,6 +93,15 @@ export class StaffDayOffService {
     }
 
     return dayOff;
+  }
+
+  async requestOwn(storeId: string, callerUserId: string, dto: CreateStaffDayOffDto) {
+    const staff = await this.prisma.staff.findFirst({
+      where: { storeId, userId: callerUserId, status: 'ACTIVE' },
+      select: { id: true },
+    });
+    if (!staff) throw new ForbiddenException('Bạn không phải nhân viên của cửa hàng này');
+    return this.create(storeId, staff.id, dto);
   }
 
   async review(id: string, storeId: string, staffId: string, reviewerUserId: string, action: DayOffReviewAction, note?: string) {
@@ -194,6 +203,21 @@ export class StaffDayOffService {
     const dayOff = await this.findOne(id, storeId, staffId);
     if (dayOff.status === DayOffStatus.APPROVED) {
       throw new BadRequestException('Không thể hủy ngày nghỉ đã được duyệt');
+    }
+    await this.prisma.staffDayOff.delete({ where: { id } });
+    return { deleted: true };
+  }
+
+  async cancelOwn(id: string, storeId: string, staffId: string, callerUserId: string) {
+    const staff = await this.prisma.staff.findFirst({
+      where: { id: staffId, storeId, userId: callerUserId },
+      select: { id: true },
+    });
+    if (!staff) throw new ForbiddenException('Bạn không có quyền hủy yêu cầu này');
+
+    const dayOff = await this.findOne(id, storeId, staffId);
+    if (dayOff.status !== DayOffStatus.PENDING) {
+      throw new BadRequestException('Chỉ có thể hủy yêu cầu đang chờ duyệt');
     }
     await this.prisma.staffDayOff.delete({ where: { id } });
     return { deleted: true };

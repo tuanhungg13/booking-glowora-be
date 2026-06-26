@@ -8,7 +8,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { DayOffStatus, NotificationType, StaffStatus } from '@prisma/client';
+import { BookingStatus, CallInStatus, DayOfWeek, DayOffStatus, NotificationType, StaffStatus } from '@prisma/client';
+
+const DOW_MAP: DayOfWeek[] = [
+  DayOfWeek.SUNDAY, DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,
+  DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY,
+];
 import { PrismaService } from '../../../prisma/prisma.service';
 import { PermissionCacheService } from '../../../redis/permission-cache.service';
 import { ChatGateway } from '../../../gateways/chat.gateway';
@@ -302,5 +307,142 @@ export class StoreStaffService {
 
   async getMyProfile(storeId: string, userId: string) {
     return this.findActiveStaffOrRestoreOwner(storeId, userId);
+  }
+
+  async getDailyTimeline(storeId: string, date: string, staffId?: string) {
+    const dayStart  = new Date(`${date}T00:00:00.000Z`);
+    const dayEnd    = new Date(`${date}T23:59:59.999Z`);
+    const dayOfWeek = DOW_MAP[dayStart.getUTCDay()];
+
+    const [store, staffList, bookings] = await Promise.all([
+      this.prisma.store.findUniqueOrThrow({
+        where: { id: storeId },
+        select: {
+          slotIntervalMins: true,
+          workingHours: {
+            where: { dayOfWeek },
+            take: 1,
+            select: { openTime: true, closeTime: true, isClosed: true },
+          },
+        },
+      }),
+
+      this.prisma.staff.findMany({
+        where: { storeId, status: StaffStatus.ACTIVE, ...(staffId ? { id: staffId } : {}) },
+        orderBy: { createdAt: 'asc' },
+        select: {
+          id: true,
+          user: { select: { fullName: true } },
+          schedules: {
+            where: { dayOfWeek, isActive: true },
+            select: { startTime: true, endTime: true },
+          },
+          dayOffs: {
+            where: {
+              date: { gte: dayStart, lte: dayEnd },
+              status: { in: [DayOffStatus.PENDING, DayOffStatus.APPROVED] },
+            },
+            select: { reason: true, status: true, startTime: true, endTime: true },
+          },
+          callIns: {
+            where: {
+              date: { gte: dayStart, lte: dayEnd },
+              status: { not: CallInStatus.REJECTED },
+            },
+            select: { startTime: true, endTime: true, status: true },
+          },
+        },
+      }),
+
+      this.prisma.booking.findMany({
+        where: {
+          storeId,
+          scheduledAt: { gte: dayStart, lte: dayEnd },
+          status: { notIn: [BookingStatus.CANCELLED, BookingStatus.REJECTED] },
+        },
+        select: {
+          id: true,
+          status: true,
+          customerName: true,
+          items: {
+            select: {
+              id: true,
+              staffId: true,
+              startTime: true,
+              duration: true,
+              service: { select: { name: true } },
+            },
+          },
+        },
+      }),
+    ]);
+
+    // Build per-staff booking items map
+    const itemsByStaff = new Map<string, {
+      id: string; bookingId: string; bookingStatus: string;
+      customerName: string | null; serviceName: string;
+      startTime: string; duration: number;
+    }[]>();
+
+    for (const booking of bookings) {
+      for (const item of booking.items) {
+        if (!item.staffId) continue;
+        const list = itemsByStaff.get(item.staffId) ?? [];
+        list.push({
+          id: item.id,
+          bookingId: booking.id,
+          bookingStatus: booking.status,
+          customerName: booking.customerName,
+          serviceName: item.service.name,
+          startTime: item.startTime.toISOString(),
+          duration: item.duration,
+        });
+        itemsByStaff.set(item.staffId, list);
+      }
+    }
+
+    const staff = staffList.map((s) => {
+      const schedule = s.schedules[0];
+      const dayOff   = s.dayOffs[0];
+      const callIn   = s.callIns[0];
+
+      let state: string;
+      let workStart: string | null = null;
+      let workEnd: string | null   = null;
+      let dayOffReason: string | null = null;
+
+      if (dayOff) {
+        state        = dayOff.status === DayOffStatus.APPROVED ? 'dayoff_approved' : 'dayoff_pending';
+        dayOffReason = dayOff.reason;
+        if (schedule) { workStart = schedule.startTime; workEnd = schedule.endTime; }
+      } else if (callIn) {
+        state     = callIn.status === CallInStatus.ACCEPTED ? 'callin_accepted' : 'callin_pending';
+        workStart = callIn.startTime;
+        workEnd   = callIn.endTime;
+      } else if (schedule) {
+        state     = 'working';
+        workStart = schedule.startTime;
+        workEnd   = schedule.endTime;
+      } else {
+        state = 'off';
+      }
+
+      return {
+        staffId:      s.id,
+        staffName:    s.user.fullName,
+        state,
+        workStart,
+        workEnd,
+        dayOffReason,
+        bookingItems: itemsByStaff.get(s.id) ?? [],
+      };
+    });
+
+    return {
+      date,
+      slotIntervalMins: store.slotIntervalMins,
+      workingHour:      store.workingHours[0] ?? null,
+      staff,
+    };
   }
 }

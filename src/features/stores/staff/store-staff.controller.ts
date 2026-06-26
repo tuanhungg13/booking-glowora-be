@@ -35,6 +35,18 @@ export class StoreStaffController {
     return this.storeStaffService.getCalendar(storeId, from, to);
   }
 
+  @ApiOperation({ summary: 'Lịch làm việc trong ngày — slot config + trạng thái nhân viên + lịch hẹn' })
+  @ApiBearerAuth()
+  @RequirePermissions(Permissions.STAFF.VIEW)
+  @Get('daily')
+  getDailyTimeline(
+    @StoreId() storeId: string,
+    @Query('date') date: string,
+    @Query('staffId') staffId?: string,
+  ) {
+    return this.storeStaffService.getDailyTimeline(storeId, date, staffId);
+  }
+
   @ApiOperation({ summary: 'Get current user staff profile for this store' })
   @ApiBearerAuth()
   @Get('me')
