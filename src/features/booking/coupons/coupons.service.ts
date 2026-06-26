@@ -24,7 +24,7 @@ export class CouponsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly systemLog: SystemLogService,
-  ) {}
+  ) { }
 
   // ─── CRUD (store owner & admin) ──────────────────────────────────────────────
 
@@ -85,18 +85,18 @@ export class CouponsService {
     const [items, total] = await Promise.all([
       includeStoreName
         ? this.prisma.coupon.findMany({
-            where,
-            skip,
-            take: limit,
-            orderBy: { createdAt: 'desc' },
-            include: adminCouponListInclude,
-          })
+          where,
+          skip,
+          take: limit,
+          orderBy: { createdAt: 'desc' },
+          include: adminCouponListInclude,
+        })
         : this.prisma.coupon.findMany({
-            where,
-            skip,
-            take: limit,
-            orderBy: { createdAt: 'desc' },
-          }),
+          where,
+          skip,
+          take: limit,
+          orderBy: { createdAt: 'desc' },
+        }),
       this.prisma.coupon.count({ where }),
     ]);
 
@@ -271,15 +271,15 @@ export class CouponsService {
     storeId: string,
     userId: string,
   ): Promise<void> {
+    if (coupon.storeId && coupon.storeId !== storeId) {
+      throw new BadRequestException('Mã coupon không hợp lệ');
+    }
+
     if (!coupon.isActive) throw new BadRequestException('Mã coupon đã bị vô hiệu hóa');
 
     const now = new Date();
     if (now < coupon.startAt) throw new BadRequestException('Mã coupon chưa có hiệu lực');
     if (coupon.expiredAt !== null && now > coupon.expiredAt) throw new BadRequestException('Mã coupon đã hết hạn');
-
-    if (coupon.storeId && coupon.storeId !== storeId) {
-      throw new BadRequestException('Mã coupon không áp dụng cho cửa hàng này');
-    }
 
     if (coupon.usageLimit !== null && coupon.usedCount >= coupon.usageLimit) {
       throw new BadRequestException('Mã coupon đã hết lượt sử dụng');
