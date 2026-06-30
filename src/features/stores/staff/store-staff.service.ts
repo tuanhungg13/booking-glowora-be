@@ -8,7 +8,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { BookingStatus, CallInStatus, DayOfWeek, DayOffStatus, NotificationType, StaffStatus } from '@prisma/client';
+import { BookingStatus, CallInStatus, DayOfWeek, DayOffStatus, NotificationType, StaffStatus, StoreStatus } from '@prisma/client';
 
 const DOW_MAP: DayOfWeek[] = [
   DayOfWeek.SUNDAY, DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,
@@ -48,6 +48,10 @@ export class StoreStaffService {
   async invite(storeId: string, ownerId: string, dto: InviteStaffDto) {
     const store = await this.storesService.checkOwnership(storeId, ownerId);
 
+    if (store.status !== StoreStatus.ACTIVE) {
+      throw new ForbiddenException('Chỉ cơ sở đã được kích hoạt mới có thể mời nhân viên');
+    }
+
     const invitedUser = await this.prisma.user.findUnique({ where: { email: dto.email } });
     if (!invitedUser) {
       throw new NotFoundException('Người dùng chưa đăng ký tài khoản trên hệ thống');
@@ -64,8 +68,10 @@ export class StoreStaffService {
       throw new ConflictException('Người dùng đã là nhân viên của cơ sở này');
     }
 
+    const now = new Date();
+
     const pendingInvite = await this.prisma.staffInvite.findFirst({
-      where: { email: dto.email, storeId, status: 'PENDING' },
+      where: { email: dto.email, storeId, status: 'PENDING', expiresAt: { gt: now } },
     });
     if (pendingInvite) {
       throw new ConflictException('Đã có lời mời đang chờ cho email này');
@@ -74,9 +80,18 @@ export class StoreStaffService {
     const token = randomBytes(32).toString('hex');
     const expiresAt = new Date(Date.now() + INVITE_TTL_DAYS * 24 * 60 * 60 * 1000);
 
-    const invite = await this.prisma.staffInvite.create({
-      data: { storeId, email: dto.email, token, expiresAt, status: 'PENDING' },
+    const existingInvite = await this.prisma.staffInvite.findFirst({
+      where: { email: dto.email, storeId, status: { in: ['PENDING', 'EXPIRED'] } },
     });
+
+    const invite = existingInvite
+      ? await this.prisma.staffInvite.update({
+          where: { id: existingInvite.id },
+          data: { token, expiresAt, status: 'PENDING' },
+        })
+      : await this.prisma.staffInvite.create({
+          data: { storeId, email: dto.email, token, expiresAt, status: 'PENDING' },
+        });
 
     const frontendUrl = this.config.get<string>('FRONTEND_URL', 'http://localhost:3000');
     const inviteUrl = `${frontendUrl}/staff-invites/accept?token=${token}`;
@@ -121,8 +136,10 @@ export class StoreStaffService {
     }
 
     const staff = await this.prisma.$transaction(async (tx) => {
-      const createdStaff = await tx.staff.create({
-        data: {
+      // Dùng upsert để xử lý cả trường hợp staff đã từng bị DELETED (record cũ vẫn còn do soft delete)
+      const upsertedStaff = await tx.staff.upsert({
+        where: { userId_storeId: { userId, storeId: invite.storeId } },
+        create: {
           userId,
           storeId: invite.storeId,
           status: StaffStatus.ACTIVE,
@@ -131,51 +148,28 @@ export class StoreStaffService {
           provinceId: user.provinceId ?? null,
           wardId: user.wardId ?? null,
         },
+        update: { status: StaffStatus.ACTIVE },
       });
 
-      let storeStaffRole = await tx.role.findFirst({
-        where: { code: STAFF_ROLE_CODE, storeId: invite.storeId },
+      const staffRole = await tx.role.findFirst({
+        where: { code: STAFF_ROLE_CODE, storeId: null },
+        select: { id: true },
       });
-
-      if (!storeStaffRole) {
-        const template = await tx.role.findFirst({
-          where: { code: STAFF_ROLE_CODE, storeId: null },
-          include: { permissions: true },
-        });
-        if (!template) {
-          throw new BadRequestException('SHOP_STAFF template role không tồn tại. Chạy seed trước.');
-        }
-        storeStaffRole = await tx.role.create({
-          data: {
-            name: template.name,
-            code: template.code,
-            description: template.description,
-            isSystem: false,
-            storeId: invite.storeId,
-          },
-        });
-        if (template.permissions.length) {
-          await tx.rolePermission.createMany({
-            data: template.permissions.map((p) => ({
-              roleId: storeStaffRole!.id,
-              permissionId: p.permissionId,
-            })),
-            skipDuplicates: true,
-          });
-        }
+      if (!staffRole) {
+        throw new BadRequestException('SHOP_STAFF template role không tồn tại. Chạy seed trước.');
       }
 
       await tx.userRole.create({
-        data: { userId, roleId: storeStaffRole.id, storeId: invite.storeId },
+        data: { userId, roleId: staffRole.id, storeId: invite.storeId },
       });
 
       await tx.staffInvite.update({
         where: { id: invite.id },
-        data: { status: 'ACCEPTED', staffId: createdStaff.id },
+        data: { status: 'ACCEPTED', staffId: upsertedStaff.id },
       });
 
       return tx.staff.findUniqueOrThrow({
-        where: { id: createdStaff.id },
+        where: { id: upsertedStaff.id },
         include: staffInclude,
       });
     });

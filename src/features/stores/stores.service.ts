@@ -109,7 +109,7 @@ export class StoresService {
 
     const templateRole = await this.prisma.role.findFirst({
       where: { code: SHOP_OWNER_ROLE_CODE, storeId: null },
-      include: { permissions: true },
+      select: { id: true },
     });
     if (!templateRole) {
       throw new BadRequestException('Thiếu vai trò mặc định SHOP_OWNER. Vui lòng chạy seed database.');
@@ -159,30 +159,10 @@ export class StoresService {
         })),
       });
 
-      const ownerRole = await tx.role.create({
-        data: {
-          name: templateRole.name,
-          code: templateRole.code,
-          description: templateRole.description,
-          isSystem: false,
-          storeId: createdStore.id,
-        },
-      });
-
-      if (templateRole.permissions.length) {
-        await tx.rolePermission.createMany({
-          data: templateRole.permissions.map((permission) => ({
-            roleId: ownerRole.id,
-            permissionId: permission.permissionId,
-          })),
-          skipDuplicates: true,
-        });
-      }
-
       await tx.userRole.create({
         data: {
           userId: ownerId,
-          roleId: ownerRole.id,
+          roleId: templateRole.id,
           storeId: createdStore.id,
         },
       });
@@ -223,7 +203,7 @@ export class StoresService {
       const lng = filter.userLng!;
       const items = rawItems.map((s) => ({
         ...s,
-        distance: s.latitude != null && s.longitude != null ? this.haversine(lat, lng, s.latitude, s.longitude) : null,
+        distance: s.latitude != null && s.longitude != null ? this.calcDistance(lat, lng, s.latitude, s.longitude) : null,
       }));
       return { items, total, page, limit };
     }
@@ -285,13 +265,11 @@ export class StoresService {
     return conditions;
   }
 
-  private haversine(lat1: number, lng1: number, lat2: number, lng2: number): number {
-    const dLat = ((lat2 - lat1) * Math.PI) / 180;
-    const dLng = ((lng2 - lng1) * Math.PI) / 180;
-    const a =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
-    return Math.round(6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * 100) / 100;
+  private calcDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
+    const toRad = (v: number) => (v * Math.PI) / 180;
+    const val = Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.cos(toRad(lng2) - toRad(lng1))
+              + Math.sin(toRad(lat1)) * Math.sin(toRad(lat2));
+    return Math.round(6371 * Math.acos(Math.min(1, val)) * 100) / 100;
   }
 
   async findOne(idOrSlug: string) {

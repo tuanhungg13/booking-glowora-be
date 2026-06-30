@@ -67,7 +67,7 @@ export class ConversationsService {
     return this.prisma.conversation.upsert({
       where: { customerId_storeId: { customerId, storeId } },
       update: {},
-      create: { customerId, storeId, mode: 'HUMAN' },
+      create: { customerId, storeId },
       include: conversationInclude,
     });
   }

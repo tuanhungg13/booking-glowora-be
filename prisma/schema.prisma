@@ -173,15 +173,9 @@ enum PromotionScope {
   SERVICE
 }
 
-enum ConversationMode {
-  BOT
-  HUMAN
-}
-
 enum SenderType {
   CUSTOMER
   STAFF
-  BOT
 }
 
 // =============================================================================
@@ -457,9 +451,8 @@ model Staff {
   schedules             StaffSchedule[]
   scheduleHistories     StaffScheduleHistory[]
   dayOffs               StaffDayOff[]
-  callIns               StaffCallIn[]
-  invites               StaffInvite[]
-  assignedConversations Conversation[]         @relation("AssignedConversations")
+  callIns StaffCallIn[]
+  invites StaffInvite[]
 
   @@unique([userId, storeId])
   @@index([storeId, status])
@@ -887,21 +880,18 @@ model PushSubscription {
 // =============================================================================
 
 model Conversation {
-  id              String           @id @default(uuid()) @db.Char(36)
-  customerId      String           @map("customer_id") @db.Char(36)
-  storeId         String           @map("store_id") @db.Char(36)
-  mode            ConversationMode @default(BOT)
-  assignedStaffId String?          @map("assigned_staff_id") @db.Char(36)
-  telegramTopicId Int?             @map("telegram_topic_id")
+  id              String  @id @default(uuid()) @db.Char(36)
+  customerId      String  @map("customer_id") @db.Char(36)
+  storeId         String  @map("store_id") @db.Char(36)
+  telegramTopicId Int?    @map("telegram_topic_id")
   lastMessageAt   DateTime?        @map("last_message_at")
   lastMessageBody String?          @map("last_message_body") @db.VarChar(200)
   createdAt       DateTime         @default(now()) @map("created_at")
   updatedAt       DateTime         @updatedAt @map("updated_at")
 
-  customer      User      @relation("CustomerConversations", fields: [customerId], references: [id])
-  store         Store     @relation(fields: [storeId], references: [id])
-  assignedStaff Staff?    @relation("AssignedConversations", fields: [assignedStaffId], references: [id])
-  messages      Message[]
+  customer User      @relation("CustomerConversations", fields: [customerId], references: [id])
+  store    Store     @relation(fields: [storeId], references: [id])
+  messages Message[]
 
   @@unique([customerId, storeId])
   @@index([customerId, lastMessageAt])
