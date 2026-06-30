@@ -71,6 +71,7 @@ export class TelegramController {
       this.logger.warn(`[handleGroupTopicReply] No Redis key for telegram:topic:${groupId}:${threadId} — message dropped`);
       return;
     }
+    await this.redis.set(`telegram:topic:${groupId}:${threadId}`, conversationId, 7200);
 
     this.logger.log(`[handleGroupTopicReply] conversationId=${conversationId}`);
 
