@@ -66,10 +66,18 @@ export class TelegramController {
 
     this.logger.log(`[handleGroupTopicReply] groupId=${groupId} threadId=${threadId} senderChatId=${senderChatId}`);
 
-    const conversationId = await this.redis.get(`telegram:topic:${groupId}:${threadId}`);
+    let conversationId = await this.redis.get(`telegram:topic:${groupId}:${threadId}`);
     if (!conversationId) {
-      this.logger.warn(`[handleGroupTopicReply] No Redis key for telegram:topic:${groupId}:${threadId} — message dropped`);
-      return;
+      const conversation = await this.prisma.conversation.findFirst({
+        where: { telegramTopicId: threadId, store: { telegramGroupId: groupId } },
+        select: { id: true },
+      });
+      if (!conversation) {
+        this.logger.warn(`[handleGroupTopicReply] No conversation found for groupId=${groupId} threadId=${threadId} — message dropped`);
+        return;
+      }
+      conversationId = conversation.id;
+      this.logger.log(`[handleGroupTopicReply] Redis key restored from DB for conv=${conversationId}`);
     }
     await this.redis.set(`telegram:topic:${groupId}:${threadId}`, conversationId, 7200);
 
