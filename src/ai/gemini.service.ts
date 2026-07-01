@@ -82,7 +82,7 @@ export class GeminiService {
     userMessage: string,
     ctx: PlatformContext,
     userLocation?: { lat: number; lng: number; cityName?: string | null },
-  ): Promise<{ reply: string; suggestedKeywords: string[]; suggestedStoreKeywords: string[] }> {
+  ): Promise<{ reply: string; suggestedKeywords: string[]; suggestedStoreKeywords: string[]; suggestedLocationKeywords: string[] }> {
     try {
       const model = this.genAI.getGenerativeModel({
         model: this.model,
@@ -108,15 +108,61 @@ export class GeminiService {
         ? storeMatch[1].split(',').map((s) => s.trim()).filter(Boolean)
         : [];
 
+      const locationMatch = text.match(/\[SUGGEST_LOCATION:([^\]]+)\]/);
+      const suggestedLocationKeywords = locationMatch
+        ? locationMatch[1].split(',').map((s) => s.trim()).filter(Boolean)
+        : [];
+
       const reply = text
         .replace(/\[SUGGEST_KW:[^\]]+\]/, '')
         .replace(/\[SUGGEST_STORE:[^\]]+\]/, '')
+        .replace(/\[SUGGEST_LOCATION:[^\]]+\]/, '')
         .trim();
 
-      return { reply, suggestedKeywords, suggestedStoreKeywords };
+      return { reply, suggestedKeywords, suggestedStoreKeywords, suggestedLocationKeywords };
     } catch (err) {
       this.logger.error('Gemini platform chat error', err);
-      return { reply: 'Xin lỗi, tôi đang gặp sự cố kỹ thuật. Vui lòng thử lại sau.', suggestedKeywords: [], suggestedStoreKeywords: [] };
+      return { reply: 'Xin lỗi, tôi đang gặp sự cố kỹ thuật. Vui lòng thử lại sau.', suggestedKeywords: [], suggestedStoreKeywords: [], suggestedLocationKeywords: [] };
+    }
+  }
+
+  // Gọi lại Gemini lần 2 khi truy vấn cửa hàng theo địa điểm + dịch vụ trả về rỗng,
+  // để AI viết lại câu trả lời dựa trên dữ liệu THẬT thay vì lời chào chung chung ở lượt 1.
+  async composeNoStoreFoundReply(
+    userMessage: string,
+    serviceKeywords: string[],
+    locationLabel: string,
+    elsewhereStores: PlatformStoreSuggestion[],
+    ctx: PlatformContext,
+  ): Promise<string> {
+    const elsewhereProvinces = Array.from(
+      new Set(elsewhereStores.map((s) => s.provinceName).filter((p): p is string => !!p)),
+    );
+    const serviceLabel = serviceKeywords.filter((k) => k !== '__top_rated__').join(', ') || 'dịch vụ khách vừa hỏi';
+
+    const factSummary = elsewhereProvinces.length
+      ? `Không có cửa hàng nào ở ${locationLabel} khớp yêu cầu "${serviceLabel}", nhưng dịch vụ này đang có tại các tỉnh/thành: ${elsewhereProvinces.join(', ')}.`
+      : `Không có cửa hàng nào trên toàn nền tảng khớp yêu cầu dịch vụ "${serviceLabel}".`;
+
+    const prompt = `Bạn là trợ lý AI của Glowora — nền tảng đặt lịch dịch vụ làm đẹp trực tuyến.
+
+Người dùng vừa hỏi: "${userMessage}"
+
+Dữ liệu thực tế tra cứu được (đây là SỰ THẬT, phải bám sát, không được thêm số liệu hay địa điểm nào khác): ${factSummary}
+Danh mục dịch vụ đang có trên nền tảng: ${ctx.categories}
+
+Viết lại một câu trả lời ngắn gọn, thân thiện bằng tiếng Việt cho người dùng dựa ĐÚNG trên dữ liệu thực tế trên:
+- Nếu có tỉnh/thành khác đang cung cấp dịch vụ, nói rõ ràng dịch vụ này hiện có ở đâu.
+- Nếu không có ở đâu cả, xin lỗi và gợi ý 2-3 danh mục dịch vụ khác đang có trên nền tảng để khách tham khảo.
+Chỉ trả về đúng câu trả lời, không thêm giải thích hay tag nào khác.`;
+
+    try {
+      const model = this.genAI.getGenerativeModel({ model: this.model });
+      const result = await model.generateContent(prompt);
+      return result.response.text().trim();
+    } catch (err) {
+      this.logger.error('Gemini compose no-result reply error', err);
+      return factSummary;
     }
   }
 
@@ -171,49 +217,61 @@ export class GeminiService {
   }
 
   async fetchStoresByKeywords(
-    keywords: string[],
+    storeKeywords: string[],
+    locationKeywords: string[],
     userLocation?: { lat: number; lng: number },
   ): Promise<PlatformStoreSuggestion[]> {
     const NEAR_ME = '__near_me__';
     const TOP_RATED = '__top_rated__';
 
-    const nearMe = keywords.includes(NEAR_ME);
-    const topRated = keywords.includes(TOP_RATED);
-    const realKeywords = keywords.filter((k) => k !== NEAR_ME && k !== TOP_RATED);
+    const topRated = storeKeywords.includes(TOP_RATED);
+    const serviceKws = storeKeywords.filter((k) => k !== TOP_RATED);
 
-    if (!realKeywords.length && !nearMe && !topRated) return [];
+    const nearMe = locationKeywords.includes(NEAR_ME);
+    const locationKws = locationKeywords.filter((k) => k !== NEAR_ME);
+
+    if (!serviceKws.length && !locationKws.length && !topRated && !nearMe) return [];
 
     const sortByDistance = nearMe && !!userLocation;
 
-    const orConditions = realKeywords.flatMap((kw) => [
-      { name: { contains: kw } },
-      { description: { contains: kw } },
-      { address: { contains: kw } },
-      { province: { name: { contains: kw } } },
-      { services: { some: { name: { contains: kw }, status: ServiceStatus.ACTIVE } } },
-      { services: { some: { description: { contains: kw }, status: ServiceStatus.ACTIVE } } },
-    ]);
+    const storeSelect = {
+      id: true, name: true, slug: true, logoUrl: true,
+      avgRating: true, totalReviews: true, address: true,
+      latitude: true, longitude: true,
+      province: { select: { name: true } },
+    };
+
+    // Nhóm điều kiện dịch vụ và nhóm điều kiện địa điểm tách biệt, AND với nhau
+    // → store phải vừa đúng dịch vụ vừa đúng địa điểm, không còn nhánh nới lỏng ngầm
+    const buildServiceConditions = (kws: string[]) => kws.map((kw) => ({
+      OR: [
+        { name: { contains: kw } },
+        { description: { contains: kw } },
+        { services: { some: { name: { contains: kw }, status: ServiceStatus.ACTIVE } } },
+        { services: { some: { description: { contains: kw }, status: ServiceStatus.ACTIVE } } },
+      ],
+    }));
+
+    const buildLocationConditions = (kws: string[]) => kws.map((kw) => ({
+      OR: [
+        { address: { contains: kw } },
+        { province: { name: { contains: kw } } },
+      ],
+    }));
+
+    const andConditions = [
+      ...buildServiceConditions(serviceKws),
+      ...buildLocationConditions(locationKws),
+    ];
 
     const stores = await this.prisma.store.findMany({
       where: {
         status: StoreStatus.ACTIVE,
-        ...(realKeywords.length ? { OR: orConditions } : {}),
+        ...(andConditions.length ? { AND: andConditions } : {}),
       },
-      select: {
-        id: true,
-        name: true,
-        slug: true,
-        logoUrl: true,
-        avgRating: true,
-        totalReviews: true,
-        address: true,
-        latitude: true,
-        longitude: true,
-        province: { select: { name: true } },
-      },
+      select: storeSelect,
       orderBy: { avgRating: 'desc' },
-      // Lấy nhiều hơn khi sort distance để có đủ kết quả sau khi lọc
-      take: sortByDistance ? 50 : 3,
+      take: sortByDistance ? 50 : 10,
     });
 
     if (sortByDistance && userLocation) {
@@ -313,21 +371,24 @@ Quy tắc bắt buộc:
 1. Trả lời ngắn gọn, thân thiện bằng tiếng Việt.
 2. Khi khách mô tả vấn đề về da/tóc/sắc đẹp, KHÔNG gợi ý dịch vụ ngay — hãy hỏi thêm 1-2 câu để hiểu rõ nhu cầu. Chỉ gợi ý dịch vụ sau khi đã có đủ thông tin hoặc khách hỏi thẳng.
 3. Nếu khách hỏi chi tiết về một cửa hàng cụ thể → hướng dẫn họ vào trang của cửa hàng đó để xem thông tin và chat trực tiếp với nhân viên.
-4. Không bịa thông tin không có trong dữ liệu.
+4. Không bịa thông tin không có trong dữ liệu. Số liệu "cửa hàng theo tỉnh/thành" chỉ là tổng số cửa hàng active tại đó, KHÔNG có nghĩa là tất cả (hay bất kỳ) cửa hàng nào trong số đó cung cấp đúng loại dịch vụ khách đang hỏi — không được gộp 2 con số này lại thành một khẳng định.
 5. Không tư vấn y tế chuyên sâu.
 6. Chỉ thêm tag [SUGGEST_KW:keyword1,keyword2,keyword3] ở DÒNG CUỐI (không xuống dòng) khi đã tư vấn đủ và muốn gợi ý dịch vụ cụ thể. KHÔNG thêm khi chào hỏi, hỏi làm rõ, hoặc hỏi thông tin chung.
    - Keywords là cụm từ tiếng Việt ngắn (1-4 từ) mô tả chính xác dịch vụ người dùng cần. Ví dụ: "massage vai cổ", "chăm sóc da mụn", "triệt lông nách", "uốn tóc xoăn"
    - Chọn tối đa 3 keywords, càng cụ thể với nhu cầu người dùng càng tốt
    - Tag này ẩn — KHÔNG hiển thị ra câu trả lời người dùng đọc
 7. Chỉ thêm tag [SUGGEST_STORE:keyword1,keyword2] ở DÒNG CUỐI (không xuống dòng) khi khách muốn tìm cửa hàng spa.
-   - Keywords là tên tỉnh/thành phố, quận/huyện, tên spa, hoặc loại dịch vụ spa cung cấp. Ví dụ: "Hà Nội", "quận 1", "chăm sóc da mặt", "cắt tóc"
-   - Hai từ khóa đặc biệt (không phải địa điểm hay dịch vụ, chỉ là tín hiệu kỹ thuật):
-     * __near_me__ : thêm khi khách hỏi "gần tôi", "gần đây", "xung quanh tôi" — hệ thống sẽ sort theo khoảng cách GPS
-     * __top_rated__ : thêm khi khách hỏi "đánh giá cao", "tốt nhất", "uy tín nhất" mà không nêu địa điểm hay dịch vụ — hệ thống trả về top spa theo rating toàn nền tảng
-   - Ví dụ cách dùng: "spa gần tôi" → [SUGGEST_STORE:__near_me__] | "spa massage đánh giá cao" → [SUGGEST_STORE:massage,__top_rated__] | "spa chăm sóc da gần tôi ở Hà Nội" → [SUGGEST_STORE:chăm sóc da,__near_me__]
-   - Chọn tối đa 2 keywords thường (không tính __near_me__ và __top_rated__)
+   - Keywords là tên spa hoặc loại dịch vụ spa cung cấp (KHÔNG chứa địa điểm — địa điểm dùng tag riêng ở quy tắc 8). Ví dụ: "chăm sóc da mặt", "cắt tóc"
+   - Từ khóa đặc biệt __top_rated__: thêm khi khách hỏi "đánh giá cao", "tốt nhất", "uy tín nhất" mà không nêu loại dịch vụ cụ thể — hệ thống trả về top spa theo rating toàn nền tảng (kết hợp với địa điểm ở tag 8 nếu có).
+   - Chọn tối đa 2 keywords thường (không tính __top_rated__)
    - Phân biệt với [SUGGEST_KW:...]: dùng [SUGGEST_STORE:...] khi user muốn xem danh sách SPA; dùng [SUGGEST_KW:...] khi user muốn xem chi tiết GIÁ/THỜI GIAN của một dịch vụ cụ thể
-   - Có thể kết hợp cả hai tag trong cùng câu trả lời nếu phù hợp
+   - Tag này ẩn — KHÔNG hiển thị ra câu trả lời người dùng đọc
+8. Nếu khách có nêu địa điểm khi tìm spa, hoặc nói "gần tôi", thêm tag [SUGGEST_LOCATION:keyword] ở DÒNG CUỐI (cùng dòng với SUGGEST_STORE nếu có cả hai).
+   - Keyword là tên tỉnh/thành phố hoặc quận/huyện. Ví dụ: "Hà Nội", "quận 1"
+   - Từ khóa đặc biệt __near_me__: thêm khi khách hỏi "gần tôi", "gần đây", "xung quanh tôi" — hệ thống sort theo khoảng cách GPS thay vì so tên địa điểm.
+   - Chỉ chọn 1 địa điểm HOẶC __near_me__, không dùng cả hai cùng lúc.
+   - Tag này có thể đứng MỘT MÌNH (không cần SUGGEST_STORE) khi khách chỉ hỏi có spa nào ở một địa điểm, không nêu loại dịch vụ.
+   - Ví dụ: "spa chăm sóc da ở Hà Nội" → [SUGGEST_STORE:chăm sóc da][SUGGEST_LOCATION:Hà Nội] | "spa gần tôi" → [SUGGEST_LOCATION:__near_me__] | "spa massage đánh giá cao" → [SUGGEST_STORE:massage,__top_rated__] | "có spa nào ở Đà Nẵng không?" → [SUGGEST_LOCATION:Đà Nẵng]
    - Tag này ẩn — KHÔNG hiển thị ra câu trả lời người dùng đọc
 
 ---

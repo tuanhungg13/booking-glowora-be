@@ -59,7 +59,7 @@ export class StoreAnalyticsService {
            AND scheduled_at <= ?
            AND customer_id NOT IN (
              SELECT customer_id FROM bookings
-             WHERE store_id = ? AND scheduled_at < ?
+             WHERE store_id = ? AND scheduled_at < ? AND customer_id IS NOT NULL
            )`,
         storeId, fromDate, toDate, storeId, fromDate,
       ),

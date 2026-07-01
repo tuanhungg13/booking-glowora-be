@@ -14,11 +14,23 @@ export class AiController {
   @Post('chat')
   async chat(@Body() dto: PlatformChatDto) {
     const context = await this.gemini.buildPlatformContext();
-    const { reply, suggestedKeywords, suggestedStoreKeywords } = await this.gemini.chatGlobal(dto.history ?? [], dto.message, context);
+    const { reply, suggestedKeywords, suggestedStoreKeywords, suggestedLocationKeywords } = await this.gemini.chatGlobal(dto.history ?? [], dto.message, context);
     const [suggestions, storeSuggestions] = await Promise.all([
       this.gemini.fetchServicesByKeywords(suggestedKeywords),
-      this.gemini.fetchStoresByKeywords(suggestedStoreKeywords),
+      this.gemini.fetchStoresByKeywords(suggestedStoreKeywords, suggestedLocationKeywords),
     ]);
+
+    const namedLocationKws = suggestedLocationKeywords.filter((k) => k !== '__near_me__');
+    const hasLocation = suggestedLocationKeywords.length > 0;
+    const hasService = suggestedStoreKeywords.length > 0;
+
+    if (hasLocation && hasService && storeSuggestions.length === 0) {
+      const elsewhereStores = await this.gemini.fetchStoresByKeywords(suggestedStoreKeywords, []);
+      const locationLabel = namedLocationKws.length ? namedLocationKws.join(', ') : 'khu vực bạn hỏi';
+      const finalReply = await this.gemini.composeNoStoreFoundReply(dto.message, suggestedStoreKeywords, locationLabel, elsewhereStores, context);
+      return { reply: finalReply, suggestions, storeSuggestions: elsewhereStores };
+    }
+
     return { reply, suggestions, storeSuggestions };
   }
 }

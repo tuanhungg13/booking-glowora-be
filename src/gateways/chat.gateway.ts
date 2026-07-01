@@ -160,23 +160,47 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const history = this.aiSessions.get(client.id) ?? [];
 
     const context = await this.gemini.buildPlatformContext();
-    const { reply, suggestedKeywords, suggestedStoreKeywords } = await this.gemini.chatGlobal(history, message, context, data.location);
+    const { reply, suggestedKeywords, suggestedStoreKeywords, suggestedLocationKeywords } = await this.gemini.chatGlobal(history, message, context, data.location);
+
+    this.logger.debug(`[ai_chat] message="${message}" | reply="${reply}"`);
+    this.logger.debug(`[ai_chat] tags → suggestedKeywords=${JSON.stringify(suggestedKeywords)} | suggestedStoreKeywords=${JSON.stringify(suggestedStoreKeywords)} | suggestedLocationKeywords=${JSON.stringify(suggestedLocationKeywords)}`);
 
     const [suggestions, storeSuggestions] = await Promise.all([
       this.gemini.fetchServicesByKeywords(suggestedKeywords),
-      this.gemini.fetchStoresByKeywords(suggestedStoreKeywords, data.location),
+      this.gemini.fetchStoresByKeywords(suggestedStoreKeywords, suggestedLocationKeywords, data.location),
     ]);
+
+    this.logger.debug(`[ai_chat] suggestions (services)=${JSON.stringify(suggestions.map(s => ({ name: s.name, store: s.storeName })))}`);
+    this.logger.debug(`[ai_chat] storeSuggestions=${JSON.stringify(storeSuggestions.map(s => ({ name: s.name, province: s.provinceName, address: s.address })))}`);
+
+    let finalReply = reply;
+    let finalStoreSuggestions = storeSuggestions;
+
+    // Đã hỏi rõ dịch vụ + địa điểm nhưng không có store nào khớp cả 2
+    // → gọi lại Gemini lần 2 với dữ liệu thật để trả lời chính xác thay vì để câu chào chung chung ở lượt 1
+    const namedLocationKws = suggestedLocationKeywords.filter((k) => k !== '__near_me__');
+    const hasLocation = suggestedLocationKeywords.length > 0;
+    const hasService = suggestedStoreKeywords.length > 0;
+
+    if (hasLocation && hasService && storeSuggestions.length === 0) {
+      const elsewhereStores = await this.gemini.fetchStoresByKeywords(suggestedStoreKeywords, [], undefined);
+      const locationLabel = namedLocationKws.length ? namedLocationKws.join(', ') : (data.location?.cityName ?? 'khu vực của bạn');
+      finalReply = await this.gemini.composeNoStoreFoundReply(message, suggestedStoreKeywords, locationLabel, elsewhereStores, context);
+      finalStoreSuggestions = elsewhereStores;
+
+      this.logger.debug(`[ai_chat] no-result reply="${finalReply}" | elsewhereStores=${JSON.stringify(elsewhereStores.map(s => s.provinceName))}`);
+    }
 
     // Cập nhật history, giới hạn AI_HISTORY_MAX_TURNS lượt gần nhất
     const updated: ChatMessage[] = [
       ...history,
       { role: 'user', content: message },
-      { role: 'model', content: reply },
+      { role: 'model', content: finalReply },
     ];
     const trimmed = updated.slice(-AI_HISTORY_MAX_TURNS * 2);
     this.aiSessions.set(client.id, trimmed);
 
-    client.emit('ai_reply', { reply, suggestions, storeSuggestions });
+    client.emit('ai_reply', { reply: finalReply, suggestions, storeSuggestions: finalStoreSuggestions });
     return { sent: true };
   }
 
