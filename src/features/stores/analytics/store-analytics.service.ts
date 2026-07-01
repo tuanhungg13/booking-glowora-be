@@ -17,7 +17,7 @@ export class StoreAnalyticsService {
   async getOverview(storeId: string, from: string, to: string) {
     const { fromDate, toDate } = vnDateRange(from, to);
 
-    const [revenueAgg, bookingStats, ratingAgg, newCustomerRows] = await Promise.all([
+    const [revenueAgg, completedRevenueAgg, bookingStats, ratingAgg, newCustomerRows] = await Promise.all([
       // Tổng doanh thu từ payments đã thanh toán
       this.prisma.payment.aggregate({
         where: {
@@ -27,6 +27,16 @@ export class StoreAnalyticsService {
         },
         _sum: { amount: true },
         _count: { id: true },
+      }),
+
+      // Doanh thu theo lịch hẹn đã hoàn thành (finalPrice), tính theo scheduledAt
+      this.prisma.booking.aggregate({
+        where: {
+          storeId,
+          status: 'COMPLETED',
+          scheduledAt: { gte: fromDate, lte: toDate },
+        },
+        _sum: { finalPrice: true },
       }),
 
       // Thống kê booking theo status
@@ -74,6 +84,7 @@ export class StoreAnalyticsService {
 
     return {
       revenue: Number(revenueAgg._sum.amount ?? 0),
+      completedRevenue: Number(completedRevenueAgg._sum.finalPrice ?? 0),
       bookingCount: totalBookings,
       completedCount: statusMap['COMPLETED'] ?? 0,
       cancelledCount: statusMap['CANCELLED'] ?? 0,
