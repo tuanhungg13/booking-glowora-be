@@ -26,13 +26,14 @@ export class RequestContextService {
       const requestId = randomUUID();
       request.requestId = requestId;
 
-      const path = (request.originalUrl ?? request.url ?? '').split('?')[0];
-      if (!SKIP_PATHS.includes(path)) {
-        this.logger.log(`→ [${requestId}] ${request.method} ${request.originalUrl ?? request.url} ip=${request.ip}`);
-        response.on('finish', () => {
-          this.logger.log(`← [${requestId}] ${request.method} ${request.originalUrl ?? request.url} | ${response.statusCode}`);
-        });
-      }
+      // TODO: tạm tắt log để đo hiệu năng load-test, bật lại sau khi test xong
+      // const path = (request.originalUrl ?? request.url ?? '').split('?')[0];
+      // if (!SKIP_PATHS.includes(path)) {
+      //   this.logger.log(`→ [${requestId}] ${request.method} ${request.originalUrl ?? request.url} ip=${request.ip}`);
+      //   response.on('finish', () => {
+      //     this.logger.log(`← [${requestId}] ${request.method} ${request.originalUrl ?? request.url} | ${response.statusCode}`);
+      //   });
+      // }
 
       this.storage.run({ request, response, requestId }, next);
     };

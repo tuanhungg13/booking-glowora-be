@@ -231,7 +231,16 @@ export class CouponsService {
     totalPrice: Prisma.Decimal,
     userId: string,
   ): Promise<{ couponId: string; discountAmount: Prisma.Decimal }> {
-    const coupon = await tx.coupon.findUnique({ where: { code: code.toUpperCase() } });
+    const upperCode = code.toUpperCase();
+
+    // Khoá đúng row coupon này trước khi đọc usedCount. bookings.service giờ chạy transaction
+    // ở mức ReadCommitted (không còn Serializable) nên nếu đọc thường, 2 booking cùng dùng 1
+    // coupon có thể cùng thấy "còn lượt" rồi cùng tăng usedCount vượt usageLimit. ReadCommitted
+    // khiến câu tx.coupon.findUnique ngay sau đây luôn đọc dữ liệu mới nhất (không bị đóng băng
+    // theo snapshot), nên chỉ cần khoá ở đây là đủ, không cần đổi cả query sang raw SQL.
+    await tx.$queryRaw`SELECT id FROM coupons WHERE code = ${upperCode} FOR UPDATE`;
+
+    const coupon = await tx.coupon.findUnique({ where: { code: upperCode } });
     if (!coupon) throw new BadRequestException('Mã coupon không tồn tại');
 
     await this.assertCouponUsable(tx, coupon, storeId, userId);

@@ -26,14 +26,20 @@ export class TelegramService implements OnModuleInit {
     this.logger.log('TelegramBot instance created (polling disabled, webhook mode)');
 
     const webhookUrl = this.config.get<string>('TELEGRAM_WEBHOOK_URL');
-    if (webhookUrl) {
-      this.logger.log(`Setting Telegram webhook to: ${webhookUrl}`);
-      this.bot.setWebHook(webhookUrl)
-        .then(() => this.logger.log('✅ Telegram webhook set successfully'))
-        .catch((err) => this.logger.error('❌ Failed to set Telegram webhook', err));
-    } else {
+    if (!webhookUrl) {
       this.logger.warn('TELEGRAM_WEBHOOK_URL not set — webhook not registered');
+      return;
     }
+    // Cluster mode fork nhiều worker (xem main.ts), mỗi worker chạy 1 NestJS app riêng
+    // nên đều tạo TelegramBot instance để gửi tin nhắn được (giữ nguyên) — nhưng đăng ký
+    // webhook với Telegram API chỉ cần gọi 1 lần cho cả cụm, gọi ở mọi worker sẽ bị
+    // Telegram rate-limit 429 (nhiều worker gọi setWebHook cùng lúc lúc khởi động).
+    if (process.env.IS_SINGLETON_WORKER === '0') return;
+
+    this.logger.log(`Setting Telegram webhook to: ${webhookUrl}`);
+    this.bot.setWebHook(webhookUrl)
+      .then(() => this.logger.log('✅ Telegram webhook set successfully'))
+      .catch((err) => this.logger.error('❌ Failed to set Telegram webhook', err));
   }
 
   get isEnabled(): boolean {

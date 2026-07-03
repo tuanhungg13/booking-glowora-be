@@ -146,18 +146,19 @@ export class NotificationsService {
       this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
     }
 
-    if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: displayName,
-          storeName,
-          serviceNames,
-          scheduledAt: timeStr,
-          eventType: 'CREATED',
-        })
-        .catch((err: Error) => this.logger.warn(`Email CREATED failed for ${customerEmail}: ${err?.message}`));
-    }
+    // TODO: tạm thời tắt gửi mail để test
+    // if (customerEmail) {
+    //   this.mail
+    //     .sendBookingEvent({
+    //       email: customerEmail,
+    //       fullName: displayName,
+    //       storeName,
+    //       serviceNames,
+    //       scheduledAt: timeStr,
+    //       eventType: 'CREATED',
+    //     })
+    //     .catch((err: Error) => this.logger.warn(`Email CREATED failed for ${customerEmail}: ${err?.message}`));
+    // }
   }
 
   async notifyBookingConfirmed(params: {
@@ -185,18 +186,19 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: customerName ?? customerEmail,
-          storeName,
-          serviceNames,
-          scheduledAt: timeStr,
-          eventType: 'CONFIRMED',
-        })
-        .catch((err: Error) => this.logger.warn(`Email CONFIRMED failed for ${customerEmail}: ${err?.message}`));
-    }
+    // TODO: tạm thời tắt gửi mail để test
+    // if (customerEmail) {
+    //   this.mail
+    //     .sendBookingEvent({
+    //       email: customerEmail,
+    //       fullName: customerName ?? customerEmail,
+    //       storeName,
+    //       serviceNames,
+    //       scheduledAt: timeStr,
+    //       eventType: 'CONFIRMED',
+    //     })
+    //     .catch((err: Error) => this.logger.warn(`Email CONFIRMED failed for ${customerEmail}: ${err?.message}`));
+    // }
   }
 
   async notifyBookingRejected(params: {
@@ -223,18 +225,19 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: customerName ?? customerEmail,
-          storeName,
-          serviceNames,
-          reason,
-          eventType: 'REJECTED',
-        })
-        .catch((err: Error) => this.logger.warn(`Email REJECTED failed for ${customerEmail}: ${err?.message}`));
-    }
+    // TODO: tạm thời tắt gửi mail để test
+    // if (customerEmail) {
+    //   this.mail
+    //     .sendBookingEvent({
+    //       email: customerEmail,
+    //       fullName: customerName ?? customerEmail,
+    //       storeName,
+    //       serviceNames,
+    //       reason,
+    //       eventType: 'REJECTED',
+    //     })
+    //     .catch((err: Error) => this.logger.warn(`Email REJECTED failed for ${customerEmail}: ${err?.message}`));
+    // }
   }
 
   async notifyBookingCompleted(params: {
@@ -260,17 +263,18 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: customerName ?? customerEmail,
-          storeName,
-          serviceNames,
-          eventType: 'COMPLETED',
-        })
-        .catch((err: Error) => this.logger.warn(`Email COMPLETED failed for ${customerEmail}: ${err?.message}`));
-    }
+    // TODO: tạm thời tắt gửi mail để test
+    // if (customerEmail) {
+    //   this.mail
+    //     .sendBookingEvent({
+    //       email: customerEmail,
+    //       fullName: customerName ?? customerEmail,
+    //       storeName,
+    //       serviceNames,
+    //       eventType: 'COMPLETED',
+    //     })
+    //     .catch((err: Error) => this.logger.warn(`Email COMPLETED failed for ${customerEmail}: ${err?.message}`));
+    // }
   }
 
   async notifyBookingCancelled(params: {
@@ -317,18 +321,19 @@ export class NotificationsService {
       this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
     }
 
-    if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: displayName,
-          storeName,
-          serviceNames,
-          reason,
-          eventType: 'CANCELLED',
-        })
-        .catch((err: Error) => this.logger.warn(`Email CANCELLED failed for ${customerEmail}: ${err?.message}`));
-    }
+    // TODO: tạm thời tắt gửi mail để test
+    // if (customerEmail) {
+    //   this.mail
+    //     .sendBookingEvent({
+    //       email: customerEmail,
+    //       fullName: displayName,
+    //       storeName,
+    //       serviceNames,
+    //       reason,
+    //       eventType: 'CANCELLED',
+    //     })
+    //     .catch((err: Error) => this.logger.warn(`Email CANCELLED failed for ${customerEmail}: ${err?.message}`));
+    // }
   }
 
   async notifyPaymentSuccess(params: {
@@ -356,18 +361,19 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: customerName ?? customerEmail,
-          storeName,
-          serviceNames,
-          amount: `${formattedAmount}₫`,
-          eventType: 'PAYMENT_SUCCESS',
-        })
-        .catch((err: Error) => this.logger.warn(`Email PAYMENT_SUCCESS failed for ${customerEmail}: ${err?.message}`));
-    }
+    // TODO: tạm thời tắt gửi mail để test
+    // if (customerEmail) {
+    //   this.mail
+    //     .sendBookingEvent({
+    //       email: customerEmail,
+    //       fullName: customerName ?? customerEmail,
+    //       storeName,
+    //       serviceNames,
+    //       amount: `${formattedAmount}₫`,
+    //       eventType: 'PAYMENT_SUCCESS',
+    //     })
+    //     .catch((err: Error) => this.logger.warn(`Email PAYMENT_SUCCESS failed for ${customerEmail}: ${err?.message}`));
+    // }
   }
 
   async notifyDepositReminder(params: {
@@ -417,20 +423,21 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: customerName ?? customerEmail,
-          storeName,
-          serviceNames,
-          scheduledAt: timeStr,
-          amount: `${formattedAmount}₫`,
-          depositDeadline: deadlineStr,
-          eventType: 'DEPOSIT_REQUIRED',
-        })
-        .catch((err: Error) => this.logger.warn(`Email DEPOSIT_REQUIRED failed for ${customerEmail}: ${err?.message}`));
-    }
+    // TODO: tạm thời tắt gửi mail để test
+    // if (customerEmail) {
+    //   this.mail
+    //     .sendBookingEvent({
+    //       email: customerEmail,
+    //       fullName: customerName ?? customerEmail,
+    //       storeName,
+    //       serviceNames,
+    //       scheduledAt: timeStr,
+    //       amount: `${formattedAmount}₫`,
+    //       depositDeadline: deadlineStr,
+    //       eventType: 'DEPOSIT_REQUIRED',
+    //     })
+    //     .catch((err: Error) => this.logger.warn(`Email DEPOSIT_REQUIRED failed for ${customerEmail}: ${err?.message}`));
+    // }
   }
 
   async notifyDepositPaid(params: {
@@ -478,18 +485,19 @@ export class NotificationsService {
       this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
     }
 
-    if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: displayName,
-          storeName,
-          serviceNames,
-          amount: `${formattedAmount}₫`,
-          eventType: 'DEPOSIT_PAID',
-        })
-        .catch((err: Error) => this.logger.warn(`Email DEPOSIT_PAID failed for ${customerEmail}: ${err?.message}`));
-    }
+    // TODO: tạm thời tắt gửi mail để test
+    // if (customerEmail) {
+    //   this.mail
+    //     .sendBookingEvent({
+    //       email: customerEmail,
+    //       fullName: displayName,
+    //       storeName,
+    //       serviceNames,
+    //       amount: `${formattedAmount}₫`,
+    //       eventType: 'DEPOSIT_PAID',
+    //     })
+    //     .catch((err: Error) => this.logger.warn(`Email DEPOSIT_PAID failed for ${customerEmail}: ${err?.message}`));
+    // }
   }
 
   async notifyDepositExpired(params: {
@@ -535,17 +543,18 @@ export class NotificationsService {
       this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
     }
 
-    if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: displayName,
-          storeName,
-          serviceNames,
-          eventType: 'CANCELLED',
-        })
-        .catch((err: Error) => this.logger.warn(`Email DEPOSIT_EXPIRED failed for ${customerEmail}: ${err?.message}`));
-    }
+    // TODO: tạm thời tắt gửi mail để test
+    // if (customerEmail) {
+    //   this.mail
+    //     .sendBookingEvent({
+    //       email: customerEmail,
+    //       fullName: displayName,
+    //       storeName,
+    //       serviceNames,
+    //       eventType: 'CANCELLED',
+    //     })
+    //     .catch((err: Error) => this.logger.warn(`Email DEPOSIT_EXPIRED failed for ${customerEmail}: ${err?.message}`));
+    // }
   }
 
   async notifyBookingReminder1Day(params: {
@@ -573,18 +582,19 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    if (customerEmail) {
-      this.mail
-        .sendBookingReminder({
-          email: customerEmail,
-          fullName: customerName ?? customerEmail,
-          storeName,
-          serviceNames,
-          scheduledAt: timeStr,
-          isOneDayReminder: true,
-        })
-        .catch((err: Error) => this.logger.warn(`Reminder 1-day email failed for ${customerEmail}: ${err?.message}`));
-    }
+    // TODO: tạm thời tắt gửi mail để test
+    // if (customerEmail) {
+    //   this.mail
+    //     .sendBookingReminder({
+    //       email: customerEmail,
+    //       fullName: customerName ?? customerEmail,
+    //       storeName,
+    //       serviceNames,
+    //       scheduledAt: timeStr,
+    //       isOneDayReminder: true,
+    //     })
+    //     .catch((err: Error) => this.logger.warn(`Reminder 1-day email failed for ${customerEmail}: ${err?.message}`));
+    // }
   }
 
   async notifyBookingReminder1Hour(params: {
@@ -612,18 +622,19 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    if (customerEmail) {
-      this.mail
-        .sendBookingReminder({
-          email: customerEmail,
-          fullName: customerName ?? customerEmail,
-          storeName,
-          serviceNames,
-          scheduledAt: timeStr,
-          isOneDayReminder: false,
-        })
-        .catch((err: Error) => this.logger.warn(`Reminder 1-hour email failed for ${customerEmail}: ${err?.message}`));
-    }
+    // TODO: tạm thời tắt gửi mail để test
+    // if (customerEmail) {
+    //   this.mail
+    //     .sendBookingReminder({
+    //       email: customerEmail,
+    //       fullName: customerName ?? customerEmail,
+    //       storeName,
+    //       serviceNames,
+    //       scheduledAt: timeStr,
+    //       isOneDayReminder: false,
+    //     })
+    //     .catch((err: Error) => this.logger.warn(`Reminder 1-hour email failed for ${customerEmail}: ${err?.message}`));
+    // }
   }
 
   async notifyStaffChanged(params: {
@@ -652,22 +663,23 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    if (customerEmail) {
-      this.mail
-        .sendStaffNotification({
-          email: customerEmail,
-          fullName: customerName ?? customerEmail,
-          subject: `Nhân viên thực hiện dịch vụ đã thay đổi`,
-          body: `Dịch vụ ${serviceName} tại ${storeName} vào ${timeStr} sẽ được thực hiện bởi ${newStaffName}.`,
-          details: [
-            { label: 'Dịch vụ', value: serviceName },
-            { label: 'Nhân viên mới', value: newStaffName },
-            { label: 'Thời gian', value: timeStr },
-            { label: 'Cơ sở', value: storeName },
-          ],
-        })
-        .catch((err: Error) => this.logger.warn(`Email STAFF_CHANGED failed for ${customerEmail}: ${err?.message}`));
-    }
+    // TODO: tạm thời tắt gửi mail để test
+    // if (customerEmail) {
+    //   this.mail
+    //     .sendStaffNotification({
+    //       email: customerEmail,
+    //       fullName: customerName ?? customerEmail,
+    //       subject: `Nhân viên thực hiện dịch vụ đã thay đổi`,
+    //       body: `Dịch vụ ${serviceName} tại ${storeName} vào ${timeStr} sẽ được thực hiện bởi ${newStaffName}.`,
+    //       details: [
+    //         { label: 'Dịch vụ', value: serviceName },
+    //         { label: 'Nhân viên mới', value: newStaffName },
+    //         { label: 'Thời gian', value: timeStr },
+    //         { label: 'Cơ sở', value: storeName },
+    //       ],
+    //     })
+    //     .catch((err: Error) => this.logger.warn(`Email STAFF_CHANGED failed for ${customerEmail}: ${err?.message}`));
+    // }
   }
 
   private push(userId: string, title: string, body: string, data?: Record<string, unknown>) {

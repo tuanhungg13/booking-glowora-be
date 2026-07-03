@@ -25,6 +25,8 @@
     "db:seed:demo": "prisma db execute --file prisma/seed_demo_stores_services.sql",
     "db:seed:200:generate": "ts-node -r tsconfig-paths/register prisma/generate_seed_200.ts",
     "db:seed:200": "prisma db execute --file prisma/seed_200_stores.sql",
+    "db:seed:customers:generate": "ts-node -r tsconfig-paths/register prisma/generate_seed_customers.ts",
+    "db:seed:customers": "prisma db execute --file prisma/seed_customers.sql",
     "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset --force && pnpm run db:seed",
     "db:seed_location": "prisma db execute --file prisma/seed_provinces_wards.sql"
@@ -47,6 +49,7 @@
     "@nestjs/websockets": "^11.1.15",
     "@prisma/adapter-mariadb": "^7.6.0",
     "@prisma/client": "^7.4.2",
+    "@socket.io/redis-adapter": "^8.3.0",
     "@types/multer": "^2.1.0",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",

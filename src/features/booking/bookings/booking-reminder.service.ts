@@ -16,6 +16,13 @@ export class BookingReminderService implements OnModuleInit {
   ) {}
 
   onModuleInit() {
+    // Cluster mode fork nhiều worker (xem main.ts), mỗi worker chạy 1 NestJS app riêng.
+    // Nếu không chặn, cron này chạy lặp lại ở TỪNG worker -> khách nhận nhiều email/push
+    // nhắc lịch trùng lặp mỗi lần cron fire. Chỉ worker được đánh dấu singleton mới chạy.
+    if (process.env.IS_SINGLETON_WORKER === '0') {
+      this.logger.log('Bỏ qua booking reminder cron ở worker này (đã chạy ở worker singleton)');
+      return;
+    }
     const expr = this.config.get<string>('REMINDER_CRON_EXPR', '*/10 * * * *');
     new Cron(expr, () => { void this.handleReminders(); });
     this.logger.log(`Booking reminder job started (cron: ${expr})`);

@@ -1,10 +1,12 @@
+import cluster from 'node:cluster';
+import * as os from 'node:os';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import cookieParser = require('cookie-parser');
 import { AppModule } from './app.module';
 import { TransformResponseInterceptor } from './common/interceptors/transform-response.interceptor';
-import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+// import { LoggingInterceptor } from './common/interceptors/logging.interceptor'; // tạm tắt để đo hiệu năng load-test
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 import { RequestContextService } from './common/request-context.service';
@@ -39,7 +41,8 @@ async function bootstrap() {
   );
   app.useGlobalInterceptors(
     app.get(SystemAuditInterceptor),
-    new LoggingInterceptor(),
+    // TODO: tạm tắt để đo hiệu năng load-test, bật lại sau khi test xong
+    // new LoggingInterceptor(),
     new TransformResponseInterceptor(),
   );
   const systemLogService = app.get(SystemLogService);
@@ -70,4 +73,38 @@ async function bootstrap() {
   logger.log(`CORS origins    : ${allowedOrigins.join(', ')}`);
   logger.log(`Listening on    : ${port}`);
 }
-bootstrap();
+
+// Node chỉ chạy JS trên 1 thread — phần CPU-bound của mỗi request (JWT verify,
+// class-validator/class-transformer, RxJS interceptor pipeline, serialize response)
+// xếp hàng tuần tự trên thread đó. Dưới tải nhiều request đồng thời, thời gian xếp hàng
+// này chiếm phần lớn độ trễ dù DB gần như rảnh (đã đo: MySQL Threads_running~2 trong khi
+// 100 request/lúc mất 1-2s). Fork N worker (mỗi worker 1 core) để dùng hết CPU thay vì
+// nghẽn ở 1 thread. WEB_CONCURRENCY cho phép override số worker (vd giới hạn trong container
+// nhỏ); mặc định theo số core máy. Set WEB_CONCURRENCY=1 để tắt cluster (vd khi debug).
+const numWorkers = Number(process.env.WEB_CONCURRENCY) || os.cpus().length;
+
+if (numWorkers > 1 && cluster.isPrimary) {
+  const logger = new Logger('Cluster');
+  logger.log(`Primary ${process.pid} đang fork ${numWorkers} worker`);
+
+  // Mỗi worker chạy 1 NestJS app riêng -> onModuleInit() (cron nhắc lịch, đăng ký webhook
+  // Telegram...) sẽ chạy lặp lại ở TỪNG worker nếu không chặn. Chỉ đánh dấu đúng 1 worker
+  // (IS_SINGLETON_WORKER=1) để các service tự kiểm tra cờ này trước khi chạy phần việc
+  // "chỉ chạy 1 lần cho cả cụm" (xem booking-reminder.service.ts, telegram.service.ts).
+  let singletonWorkerId: number | undefined;
+  const forkWorker = (isSingleton: boolean) => {
+    const worker = cluster.fork({ IS_SINGLETON_WORKER: isSingleton ? '1' : '0' });
+    if (isSingleton) singletonWorkerId = worker.id;
+    return worker;
+  };
+
+  forkWorker(true);
+  for (let i = 1; i < numWorkers; i++) forkWorker(false);
+
+  cluster.on('exit', (worker, code, signal) => {
+    logger.warn(`Worker ${worker.process.pid} thoát (code=${code}, signal=${signal}) — fork lại`);
+    forkWorker(worker.id === singletonWorkerId);
+  });
+} else {
+  bootstrap();
+}

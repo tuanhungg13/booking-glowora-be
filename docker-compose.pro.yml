@@ -42,6 +42,16 @@ services:
       MYSQL_USER: ${MYSQL_USER:-hwglee}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-gloworadev}
       TZ: ${TZ:-Asia/Ho_Chi_Minh}
+    # Tune InnoDB cho tải burst nhiều booking cùng lúc (xem báo cáo tối ưu concurrency):
+    # - buffer-pool lớn hơn default 128MB để index booking/staff nằm gọn trong RAM
+    # - max-connections đủ margin trên connectionLimit=60 của Prisma pool (prisma.service.ts)
+    # - lock-wait-timeout hạ từ default 50s để transaction bị chờ lock fail nhanh, nhường
+    #   chỗ cho retryTransaction retry thay vì giữ connection/lock lâu dưới tải cao
+    command:
+      - --innodb-buffer-pool-size=${MYSQL_INNODB_BUFFER_POOL_SIZE:-1G}
+      - --innodb-buffer-pool-instances=${MYSQL_INNODB_BUFFER_POOL_INSTANCES:-4}
+      - --max-connections=${MYSQL_MAX_CONNECTIONS:-200}
+      - --innodb-lock-wait-timeout=${MYSQL_INNODB_LOCK_WAIT_TIMEOUT:-8}
     ports:
       - "127.0.0.1:${MYSQL_PORT:-3306}:3306"
     volumes:

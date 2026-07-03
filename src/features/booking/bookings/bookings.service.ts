@@ -21,6 +21,12 @@ const DOW_MAP: DayOfWeek[] = [
   DayOfWeek.SUNDAY, DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,
   DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY,
 ];
+
+// Biên an toàn khi quét các booking/item có thể overlap: chỉ cần đủ lớn hơn tổng thời lượng
+// thực tế tối đa của 1 booking (dịch vụ spa hiếm khi kéo dài quá vài giờ). Trước đây dùng ±24h
+// khiến InnoDB (dưới Serializable) phải gap-lock cả dải 48h quanh mỗi slot, làm 2 booking khác
+// giờ/khác nhân viên (không tranh chấp thật) vẫn có thể đụng lock nhau khi 100 người đặt cùng lúc.
+const OVERLAP_SCAN_MARGIN_MS = 6 * 60 * 60 * 1000; // 6h
 import { PrismaService } from '../../../prisma/prisma.service';
 import { retryTransaction } from '../../../prisma/transaction-retry.util';
 import { NotificationsService } from '../../notifications/notifications/notifications.service';
@@ -68,27 +74,33 @@ export class BookingsService {
       throw new BadRequestException('Phải chọn ít nhất 1 dịch vụ');
     }
 
-    // 2 query độc lập (không phụ thuộc kết quả nhau), chạy song song ngoài transaction
-    const [isStoreMember, activePromotion] = await Promise.all([
+    // 4 query độc lập, không phụ thuộc kết quả nhau — chạy song song ngoài transaction.
+    // store/userProfile trước đây đọc lại bên trong transaction dù không cần tính nguyên tử
+    // với phần ghi (store hiếm khi đổi giữa lúc đặt lịch); đưa ra ngoài để transaction chỉ
+    // còn giữ đúng phần cần khoá, rút ngắn thời gian giữ lock dưới tải cao.
+    const [isStoreMember, activePromotion, store, userProfile] = await Promise.all([
       this.prisma.userRole.findFirst({
         where: { userId: customerId, storeId: dto.storeId },
       }),
       this.promotions.findActiveForStore(dto.storeId),
+      this.prisma.store.findUnique({ where: { id: dto.storeId } }),
+      this.prisma.user.findUnique({
+        where: { id: customerId },
+        select: { fullName: true, phone: true, email: true },
+      }),
     ]);
     if (isStoreMember) {
       throw new ForbiddenException(
         'Bạn là chủ hoặc nhân viên của cơ sở này nên không thể đặt lịch tại đây. Vui lòng sử dụng tài khoản khách hàng khác để đặt lịch.',
       );
     }
+    if (!store || store.status !== StoreStatus.ACTIVE) {
+      throw new NotFoundException('Cửa hàng không tồn tại hoặc chưa hoạt động');
+    }
 
     const booking = await retryTransaction(() =>
       this.prisma.$transaction(
       async (tx) => {
-        const store = await tx.store.findUnique({ where: { id: dto.storeId } });
-        if (!store || store.status !== StoreStatus.ACTIVE) {
-          throw new NotFoundException('Cửa hàng không tồn tại hoặc chưa hoạt động');
-        }
-
         let currentTime = new Date(dto.scheduledAt);
         const itemsData: Array<{
           sortOrder: number;
@@ -119,14 +131,17 @@ export class BookingsService {
           });
 
           let staffId: string;
+          let staffName: string | null;
           let isStaffChosenByCustomer = false;
           let variant: Awaited<typeof variantQuery>;
           if (svc.staffId) {
-            // variant và canDo đọc 2 bảng độc lập, không phụ thuộc kết quả nhau
+            // variant và canDo đọc 2 bảng độc lập, không phụ thuộc kết quả nhau;
+            // canDo lấy luôn fullName để khỏi phải query staff riêng lần nữa
             const [variantResult, canDo] = await Promise.all([
               variantQuery,
               tx.staff.findFirst({
                 where: { id: svc.staffId, storeId: dto.storeId, status: 'ACTIVE' },
+                include: { user: { select: { fullName: true } } },
               }),
             ]);
             variant = variantResult;
@@ -137,6 +152,7 @@ export class BookingsService {
               throw new BadRequestException(`Nhân viên không thực hiện được dịch vụ thứ ${i + 1}`);
             }
             staffId = svc.staffId;
+            staffName = canDo.user.fullName;
             isStaffChosenByCustomer = true;
           } else {
             variant = await variantQuery;
@@ -147,17 +163,15 @@ export class BookingsService {
             if (!found) {
               throw new ConflictException(`Không có nhân viên khả dụng cho dịch vụ thứ ${i + 1}`);
             }
-            staffId = found;
+            staffId = found.id;
+            staffName = found.fullName;
           }
 
-          // Overlap check (BookingItem) và lấy tên staff (Staff) đọc 2 bảng độc lập
-          const [overlap, staffRecord] = await Promise.all([
-            this.findOverlap(tx, staffId, currentTime, variant.duration),
-            tx.staff.findUnique({
-              where: { id: staffId },
-              select: { user: { select: { fullName: true } } },
-            }),
-          ]);
+          // Khoá đúng 1 row staff (thay cho Serializable isolation của cả transaction): chỉ
+          // booking nhắm CÙNG staff này mới phải xếp hàng chờ nhau, khác staff chạy song song
+          // hoàn toàn. Phải khoá TRƯỚC khi findOverlap để đóng đúng race window check-rồi-insert.
+          await this.lockStaffForBooking(tx, staffId);
+          const overlap = await this.findOverlap(tx, staffId, currentTime, variant.duration);
           if (overlap) throw new ConflictException('Slot này vừa được đặt');
 
           // Apply promotion per item nếu có và service nằm trong scope
@@ -183,7 +197,7 @@ export class BookingsService {
             price: itemPrice,
             serviceName: variant.service.name,
             variantName: variant.name,
-            staffName: staffRecord?.user?.fullName ?? null,
+            staffName,
             isStaffChosenByCustomer,
           });
 
@@ -195,7 +209,7 @@ export class BookingsService {
         // Kiểm tra khách hàng không có lịch hẹn trùng giờ
         const newStart = new Date(dto.scheduledAt);
         const newEnd = new Date(newStart.getTime() + totalDuration * 60 * 1000);
-        const windowMin = new Date(newStart.getTime() - 24 * 60 * 60 * 1000);
+        const windowMin = new Date(newStart.getTime() - OVERLAP_SCAN_MARGIN_MS);
         const customerBookings = await tx.booking.findMany({
           where: {
             customerId,
@@ -228,17 +242,11 @@ export class BookingsService {
         let couponId: string | null = null;
         let discountAmount = new Prisma.Decimal(0);
 
-        // applyToBooking có ghi (tăng usedCount) nên chỉ chạy sau khi đã chắc chắn
-        // không bị conflict lịch ở trên; userProfile là read độc lập, chạy song song với nó
-        const [couponResult, userProfile] = await Promise.all([
-          dto.couponCode
-            ? this.coupons.applyToBooking(tx, dto.couponCode, dto.storeId, totalPrice, customerId)
-            : Promise.resolve(null),
-          tx.user.findUnique({
-            where: { id: customerId },
-            select: { fullName: true, phone: true, email: true },
-          }),
-        ]);
+        // applyToBooking có ghi (tăng usedCount) nên chỉ chạy sau khi đã chắc chắn không bị
+        // conflict lịch ở trên; userProfile đã được đọc ngoài transaction ở đầu hàm rồi
+        const couponResult = dto.couponCode
+          ? await this.coupons.applyToBooking(tx, dto.couponCode, dto.storeId, totalPrice, customerId)
+          : null;
         if (couponResult) {
           couponId = couponResult.couponId;
           discountAmount = couponResult.discountAmount;
@@ -279,7 +287,12 @@ export class BookingsService {
 
         return booking;
       },
-      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+      // ReadCommitted thay vì Serializable: mỗi câu lệnh đọc dữ liệu mới nhất tại thời điểm
+      // chạy (không đóng băng theo snapshot đầu transaction như RepeatableRead), nên kết hợp
+      // đúng với lockStaffForBooking()/coupon lock bên dưới để tuần tự hoá CHỈ những booking
+      // tranh chấp thật (cùng staff, cùng coupon) — các booking khác staff/khác coupon chạy
+      // song song hoàn toàn thay vì bị Serializable gap-lock cả dải thời gian.
+      { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted },
       ),
     );
 
@@ -307,15 +320,18 @@ export class BookingsService {
       throw new BadRequestException('Phải chọn ít nhất 1 dịch vụ');
     }
 
-    const activePromotion = await this.promotions.findActiveForStore(storeId);
+    // Đọc trước ngoài transaction (xem giải thích ở create()) để rút ngắn thời gian giữ lock
+    const [activePromotion, store] = await Promise.all([
+      this.promotions.findActiveForStore(storeId),
+      this.prisma.store.findUnique({ where: { id: storeId } }),
+    ]);
+    if (!store || store.status !== StoreStatus.ACTIVE) {
+      throw new NotFoundException('Cửa hàng không tồn tại hoặc chưa hoạt động');
+    }
 
-    const booking = await this.prisma.$transaction(
+    const booking = await retryTransaction(() =>
+      this.prisma.$transaction(
       async (tx) => {
-        const store = await tx.store.findUnique({ where: { id: storeId } });
-        if (!store || store.status !== StoreStatus.ACTIVE) {
-          throw new NotFoundException('Cửa hàng không tồn tại hoặc chưa hoạt động');
-        }
-
         let currentTime = new Date(dto.scheduledAt);
         const itemsData: Array<{
           sortOrder: number;
@@ -335,53 +351,59 @@ export class BookingsService {
         for (let i = 0; i < dto.services.length; i++) {
           const svc = dto.services[i];
 
-          const variant = await tx.serviceVariant.findFirst({
+          const variantQuery = tx.serviceVariant.findFirst({
             where: {
               id: svc.variantId,
               serviceId: svc.serviceId,
               status: ServiceStatus.ACTIVE,
               service: { storeId, status: ServiceStatus.ACTIVE },
             },
-            include: { service: { select: { name: true } } },
+            include: { service: { select: { name: true, categoryId: true } } },
           });
-          if (!variant) {
-            throw new NotFoundException(`Variant không tìm thấy cho dịch vụ thứ ${i + 1}`);
-          }
 
           let staffId: string;
+          let staffName: string | null;
           let isStaffChosenByCustomer = false;
+          let variant: Awaited<typeof variantQuery>;
           if (svc.staffId) {
-            const canDo = await tx.staff.findFirst({
-              where: { id: svc.staffId, storeId, status: 'ACTIVE' },
-            });
+            const [variantResult, canDo] = await Promise.all([
+              variantQuery,
+              tx.staff.findFirst({
+                where: { id: svc.staffId, storeId, status: 'ACTIVE' },
+                include: { user: { select: { fullName: true } } },
+              }),
+            ]);
+            variant = variantResult;
+            if (!variant) {
+              throw new NotFoundException(`Variant không tìm thấy cho dịch vụ thứ ${i + 1}`);
+            }
             if (!canDo) {
               throw new BadRequestException(`Nhân viên không thực hiện được dịch vụ thứ ${i + 1}`);
             }
             staffId = svc.staffId;
+            staffName = canDo.user.fullName;
             isStaffChosenByCustomer = true;
           } else {
+            variant = await variantQuery;
+            if (!variant) {
+              throw new NotFoundException(`Variant không tìm thấy cho dịch vụ thứ ${i + 1}`);
+            }
             const found = await this.pickAvailableStaff(tx, storeId, svc.serviceId, currentTime, variant.duration, store.timezone);
             if (!found) {
               throw new ConflictException(`Không có nhân viên khả dụng cho dịch vụ thứ ${i + 1}`);
             }
-            staffId = found;
+            staffId = found.id;
+            staffName = found.fullName;
           }
 
-          await this.assertNoOverlap(tx, staffId, currentTime, variant.duration);
-
-          const staffRecord = await tx.staff.findUnique({
-            where: { id: staffId },
-            select: { user: { select: { fullName: true } } },
-          });
+          await this.lockStaffForBooking(tx, staffId);
+          const overlap = await this.findOverlap(tx, staffId, currentTime, variant.duration);
+          if (overlap) throw new ConflictException('Slot này vừa được đặt');
 
           let itemPrice = variant.price;
           let originalPrice: Prisma.Decimal | null = null;
           if (activePromotion) {
-            const variantWithService = await tx.serviceVariant.findUnique({
-              where: { id: variant.id },
-              include: { service: { select: { categoryId: true } } },
-            });
-            const categoryId = variantWithService?.service.categoryId ?? null;
+            const categoryId = variant.service.categoryId ?? null;
             if (this.promotions.isServiceInScope(activePromotion, svc.serviceId, categoryId)) {
               const saving = this.promotions.calcDiscount(activePromotion, Number(variant.price));
               originalPrice = variant.price;
@@ -400,7 +422,7 @@ export class BookingsService {
             price: itemPrice,
             serviceName: variant.service.name,
             variantName: variant.name,
-            staffName: staffRecord?.user?.fullName ?? null,
+            staffName,
             isStaffChosenByCustomer,
           });
 
@@ -440,7 +462,8 @@ export class BookingsService {
           include: bookingInclude,
         });
       },
-      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+      { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted },
+      ),
     );
 
     const serviceNames = booking.items.map((item) => item.service.name).join(', ');
@@ -844,7 +867,7 @@ export class BookingsService {
     startTime: Date,
     duration: number,
     timezone: string,
-  ): Promise<string | null> {
+  ): Promise<{ id: string; fullName: string | null } | null> {
     const tzOffset = TZ_OFFSETS[timezone] ?? 7 * 60;
     const localDate = new Date(startTime.getTime() + tzOffset * 60 * 1000);
     const dayOfWeek = DOW_MAP[localDate.getUTCDay()];
@@ -855,17 +878,61 @@ export class BookingsService {
 
     const mappings = await tx.staff.findMany({
       where: { storeId, status: 'ACTIVE' },
-      select: { id: true },
+      select: { id: true, user: { select: { fullName: true } } },
     });
+    if (mappings.length === 0) return null;
+    const staffIds = mappings.map((m) => m.id);
+    // Lấy sẵn tên staff từ query này luôn, tránh phải query lại staff.findUnique riêng để lấy fullName
+    const nameByStaff = new Map(mappings.map((m) => [m.id, m.user.fullName]));
 
-    for (const { id: staffId } of mappings) {
-      const [schedule, callIn, dayOffConflict] = await Promise.all([
-        tx.staffSchedule.findFirst({ where: { staffId, dayOfWeek, isActive: true } }),
-        tx.staffCallIn.findFirst({ where: { staffId, date: dateUTCMidnight, status: CallInStatus.ACCEPTED } }),
-        this.hasDayOffConflict(tx, staffId, dateUTCMidnight, localStartMins, localEndMins),
-      ]);
+    const endTime = new Date(startTime.getTime() + duration * 60 * 1000);
+    const windowMin = new Date(startTime.getTime() - OVERLAP_SCAN_MARGIN_MS);
+    const windowMax = endTime;
 
+    // Batch fetch 1 lần cho toàn bộ staff thay vì query tuần tự từng người
+    // (tránh N staff × 4 query round-trip khi khách để hệ thống tự chọn nhân viên)
+    const [schedules, callIns, dayOffs, busyItems] = await Promise.all([
+      tx.staffSchedule.findMany({ where: { staffId: { in: staffIds }, dayOfWeek, isActive: true } }),
+      tx.staffCallIn.findMany({ where: { staffId: { in: staffIds }, date: dateUTCMidnight, status: CallInStatus.ACCEPTED } }),
+      tx.staffDayOff.findMany({
+        where: { staffId: { in: staffIds }, date: dateUTCMidnight, status: { in: [DayOffStatus.PENDING, DayOffStatus.APPROVED] } },
+        select: { staffId: true, startTime: true, endTime: true },
+      }),
+      tx.bookingItem.findMany({
+        where: {
+          staffId: { in: staffIds },
+          booking: { status: { in: [BookingStatus.PENDING, BookingStatus.CONFIRMED, BookingStatus.DEPOSIT_PENDING, BookingStatus.DEPOSIT_PAID, BookingStatus.PAID] } },
+          startTime: { gte: windowMin, lte: windowMax },
+        },
+        select: { staffId: true, startTime: true, duration: true },
+      }),
+    ]);
+
+    const scheduleByStaff = new Map(schedules.map((s) => [s.staffId, s]));
+    const callInByStaff = new Map(callIns.map((c) => [c.staffId, c]));
+    const dayOffsByStaff = new Map<string, typeof dayOffs>();
+    for (const d of dayOffs) {
+      const arr = dayOffsByStaff.get(d.staffId);
+      if (arr) arr.push(d); else dayOffsByStaff.set(d.staffId, [d]);
+    }
+    const busyByStaff = new Map<string, typeof busyItems>();
+    for (const item of busyItems) {
+      if (!item.staffId) continue;
+      const arr = busyByStaff.get(item.staffId);
+      if (arr) arr.push(item); else busyByStaff.set(item.staffId, [item]);
+    }
+
+    for (const staffId of staffIds) {
+      const schedule = scheduleByStaff.get(staffId);
+      const callIn = callInByStaff.get(staffId);
       if (!schedule && !callIn) continue;
+
+      const dayOffConflict = (dayOffsByStaff.get(staffId) ?? []).some((d) => {
+        if (d.startTime === null) return true;
+        const offStart = this.parseTimeMins(d.startTime);
+        const offEnd = this.parseTimeMins(d.endTime!);
+        return localStartMins < offEnd && offStart < localEndMins;
+      });
       if (dayOffConflict) continue;
 
       const windowStartStr = schedule?.startTime ?? callIn!.startTime;
@@ -875,8 +942,11 @@ export class BookingsService {
       const windowEnd = this.parseTimeMins(windowEndStr);
       if (localStartMins < windowStart || localEndMins > windowEnd) continue;
 
-      const overlap = await this.findOverlap(tx, staffId, startTime, duration);
-      if (!overlap) return staffId;
+      const overlap = (busyByStaff.get(staffId) ?? []).some((item) => {
+        const itemEnd = new Date(item.startTime.getTime() + item.duration * 60 * 1000);
+        return startTime < itemEnd && item.startTime < endTime;
+      });
+      if (!overlap) return { id: staffId, fullName: nameByStaff.get(staffId) ?? null };
     }
     return null;
   }
@@ -905,14 +975,14 @@ export class BookingsService {
     });
   }
 
-  private async assertNoOverlap(
-    tx: Prisma.TransactionClient,
-    staffId: string,
-    startTime: Date,
-    duration: number,
-  ) {
-    const overlap = await this.findOverlap(tx, staffId, startTime, duration);
-    if (overlap) throw new ConflictException('Slot này vừa được đặt');
+  // SELECT ... FOR UPDATE trên đúng 1 row staff. Đây là cơ chế tuần tự hoá thay thế cho
+  // Serializable isolation (nay transaction chạy ReadCommitted): 2 booking cùng nhắm 1 staff
+  // sẽ xếp hàng ở đây, transaction sau chỉ được tiếp tục sau khi transaction trước commit/rollback
+  // -- lúc đó findOverlap (đọc thường, không khoá) mới thấy được item vừa insert vì ReadCommitted
+  // luôn đọc dữ liệu mới nhất tại từng câu lệnh (không bị "đóng băng" theo snapshot như
+  // RepeatableRead, vốn sẽ khiến việc khoá staff ở đây trở nên vô nghĩa).
+  private async lockStaffForBooking(tx: Prisma.TransactionClient, staffId: string): Promise<void> {
+    await tx.$queryRaw`SELECT id FROM staff WHERE id = ${staffId} FOR UPDATE`;
   }
 
   private async findOverlap(
@@ -923,9 +993,11 @@ export class BookingsService {
     excludeItemId?: string,
   ) {
     const endTime = new Date(startTime.getTime() + duration * 60 * 1000);
-    // Widen query window ±24h to handle all timezone offsets safely
-    const windowMin = new Date(startTime.getTime() - 24 * 60 * 60 * 1000);
-    const windowMax = new Date(endTime.getTime() + 24 * 60 * 60 * 1000);
+    // item chỉ có thể overlap [startTime, endTime) nếu item.startTime < endTime (bound trên
+    // chính xác, không cần nới) và item.startTime + item.duration > startTime (bound dưới cần
+    // margin vì chưa biết trước duration của item khác — xem OVERLAP_SCAN_MARGIN_MS)
+    const windowMin = new Date(startTime.getTime() - OVERLAP_SCAN_MARGIN_MS);
+    const windowMax = endTime;
 
     const busyItems = await tx.bookingItem.findMany({
       where: {

@@ -3,6 +3,7 @@ import {
   Catch,
   ExceptionFilter,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { LogType, Prisma } from '@prisma/client';
 import { SystemLogService } from '../../system-log/system-log.service';
@@ -21,6 +22,8 @@ type LoggableRequest = {
 
 @Catch(Prisma.PrismaClientKnownRequestError, Prisma.PrismaClientValidationError)
 export class PrismaExceptionFilter implements ExceptionFilter {
+  private readonly logger = new Logger(PrismaExceptionFilter.name);
+
   constructor(private readonly systemLog?: SystemLogService) {}
 
   catch(
@@ -54,6 +57,14 @@ export class PrismaExceptionFilter implements ExceptionFilter {
       }
     }
 
+    const prismaCode =
+      exception instanceof Prisma.PrismaClientKnownRequestError ? exception.code : undefined;
+    this.logger.error(
+      `[${requestId ?? '-'}] ${request?.method ?? ''} ${request?.originalUrl ?? request?.url ?? ''} ` +
+        `prismaCode=${prismaCode ?? '-'} status=${status} ${exception.message}`,
+      exception.stack,
+    );
+
     if (request && !request.systemLogErrorRecorded && !shouldSkipDbErrorLog(request.method, request.originalUrl ?? request.url)) {
       this.systemLog?.logError(
         {
@@ -65,10 +76,7 @@ export class PrismaExceptionFilter implements ExceptionFilter {
             params: request.params,
             query: request.query,
             statusCode: status,
-            prismaCode:
-              exception instanceof Prisma.PrismaClientKnownRequestError
-                ? exception.code
-                : undefined,
+            prismaCode,
           },
         },
         exception,
