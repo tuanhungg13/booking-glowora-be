@@ -22,6 +22,7 @@ const DOW_MAP: DayOfWeek[] = [
   DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY,
 ];
 import { PrismaService } from '../../../prisma/prisma.service';
+import { retryTransaction } from '../../../prisma/transaction-retry.util';
 import { NotificationsService } from '../../notifications/notifications/notifications.service';
 import { SystemLogService } from '../../../system-log/system-log.service';
 import { BookingFilterDto } from './dto/booking-filter.dto';
@@ -67,19 +68,21 @@ export class BookingsService {
       throw new BadRequestException('Phải chọn ít nhất 1 dịch vụ');
     }
 
-    const isStoreMember = await this.prisma.userRole.findFirst({
-      where: { userId: customerId, storeId: dto.storeId },
-    });
+    // 2 query độc lập (không phụ thuộc kết quả nhau), chạy song song ngoài transaction
+    const [isStoreMember, activePromotion] = await Promise.all([
+      this.prisma.userRole.findFirst({
+        where: { userId: customerId, storeId: dto.storeId },
+      }),
+      this.promotions.findActiveForStore(dto.storeId),
+    ]);
     if (isStoreMember) {
       throw new ForbiddenException(
         'Bạn là chủ hoặc nhân viên của cơ sở này nên không thể đặt lịch tại đây. Vui lòng sử dụng tài khoản khách hàng khác để đặt lịch.',
       );
     }
 
-    // Fetch active promotion ngoài transaction (read-only, không cần lock)
-    const activePromotion = await this.promotions.findActiveForStore(dto.storeId);
-
-    const booking = await this.prisma.$transaction(
+    const booking = await retryTransaction(() =>
+      this.prisma.$transaction(
       async (tx) => {
         const store = await tx.store.findUnique({ where: { id: dto.storeId } });
         if (!store || store.status !== StoreStatus.ACTIVE) {
@@ -105,31 +108,41 @@ export class BookingsService {
         for (let i = 0; i < dto.services.length; i++) {
           const svc = dto.services[i];
 
-          const variant = await tx.serviceVariant.findFirst({
+          const variantQuery = tx.serviceVariant.findFirst({
             where: {
               id: svc.variantId,
               serviceId: svc.serviceId,
               status: ServiceStatus.ACTIVE,
               service: { storeId: dto.storeId, status: ServiceStatus.ACTIVE },
             },
-            include: { service: { select: { name: true } } },
+            include: { service: { select: { name: true, categoryId: true } } },
           });
-          if (!variant) {
-            throw new NotFoundException(`Variant không tìm thấy cho dịch vụ thứ ${i + 1}`);
-          }
 
           let staffId: string;
           let isStaffChosenByCustomer = false;
+          let variant: Awaited<typeof variantQuery>;
           if (svc.staffId) {
-            const canDo = await tx.staff.findFirst({
-              where: { id: svc.staffId, storeId: dto.storeId, status: 'ACTIVE' },
-            });
+            // variant và canDo đọc 2 bảng độc lập, không phụ thuộc kết quả nhau
+            const [variantResult, canDo] = await Promise.all([
+              variantQuery,
+              tx.staff.findFirst({
+                where: { id: svc.staffId, storeId: dto.storeId, status: 'ACTIVE' },
+              }),
+            ]);
+            variant = variantResult;
+            if (!variant) {
+              throw new NotFoundException(`Variant không tìm thấy cho dịch vụ thứ ${i + 1}`);
+            }
             if (!canDo) {
               throw new BadRequestException(`Nhân viên không thực hiện được dịch vụ thứ ${i + 1}`);
             }
             staffId = svc.staffId;
             isStaffChosenByCustomer = true;
           } else {
+            variant = await variantQuery;
+            if (!variant) {
+              throw new NotFoundException(`Variant không tìm thấy cho dịch vụ thứ ${i + 1}`);
+            }
             const found = await this.pickAvailableStaff(tx, dto.storeId, svc.serviceId, currentTime, variant.duration, store.timezone);
             if (!found) {
               throw new ConflictException(`Không có nhân viên khả dụng cho dịch vụ thứ ${i + 1}`);
@@ -137,22 +150,21 @@ export class BookingsService {
             staffId = found;
           }
 
-          await this.assertNoOverlap(tx, staffId, currentTime, variant.duration);
-
-          const staffRecord = await tx.staff.findUnique({
-            where: { id: staffId },
-            select: { user: { select: { fullName: true } } },
-          });
+          // Overlap check (BookingItem) và lấy tên staff (Staff) đọc 2 bảng độc lập
+          const [overlap, staffRecord] = await Promise.all([
+            this.findOverlap(tx, staffId, currentTime, variant.duration),
+            tx.staff.findUnique({
+              where: { id: staffId },
+              select: { user: { select: { fullName: true } } },
+            }),
+          ]);
+          if (overlap) throw new ConflictException('Slot này vừa được đặt');
 
           // Apply promotion per item nếu có và service nằm trong scope
           let itemPrice = variant.price;
           let originalPrice: Prisma.Decimal | null = null;
           if (activePromotion) {
-            const variantWithService = await tx.serviceVariant.findUnique({
-              where: { id: variant.id },
-              include: { service: { select: { categoryId: true } } },
-            });
-            const categoryId = variantWithService?.service.categoryId ?? null;
+            const categoryId = variant.service.categoryId ?? null;
             if (this.promotions.isServiceInScope(activePromotion, svc.serviceId, categoryId)) {
               const saving = this.promotions.calcDiscount(activePromotion, Number(variant.price));
               originalPrice = variant.price;
@@ -216,24 +228,23 @@ export class BookingsService {
         let couponId: string | null = null;
         let discountAmount = new Prisma.Decimal(0);
 
-        if (dto.couponCode) {
-          const result = await this.coupons.applyToBooking(
-            tx,
-            dto.couponCode,
-            dto.storeId,
-            totalPrice,
-            customerId,
-          );
-          couponId = result.couponId;
-          discountAmount = result.discountAmount;
+        // applyToBooking có ghi (tăng usedCount) nên chỉ chạy sau khi đã chắc chắn
+        // không bị conflict lịch ở trên; userProfile là read độc lập, chạy song song với nó
+        const [couponResult, userProfile] = await Promise.all([
+          dto.couponCode
+            ? this.coupons.applyToBooking(tx, dto.couponCode, dto.storeId, totalPrice, customerId)
+            : Promise.resolve(null),
+          tx.user.findUnique({
+            where: { id: customerId },
+            select: { fullName: true, phone: true, email: true },
+          }),
+        ]);
+        if (couponResult) {
+          couponId = couponResult.couponId;
+          discountAmount = couponResult.discountAmount;
         }
 
         const finalPrice = totalPrice.sub(discountAmount);
-
-        const userProfile = await tx.user.findUnique({
-          where: { id: customerId },
-          select: { fullName: true, phone: true, email: true },
-        });
 
         const booking = await tx.booking.create({
           data: {
@@ -269,6 +280,7 @@ export class BookingsService {
         return booking;
       },
       { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+      ),
     );
 
     const serviceNames = booking.items.map((item) => item.service.name).join(', ');
