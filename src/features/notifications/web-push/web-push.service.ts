@@ -48,17 +48,30 @@ export class WebPushService implements OnModuleInit {
   }
 
   async sendToUser(userId: string, payload: { title: string; body: string; data?: Record<string, unknown> }) {
-    if (!this.enabled) return;
+    return this.sendToUsers([{ userId, ...payload }]);
+  }
 
-    const subs = await this.prisma.pushSubscription.findMany({ where: { userId } });
+  // Gộp 1 lần query pushSubscription cho nhiều user thay vì gọi sendToUser() tuần tự từng
+  // người (mỗi lần lại tự query riêng) — dùng khi 1 sự kiện (vd tạo booking) cần push đồng
+  // thời cho owner + customer, để giảm round-trip DB dưới tải cao.
+  async sendToUsers(
+    items: Array<{ userId: string; title: string; body: string; data?: Record<string, unknown> }>,
+  ) {
+    if (!this.enabled || items.length === 0) return;
+
+    const userIds = items.map((i) => i.userId);
+    const subs = await this.prisma.pushSubscription.findMany({ where: { userId: { in: userIds } } });
     if (!subs.length) return;
 
-    const payloadStr = JSON.stringify(payload);
+    const payloadByUser = new Map(
+      items.map((i) => [i.userId, JSON.stringify({ title: i.title, body: i.body, data: i.data })]),
+    );
+
     const results = await Promise.allSettled(
       subs.map((sub) =>
         webPush.sendNotification(
           { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } },
-          payloadStr,
+          payloadByUser.get(sub.userId)!,
         ),
       ),
     );

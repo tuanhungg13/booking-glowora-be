@@ -12,11 +12,19 @@ import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter'
 import { RequestContextService } from './common/request-context.service';
 import { SystemAuditInterceptor } from './common/interceptors/system-audit.interceptor';
 import { SystemLogService } from './system-log/system-log.service';
+import { RedisService } from './redis/redis.service';
+import { RedisIoAdapter } from './gateways/redis-io.adapter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
   app.use(app.get(RequestContextService).middleware());
+
+  // Đồng bộ Socket.IO qua Redis pub/sub giữa các worker cluster (xem redis-io.adapter.ts)
+  const redisService = app.get(RedisService);
+  const pubClient = redisService.getClient().duplicate();
+  const subClient = pubClient.duplicate();
+  app.useWebSocketAdapter(new RedisIoAdapter(app, pubClient, subClient));
 
   const allowedOrigins = (process.env.FRONTEND_CORS_ORIGINS ?? 'http://localhost:3000')
     .split(',')
@@ -84,6 +92,14 @@ async function bootstrap() {
 const numWorkers = Number(process.env.WEB_CONCURRENCY) || os.cpus().length;
 
 if (numWorkers > 1 && cluster.isPrimary) {
+  // Trên Windows, cluster module mặc định dùng SCHED_NONE (để OS tự chia connection
+  // qua shared handle) thay vì SCHED_RR như Linux/Mac — nhưng đo thực tế cho thấy OS
+  // không chia đều: gần như toàn bộ 100 request đồng thời dồn vào đúng 1 worker (CPU
+  // time của 1 worker tăng ~1s trong khi 7 worker còn lại gần như không đổi), khiến
+  // cluster fork ở trên vô hiệu. Ép SCHED_RR để primary tự round-robin connection
+  // qua các worker thay vì để Windows quyết định.
+  cluster.schedulingPolicy = cluster.SCHED_RR;
+
   const logger = new Logger('Cluster');
   logger.log(`Primary ${process.pid} đang fork ${numWorkers} worker`);
 

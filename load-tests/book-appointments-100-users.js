@@ -35,6 +35,10 @@ import { loginCustomerPool } from './lib/accounts.js';
 
 const BASE_URL = __ENV.BASE_URL || 'http://localhost:8080';
 const VUS = Number(__ENV.VUS || 100);
+// Cho phép đẩy ngày đặt lịch xa hơn khi chạy lại script nhiều lần trong cùng 1 ngày
+// (mặc định +9 ngày kể từ hôm nay, xem scheduledAtForRound) - tránh toàn bộ request
+// bị 409 do trùng scheduledAt với lần chạy trước, để đo đúng latency của nhánh 201.
+const DAY_OFFSET = Number(__ENV.DAY_OFFSET || 9);
 
 const bookingCreated = new Counter('booking_created');
 const bookingConflict = new Counter('booking_conflict_409');
@@ -130,7 +134,7 @@ function scheduledAtForRound(round) {
   const localMinutes = SLOT_START_MIN + slotIndex * SLOT_GAP_MIN;
 
   const date = new Date();
-  date.setUTCDate(date.getUTCDate() + 9 + dayOffset);
+  date.setUTCDate(date.getUTCDate() + DAY_OFFSET + dayOffset);
   date.setUTCHours(Math.floor(localMinutes / 60) - VN_UTC_OFFSET_HOURS, localMinutes % 60, 0, 0);
   return date;
 }
