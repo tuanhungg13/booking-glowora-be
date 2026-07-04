@@ -164,33 +164,46 @@ export class BookingsService {
               ]);
               variant = variantResult;
               if (!variant) {
-                throw new NotFoundException(`Variant không tìm thấy cho dịch vụ thứ ${i + 1}`);
+                const svcInfo = await tx.service.findUnique({ where: { id: svc.serviceId }, select: { name: true } });
+                throw new NotFoundException(`Variant không tìm thấy cho dịch vụ "${svcInfo?.name ?? ''}"`);
               }
               if (!canDo) {
-                throw new BadRequestException(`Nhân viên không thực hiện được dịch vụ thứ ${i + 1}`);
+                throw new BadRequestException(`Nhân viên không thực hiện được dịch vụ "${variant.service.name}"`);
               }
               staffId = svc.staffId;
               staffName = canDo.user.fullName;
               isStaffChosenByCustomer = true;
+
+              // Khoá đúng 1 row staff (thay cho Serializable isolation của cả transaction): chỉ
+              // booking nhắm CÙNG staff này mới phải xếp hàng chờ nhau, khác staff chạy song song
+              // hoàn toàn. Phải khoá TRƯỚC khi findOverlap để đóng đúng race window check-rồi-insert.
+              await this.lockStaffForBooking(tx, staffId);
+              const overlap = await this.findOverlap(tx, staffId, currentTime, variant.duration);
+              if (overlap) throw new ConflictException('Slot này vừa được đặt');
             } else {
               variant = await variantQuery;
               if (!variant) {
-                throw new NotFoundException(`Variant không tìm thấy cho dịch vụ thứ ${i + 1}`);
+                const svcInfo = await tx.service.findUnique({ where: { id: svc.serviceId }, select: { name: true } });
+                throw new NotFoundException(`Variant không tìm thấy cho dịch vụ "${svcInfo?.name ?? ''}"`);
               }
-              const found = await this.pickAvailableStaff(tx, dto.storeId, svc.serviceId, currentTime, variant.duration, store.timezone);
-              if (!found) {
-                throw new ConflictException(`Không có nhân viên khả dụng cho dịch vụ thứ ${i + 1}`);
-              }
-              staffId = found.id;
-              staffName = found.fullName;
-            }
 
-            // Khoá đúng 1 row staff (thay cho Serializable isolation của cả transaction): chỉ
-            // booking nhắm CÙNG staff này mới phải xếp hàng chờ nhau, khác staff chạy song song
-            // hoàn toàn. Phải khoá TRƯỚC khi findOverlap để đóng đúng race window check-rồi-insert.
-            await this.lockStaffForBooking(tx, staffId);
-            const overlap = await this.findOverlap(tx, staffId, currentTime, variant.duration);
-            if (overlap) throw new ConflictException('Slot này vừa được đặt');
+              // Ứng viên đã được pickAvailableStaff sort theo workload tăng dần; khoá + check
+              // overlap từng ứng viên theo thứ tự đó. Nếu ứng viên đầu vừa bị transaction khác
+              // giành mất slot (thua race ở bước lock), thử ngay ứng viên kế tiếp thay vì báo lỗi
+              // luôn cho khách.
+              const candidates = await this.pickAvailableStaff(tx, dto.storeId, currentTime, variant.duration, store.timezone);
+              let picked: { id: string; fullName: string | null } | null = null;
+              for (const candidate of candidates) {
+                await this.lockStaffForBooking(tx, candidate.id);
+                const candidateOverlap = await this.findOverlap(tx, candidate.id, currentTime, variant.duration);
+                if (!candidateOverlap) { picked = candidate; break; }
+              }
+              if (!picked) {
+                throw new ConflictException(`Không có nhân viên khả dụng cho dịch vụ "${variant.service.name}"`);
+              }
+              staffId = picked.id;
+              staffName = picked.fullName;
+            }
 
             // Apply promotion per item nếu có và service nằm trong scope
             let itemPrice = variant.price;
@@ -389,30 +402,39 @@ export class BookingsService {
               ]);
               variant = variantResult;
               if (!variant) {
-                throw new NotFoundException(`Variant không tìm thấy cho dịch vụ thứ ${i + 1}`);
+                const svcInfo = await tx.service.findUnique({ where: { id: svc.serviceId }, select: { name: true } });
+                throw new NotFoundException(`Variant không tìm thấy cho dịch vụ "${svcInfo?.name ?? ''}"`);
               }
               if (!canDo) {
-                throw new BadRequestException(`Nhân viên không thực hiện được dịch vụ thứ ${i + 1}`);
+                throw new BadRequestException(`Nhân viên không thực hiện được dịch vụ "${variant.service.name}"`);
               }
               staffId = svc.staffId;
               staffName = canDo.user.fullName;
               isStaffChosenByCustomer = true;
+
+              await this.lockStaffForBooking(tx, staffId);
+              const overlap = await this.findOverlap(tx, staffId, currentTime, variant.duration);
+              if (overlap) throw new ConflictException('Slot này vừa được đặt');
             } else {
               variant = await variantQuery;
               if (!variant) {
-                throw new NotFoundException(`Variant không tìm thấy cho dịch vụ thứ ${i + 1}`);
+                const svcInfo = await tx.service.findUnique({ where: { id: svc.serviceId }, select: { name: true } });
+                throw new NotFoundException(`Variant không tìm thấy cho dịch vụ "${svcInfo?.name ?? ''}"`);
               }
-              const found = await this.pickAvailableStaff(tx, storeId, svc.serviceId, currentTime, variant.duration, store.timezone);
-              if (!found) {
-                throw new ConflictException(`Không có nhân viên khả dụng cho dịch vụ thứ ${i + 1}`);
-              }
-              staffId = found.id;
-              staffName = found.fullName;
-            }
 
-            await this.lockStaffForBooking(tx, staffId);
-            const overlap = await this.findOverlap(tx, staffId, currentTime, variant.duration);
-            if (overlap) throw new ConflictException('Slot này vừa được đặt');
+              const candidates = await this.pickAvailableStaff(tx, storeId, currentTime, variant.duration, store.timezone);
+              let picked: { id: string; fullName: string | null } | null = null;
+              for (const candidate of candidates) {
+                await this.lockStaffForBooking(tx, candidate.id);
+                const candidateOverlap = await this.findOverlap(tx, candidate.id, currentTime, variant.duration);
+                if (!candidateOverlap) { picked = candidate; break; }
+              }
+              if (!picked) {
+                throw new ConflictException(`Không có nhân viên khả dụng cho dịch vụ "${variant.service.name}"`);
+              }
+              staffId = picked.id;
+              staffName = picked.fullName;
+            }
 
             let itemPrice = variant.price;
             let originalPrice: Prisma.Decimal | null = null;
@@ -874,14 +896,17 @@ export class BookingsService {
     if (!userRole) throw new ForbiddenException('Bạn không phải nhân viên của cơ sở này');
   }
 
+  // Trả về danh sách nhân viên khả dụng, sắp xếp theo workload (số booking item đang bận
+  // trong cửa sổ quét) tăng dần để cân bằng tải — cùng tiêu chí "Fix 6" đang dùng ở
+  // SlotsService.getAvailableSlots. Không có bảng ánh xạ staff↔service trong schema (mọi nhân
+  // viên ACTIVE của store đều được coi là làm được mọi dịch vụ) nên hàm này không lọc theo service.
   private async pickAvailableStaff(
     tx: Prisma.TransactionClient,
     storeId: string,
-    serviceId: string,
     startTime: Date,
     duration: number,
     timezone: string,
-  ): Promise<{ id: string; fullName: string | null } | null> {
+  ): Promise<Array<{ id: string; fullName: string | null }>> {
     const tzOffset = TZ_OFFSETS[timezone] ?? 7 * 60;
     const localDate = new Date(startTime.getTime() + tzOffset * 60 * 1000);
     const dayOfWeek = DOW_MAP[localDate.getUTCDay()];
@@ -894,7 +919,7 @@ export class BookingsService {
       where: { storeId, status: 'ACTIVE' },
       select: { id: true, user: { select: { fullName: true } } },
     });
-    if (mappings.length === 0) return null;
+    if (mappings.length === 0) return [];
     const staffIds = mappings.map((m) => m.id);
     // Lấy sẵn tên staff từ query này luôn, tránh phải query lại staff.findUnique riêng để lấy fullName
     const nameByStaff = new Map(mappings.map((m) => [m.id, m.user.fullName]));
@@ -936,6 +961,8 @@ export class BookingsService {
       if (arr) arr.push(item); else busyByStaff.set(item.staffId, [item]);
     }
 
+    const candidates: Array<{ id: string; fullName: string | null; workload: number }> = [];
+
     for (const staffId of staffIds) {
       const schedule = scheduleByStaff.get(staffId);
       const callIn = callInByStaff.get(staffId);
@@ -956,13 +983,18 @@ export class BookingsService {
       const windowEnd = this.parseTimeMins(windowEndStr);
       if (localStartMins < windowStart || localEndMins > windowEnd) continue;
 
-      const overlap = (busyByStaff.get(staffId) ?? []).some((item) => {
+      const staffBusyItems = busyByStaff.get(staffId) ?? [];
+      const overlap = staffBusyItems.some((item) => {
         const itemEnd = new Date(item.startTime.getTime() + item.duration * 60 * 1000);
         return startTime < itemEnd && item.startTime < endTime;
       });
-      if (!overlap) return { id: staffId, fullName: nameByStaff.get(staffId) ?? null };
+      if (overlap) continue;
+
+      candidates.push({ id: staffId, fullName: nameByStaff.get(staffId) ?? null, workload: staffBusyItems.length });
     }
-    return null;
+
+    candidates.sort((a, b) => a.workload - b.workload);
+    return candidates.map(({ id, fullName }) => ({ id, fullName }));
   }
 
   private parseTimeMins(timeStr: string): number {

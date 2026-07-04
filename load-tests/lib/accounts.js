@@ -1,6 +1,6 @@
 import http from 'k6/http';
 
-const OWNER_PASSWORD = 'Owner@123456';
+export const OWNER_PASSWORD = 'Owner@123456';
 const STORE_COUNT = 60; // prisma/seed_200_stores.sql seeds 60 demo stores
 const MAX_STAFF_PER_STORE = 5;
 
@@ -24,6 +24,18 @@ export function candidateEmails() {
   return emails;
 }
 
+// Chỉ email owner.sXXX (bỏ qua staff.sXXXuYY) - dùng khi cần đăng nhập ĐÚNG chủ cửa
+// hàng, vd race-single-slot-4-users-mixed.js cần actor có quyền CREATE_APPOINTMENT để
+// gọi POST /store-bookings/walk-in (role SHOP_STAFF không có quyền này, xem
+// prisma/seed.ts - STAFF_PERMISSIONS).
+export function ownerCandidateEmails() {
+  const emails = [];
+  for (let s = 1; s <= STORE_COUNT; s++) {
+    emails.push(`owner.s${String(s).padStart(3, '0')}@glowora.local`);
+  }
+  return emails;
+}
+
 // Demo CUSTOMER accounts (prisma/seed_customers.sql, see
 // prisma/seed_customers_accounts.md). Their UserRole is global (storeId =
 // NULL), so they hold no membership at any store and can book ANY store.
@@ -35,6 +47,8 @@ export function customerCandidateEmails() {
   return emails;
 }
 
+// Trả về { token, userId } (userId lấy từ data.user.id - dùng để log/định danh khách
+// hàng trong báo cáo, vd race-single-slot-3-users.js) hoặc null nếu đăng nhập thất bại.
 export function login(baseUrl, email, password) {
   const res = http.post(
     `${baseUrl}/auth/login`,
@@ -43,31 +57,34 @@ export function login(baseUrl, email, password) {
   );
   if (res.status !== 200 && res.status !== 201) return null;
   const body = res.json();
-  return body && body.data && body.data.access_token ? body.data.access_token : null;
+  const token = body && body.data && body.data.access_token;
+  if (!token) return null;
+  const userId = (body.data.user && body.data.user.id) || null;
+  return { token, userId };
 }
 
 // Logs in demo owner/staff accounts one by one (some candidates, e.g. staff
 // u05 on a 4-staff store, don't exist and are silently skipped) until `max`
 // successful logins are collected, or the candidate list is exhausted (~325
-// accounts total). Returns [{ email, token }].
+// accounts total). Returns [{ email, token, userId }].
 export function loginPool(baseUrl, max) {
   const pool = [];
   for (const email of candidateEmails()) {
     if (pool.length >= max) break;
-    const token = login(baseUrl, email, OWNER_PASSWORD);
-    if (token) pool.push({ email, token });
+    const account = login(baseUrl, email, OWNER_PASSWORD);
+    if (account) pool.push({ email, token: account.token, userId: account.userId });
   }
   return pool;
 }
 
 // Same as loginPool() but for the 200 demo CUSTOMER accounts. Returns
-// [{ email, token }].
+// [{ email, token, userId }].
 export function loginCustomerPool(baseUrl, max) {
   const pool = [];
   for (const email of customerCandidateEmails()) {
     if (pool.length >= max) break;
-    const token = login(baseUrl, email, CUSTOMER_PASSWORD);
-    if (token) pool.push({ email, token });
+    const account = login(baseUrl, email, CUSTOMER_PASSWORD);
+    if (account) pool.push({ email, token: account.token, userId: account.userId });
   }
   return pool;
 }
