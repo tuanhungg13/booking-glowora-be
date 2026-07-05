@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { DayOfWeek, Prisma, StaffStatus, StoreStatus } from '@prisma/client';
+import { DayOfWeek, Prisma, StaffStatus, Store, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { PermissionCacheService } from '../../redis/permission-cache.service';
 import { SystemLogService } from '../../system-log/system-log.service';
@@ -24,6 +24,14 @@ const SHOP_OWNER_ROLE_CODE = 'SHOP_OWNER';
 const MAX_STORE_ROLES_PER_USER = 3;
 const CLOUDINARY_IMAGE_HOST = 'res.cloudinary.com';
 
+// Các field xác minh danh tính/giấy phép — sửa đổi những field này sau khi store
+// đã ACTIVE/INACTIVE thì phải đưa store về PENDING để admin duyệt lại.
+const VERIFICATION_DATE_FIELDS = ['cccdDateOfBirth', 'cccdIssueDate', 'cccdExpiryDate', 'bizIssueDate'] as const;
+const VERIFICATION_TEXT_FIELDS = [
+  'cccdFullName', 'citizenId', 'cccdGender', 'cccdNationality', 'cccdAddress',
+  'bizName', 'bizCode', 'bizOwnerName', 'bizAddress', 'bizLine',
+] as const;
+
 const storeListInclude = {
   workingHours: { orderBy: { dayOfWeek: 'asc' as const } },
   owner: { select: { id: true, fullName: true, email: true, phone: true } },
@@ -32,8 +40,33 @@ const storeListInclude = {
   _count: { select: { services: true, reviews: true, staff: true } },
 } as const;
 
-const storeDetailInclude = {
-  ...storeListInclude,
+// Chỉ chứa các field mà trang danh sách/chi tiết store public thực sự render.
+// Không dùng storeListInclude ở đây vì nó expose CCCD, giấy phép kinh doanh, và
+// thông tin liên hệ riêng của owner — chỉ dành cho owner/admin xem (create/findMine/update).
+const storePublicListSelect = {
+  id: true,
+  slug: true,
+  name: true,
+  address: true,
+  logoUrl: true,
+  bannerUrl: true,
+  avgRating: true,
+  totalReviews: true,
+  latitude: true,
+  longitude: true,
+  workingHours: {
+    select: { dayOfWeek: true, openTime: true, closeTime: true, isClosed: true },
+    orderBy: { dayOfWeek: 'asc' as const },
+  },
+  province: { select: { name: true } },
+  ward: { select: { name: true } },
+  _count: { select: { services: true } },
+} as const;
+
+const storePublicDetailSelect = {
+  ...storePublicListSelect,
+  description: true,
+  phone: true,
   services: {
     where: { status: 'ACTIVE' as const },
     include: {
@@ -41,15 +74,6 @@ const storeDetailInclude = {
       variants: { where: { status: 'ACTIVE' as const }, orderBy: { sortOrder: 'asc' as const } },
     },
     orderBy: { createdAt: 'desc' as const },
-  },
-  reviews: {
-    where: { isVisible: true },
-    take: 5,
-    orderBy: { createdAt: 'desc' as const },
-    include: {
-      customer: { select: { id: true, fullName: true, avatarUrl: true } },
-      service: { select: { id: true, name: true } },
-    },
   },
 } as const;
 
@@ -195,7 +219,7 @@ export class StoresService {
       const where = this.buildPublicWhere(filter);
       const orderBy = this.buildOrderBy(filter.sort);
       const [rawItems, total] = await this.prisma.$transaction([
-        this.prisma.store.findMany({ where, orderBy, skip: (page - 1) * limit, take: limit, include: storeListInclude }),
+        this.prisma.store.findMany({ where, orderBy, skip: (page - 1) * limit, take: limit, select: storePublicListSelect }),
         this.prisma.store.count({ where }),
       ]);
       if (!hasLocation) return { items: rawItems, total, page, limit };
@@ -234,7 +258,7 @@ export class StoresService {
 
     const distanceMap = new Map(rows.map((r) => [r.id, Number(r.distance)]));
     const pageIds = rows.map((r) => r.id);
-    const pageItems = await this.prisma.store.findMany({ where: { id: { in: pageIds } }, include: storeListInclude });
+    const pageItems = await this.prisma.store.findMany({ where: { id: { in: pageIds } }, select: storePublicListSelect });
     const items = pageIds.map((id) => ({ ...pageItems.find((s) => s.id === id)!, distance: distanceMap.get(id) }));
     return { items, total, page, limit };
   }
@@ -278,7 +302,7 @@ export class StoresService {
         status: StoreStatus.ACTIVE,
         OR: [{ id: idOrSlug }, { slug: idOrSlug }],
       },
-      include: storeDetailInclude,
+      select: storePublicDetailSelect,
     });
     if (!store) throw new NotFoundException('Không tìm thấy cửa hàng');
 
@@ -357,10 +381,16 @@ export class StoresService {
       ? await this.generateUniqueSlug(dto.name, dto.provinceId ?? store.provinceId ?? undefined)
       : undefined;
 
+    const changedVerificationFields = this.hasVerificationChange(dto, store);
+
     return this.mapStoreOwnerView(
       await this.prisma.store.update({
         where: { id },
-        data: { ...dto, ...(slug && { slug }) },
+        data: {
+          ...dto,
+          ...(slug && { slug }),
+          ...(changedVerificationFields && this.reverificationData(store.status)),
+        },
         include: storeListInclude,
       }),
     );
@@ -425,8 +455,8 @@ export class StoresService {
     const cccdFrontUrl = await this.cloudinary.uploadImage(file, `glowora/stores/${id}/cccd-front`);
     const updated = await this.prisma.store.update({
       where: { id },
-      data: { cccdFrontUrl },
-      select: { id: true, cccdFrontUrl: true },
+      data: { cccdFrontUrl, ...this.reverificationData(store.status) },
+      select: { id: true, cccdFrontUrl: true, status: true },
     });
     await this.deleteCloudinaryImageIfPresent(store.cccdFrontUrl).catch(() => undefined);
     return updated;
@@ -437,8 +467,8 @@ export class StoresService {
     const cccdBackUrl = await this.cloudinary.uploadImage(file, `glowora/stores/${id}/cccd-back`);
     const updated = await this.prisma.store.update({
       where: { id },
-      data: { cccdBackUrl },
-      select: { id: true, cccdBackUrl: true },
+      data: { cccdBackUrl, ...this.reverificationData(store.status) },
+      select: { id: true, cccdBackUrl: true, status: true },
     });
     await this.deleteCloudinaryImageIfPresent(store.cccdBackUrl).catch(() => undefined);
     return updated;
@@ -449,8 +479,8 @@ export class StoresService {
     const businessLicenseUrl = await this.cloudinary.uploadImage(file, `glowora/stores/${id}/business-license`);
     const updated = await this.prisma.store.update({
       where: { id },
-      data: { businessLicenseUrl },
-      select: { id: true, businessLicenseUrl: true },
+      data: { businessLicenseUrl, ...this.reverificationData(store.status) },
+      select: { id: true, businessLicenseUrl: true, status: true },
     });
     await this.deleteCloudinaryImageIfPresent(store.businessLicenseUrl).catch(() => undefined);
     return updated;
@@ -542,6 +572,28 @@ export class StoresService {
       this.prisma.storePaymentConfig.delete({ where: { storeId } }),
       this.prisma.store.update({ where: { id: storeId }, data: { depositPercent: 0 } }),
     ]);
+  }
+
+  private reverificationData(currentStatus: StoreStatus): Prisma.StoreUncheckedUpdateInput {
+    if (currentStatus !== StoreStatus.ACTIVE && currentStatus !== StoreStatus.INACTIVE) return {};
+    return { status: StoreStatus.PENDING, approvedById: null, approvedAt: null, rejectionReason: null };
+  }
+
+  // So sánh với giá trị hiện tại trong DB — tránh việc submit lại y nguyên dữ liệu cũ
+  // (form ở FE luôn gửi kèm toàn bộ field CCCD/biz dù người dùng không đổi gì) cũng kích hoạt duyệt lại.
+  private hasVerificationChange(dto: UpdateStoreDto, store: Store): boolean {
+    const textChanged = VERIFICATION_TEXT_FIELDS.some((field) => {
+      const incoming = dto[field];
+      return incoming !== undefined && incoming !== (store[field] ?? undefined);
+    });
+    if (textChanged) return true;
+
+    return VERIFICATION_DATE_FIELDS.some((field) => {
+      const incoming = dto[field];
+      if (incoming === undefined) return false;
+      const current = store[field];
+      return new Date(incoming).getTime() !== (current ? current.getTime() : NaN);
+    });
   }
 
   async checkOwnership(storeId: string, userId: string) {

@@ -13,7 +13,14 @@ type PublicServiceParams = { storeId?: string; categoryId?: string; q?: string; 
 const serviceInclude = {
   category: true,
   variants: { where: { status: ServiceStatus.ACTIVE }, orderBy: { sortOrder: 'asc' as const } },
-  store: { select: { id: true, name: true, slug: true, address: true, logoUrl: true, latitude: true, longitude: true } },
+  store: {
+    select: {
+      id: true, name: true, slug: true, address: true, logoUrl: true, latitude: true, longitude: true,
+      province: { select: { id: true, name: true, type: true } },
+      ward: { select: { id: true, name: true, type: true } },
+    },
+  },
+  _count: { select: { reviews: { where: { isVisible: true } } } },
 } as const;
 
 function calcDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
