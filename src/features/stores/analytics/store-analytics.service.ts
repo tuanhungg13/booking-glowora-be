@@ -194,7 +194,7 @@ export class StoreAnalyticsService {
 
     const rows = await this.prisma.$queryRawUnsafe<
       {
-        service_id: string;
+        service_id: string | null;
         service_name: string;
         booking_count: string;
         revenue: string;
@@ -202,20 +202,20 @@ export class StoreAnalyticsService {
       }[]
     >(
       `SELECT
-         s.id                         AS service_id,
-         s.name                       AS service_name,
-         COUNT(bi.id)                 AS booking_count,
-         SUM(bi.price)                AS revenue,
-         AVG(r.rating)                AS avg_rating
+         COALESCE(s.id, bi.service_id)     AS service_id,
+         COALESCE(s.name, bi.service_name) AS service_name,
+         COUNT(bi.id)                      AS booking_count,
+         SUM(bi.price)                     AS revenue,
+         AVG(r.rating)                     AS avg_rating
        FROM booking_items bi
        JOIN bookings b  ON b.id  = bi.booking_id
-       JOIN services s  ON s.id  = bi.service_id
+       LEFT JOIN services s ON s.id  = bi.service_id
        LEFT JOIN reviews r ON r.booking_item_id = bi.id AND r.is_visible = 1
        WHERE b.store_id = ?
          AND b.status = 'COMPLETED'
          AND b.scheduled_at >= ?
          AND b.scheduled_at <= ?
-       GROUP BY s.id, s.name
+       GROUP BY COALESCE(s.id, bi.service_id), COALESCE(s.name, bi.service_name)
        ORDER BY booking_count DESC
        LIMIT ?`,
       storeId,

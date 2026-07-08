@@ -58,6 +58,7 @@ export class ReviewsService {
           customerId: bookingItem.booking.customerId!,
           storeId: bookingItem.booking.storeId,
           serviceId: bookingItem.serviceId,
+          serviceName: bookingItem.serviceName,
           staffId: bookingItem.staffId,
           rating: dto.rating,
           comment: dto.comment,
@@ -210,7 +211,7 @@ export class ReviewsService {
 
   private async recalculateRatings(
     storeId: string,
-    serviceId: string,
+    serviceId: string | null,
     staffId?: string | null,
     tx?: Prisma.TransactionClient,
   ) {
@@ -218,7 +219,9 @@ export class ReviewsService {
 
     const [storeAggregate, serviceAggregate] = await Promise.all([
       db.review.aggregate({ where: { storeId, isVisible: true }, _avg: { rating: true }, _count: { rating: true } }),
-      db.review.aggregate({ where: { serviceId, isVisible: true }, _avg: { rating: true }, _count: { rating: true } }),
+      serviceId
+        ? db.review.aggregate({ where: { serviceId, isVisible: true }, _avg: { rating: true }, _count: { rating: true } })
+        : null,
     ]);
 
     await Promise.all([
@@ -226,10 +229,12 @@ export class ReviewsService {
         where: { id: storeId },
         data: { avgRating: storeAggregate._avg.rating ?? 0, totalReviews: storeAggregate._count.rating },
       }),
-      db.service.update({
-        where: { id: serviceId },
-        data: { avgRating: serviceAggregate._avg.rating ?? 0 },
-      }),
+      serviceId && serviceAggregate
+        ? db.service.update({
+            where: { id: serviceId },
+            data: { avgRating: serviceAggregate._avg.rating ?? 0 },
+          })
+        : null,
     ]);
 
     if (staffId) {

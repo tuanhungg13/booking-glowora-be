@@ -502,7 +502,7 @@ export class BookingsService {
       ),
     );
 
-    const serviceNames = booking.items.map((item) => item.service.name).join(', ');
+    const serviceNames = booking.items.map((item) => item.service?.name ?? item.serviceName).join(', ');
     this.notifications
       .notifyBookingCreated({
         bookingId: booking.id,
@@ -715,7 +715,7 @@ export class BookingsService {
       include: bookingInclude,
     });
 
-    const serviceNames = updated.items.map((i) => i.service.name).join(', ');
+    const serviceNames = updated.items.map((i) => i.service?.name ?? i.serviceName).join(', ');
 
     if (needsDeposit) {
       this.notifications
@@ -777,7 +777,7 @@ export class BookingsService {
         customerId: updated.customer?.id,
         customerEmail: updated.customer?.email,
         storeName: updated.store.name,
-        serviceNames: updated.items.map((i) => i.service.name).join(', '),
+        serviceNames: updated.items.map((i) => i.service?.name ?? i.serviceName).join(', '),
         reason,
       })
       .catch(() => undefined);
@@ -806,7 +806,7 @@ export class BookingsService {
         customerId: updated.customer?.id,
         customerEmail: updated.customer?.email,
         storeName: updated.store.name,
-        serviceNames: updated.items.map((i) => i.service.name).join(', '),
+        serviceNames: updated.items.map((i) => i.service?.name ?? i.serviceName).join(', '),
       })
       .catch(() => undefined);
 
@@ -861,7 +861,7 @@ export class BookingsService {
         customerId: updated.customer?.id,
         customerName: updated.customer?.fullName,
         customerEmail: updated.customer?.email,
-        serviceNames: updated.items.map((i) => i.service.name).join(', '),
+        serviceNames: updated.items.map((i) => i.service?.name ?? i.serviceName).join(', '),
         reason,
       })
       .catch(() => undefined);
@@ -1147,7 +1147,7 @@ export class BookingsService {
         customerName: booking.customer?.fullName,
         customerEmail: booking.customer?.email,
         storeName: booking.store.name,
-        serviceName: item.service.name,
+        serviceName: item.service?.name ?? item.serviceName,
         newStaffName: newStaff.user.fullName,
         scheduledAt: booking.scheduledAt,
       })

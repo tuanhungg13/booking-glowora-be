@@ -208,7 +208,7 @@ export class PaymentsService {
       gateway: payload.gateway,
     });
 
-    const serviceNames = payment.booking.items.map((i) => i.service.name).join(', ');
+    const serviceNames = payment.booking.items.map((i) => i.service?.name ?? i.serviceName).join(', ');
 
     if (payment.type === PaymentType.DEPOSIT) {
       this.systemLog.log({

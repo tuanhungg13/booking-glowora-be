@@ -722,8 +722,8 @@ model BookingItem {
   id          String   @id @default(uuid()) @db.Char(36)
   bookingId   String   @map("booking_id") @db.Char(36)
   sortOrder   Int      @map("sort_order") // thứ tự thực hiện: 0, 1, 2...
-  serviceId   String   @map("service_id") @db.Char(36)
-  variantId   String   @map("variant_id") @db.Char(36)
+  serviceId   String?  @map("service_id") @db.Char(36)
+  variantId   String?  @map("variant_id") @db.Char(36)
   staffId                  String?  @map("staff_id") @db.Char(36)
   startTime                DateTime @map("start_time") // UTC — thời điểm bắt đầu item này
   duration                 Int // snapshot of variant.duration (phút)
@@ -735,10 +735,10 @@ model BookingItem {
   isStaffChosenByCustomer  Boolean  @default(false) @map("is_staff_chosen_by_customer")
   createdAt                DateTime @default(now()) @map("created_at")
 
-  booking Booking        @relation(fields: [bookingId], references: [id], onDelete: Cascade)
-  service Service        @relation(fields: [serviceId], references: [id])
-  variant ServiceVariant @relation(fields: [variantId], references: [id])
-  staff   Staff?         @relation(fields: [staffId], references: [id])
+  booking Booking         @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  service Service?        @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  variant ServiceVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  staff   Staff?          @relation(fields: [staffId], references: [id])
   review  Review?
 
   @@index([bookingId])
@@ -808,7 +808,8 @@ model Review {
   bookingId     String   @map("booking_id") @db.Char(36)
   customerId    String   @map("customer_id") @db.Char(36)
   storeId       String   @map("store_id") @db.Char(36)
-  serviceId     String   @map("service_id") @db.Char(36)
+  serviceId     String?  @map("service_id") @db.Char(36)
+  serviceName   String?  @map("service_name") @db.VarChar(150) // snapshot of service.name
   staffId       String?  @map("staff_id") @db.Char(36)
   rating        Int // 1–5
   comment       String?  @db.Text
@@ -821,7 +822,7 @@ model Review {
   booking     Booking     @relation(fields: [bookingId], references: [id])
   customer    User        @relation("CustomerReviews", fields: [customerId], references: [id])
   store       Store       @relation(fields: [storeId], references: [id])
-  service     Service     @relation(fields: [serviceId], references: [id])
+  service     Service?    @relation(fields: [serviceId], references: [id], onDelete: SetNull)
   staff       Staff?      @relation("StaffReviews", fields: [staffId], references: [id])
 
   @@index([storeId, isVisible, createdAt])

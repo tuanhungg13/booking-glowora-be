@@ -364,6 +364,7 @@ export class StoreStaffService {
               staffId: true,
               startTime: true,
               duration: true,
+              serviceName: true,
               service: { select: { name: true } },
             },
           },
@@ -387,7 +388,7 @@ export class StoreStaffService {
           bookingId: booking.id,
           bookingStatus: booking.status,
           customerName: booking.customerName,
-          serviceName: item.service.name,
+          serviceName: item.service?.name ?? item.serviceName,
           startTime: item.startTime.toISOString(),
           duration: item.duration,
         });

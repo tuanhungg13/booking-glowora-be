@@ -54,7 +54,7 @@ export class BookingReminderService implements OnModuleInit {
 
     for (const booking of bookings) {
       if (!booking.customer) continue;
-      const serviceNames = booking.items.map((i) => i.service.name).join(', ');
+      const serviceNames = booking.items.map((i) => i.service?.name ?? i.serviceName).join(', ');
       await this.notifications
         .notifyBookingReminder1Day({
           bookingId: booking.id,
@@ -95,7 +95,7 @@ export class BookingReminderService implements OnModuleInit {
 
     for (const booking of bookings) {
       if (!booking.customer) continue;
-      const serviceNames = booking.items.map((i) => i.service.name).join(', ');
+      const serviceNames = booking.items.map((i) => i.service?.name ?? i.serviceName).join(', ');
       await this.notifications
         .notifyBookingReminder1Hour({
           bookingId: booking.id,
@@ -134,7 +134,7 @@ export class BookingReminderService implements OnModuleInit {
 
     for (const booking of bookings) {
       if (!booking.customer) continue;
-      const serviceNames = booking.items.map((i) => i.service.name).join(', ');
+      const serviceNames = booking.items.map((i) => i.service?.name ?? i.serviceName).join(', ');
       await this.notifications
         .notifyDepositReminder({
           bookingId: booking.id,
@@ -175,7 +175,7 @@ export class BookingReminderService implements OnModuleInit {
       });
       if (result.count === 0) continue;
 
-      const serviceNames = booking.items.map((i) => i.service.name).join(', ');
+      const serviceNames = booking.items.map((i) => i.service?.name ?? i.serviceName).join(', ');
       await this.notifications
         .notifyDepositExpired({
           bookingId: booking.id,

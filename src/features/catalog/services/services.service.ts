@@ -643,10 +643,13 @@ export class ServicesService {
   async remove(id: string, storeId: string, actorId: string) {
     const service = await this.findOne(id, storeId);
     await this.checkNoUpcomingBookings(id);
-    await this.prisma.service.update({
-      where: { id },
-      data: { status: ServiceStatus.DELETED, slug: null },
-    });
+
+    const urls = Array.isArray(service.imageUrls) ? (service.imageUrls as string[]) : [];
+    await Promise.allSettled(
+      urls.map((url) => this.cloudinary.deleteImage(this.cloudinary.extractPublicId(url))),
+    );
+
+    await this.prisma.service.delete({ where: { id } });
 
     this.systemLog.log({
       type: LogType.SERVICE_DELETED,
@@ -654,7 +657,7 @@ export class ServicesService {
       storeId,
       targetId: id,
       targetType: 'Service',
-      metadata: { name: service.name },
+      metadata: { name: service.name, permanent: true },
     });
 
     return { deleted: true };
@@ -672,6 +675,8 @@ export class ServicesService {
     await Promise.allSettled(
       services.map(async (service) => {
         try {
+          await this.checkNoUpcomingBookings(service.id);
+
           const urls = Array.isArray(service.imageUrls) ? (service.imageUrls as string[]) : [];
           await Promise.allSettled(
             urls.map((url) => this.cloudinary.deleteImage(this.cloudinary.extractPublicId(url))),

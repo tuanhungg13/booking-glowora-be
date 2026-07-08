@@ -133,7 +133,7 @@ export class ServicesController {
     return this.servicesService.bulkHardDelete(storeId, dto.ids, user.id);
   }
 
-  @ApiOperation({ summary: 'Xóa dịch vụ' })
+  @ApiOperation({ summary: 'Xóa cứng dịch vụ' })
   @ApiBearerAuth()
   @ApiParam({ name: 'id', description: 'Service ID' })
   @Delete(':id')
