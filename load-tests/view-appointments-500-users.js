@@ -20,11 +20,11 @@ import { loginPool } from './lib/accounts.js';
 const BASE_URL = __ENV.BASE_URL || 'http://localhost:8080';
 const VUS = Number(__ENV.VUS || 500);
 
-const viewDuration = new Trend('view_bookings_duration_ms', true);
+const viewDuration = new Trend('view_services_duration_ms', true);
 
 export const options = {
   scenarios: {
-    view_appointments: {
+    view_services: {
       executor: 'per-vu-iterations',
       vus: VUS,
       iterations: 1,
@@ -34,27 +34,27 @@ export const options = {
   setupTimeout: '180s',
   thresholds: {
     http_req_failed: ['rate<0.01'],
-    view_bookings_duration_ms: ['p(95)<1000'],
+    view_services_duration_ms: ['p(95)<1000'],
   },
 };
 
-export function setup() {
-  const pool = loginPool(BASE_URL, VUS);
-  if (pool.length === 0) {
-    throw new Error('Không đăng nhập được tài khoản demo nào (owner.sNNN@glowora.local, mật khẩu Owner@123456).');
-  }
-  if (pool.length < VUS) {
-    console.warn(`Chỉ có ${pool.length}/${VUS} tài khoản demo - một số VU sẽ dùng chung tài khoản (bình thường với GET).`);
-  }
-  console.log(`Setup xong: ${pool.length} tài khoản đã đăng nhập.`);
-  return { tokens: pool.map((a) => a.token) };
-}
+// export function setup() {
+//   const pool = loginPool(BASE_URL, VUS);
+//   if (pool.length === 0) {
+//     throw new Error('Không đăng nhập được tài khoản demo nào (owner.sNNN@glowora.local, mật khẩu Owner@123456).');
+//   }
+//   if (pool.length < VUS) {
+//     console.warn(`Chỉ có ${pool.length}/${VUS} tài khoản demo - một số VU sẽ dùng chung tài khoản (bình thường với GET).`);
+//   }
+//   console.log(`Setup xong: ${pool.length} tài khoản đã đăng nhập.`);
+//   return { tokens: pool.map((a) => a.token) };
+// }
 
 export default function (data) {
-  const token = data.tokens[(__VU - 1) % data.tokens.length];
+  // const token = data.tokens[(__VU - 1) % data.tokens.length];
 
-  const res = http.get(`${BASE_URL}/bookings/my?page=1&limit=20`, {
-    headers: { Authorization: `Bearer ${token}` },
+  const res = http.get(`${BASE_URL}/services/explore?page=1&limit=20`, {
+    // headers: { Authorization: `Bearer ${token}` },
     tags: { name: 'ViewMyBookings' },
   });
 

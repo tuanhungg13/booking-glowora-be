@@ -95,6 +95,9 @@ export class BookingsService {
     if (dto.services.length === 0) {
       throw new BadRequestException('Phải chọn ít nhất 1 dịch vụ');
     }
+    if (new Date(dto.scheduledAt).getTime() <= Date.now()) {
+      throw new BadRequestException('Không thể đặt lịch cho thời điểm đã qua');
+    }
 
     const [isStoreMember, activePromotion, store, userProfile] = await Promise.all([
       this.prisma.userRole.findFirst({
@@ -345,6 +348,9 @@ export class BookingsService {
   async createWalkIn(dto: CreateWalkInBookingDto, storeId: string, actorId: string, ipAddress?: string) {
     if (dto.services.length === 0) {
       throw new BadRequestException('Phải chọn ít nhất 1 dịch vụ');
+    }
+    if (new Date(dto.scheduledAt).getTime() <= Date.now()) {
+      throw new BadRequestException('Không thể đặt lịch cho thời điểm đã qua');
     }
 
     // Đọc trước ngoài transaction (xem giải thích ở create()) để rút ngắn thời gian giữ lock
