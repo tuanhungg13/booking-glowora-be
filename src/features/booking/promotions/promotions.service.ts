@@ -25,7 +25,7 @@ export class PromotionsService {
 
   async create(dto: CreatePromotionDto, createdById: string, storeId: string) {
     if (dto.endAt && new Date(dto.endAt) <= new Date(dto.startAt)) {
-      throw new BadRequestException('endAt phải sau startAt');
+      throw new BadRequestException('Ngày kết thúc phải sau ngày bắt đầu');
     }
     if (dto.type === CouponType.PERCENTAGE && (dto.value <= 0 || dto.value > 100)) {
       throw new BadRequestException('Promotion PERCENTAGE phải có value từ 1 đến 100');
@@ -137,16 +137,14 @@ export class PromotionsService {
     const promotion = await this.findOne(id, storeId);
 
     if (dto.endAt && new Date(dto.endAt) <= promotion.startAt) {
-      throw new BadRequestException('endAt phải sau startAt');
+      throw new BadRequestException('Ngày kết thúc phải sau ngày bắt đầu');
     }
 
+    // dto.endAt: undefined = giữ nguyên, null = xoá hạn, string = set ngày mới
+    const nextEndAt = dto.endAt !== undefined ? (dto.endAt ? new Date(dto.endAt) : null) : promotion.endAt;
+
     if (dto.isActive === true && !promotion.isActive) {
-      await this.assertNoOverlappingActive(
-        storeId,
-        promotion.startAt,
-        dto.endAt ? new Date(dto.endAt) : promotion.endAt,
-        id,
-      );
+      await this.assertNoOverlappingActive(storeId, promotion.startAt, nextEndAt, id);
     }
 
     const updated = await this.prisma.promotion.update({
@@ -155,7 +153,7 @@ export class PromotionsService {
         ...(dto.name !== undefined && { name: dto.name }),
         ...(dto.description !== undefined && { description: dto.description }),
         ...(dto.isActive !== undefined && { isActive: dto.isActive }),
-        ...(dto.endAt && { endAt: new Date(dto.endAt) }),
+        ...(dto.endAt !== undefined && { endAt: nextEndAt }),
       },
       include: promotionInclude,
     });

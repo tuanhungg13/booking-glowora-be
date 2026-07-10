@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -30,27 +31,43 @@ export class CouponsService {
 
   async create(dto: CreateCouponDto, createdById: string, storeId: string | null = null) {
     if (dto.expiredAt && new Date(dto.expiredAt) <= new Date(dto.startAt)) {
-      throw new BadRequestException('expiredAt phải sau startAt');
+      throw new BadRequestException('Ngày hết hạn phải sau ngày bắt đầu');
     }
     if (dto.type === CouponType.PERCENTAGE && (dto.value <= 0 || dto.value > 100)) {
       throw new BadRequestException('Coupon PERCENTAGE phải có value từ 1 đến 100');
     }
+    if (dto.type === CouponType.FIXED && dto.maxDiscount !== undefined) {
+      throw new BadRequestException('maxDiscount chỉ áp dụng cho coupon loại PERCENTAGE');
+    }
 
-    const coupon = await this.prisma.coupon.create({
-      data: {
-        code: dto.code.toUpperCase(),
-        type: dto.type,
-        value: dto.value,
-        minAmount: dto.minAmount ?? null,
-        maxDiscount: dto.maxDiscount ?? null,
-        usageLimit: dto.usageLimit ?? null,
-        perUserLimit: dto.perUserLimit ?? null,
-        startAt: new Date(dto.startAt),
-        expiredAt: dto.expiredAt ? new Date(dto.expiredAt) : null,
-        storeId,
-        createdById,
-      },
-    });
+    const code = dto.code.toUpperCase();
+
+    const createCoupon = () =>
+      this.prisma.coupon.create({
+        data: {
+          code,
+          type: dto.type,
+          value: dto.value,
+          minAmount: dto.minAmount ?? null,
+          maxDiscount: dto.maxDiscount ?? null,
+          usageLimit: dto.usageLimit ?? null,
+          perUserLimit: dto.perUserLimit ?? null,
+          startAt: new Date(dto.startAt),
+          expiredAt: dto.expiredAt ? new Date(dto.expiredAt) : null,
+          storeId,
+          createdById,
+        },
+      });
+
+    let coupon: Awaited<ReturnType<typeof createCoupon>>;
+    try {
+      coupon = await createCoupon();
+    } catch (err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002') {
+        throw new ConflictException(`Mã coupon "${code}" đã tồn tại, vui lòng chọn mã khác`);
+      }
+      throw err;
+    }
 
     this.systemLog.log({
       type: LogType.COUPON_CREATED,
@@ -114,14 +131,15 @@ export class CouponsService {
     this.assertActor(coupon.storeId, actorStoreId);
 
     if (dto.expiredAt && new Date(dto.expiredAt) <= coupon.startAt) {
-      throw new BadRequestException('expiredAt phải sau startAt');
+      throw new BadRequestException('Ngày hết hạn phải sau ngày bắt đầu');
     }
 
     const updated = await this.prisma.coupon.update({
       where: { id },
       data: {
         ...(dto.isActive !== undefined && { isActive: dto.isActive }),
-        ...(dto.expiredAt && { expiredAt: new Date(dto.expiredAt) }),
+        // dto.expiredAt: undefined = giữ nguyên (không có key), null = xoá hạn, string = set ngày mới
+        ...(dto.expiredAt !== undefined && { expiredAt: dto.expiredAt ? new Date(dto.expiredAt) : null }),
       },
     });
 
