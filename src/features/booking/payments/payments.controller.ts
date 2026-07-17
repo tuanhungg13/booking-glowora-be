@@ -8,6 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { SkipThrottle } from '@nestjs/throttler';
 import { Public } from '../../../common/decorators/public.decorator';
 import { CurrentUser, type CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 import { PaymentsService } from './payments.service';
@@ -31,6 +32,9 @@ export class PaymentsController {
 
   @ApiOperation({ summary: 'SePay webhook — nhận thông báo khi tiền về tài khoản shop' })
   @Public()
+  // Gọi từ server SePay (đã xác thực bằng Authorization header riêng), không phải traffic
+  // người dùng cuối -> không áp rate-limit theo IP.
+  @SkipThrottle()
   @Post('payments/sepay/webhook/:storeId')
   sepayWebhook(
     @Param('storeId', ParseUUIDPipe) storeId: string,

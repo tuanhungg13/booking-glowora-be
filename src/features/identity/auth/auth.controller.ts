@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Headers, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Throttle, minutes } from '@nestjs/throttler';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody, ApiHeader } from '@nestjs/swagger';
 import { LoginDto } from './dto/login.dto';
 import type { Request, Response } from 'express';
@@ -33,6 +34,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Đăng nhập' })
   @ApiBody({ type: LoginDto })
   @Public()
+  @Throttle({ default: { limit: 5, ttl: minutes(1) } })
   @Post('login')
   @UseGuards(LocalAuthGuard)
   @AuditLog({ type: LogType.AUTH_LOGIN, targetType: 'User' })
@@ -52,6 +54,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Bước 1: Đăng ký — gửi OTP về email để xác nhận' })
   @Public()
+  @Throttle({ default: { limit: 3, ttl: minutes(1) } })
   @Post('register')
   async register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
@@ -59,6 +62,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Bước 2: Xác nhận OTP — hoàn tất đăng ký tài khoản' })
   @Public()
+  @Throttle({ default: { limit: 5, ttl: minutes(10) } })
   @Post('verify-otp')
   @AuditLog({ type: LogType.AUTH_REGISTER, targetType: 'User' })
   async verifyOtp(@Body() dto: VerifyOtpDto, @Req() req: Request) {
@@ -84,6 +88,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Bước 1: Quên mật khẩu — gửi OTP về email để xác nhận' })
   @Public()
+  @Throttle({ default: { limit: 3, ttl: minutes(1) } })
   @Post('forgot-password')
   async forgotPassword(@Body() dto: ForgotPasswordDto) {
     return this.authService.forgotPassword(dto);
@@ -91,6 +96,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Bước 2: Đặt lại mật khẩu — xác nhận OTP và cập nhật mật khẩu mới' })
   @Public()
+  @Throttle({ default: { limit: 5, ttl: minutes(10) } })
   @Post('reset-password')
   async resetPassword(@Body() dto: ResetPasswordDto) {
     return this.authService.resetPassword(dto);

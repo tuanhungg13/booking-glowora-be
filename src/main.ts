@@ -2,6 +2,7 @@ import cluster from 'node:cluster';
 import * as os from 'node:os';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import cookieParser = require('cookie-parser');
 import { AppModule } from './app.module';
@@ -16,7 +17,11 @@ import { RedisService } from './redis/redis.service';
 import { RedisIoAdapter } from './gateways/redis-io.adapter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  // Production chạy sau 1 lớp reverse proxy/LB -> tin đúng 1 hop để req.ip (ThrottlerGuard,
+  // rate limit theo IP) và x-forwarded-for (auth.controller.ts) lấy đúng IP client thật,
+  // không phải IP của proxy.
+  app.set('trust proxy', 1);
   app.use(cookieParser());
   app.use(app.get(RequestContextService).middleware());
 

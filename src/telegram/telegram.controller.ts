@@ -1,5 +1,6 @@
 import { Body, Controller, Inject, Logger, Post, forwardRef } from '@nestjs/common';
 import { ApiExcludeController, ApiTags } from '@nestjs/swagger';
+import { SkipThrottle } from '@nestjs/throttler';
 import { Public } from '../common/decorators/public.decorator';
 import { TelegramService } from './telegram.service';
 import { PrismaService } from '../prisma/prisma.service';
@@ -23,6 +24,8 @@ export class TelegramController {
   ) {}
 
   @Public()
+  // Gọi từ server Telegram, không phải traffic người dùng cuối -> không áp rate-limit theo IP.
+  @SkipThrottle()
   @Post('webhook')
   async handleWebhook(@Body() update: any) {
     const message = update?.message;
