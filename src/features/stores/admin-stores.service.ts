@@ -11,6 +11,19 @@ const adminStoreInclude = {
   _count: { select: { services: true, reviews: true, staff: true, bookings: true } },
 } as const;
 
+// Chỉ chứa các field trang danh sách admin thực sự render — không select CCCD/giấy phép
+// kinh doanh và các field cấu hình nội bộ ở đây để tránh lộ dữ liệu nhạy cảm cho mọi item
+// trong danh sách phân trang. Field đầy đủ chỉ trả ở findOne (trang chi tiết).
+const adminStoreListSelect = {
+  id: true,
+  name: true,
+  address: true,
+  status: true,
+  createdAt: true,
+  owner: { select: { id: true, fullName: true, email: true } },
+  _count: { select: { services: true, reviews: true } },
+} as const;
+
 @Injectable()
 export class AdminStoresService {
   constructor(
@@ -78,7 +91,7 @@ export class AdminStoresService {
         skip: (page - 1) * limit,
         take: limit,
         orderBy: { createdAt: 'desc' },
-        include: adminStoreInclude,
+        select: adminStoreListSelect,
       }),
       this.prisma.store.count({ where }),
     ]);

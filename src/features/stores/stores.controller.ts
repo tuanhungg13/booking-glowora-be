@@ -111,11 +111,11 @@ export class StoresController {
     return this.storesService.create(dto, user.id);
   }
 
-  @ApiOperation({ summary: 'Stores owned by current user' })
+  @ApiOperation({ summary: 'Store detail for current owner (includes CCCD/business license)' })
   @ApiBearerAuth()
-  @Get('mine')
-  findMine(@CurrentUser() user: CurrentUserPayload) {
-    return this.storesService.findMine(user.id);
+  @Get('mine/:id')
+  findMine(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
+    return this.storesService.findMineDetail(id, user.id);
   }
 
   @ApiOperation({

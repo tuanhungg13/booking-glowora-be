@@ -317,13 +317,16 @@ export class StoresService {
     return { ...store, services: enrichedServices, activePromotion: promotion };
   }
 
-  async findMine(ownerId: string) {
-    const stores = await this.prisma.store.findMany({
-      where: { ownerId },
-      orderBy: { createdAt: 'desc' },
+  async findMineDetail(id: string, ownerId: string) {
+    const store = await this.prisma.store.findUnique({
+      where: { id },
       include: storeListInclude,
     });
-    return stores.map((s) => this.mapStoreOwnerView(s));
+    if (!store) throw new NotFoundException('Không tìm thấy cửa hàng');
+    if (store.ownerId !== ownerId) {
+      throw new ForbiddenException('Bạn không có quyền quản lý cửa hàng này');
+    }
+    return this.mapStoreOwnerView(store);
   }
 
   async findMyStores(userId: string) {

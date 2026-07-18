@@ -6,6 +6,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import helmet from 'helmet';
 import cookieParser = require('cookie-parser');
 import { AppModule } from './app.module';
 import { TransformResponseInterceptor } from './common/interceptors/transform-response.interceptor';
@@ -20,10 +21,20 @@ import { buildRmqConsumerOptions } from './rabbitmq/rabbitmq.options';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const isProduction = process.env.NODE_ENV === 'production';
   // Production chạy sau 1 lớp reverse proxy/LB -> tin đúng 1 hop để req.ip (ThrottlerGuard,
   // rate limit theo IP) và x-forwarded-for (auth.controller.ts) lấy đúng IP client thật,
   // không phải IP của proxy.
   app.set('trust proxy', 1);
+  app.use(
+    helmet({
+      // Swagger UI (chỉ bật khi !isProduction, xem bên dưới) cần inline script/style nên
+      // sẽ bị CSP mặc định của helmet chặn -> chỉ bật CSP ở production, nơi route /api
+      // (swagger) không tồn tại. Các header bảo mật khác của helmet (HSTS, X-Content-Type-Options,
+      // X-Frame-Options...) vẫn luôn bật.
+      contentSecurityPolicy: isProduction,
+    }),
+  );
   app.use(cookieParser());
   app.use(app.get(RequestContextService).middleware());
 
@@ -85,7 +96,6 @@ async function bootstrap() {
   await app.listen(port);
 
   const logger = new Logger('Bootstrap');
-  const isProduction = process.env.NODE_ENV === 'production';
   logger.log(`NODE_ENV        : ${process.env.NODE_ENV ?? '(not set)'}`);
   logger.log(`Cookie sameSite : ${isProduction ? 'none' : 'lax'}`);
   logger.log(`Cookie secure   : ${isProduction}`);
