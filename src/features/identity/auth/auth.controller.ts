@@ -11,10 +11,8 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { Public } from '../../../common/decorators/public.decorator';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
-import { AuditLog } from '../../../common/decorators/audit-log.decorator';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
-import { LogType } from '@prisma/client';
 
 const ACCESS_TOKEN_TTL = 15 * 60 * 1000;
 const REFRESH_TOKEN_TTL = 7 * 24 * 60 * 60 * 1000;
@@ -37,7 +35,6 @@ export class AuthController {
   @Throttle({ default: { limit: 5, ttl: minutes(1) } })
   @Post('login')
   @UseGuards(LocalAuthGuard)
-  @AuditLog({ type: LogType.AUTH_LOGIN, targetType: 'User' })
   async login(
     @CurrentUser() user: CurrentUserPayload,
     @Req() req: Request,
@@ -64,7 +61,6 @@ export class AuthController {
   @Public()
   @Throttle({ default: { limit: 5, ttl: minutes(10) } })
   @Post('verify-otp')
-  @AuditLog({ type: LogType.AUTH_REGISTER, targetType: 'User' })
   async verifyOtp(@Body() dto: VerifyOtpDto, @Req() req: Request) {
     const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ?? req.ip ?? '';
     return this.authService.verifyRegisterOtp(dto, ip);
@@ -105,7 +101,6 @@ export class AuthController {
   @ApiOperation({ summary: 'Đăng xuất, blacklist refresh token' })
   @ApiBearerAuth()
   @Post('logout')
-  @AuditLog({ type: LogType.AUTH_LOGOUT, targetType: 'User' })
   async logout(
     @CurrentUser() user: CurrentUserPayload,
     @Req() req: Request,

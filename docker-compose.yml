@@ -56,9 +56,34 @@ services:
     networks:
       - glowora_network
 
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    container_name: glowora_rabbitmq
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-glowora}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-gloworadev}
+      TZ: ${TZ:-Asia/Ho_Chi_Minh}
+    # Ports exposed to localhost only (for dev, RabbitMQ management UI)
+    ports:
+      - "127.0.0.1:5672:5672"
+      - "127.0.0.1:15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - glowora_network
+
 volumes:
   mysql_data:
   redis_data:
+  rabbitmq_data:
 
 networks:
   glowora_network:

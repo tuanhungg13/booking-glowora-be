@@ -17,11 +17,9 @@ import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { RedisService } from '../../../redis/redis.service';
-import { MailService } from '../../../mail/mail.service';
+import { MailProducerService } from '../../../mail/mail-producer.service';
 import { WebPushService } from '../../notifications/web-push/web-push.service';
 import { ALL_PERMISSION_CODES } from '../../../common/constants/permissions';
-import { SystemLogService } from '../../../system-log/system-log.service';
-import { LogType } from '@prisma/client';
 
 const CUSTOMER_ROLE_CODE = 'CUSTOMER';
 
@@ -32,9 +30,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
     private readonly redis: RedisService,
-    private readonly mail: MailService,
+    private readonly mailProducer: MailProducerService,
     private readonly webPush: WebPushService,
-    private readonly systemLog: SystemLogService,
   ) { }
 
   async validateUser(email: string, password: string) {
@@ -59,8 +56,6 @@ export class AuthService {
       where: { id: user.id },
       data: { refreshToken: await bcrypt.hash(refreshToken, 10) },
     });
-
-    this.systemLog.log({ type: LogType.AUTH_LOGIN, actorId: user.id, targetId: user.id, targetType: 'User', metadata: { email: user.email }, ipAddress, requestId });
 
     return {
       access_token: accessToken,
@@ -88,7 +83,7 @@ export class AuthService {
       600,
     );
 
-    await this.mail.sendOtpVerification(dto.email, otp, dto.fullName);
+    this.mailProducer.sendOtpVerification(dto.email, otp, dto.fullName);
 
     return { message: 'OTP đã được gửi đến email của bạn. Vui lòng xác nhận trong 10 phút.' };
   }
@@ -129,8 +124,6 @@ export class AuthService {
     });
 
     await this.redis.del(pendingKey);
-
-    this.systemLog.log({ type: LogType.AUTH_REGISTER, actorId: user.id, targetId: user.id, targetType: 'User', metadata: { email: dto.email }, ipAddress, requestId });
 
     return user;
   }
@@ -187,7 +180,6 @@ export class AuthService {
       this.prisma.user.update({ where: { id: userId }, data: { refreshToken: null } }),
       this.webPush.deleteAllSubscriptionsForUser(userId),
     ]);
-    this.systemLog.log({ type: LogType.AUTH_LOGOUT, actorId: userId, targetId: userId, targetType: 'User' });
     return { success: true };
   }
 
@@ -273,7 +265,7 @@ export class AuthService {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     await this.redis.set(`otp:reset:${dto.email}`, otp, 600);
 
-    await this.mail.sendPasswordResetOtp(dto.email, otp, user.fullName ?? undefined);
+    this.mailProducer.sendPasswordResetOtp(dto.email, otp, user.fullName ?? undefined);
 
     return { message: 'OTP đã được gửi đến email của bạn. Vui lòng xác nhận trong 10 phút.' };
   }

@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { BookingStatus, LogType, NotificationType, Prisma, StoreStatus, UserStatus } from '@prisma/client';
+import { BookingStatus, NotificationType, Prisma, StoreStatus, UserStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
-import { SystemLogService } from '../../system-log/system-log.service';
 import { AdminStoreActionDto } from './dto/admin-store-action.dto';
 import { AdminStoreFilterDto } from './dto/store-filter.dto';
 
@@ -16,7 +15,6 @@ const adminStoreInclude = {
 export class AdminStoresService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly systemLog: SystemLogService,
   ) {}
 
   async getStats() {
@@ -127,7 +125,6 @@ export class AdminStoresService {
       },
     });
 
-    this.systemLog.log({ type: LogType.STORE_APPROVED, actorId: adminId, storeId: id, targetId: id, targetType: 'Store', metadata: { storeName: store.name }, ipAddress, requestId });
     return updated;
   }
 
@@ -160,7 +157,6 @@ export class AdminStoresService {
       },
     });
 
-    this.systemLog.log({ type: LogType.STORE_REJECTED, actorId: adminId, storeId: id, targetId: id, targetType: 'Store', metadata: { storeName: store.name, reason: dto.reason }, ipAddress, requestId });
     return updated;
   }
 
@@ -193,7 +189,6 @@ export class AdminStoresService {
       },
     });
 
-    this.systemLog.log({ type: LogType.STORE_BANNED, actorId: adminId, storeId: id, targetId: id, targetType: 'Store', metadata: { storeName: store.name, reason: dto.reason }, ipAddress, requestId });
     return updated;
   }
 
@@ -212,7 +207,6 @@ export class AdminStoresService {
       include: adminStoreInclude,
     });
 
-    this.systemLog.log({ type: LogType.STORE_UNLOCKED, actorId: adminId, storeId: id, targetId: id, targetType: 'Store', metadata: { storeName: store.name }, ipAddress, requestId });
     return updated;
   }
 }

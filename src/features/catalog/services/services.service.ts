@@ -558,14 +558,6 @@ export class ServicesService {
     if (dto.name) await this.checkDuplicateName(dto.name, storeId, id);
     const slug = dto.name ? await this.generateUniqueSlug(dto.name, storeId, id) : undefined;
 
-    if (dto.imageUrls !== undefined) {
-      const current = Array.isArray(service.imageUrls) ? (service.imageUrls as string[]) : [];
-      const removed = current.filter((url) => !dto.imageUrls!.includes(url));
-      await Promise.allSettled(
-        removed.map((url) => this.cloudinary.deleteImage(this.cloudinary.extractPublicId(url))),
-      );
-    }
-
     await this.prisma.service.update({
       where: { id },
       data: {
@@ -577,6 +569,16 @@ export class ServicesService {
         ...(dto.imageUrls !== undefined && { imageUrls: dto.imageUrls }),
       },
     });
+
+    // Chỉ xoá ảnh cũ trên Cloudinary SAU KHI DB update thành công — nếu update lỗi giữa
+    // chừng, ảnh cũ vẫn còn nguyên thay vì mất vĩnh viễn trong khi record chưa đổi.
+    if (dto.imageUrls !== undefined) {
+      const current = Array.isArray(service.imageUrls) ? (service.imageUrls as string[]) : [];
+      const removed = current.filter((url) => !dto.imageUrls!.includes(url));
+      await Promise.allSettled(
+        removed.map((url) => this.cloudinary.deleteImage(this.cloudinary.extractPublicId(url))),
+      );
+    }
 
     if (dto.variants !== undefined) {
       const activeCount = dto.variants.filter((v) => (v.status ?? ServiceStatus.ACTIVE) === ServiceStatus.ACTIVE).length;
@@ -644,12 +646,14 @@ export class ServicesService {
     const service = await this.findOne(id, storeId);
     await this.checkNoUpcomingBookings(id);
 
+    await this.prisma.service.delete({ where: { id } });
+
+    // Chỉ xoá ảnh trên Cloudinary SAU KHI xoá DB thành công — tránh mất ảnh vĩnh viễn
+    // trong khi record service vẫn còn (nếu delete DB thất bại, vd còn ràng buộc FK).
     const urls = Array.isArray(service.imageUrls) ? (service.imageUrls as string[]) : [];
     await Promise.allSettled(
       urls.map((url) => this.cloudinary.deleteImage(this.cloudinary.extractPublicId(url))),
     );
-
-    await this.prisma.service.delete({ where: { id } });
 
     this.systemLog.log({
       type: LogType.SERVICE_DELETED,
@@ -677,12 +681,13 @@ export class ServicesService {
         try {
           await this.checkNoUpcomingBookings(service.id);
 
+          await this.prisma.service.delete({ where: { id: service.id } });
+
+          // Xoá ảnh Cloudinary SAU KHI xoá DB thành công — cùng lý do như remove() ở trên.
           const urls = Array.isArray(service.imageUrls) ? (service.imageUrls as string[]) : [];
           await Promise.allSettled(
             urls.map((url) => this.cloudinary.deleteImage(this.cloudinary.extractPublicId(url))),
           );
-
-          await this.prisma.service.delete({ where: { id: service.id } });
 
           this.systemLog.log({
             type: LogType.SERVICE_DELETED,

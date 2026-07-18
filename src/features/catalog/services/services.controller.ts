@@ -23,12 +23,10 @@ import { BulkDeleteServicesDto } from './dto/bulk-delete-services.dto';
 import { PublicServiceQueryDto, ServiceQueryDto } from './dto/service-filter.dto';
 import { Public } from '../../../common/decorators/public.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
-import { AuditLog } from '../../../common/decorators/audit-log.decorator';
 import { Permissions } from '../../../common/constants/permissions';
 import { StoreId } from '../../../common/decorators/store-id.decorator';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
-import { LogType } from '@prisma/client';
 
 @ApiTags('services')
 @ApiHeader({ name: 'x-store-id', description: 'ID của store (bắt buộc trừ GET /services/:id)', required: false })
@@ -43,7 +41,6 @@ export class ServicesController {
   @ApiBearerAuth()
   @Post()
   @RequirePermissions(Permissions.SERVICE.CREATE)
-  @AuditLog({ type: LogType.SERVICE_CREATED, targetType: 'Service' })
   create(
     @StoreId() storeId: string,
     @Body() dto: CreateServiceDto,
@@ -111,7 +108,6 @@ export class ServicesController {
   @ApiParam({ name: 'id', description: 'Service ID' })
   @Patch(':id')
   @RequirePermissions(Permissions.SERVICE.UPDATE)
-  @AuditLog({ type: LogType.SERVICE_UPDATED, targetType: 'Service' })
   update(
     @StoreId() storeId: string,
     @Param('id') id: string,
@@ -138,7 +134,6 @@ export class ServicesController {
   @ApiParam({ name: 'id', description: 'Service ID' })
   @Delete(':id')
   @RequirePermissions(Permissions.SERVICE.DELETE)
-  @AuditLog({ type: LogType.SERVICE_DELETED, targetType: 'Service' })
   remove(
     @StoreId() storeId: string,
     @Param('id') id: string,

@@ -4,9 +4,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { BookingStatus, LogType, Prisma } from '@prisma/client';
+import { BookingStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { SystemLogService } from '../../../system-log/system-log.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReviewFilterDto } from './dto/review-filter.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
@@ -23,7 +22,6 @@ const reviewInclude = {
 export class ReviewsService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly systemLog: SystemLogService,
   ) {}
 
   async create(dto: CreateReviewDto, customerId?: string, bookingItemIdOverride?: string) {
@@ -205,7 +203,6 @@ export class ReviewsService {
       await this.recalculateRatings(existing.storeId, existing.serviceId, existing.staffId, tx);
       return r;
     });
-    this.systemLog.log({ type: isVisible ? LogType.REVIEW_SHOWN : LogType.REVIEW_HIDDEN, actorId, storeId: existing.storeId, targetId: id, targetType: 'Review', metadata: { serviceId: existing.serviceId } });
     return review;
   }
 

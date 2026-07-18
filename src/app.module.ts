@@ -8,6 +8,7 @@ import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
 import { RedisService } from './redis/redis.service';
+import { RabbitmqModule } from './rabbitmq/rabbitmq.module';
 import { JwtAuthGuard } from './features/identity/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './features/identity/auth/guards/permissions.guard';
 import { IdentityModule } from './features/identity.module';
@@ -51,6 +52,7 @@ import { UploadModule } from './upload/upload.module';
     UploadModule,
     PrismaModule,
     RedisModule,
+    RabbitmqModule,
     IdentityModule,
     CatalogModule,
     BookingModule,

@@ -15,6 +15,7 @@ services:
       MYSQL_HOST: mysql
       MYSQL_DB: ${MYSQL_DB:-glowora_business}
       REDIS_HOST: redis
+      RABBITMQ_HOST: rabbitmq
       TZ: ${TZ:-Asia/Ho_Chi_Minh}
     ports:
       - "${HOST_PORT:-8080}:8080"
@@ -22,6 +23,8 @@ services:
       mysql:
         condition: service_healthy
       redis:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:8080/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
@@ -83,9 +86,32 @@ services:
     networks:
       - glowora_network
 
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    container_name: glowora_rabbitmq_pro
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-glowora}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-gloworadev}
+      TZ: ${TZ:-Asia/Ho_Chi_Minh}
+    ports:
+      - "127.0.0.1:${RABBITMQ_PORT:-5672}:5672"
+      - "127.0.0.1:${RABBITMQ_MGMT_PORT:-15672}:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - glowora_network
+
 volumes:
   mysql_data:
   redis_data:
+  rabbitmq_data:
 
 networks:
   glowora_network:

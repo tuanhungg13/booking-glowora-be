@@ -3,13 +3,11 @@ import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@ne
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
-import { AuditLog } from '../../../common/decorators/audit-log.decorator';
 import { Permissions } from '../../../common/constants/permissions';
 import { CouponsService } from './coupons.service';
 import { CreateCouponDto } from './dto/create-coupon.dto';
 import { UpdateCouponDto } from './dto/update-coupon.dto';
 import { CouponFilterDto } from './dto/coupon-filter.dto';
-import { LogType } from '@prisma/client';
 
 @ApiTags('admin-coupons')
 @ApiBearerAuth()
@@ -19,7 +17,6 @@ export class AdminCouponsController {
 
   @Post()
   @RequirePermissions(Permissions.COUPON.MANAGE)
-  @AuditLog({ type: LogType.COUPON_CREATED, targetType: 'Coupon' })
   @ApiOperation({ summary: '[Admin] Tạo coupon platform-wide (áp dụng mọi cửa hàng)' })
   @ApiResponse({ status: 201, description: 'Coupon platform đã được tạo' })
   create(@Body() dto: CreateCouponDto, @CurrentUser() user: CurrentUserPayload) {
@@ -43,7 +40,6 @@ export class AdminCouponsController {
 
   @Patch(':id')
   @RequirePermissions(Permissions.COUPON.MANAGE)
-  @AuditLog({ type: LogType.COUPON_UPDATED, targetType: 'Coupon' })
   @ApiOperation({ summary: '[Admin] Cập nhật coupon platform' })
   @ApiParam({ name: 'id', description: 'ID coupon' })
   update(
@@ -57,7 +53,6 @@ export class AdminCouponsController {
 
   @Delete(':id')
   @RequirePermissions(Permissions.COUPON.MANAGE)
-  @AuditLog({ type: LogType.COUPON_DELETED, targetType: 'Coupon' })
   @ApiOperation({ summary: '[Admin] Xóa coupon platform' })
   @ApiParam({ name: 'id', description: 'ID coupon' })
   remove(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {

@@ -11,7 +11,6 @@ import {
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
-import { AuditLog } from '../../../common/decorators/audit-log.decorator';
 import { Permissions } from '../../../common/constants/permissions';
 import { StoreId } from '../../../common/decorators/store-id.decorator';
 import { BookingsService } from './bookings.service';
@@ -21,7 +20,6 @@ import { CalendarQueryDto } from './dto/calendar-query.dto';
 import { RejectBookingDto } from './dto/reject-booking.dto';
 import { RecordStorePaymentDto } from '../payments/dto/record-store-payment.dto';
 import { CreateWalkInBookingDto } from './dto/create-walkin-booking.dto';
-import { LogType } from '@prisma/client';
 
 @ApiTags('store-bookings')
 @ApiBearerAuth()
@@ -85,7 +83,6 @@ export class StoreBookingsController {
 
   @Patch(':id/confirm')
   @RequirePermissions(Permissions.APPOINTMENT.UPDATE)
-  @AuditLog({ type: LogType.BOOKING_CONFIRMED, targetType: 'Booking' })
   @ApiOperation({
     summary: 'Xác nhận lịch hẹn',
     description:
@@ -106,7 +103,6 @@ export class StoreBookingsController {
 
   @Patch(':id/reject')
   @RequirePermissions(Permissions.APPOINTMENT.UPDATE)
-  @AuditLog({ type: LogType.BOOKING_REJECTED, targetType: 'Booking' })
   @ApiOperation({
     summary: 'Từ chối lịch hẹn',
     description:
@@ -171,7 +167,6 @@ export class StoreBookingsController {
 
   @Patch(':bookingId/items/:itemId/staff')
   @RequirePermissions(Permissions.APPOINTMENT.UPDATE)
-  @AuditLog({ type: LogType.BOOKING_STAFF_CHANGED, targetType: 'Booking' })
   @ApiOperation({
     summary: 'Thay đổi nhân viên thực hiện dịch vụ',
     description: 'Cho phép quản lý thay đổi nhân viên phụ trách một dịch vụ trong lịch hẹn. Không áp dụng cho lịch hẹn đã hoàn thành, đã hủy hoặc bị từ chối.',
@@ -195,7 +190,6 @@ export class StoreBookingsController {
 
   @Post('walk-in')
   @RequirePermissions(Permissions.APPOINTMENT.CREATE)
-  @AuditLog({ type: LogType.BOOKING_CREATED, targetType: 'Booking' })
   @ApiOperation({
     summary: 'Tạo lịch hẹn cho khách vãng lai',
     description: 'Nhân viên / quản lý tạo lịch hẹn tại quầy cho khách đến trực tiếp mà không có tài khoản.',
@@ -215,7 +209,6 @@ export class StoreBookingsController {
 
   @Patch(':id/complete')
   @RequirePermissions(Permissions.APPOINTMENT.UPDATE)
-  @AuditLog({ type: LogType.BOOKING_COMPLETED, targetType: 'Booking' })
   @ApiOperation({
     summary: 'Hoàn thành lịch hẹn',
     description:

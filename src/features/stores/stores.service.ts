@@ -10,8 +10,6 @@ import { ConfigService } from '@nestjs/config';
 import { DayOfWeek, Prisma, StaffStatus, Store, StoreStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { PermissionCacheService } from '../../redis/permission-cache.service';
-import { SystemLogService } from '../../system-log/system-log.service';
-import { LogType } from '@prisma/client';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { StoreFilterDto } from './dto/store-filter.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
@@ -97,7 +95,6 @@ export class StoresService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly permissionCache: PermissionCacheService,
-    private readonly systemLog: SystemLogService,
     private readonly config: ConfigService,
     private readonly cloudinary: CloudinaryService,
     private readonly promotions: PromotionsService,
@@ -206,7 +203,6 @@ export class StoresService {
     });
 
     await this.permissionCache.invalidateUser(ownerId);
-    this.systemLog.log({ type: LogType.STORE_CREATED, actorId: ownerId, storeId: store.id, targetId: store.id, targetType: 'Store', metadata: { name: store.name, slug: store.slug } });
     return store;
   }
 

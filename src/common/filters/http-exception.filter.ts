@@ -4,14 +4,11 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
-import { LogType } from '@prisma/client';
-import { SystemLogService } from '../../system-log/system-log.service';
-import { shouldSkipDbErrorLog } from '../constants/skip-db-log';
 
 type LoggableRequest = {
   requestId?: string;
-  systemLogErrorRecorded?: boolean;
   method?: string;
   originalUrl?: string;
   url?: string;
@@ -22,7 +19,7 @@ type LoggableRequest = {
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-  constructor(private readonly systemLog?: SystemLogService) {}
+  private readonly logger = new Logger(HttpExceptionFilter.name);
 
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -54,23 +51,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
     if (errorCode !== undefined) body.errorCode = errorCode;
     if (requestId !== undefined) body.requestId = requestId;
 
-    if (request && !request.systemLogErrorRecorded && !shouldSkipDbErrorLog(request.method, request.originalUrl ?? request.url, status, message)) {
-      this.systemLog?.logError(
-        {
-          type: LogType.SYSTEM_ERROR,
-          actorId: request.user?.id,
-          metadata: {
-            method: request.method,
-            path: request.originalUrl ?? request.url,
-            params: request.params,
-            query: request.query,
-            statusCode: status,
-            errorCode,
-          },
-        },
-        exception,
+    if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
+      this.logger.error(
+        `[${requestId ?? '-'}] ${request?.method ?? ''} ${request?.originalUrl ?? request?.url ?? ''} status=${status} ${exception.message}`,
+        exception.stack,
       );
-      request.systemLogErrorRecorded = true;
     }
 
     response.status(status).json(body);

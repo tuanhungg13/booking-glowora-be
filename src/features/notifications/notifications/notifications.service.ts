@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException, Inject, forwardRef, Logger } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { NotificationType } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { ChatGateway } from '../../../gateways/chat.gateway';
-import { MailService } from '../../../mail/mail.service';
-import { WebPushService } from '../web-push/web-push.service';
+import { MailProducerService } from '../../../mail/mail-producer.service';
+import { RABBITMQ_CLIENT } from '../../../rabbitmq/rabbitmq.constants';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 
@@ -15,8 +16,8 @@ export class NotificationsService {
     private readonly prisma: PrismaService,
     @Inject(forwardRef(() => ChatGateway))
     private readonly gateway: ChatGateway,
-    private readonly mail: MailService,
-    private readonly webPush: WebPushService,
+    private readonly mailProducer: MailProducerService,
+    @Inject(RABBITMQ_CLIENT.NOTIFICATIONS_PUSH) private readonly pushClient: ClientProxy,
   ) { }
 
   async create(dto: CreateNotificationDto) {
@@ -158,18 +159,15 @@ export class NotificationsService {
     }
     this.pushMany(pushItems);
 
-    // TODO: tạm thời tắt gửi mail để test
     if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: displayName,
-          storeName,
-          serviceNames,
-          scheduledAt: timeStr,
-          eventType: 'CREATED',
-        })
-        .catch((err: Error) => this.logger.warn(`Email CREATED failed for ${customerEmail}: ${err?.message}`));
+      this.mailProducer.sendBookingEvent({
+        email: customerEmail,
+        fullName: displayName,
+        storeName,
+        serviceNames,
+        scheduledAt: timeStr,
+        eventType: 'CREATED',
+      });
     }
   }
 
@@ -198,18 +196,15 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    // TODO: tạm thời tắt gửi mail để test
     if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: customerName ?? customerEmail,
-          storeName,
-          serviceNames,
-          scheduledAt: timeStr,
-          eventType: 'CONFIRMED',
-        })
-        .catch((err: Error) => this.logger.warn(`Email CONFIRMED failed for ${customerEmail}: ${err?.message}`));
+      this.mailProducer.sendBookingEvent({
+        email: customerEmail,
+        fullName: customerName ?? customerEmail,
+        storeName,
+        serviceNames,
+        scheduledAt: timeStr,
+        eventType: 'CONFIRMED',
+      });
     }
   }
 
@@ -237,18 +232,15 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    // TODO: tạm thời tắt gửi mail để test
     if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: customerName ?? customerEmail,
-          storeName,
-          serviceNames,
-          reason,
-          eventType: 'REJECTED',
-        })
-        .catch((err: Error) => this.logger.warn(`Email REJECTED failed for ${customerEmail}: ${err?.message}`));
+      this.mailProducer.sendBookingEvent({
+        email: customerEmail,
+        fullName: customerName ?? customerEmail,
+        storeName,
+        serviceNames,
+        reason,
+        eventType: 'REJECTED',
+      });
     }
   }
 
@@ -275,17 +267,14 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    // TODO: tạm thời tắt gửi mail để test
     if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: customerName ?? customerEmail,
-          storeName,
-          serviceNames,
-          eventType: 'COMPLETED',
-        })
-        .catch((err: Error) => this.logger.warn(`Email COMPLETED failed for ${customerEmail}: ${err?.message}`));
+      this.mailProducer.sendBookingEvent({
+        email: customerEmail,
+        fullName: customerName ?? customerEmail,
+        storeName,
+        serviceNames,
+        eventType: 'COMPLETED',
+      });
     }
   }
 
@@ -333,18 +322,15 @@ export class NotificationsService {
       this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
     }
 
-    // TODO: tạm thời tắt gửi mail để test
     if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: displayName,
-          storeName,
-          serviceNames,
-          reason,
-          eventType: 'CANCELLED',
-        })
-        .catch((err: Error) => this.logger.warn(`Email CANCELLED failed for ${customerEmail}: ${err?.message}`));
+      this.mailProducer.sendBookingEvent({
+        email: customerEmail,
+        fullName: displayName,
+        storeName,
+        serviceNames,
+        reason,
+        eventType: 'CANCELLED',
+      });
     }
   }
 
@@ -373,18 +359,15 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    // TODO: tạm thời tắt gửi mail để test
     if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: customerName ?? customerEmail,
-          storeName,
-          serviceNames,
-          amount: `${formattedAmount}₫`,
-          eventType: 'PAYMENT_SUCCESS',
-        })
-        .catch((err: Error) => this.logger.warn(`Email PAYMENT_SUCCESS failed for ${customerEmail}: ${err?.message}`));
+      this.mailProducer.sendBookingEvent({
+        email: customerEmail,
+        fullName: customerName ?? customerEmail,
+        storeName,
+        serviceNames,
+        amount: `${formattedAmount}₫`,
+        eventType: 'PAYMENT_SUCCESS',
+      });
     }
   }
 
@@ -435,20 +418,17 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    // TODO: tạm thời tắt gửi mail để test
     if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: customerName ?? customerEmail,
-          storeName,
-          serviceNames,
-          scheduledAt: timeStr,
-          amount: `${formattedAmount}₫`,
-          depositDeadline: deadlineStr,
-          eventType: 'DEPOSIT_REQUIRED',
-        })
-        .catch((err: Error) => this.logger.warn(`Email DEPOSIT_REQUIRED failed for ${customerEmail}: ${err?.message}`));
+      this.mailProducer.sendBookingEvent({
+        email: customerEmail,
+        fullName: customerName ?? customerEmail,
+        storeName,
+        serviceNames,
+        scheduledAt: timeStr,
+        amount: `${formattedAmount}₫`,
+        depositDeadline: deadlineStr,
+        eventType: 'DEPOSIT_REQUIRED',
+      });
     }
   }
 
@@ -497,18 +477,15 @@ export class NotificationsService {
       this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
     }
 
-    // TODO: tạm thời tắt gửi mail để test
     if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: displayName,
-          storeName,
-          serviceNames,
-          amount: `${formattedAmount}₫`,
-          eventType: 'DEPOSIT_PAID',
-        })
-        .catch((err: Error) => this.logger.warn(`Email DEPOSIT_PAID failed for ${customerEmail}: ${err?.message}`));
+      this.mailProducer.sendBookingEvent({
+        email: customerEmail,
+        fullName: displayName,
+        storeName,
+        serviceNames,
+        amount: `${formattedAmount}₫`,
+        eventType: 'DEPOSIT_PAID',
+      });
     }
   }
 
@@ -555,17 +532,14 @@ export class NotificationsService {
       this.push(customerId, customerNotif.title, customerNotif.body, { bookingId });
     }
 
-    // TODO: tạm thời tắt gửi mail để test
     if (customerEmail) {
-      this.mail
-        .sendBookingEvent({
-          email: customerEmail,
-          fullName: displayName,
-          storeName,
-          serviceNames,
-          eventType: 'CANCELLED',
-        })
-        .catch((err: Error) => this.logger.warn(`Email DEPOSIT_EXPIRED failed for ${customerEmail}: ${err?.message}`));
+      this.mailProducer.sendBookingEvent({
+        email: customerEmail,
+        fullName: displayName,
+        storeName,
+        serviceNames,
+        eventType: 'CANCELLED',
+      });
     }
   }
 
@@ -594,18 +568,15 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    // TODO: tạm thời tắt gửi mail để test
     if (customerEmail) {
-      this.mail
-        .sendBookingReminder({
-          email: customerEmail,
-          fullName: customerName ?? customerEmail,
-          storeName,
-          serviceNames,
-          scheduledAt: timeStr,
-          isOneDayReminder: true,
-        })
-        .catch((err: Error) => this.logger.warn(`Reminder 1-day email failed for ${customerEmail}: ${err?.message}`));
+      this.mailProducer.sendBookingReminder({
+        email: customerEmail,
+        fullName: customerName ?? customerEmail,
+        storeName,
+        serviceNames,
+        scheduledAt: timeStr,
+        isOneDayReminder: true,
+      });
     }
   }
 
@@ -634,18 +605,15 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    // TODO: tạm thời tắt gửi mail để test
     if (customerEmail) {
-      this.mail
-        .sendBookingReminder({
-          email: customerEmail,
-          fullName: customerName ?? customerEmail,
-          storeName,
-          serviceNames,
-          scheduledAt: timeStr,
-          isOneDayReminder: false,
-        })
-        .catch((err: Error) => this.logger.warn(`Reminder 1-hour email failed for ${customerEmail}: ${err?.message}`));
+      this.mailProducer.sendBookingReminder({
+        email: customerEmail,
+        fullName: customerName ?? customerEmail,
+        storeName,
+        serviceNames,
+        scheduledAt: timeStr,
+        isOneDayReminder: false,
+      });
     }
   }
 
@@ -675,36 +643,33 @@ export class NotificationsService {
     this.gateway.emitToUser(customerId, 'notification_received', notif);
     this.push(customerId, notif.title, notif.body, { bookingId });
 
-    // TODO: tạm thời tắt gửi mail để test
     if (customerEmail) {
-      this.mail
-        .sendStaffNotification({
-          email: customerEmail,
-          fullName: customerName ?? customerEmail,
-          subject: `Nhân viên thực hiện dịch vụ đã thay đổi`,
-          body: `Dịch vụ ${serviceName} tại ${storeName} vào ${timeStr} sẽ được thực hiện bởi ${newStaffName}.`,
-          details: [
-            { label: 'Dịch vụ', value: serviceName },
-            { label: 'Nhân viên mới', value: newStaffName },
-            { label: 'Thời gian', value: timeStr },
-            { label: 'Cơ sở', value: storeName },
-          ],
-        })
-        .catch((err: Error) => this.logger.warn(`Email STAFF_CHANGED failed for ${customerEmail}: ${err?.message}`));
+      this.mailProducer.sendStaffNotification({
+        email: customerEmail,
+        fullName: customerName ?? customerEmail,
+        subject: `Nhân viên thực hiện dịch vụ đã thay đổi`,
+        body: `Dịch vụ ${serviceName} tại ${storeName} vào ${timeStr} sẽ được thực hiện bởi ${newStaffName}.`,
+        details: [
+          { label: 'Dịch vụ', value: serviceName },
+          { label: 'Nhân viên mới', value: newStaffName },
+          { label: 'Thời gian', value: timeStr },
+          { label: 'Cơ sở', value: storeName },
+        ],
+      });
     }
   }
 
   private push(userId: string, title: string, body: string, data?: Record<string, unknown>) {
-    this.webPush
-      .sendToUser(userId, { title, body, data })
-      .catch((err: Error) => this.logger.warn(`Web push failed for user ${userId}: ${err?.message}`));
+    this.pushClient.emit('push.send-to-user', { userId, title, body, data }).subscribe({
+      error: (err: Error) => this.logger.warn(`Web push publish failed for user ${userId}: ${err?.message}`),
+    });
   }
 
   private pushMany(items: Array<{ userId: string; title: string; body: string; data?: Record<string, unknown> }>) {
     if (items.length === 0) return;
-    this.webPush
-      .sendToUsers(items)
-      .catch((err: Error) => this.logger.warn(`Web push (batch) failed: ${err?.message}`));
+    this.pushClient.emit('push.send-to-users', items).subscribe({
+      error: (err: Error) => this.logger.warn(`Web push publish (batch) failed: ${err?.message}`),
+    });
   }
 
   // Offset UTC → UTC+7 thủ công để không phụ thuộc vào ICU locale của server

@@ -7,9 +7,11 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { SenderType } from '@prisma/client';
+import { ClientProxy } from '@nestjs/microservices';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { RedisService } from '../../../redis/redis.service';
 import { TelegramService } from '../../../telegram/telegram.service';
+import { RABBITMQ_CLIENT } from '../../../rabbitmq/rabbitmq.constants';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 
 const TELEGRAM_ACTIVE_TTL = 7200; // 2 hours
@@ -43,6 +45,8 @@ export class ConversationsService {
     private readonly redis: RedisService,
     @Inject(forwardRef(() => TelegramService))
     private readonly telegram: TelegramService,
+    @Inject(RABBITMQ_CLIENT.TELEGRAM_FORWARD)
+    private readonly telegramClient: ClientProxy,
   ) {}
 
   async create(storeId: string, customerId: string) {
@@ -422,16 +426,21 @@ export class ConversationsService {
 
     if (content.trim()) {
       const label = senderLabel ?? `💬 *${conversation.customer.fullName}*`;
-      await this.telegram.sendToGroupTopic(groupId, topicId, `${label}:\n${content}`);
+      this.publishTelegram('telegram.send-to-group-topic', { groupId, topicId, text: `${label}:\n${content}` });
     }
     for (const att of attachments) {
       if (att.type === 'image') {
-        await this.telegram.sendPhotoToGroupTopic(groupId, topicId, att.url);
+        this.publishTelegram('telegram.send-photo-to-group-topic', { groupId, topicId, photoUrl: att.url });
       } else {
-        await this.telegram.sendVideoToGroupTopic(groupId, topicId, att.url);
+        this.publishTelegram('telegram.send-video-to-group-topic', { groupId, topicId, videoUrl: att.url });
       }
     }
     this.logger.log(`[forwardToStaff] ✅ Forwarded to group topic topicId=${topicId}`);
   }
 
+  private publishTelegram(pattern: string, payload: unknown): void {
+    this.telegramClient.emit(pattern, payload).subscribe({
+      error: (err: Error) => this.logger.error(`Publish "${pattern}" failed: ${err.message}`, err.stack),
+    });
+  }
 }

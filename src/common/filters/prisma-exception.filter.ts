@@ -5,13 +5,10 @@ import {
   HttpStatus,
   Logger,
 } from '@nestjs/common';
-import { LogType, Prisma } from '@prisma/client';
-import { SystemLogService } from '../../system-log/system-log.service';
-import { shouldSkipDbErrorLog } from '../constants/skip-db-log';
+import { Prisma } from '@prisma/client';
 
 type LoggableRequest = {
   requestId?: string;
-  systemLogErrorRecorded?: boolean;
   method?: string;
   originalUrl?: string;
   url?: string;
@@ -23,8 +20,6 @@ type LoggableRequest = {
 @Catch(Prisma.PrismaClientKnownRequestError, Prisma.PrismaClientValidationError)
 export class PrismaExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(PrismaExceptionFilter.name);
-
-  constructor(private readonly systemLog?: SystemLogService) {}
 
   catch(
     exception: Prisma.PrismaClientKnownRequestError | Prisma.PrismaClientValidationError,
@@ -64,25 +59,6 @@ export class PrismaExceptionFilter implements ExceptionFilter {
         `prismaCode=${prismaCode ?? '-'} status=${status} ${exception.message}`,
       exception.stack,
     );
-
-    if (request && !request.systemLogErrorRecorded && !shouldSkipDbErrorLog(request.method, request.originalUrl ?? request.url)) {
-      this.systemLog?.logError(
-        {
-          type: LogType.SYSTEM_ERROR,
-          actorId: request.user?.id,
-          metadata: {
-            method: request.method,
-            path: request.originalUrl ?? request.url,
-            params: request.params,
-            query: request.query,
-            statusCode: status,
-            prismaCode,
-          },
-        },
-        exception,
-      );
-      request.systemLogErrorRecorded = true;
-    }
 
     response.status(status).json({
       success: false,

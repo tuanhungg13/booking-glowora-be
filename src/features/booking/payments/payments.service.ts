@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import {
   BookingStatus,
-  LogType,
   PaymentMethod,
   PaymentStatus,
   PaymentType,
@@ -13,7 +12,6 @@ import {
 } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { NotificationsService } from '../../notifications/notifications/notifications.service';
-import { SystemLogService } from '../../../system-log/system-log.service';
 import {
   buildVietQrUrl,
   extractSepayCode,
@@ -39,7 +37,6 @@ export class PaymentsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notifications: NotificationsService,
-    private readonly systemLog: SystemLogService,
   ) {}
 
   async createSepayPayment(bookingId: string, userId: string, chosenType?: PaymentType) {
@@ -181,44 +178,32 @@ export class PaymentsService {
     }
 
     if (payload.transferAmount < Number(payment.amount)) {
-      await this.prisma.payment.update({
-        where: { id: payment.id },
+      // updateMany + where status:PENDING để thao tác nguyên tử — tránh 2 lần gọi webhook
+      // trùng nhau (SePay retry) cùng đọc thấy PENDING rồi cùng ghi FAILED, gây log trùng.
+      const { count } = await this.prisma.payment.updateMany({
+        where: { id: payment.id, status: PaymentStatus.PENDING },
         data: {
           status: PaymentStatus.FAILED,
           failedReason: `Số tiền không đủ: nhận ${payload.transferAmount}, cần ${Number(payment.amount)}`,
         },
       });
-      this.systemLog.log({
-        type: LogType.PAYMENT_FAILED,
-        actorId: payment.customer?.id,
-        storeId: payment.booking.storeId,
-        targetId: payment.id,
-        targetType: 'Payment',
-        metadata: {
-          bookingId: payment.bookingId,
-          transferAmount: payload.transferAmount,
-          requiredAmount: Number(payment.amount),
-        },
-      });
+      if (count === 0) {
+        return { success: true, message: 'Không tìm thấy thanh toán hoặc đã được xử lý' };
+      }
       return { success: false, message: 'Số tiền thanh toán không đủ' };
     }
 
-    await this.updatePaymentSuccess(payment.id, payment.type, payment.bookingId, {
+    const updated = await this.updatePaymentSuccess(payment.id, payment.type, payment.bookingId, {
       transactionId: String(payload.id),
       gateway: payload.gateway,
     });
+    if (!updated) {
+      return { success: true, message: 'Không tìm thấy thanh toán hoặc đã được xử lý' };
+    }
 
     const serviceNames = payment.booking.items.map((i) => i.service?.name ?? i.serviceName).join(', ');
 
     if (payment.type === PaymentType.DEPOSIT) {
-      this.systemLog.log({
-        type: LogType.BOOKING_DEPOSIT_PAID,
-        actorId: payment.customer?.id,
-        storeId: payment.booking.storeId,
-        targetId: payment.id,
-        targetType: 'Payment',
-        metadata: { bookingId: payment.bookingId, amount: Number(payment.amount) },
-      });
       this.notifications
         .notifyDepositPaid({
           bookingId: payment.bookingId,
@@ -232,14 +217,6 @@ export class PaymentsService {
         })
         .catch(() => {});
     } else {
-      this.systemLog.log({
-        type: LogType.PAYMENT_COMPLETED,
-        actorId: payment.customer?.id,
-        storeId: payment.booking.storeId,
-        targetId: payment.id,
-        targetType: 'Payment',
-        metadata: { bookingId: payment.bookingId, amount: Number(payment.amount) },
-      });
       this.notifications
         .notifyPaymentSuccess({
           bookingId: payment.bookingId,
@@ -363,14 +340,6 @@ export class PaymentsService {
           data: { status: BookingStatus.DEPOSIT_PAID, depositPaidAt: now },
         }),
       ]);
-      this.systemLog.log({
-        type: LogType.BOOKING_DEPOSIT_PAID,
-        actorId: staffId,
-        storeId,
-        targetId: bookingId,
-        targetType: 'Payment',
-        metadata: { bookingId, amount: Number(amount), method: 'CASH' },
-      });
     } else {
       await this.prisma.$transaction([
         paymentCreate,
@@ -388,14 +357,6 @@ export class PaymentsService {
           data: { status: BookingStatus.PAID },
         }),
       ]);
-      this.systemLog.log({
-        type: LogType.PAYMENT_COMPLETED,
-        actorId: staffId,
-        storeId,
-        targetId: bookingId,
-        targetType: 'Payment',
-        metadata: { bookingId, amount: Number(amount), method: 'CASH' },
-      });
     }
 
     return { recorded: true, amount: Number(amount), paymentType };
@@ -479,35 +440,37 @@ export class PaymentsService {
     return payment;
   }
 
+  // Trả về false nếu payment không còn ở PENDING lúc này (đã được 1 lần gọi webhook khác
+  // xử lý trước đó — vd SePay gửi trùng webhook do retry) -> caller không gửi notification trùng.
   private async updatePaymentSuccess(
     paymentId: string,
     type: PaymentType,
     bookingId: string,
     sepayData: { transactionId: string; gateway: string },
-  ) {
+  ): Promise<boolean> {
     const now = new Date();
-    const paymentUpdate = this.prisma.payment.update({
-      where: { id: paymentId },
-      data: {
-        status: PaymentStatus.PAID,
-        sepayTransactionId: sepayData.transactionId,
-        sepayGateway: sepayData.gateway,
-        paidAt: now,
-      },
-    });
+    return this.prisma.$transaction(async (tx) => {
+      // updateMany + where status:PENDING trong cùng transaction: nếu 2 request xử lý
+      // cùng payment chạy đồng thời, request thứ 2 sẽ bị block tới khi request đầu commit,
+      // rồi đọc lại thấy status đã là PAID -> count = 0 -> không cập nhật booking/gửi thông báo lần 2.
+      const { count } = await tx.payment.updateMany({
+        where: { id: paymentId, status: PaymentStatus.PENDING },
+        data: {
+          status: PaymentStatus.PAID,
+          sepayTransactionId: sepayData.transactionId,
+          sepayGateway: sepayData.gateway,
+          paidAt: now,
+        },
+      });
+      if (count === 0) return false;
 
-    if (type === PaymentType.DEPOSIT) {
-      await this.prisma.$transaction([
-        paymentUpdate,
-        this.prisma.booking.update({
+      if (type === PaymentType.DEPOSIT) {
+        await tx.booking.update({
           where: { id: bookingId },
           data: { status: BookingStatus.DEPOSIT_PAID, depositPaidAt: now },
-        }),
-      ]);
-    } else {
-      await this.prisma.$transaction([
-        paymentUpdate,
-        this.prisma.booking.updateMany({
+        });
+      } else {
+        await tx.booking.updateMany({
           where: {
             id: bookingId,
             status: {
@@ -519,8 +482,9 @@ export class PaymentsService {
             },
           },
           data: { status: BookingStatus.PAID },
-        }),
-      ]);
-    }
+        });
+      }
+      return true;
+    });
   }
 }

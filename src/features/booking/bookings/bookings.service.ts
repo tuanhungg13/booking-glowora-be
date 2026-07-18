@@ -340,8 +340,6 @@ export class BookingsService {
       })
       .catch(() => undefined);
 
-    this.systemLog.log({ type: LogType.BOOKING_CREATED, actorId: customerId, storeId: dto.storeId, targetId: booking.id, targetType: 'Booking', metadata: { scheduledAt, totalPrice: Number(booking.totalPrice) }, ipAddress, requestId });
-
     return { id: booking.id };
   }
 
@@ -750,8 +748,6 @@ export class BookingsService {
         .catch(() => undefined);
     }
 
-    this.systemLog.log({ type: LogType.BOOKING_CONFIRMED, actorId: userId, storeId: updated.storeId, targetId: id, targetType: 'Booking', metadata: { customerId: updated.customerId, needsDeposit }, ipAddress, requestId });
-
     return updated;
   }
 
@@ -788,8 +784,6 @@ export class BookingsService {
       })
       .catch(() => undefined);
 
-    this.systemLog.log({ type: LogType.BOOKING_REJECTED, actorId: userId, storeId: updated.storeId, targetId: id, targetType: 'Booking', metadata: { customerId: updated.customerId, reason }, ipAddress, requestId });
-
     return updated;
   }
 
@@ -815,8 +809,6 @@ export class BookingsService {
         serviceNames: updated.items.map((i) => i.service?.name ?? i.serviceName).join(', '),
       })
       .catch(() => undefined);
-
-    this.systemLog.log({ type: LogType.BOOKING_COMPLETED, actorId: userId, storeId: updated.storeId, targetId: id, targetType: 'Booking', metadata: { customerId: updated.customerId }, ipAddress, requestId });
 
     return updated;
   }
@@ -872,15 +864,23 @@ export class BookingsService {
       })
       .catch(() => undefined);
 
-    this.systemLog.log({ type: LogType.BOOKING_CANCELLED, actorId: userId, storeId: updated.storeId, targetId: id, targetType: 'Booking', metadata: { reason }, ipAddress });
-
     return updated;
   }
 
-  async remove(id: string, userId: string) {
+  async remove(id: string, userId: string, ipAddress?: string) {
     const booking = await this.findOne(id);
     await this.assertStoreMember(userId, booking.storeId);
+
+    // Chỉ cho xoá vĩnh viễn các booking đã ở trạng thái kết thúc không thành (CANCELLED/REJECTED)
+    // — booking còn hiệu lực hoặc đã hoàn thành là dữ liệu giao dịch thật, không được xoá cứng.
+    // BookingItem (chi tiết dịch vụ/giá/nhân viên) bị cascade xoá theo nên phải chặn từ đây.
+    const deletableStatuses: BookingStatus[] = [BookingStatus.CANCELLED, BookingStatus.REJECTED];
+    if (!deletableStatuses.includes(booking.status)) {
+      throw new BadRequestException('Chỉ có thể xóa vĩnh viễn lịch hẹn đã hủy hoặc bị từ chối');
+    }
+
     await this.prisma.booking.delete({ where: { id } });
+
     return { deleted: true };
   }
 
@@ -1158,16 +1158,6 @@ export class BookingsService {
         scheduledAt: booking.scheduledAt,
       })
       .catch(() => undefined);
-
-    this.systemLog.log({
-      type: LogType.BOOKING_STAFF_CHANGED,
-      actorId: userId,
-      storeId,
-      targetId: bookingId,
-      targetType: 'Booking',
-      metadata: { itemId, newStaffId, newStaffName: newStaff.user.fullName },
-      ipAddress,
-    });
 
     return this.findOne(bookingId);
   }

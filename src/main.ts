@@ -3,7 +3,9 @@ import * as os from 'node:os';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { MicroserviceOptions } from '@nestjs/microservices';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
 import cookieParser = require('cookie-parser');
 import { AppModule } from './app.module';
 import { TransformResponseInterceptor } from './common/interceptors/transform-response.interceptor';
@@ -11,10 +13,10 @@ import { TransformResponseInterceptor } from './common/interceptors/transform-re
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 import { RequestContextService } from './common/request-context.service';
-import { SystemAuditInterceptor } from './common/interceptors/system-audit.interceptor';
-import { SystemLogService } from './system-log/system-log.service';
 import { RedisService } from './redis/redis.service';
 import { RedisIoAdapter } from './gateways/redis-io.adapter';
+import { RABBITMQ_QUEUES } from './rabbitmq/rabbitmq.constants';
+import { buildRmqConsumerOptions } from './rabbitmq/rabbitmq.options';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -53,16 +55,11 @@ async function bootstrap() {
     }),
   );
   app.useGlobalInterceptors(
-    app.get(SystemAuditInterceptor),
     // TODO: tạm tắt để đo hiệu năng load-test, bật lại sau khi test xong
     // new LoggingInterceptor(),
     new TransformResponseInterceptor(),
   );
-  const systemLogService = app.get(SystemLogService);
-  app.useGlobalFilters(
-    new PrismaExceptionFilter(systemLogService),
-    new HttpExceptionFilter(systemLogService),
-  );
+  app.useGlobalFilters(new PrismaExceptionFilter(), new HttpExceptionFilter());
 
   if (process.env.NODE_ENV !== 'production') {
     const config = new DocumentBuilder()
@@ -74,6 +71,15 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api', app, document);
   }
+
+  // Mỗi cluster worker (xem cuối file) mở consumer riêng cho cùng các queue —
+  // RabbitMQ tự đảm bảo mỗi message chỉ 1 consumer xử lý (competing consumers),
+  // nên không cần cờ IS_SINGLETON_WORKER như cron/webhook Telegram.
+  const configService = app.get(ConfigService);
+  for (const queue of Object.values(RABBITMQ_QUEUES)) {
+    app.connectMicroservice<MicroserviceOptions>(buildRmqConsumerOptions(queue, configService));
+  }
+  await app.startAllMicroservices();
 
   const port = process.env.APP_PORT ?? 8080;
   await app.listen(port);

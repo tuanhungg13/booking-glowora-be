@@ -99,18 +99,19 @@ export class TelegramService implements OnModuleInit {
       return;
     }
     this.logger.log(`[sendToGroupTopic] groupId=${groupId} topicId=${topicId} text="${text.slice(0, 80)}..."`);
-    await this.bot
-      .sendMessage(groupId, text, {
+    try {
+      await this.bot.sendMessage(groupId, text, {
         message_thread_id: topicId,
         parse_mode: 'Markdown',
-      } as any)
-      .then(() => this.logger.log(`[sendToGroupTopic] ✅ Sent to group ${groupId} topic ${topicId}`))
-      .catch((err: any) =>
-        this.logger.error(
-          `[sendToGroupTopic] ❌ Failed — groupId=${groupId} topicId=${topicId} | error: ${err?.message ?? err}`,
-          err?.stack,
-        ),
+      } as any);
+      this.logger.log(`[sendToGroupTopic] ✅ Sent to group ${groupId} topic ${topicId}`);
+    } catch (err: any) {
+      this.logger.error(
+        `[sendToGroupTopic] ❌ Failed — groupId=${groupId} topicId=${topicId} | error: ${err?.message ?? err}`,
+        err?.stack,
       );
+      throw err;
+    }
   }
 
   async sendConfirmation(chatId: string, message: string): Promise<void> {
@@ -126,16 +127,22 @@ export class TelegramService implements OnModuleInit {
 
   async sendPhotoToGroupTopic(groupId: string, topicId: number, photoUrl: string, caption?: string): Promise<void> {
     if (!this.bot) return;
-    await this.bot
-      .sendPhoto(groupId, photoUrl, { caption, message_thread_id: topicId } as any)
-      .catch((err: any) => this.logger.error(`[sendPhotoToGroupTopic] Failed groupId=${groupId}`, err?.message));
+    try {
+      await this.bot.sendPhoto(groupId, photoUrl, { caption, message_thread_id: topicId } as any);
+    } catch (err: any) {
+      this.logger.error(`[sendPhotoToGroupTopic] Failed groupId=${groupId}`, err?.message);
+      throw err;
+    }
   }
 
   async sendVideoToGroupTopic(groupId: string, topicId: number, videoUrl: string, caption?: string): Promise<void> {
     if (!this.bot) return;
-    await this.bot
-      .sendVideo(groupId, videoUrl, { caption, message_thread_id: topicId } as any)
-      .catch((err: any) => this.logger.error(`[sendVideoToGroupTopic] Failed groupId=${groupId}`, err?.message));
+    try {
+      await this.bot.sendVideo(groupId, videoUrl, { caption, message_thread_id: topicId } as any);
+    } catch (err: any) {
+      this.logger.error(`[sendVideoToGroupTopic] Failed groupId=${groupId}`, err?.message);
+      throw err;
+    }
   }
 
   async getFileUrl(fileId: string): Promise<string | null> {
