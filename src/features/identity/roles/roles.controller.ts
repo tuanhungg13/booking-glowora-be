@@ -13,6 +13,7 @@ import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { RequirePermissions } from '../../../common/decorators/require-permissions.decorator';
 import { Permissions } from '../../../common/constants/permissions';
+import { CurrentUser, type CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 
 @ApiTags('roles')
 @ApiBearerAuth()
@@ -25,16 +26,16 @@ export class RolesController {
   @ApiResponse({ status: 403, description: 'Không có quyền' })
   @Post()
   @RequirePermissions(Permissions.ROLE.CREATE)
-  create(@Body() dto: CreateRoleDto) {
-    return this.rolesService.create(dto);
+  create(@Body() dto: CreateRoleDto, @CurrentUser() user: CurrentUserPayload) {
+    return this.rolesService.create(dto, user.id);
   }
 
   @ApiOperation({ summary: 'Lấy danh sách tất cả role' })
   @ApiResponse({ status: 200, description: 'Danh sách role' })
   @Get()
   @RequirePermissions(Permissions.ROLE.VIEW)
-  findAll() {
-    return this.rolesService.findAll();
+  findAll(@CurrentUser() user: CurrentUserPayload) {
+    return this.rolesService.findAll(user.id);
   }
 
   @ApiOperation({ summary: 'Lấy chi tiết một role' })
@@ -43,8 +44,8 @@ export class RolesController {
   @ApiResponse({ status: 404, description: 'Không tìm thấy role' })
   @Get(':id')
   @RequirePermissions(Permissions.ROLE.VIEW)
-  findOne(@Param('id') id: string) {
-    return this.rolesService.findOne(id);
+  findOne(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
+    return this.rolesService.findOne(id, user.id);
   }
 
   @ApiOperation({ summary: 'Cập nhật role' })
@@ -53,8 +54,8 @@ export class RolesController {
   @ApiResponse({ status: 404, description: 'Không tìm thấy role' })
   @Patch(':id')
   @RequirePermissions(Permissions.ROLE.UPDATE)
-  update(@Param('id') id: string, @Body() dto: UpdateRoleDto) {
-    return this.rolesService.update(id, dto);
+  update(@Param('id') id: string, @Body() dto: UpdateRoleDto, @CurrentUser() user: CurrentUserPayload) {
+    return this.rolesService.update(id, dto, user.id);
   }
 
   @ApiOperation({ summary: 'Xóa role' })
@@ -63,7 +64,7 @@ export class RolesController {
   @ApiResponse({ status: 404, description: 'Không tìm thấy role' })
   @Delete(':id')
   @RequirePermissions(Permissions.ROLE.DELETE)
-  remove(@Param('id') id: string) {
-    return this.rolesService.remove(id);
+  remove(@Param('id') id: string, @CurrentUser() user: CurrentUserPayload) {
+    return this.rolesService.remove(id, user.id);
   }
 }

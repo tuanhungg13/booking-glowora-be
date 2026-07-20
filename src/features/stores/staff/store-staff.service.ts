@@ -32,6 +32,12 @@ const staffInclude = {
   ward: { select: { id: true, name: true, type: true, provinceId: true } },
 } as const;
 
+// Dùng cho endpoint public (không đăng nhập) — bỏ email/phone để không lộ PII nhân viên
+// cho bất kỳ ai biết storeId.
+const staffPublicInclude = {
+  user: { select: { id: true, fullName: true, avatarUrl: true } },
+} as const;
+
 @Injectable()
 export class StoreStaffService {
   private readonly logger = new Logger(StoreStaffService.name);
@@ -192,6 +198,25 @@ export class StoreStaffService {
     const staff = await this.prisma.staff.findFirst({
       where: { id: staffId, storeId, status: { not: StaffStatus.DELETED } },
       include: staffInclude,
+    });
+    if (!staff) throw new NotFoundException('Nhân viên không tồn tại trong cơ sở này');
+    return this.mapStaff(staff);
+  }
+
+  async findAllPublic(storeId: string) {
+    const store = await this.prisma.store.findUnique({ where: { id: storeId }, select: { ownerId: true } });
+    const list = await this.prisma.staff.findMany({
+      where: { storeId, status: { not: StaffStatus.DELETED } },
+      orderBy: { createdAt: 'asc' },
+      include: staffPublicInclude,
+    });
+    return list.map((s) => ({ ...this.mapStaff(s), isOwner: s.userId === store?.ownerId }));
+  }
+
+  async findOnePublic(storeId: string, staffId: string) {
+    const staff = await this.prisma.staff.findFirst({
+      where: { id: staffId, storeId, status: { not: StaffStatus.DELETED } },
+      include: staffPublicInclude,
     });
     if (!staff) throw new NotFoundException('Nhân viên không tồn tại trong cơ sở này');
     return this.mapStaff(staff);

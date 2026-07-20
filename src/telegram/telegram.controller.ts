@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Logger, Post, forwardRef } from '@nestjs/common';
+import { Body, Controller, Headers, Inject, Logger, Post, forwardRef } from '@nestjs/common';
 import { ApiExcludeController, ApiTags } from '@nestjs/swagger';
 import { SkipThrottle } from '@nestjs/throttler';
 import { Public } from '../common/decorators/public.decorator';
@@ -27,7 +27,17 @@ export class TelegramController {
   // Gọi từ server Telegram, không phải traffic người dùng cuối -> không áp rate-limit theo IP.
   @SkipThrottle()
   @Post('webhook')
-  async handleWebhook(@Body() update: any) {
+  async handleWebhook(
+    @Body() update: any,
+    @Headers('x-telegram-bot-api-secret-token') secretToken?: string,
+  ) {
+    if (!this.telegram.verifyWebhookSecret(secretToken)) {
+      this.logger.warn('[webhook] Rejected — thiếu hoặc sai secret token, request không đến từ Telegram');
+      // Trả 200 { ok: true } thay vì 401 — không cho kẻ giả mạo phân biệt được
+      // "sai secret" với "update hợp lệ nhưng không cần xử lý gì".
+      return { ok: true };
+    }
+
     const message = update?.message;
     if (message?.chat) {
       this.logger.log(

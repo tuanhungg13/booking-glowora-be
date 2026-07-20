@@ -19,6 +19,17 @@ import { RedisIoAdapter } from './gateways/redis-io.adapter';
 import { RABBITMQ_QUEUES } from './rabbitmq/rabbitmq.constants';
 import { buildRmqConsumerOptions } from './rabbitmq/rabbitmq.options';
 
+// Fail-fast nếu thiếu secret bắt buộc — tránh app âm thầm chạy với secret mặc định
+// hardcode (dễ đoán) khiến ai cũng giả mạo được access/refresh token.
+function assertRequiredEnv() {
+  const required = ['JWT_ACCESS_SECRET', 'JWT_REFRESH_SECRET'];
+  const missing = required.filter((key) => !process.env[key]);
+  if (missing.length > 0) {
+    throw new Error(`Thiếu biến môi trường bắt buộc: ${missing.join(', ')}`);
+  }
+}
+assertRequiredEnv();
+
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const isProduction = process.env.NODE_ENV === 'production';

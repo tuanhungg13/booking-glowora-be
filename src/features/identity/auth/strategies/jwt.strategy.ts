@@ -20,7 +20,9 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         ExtractJwt.fromAuthHeaderAsBearerToken(),
       ]),
       ignoreExpiration: false,
-      secretOrKey: config.get<string>('JWT_ACCESS_SECRET') || 'change-me-in-production',
+      // Non-null assertion an toàn: main.ts assertRequiredEnv() đã throw ở bootstrap
+      // nếu thiếu JWT_ACCESS_SECRET, nên tới đây biến này chắc chắn đã có giá trị.
+      secretOrKey: config.get<string>('JWT_ACCESS_SECRET')!,
       passReqToCallback: false,
     });
   }

@@ -20,7 +20,7 @@ export class StoreStaffController {
   @Public()
   @Get()
   findAll(@StoreId() storeId: string) {
-    return this.storeStaffService.findAll(storeId);
+    return this.storeStaffService.findAllPublic(storeId);
   }
 
   @ApiOperation({ summary: 'Calendar tổng quan lịch làm việc toàn nhân viên' })
@@ -61,7 +61,7 @@ export class StoreStaffController {
   @Public()
   @Get(':staffId')
   findOne(@StoreId() storeId: string, @Param('staffId') staffId: string) {
-    return this.storeStaffService.findOne(storeId, staffId);
+    return this.storeStaffService.findOnePublic(storeId, staffId);
   }
 
   @ApiOperation({ summary: 'Invite a user to become staff' })

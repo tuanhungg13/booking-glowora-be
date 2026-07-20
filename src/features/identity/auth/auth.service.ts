@@ -136,8 +136,7 @@ export class AuthService {
     let payload: { sub: string; email: string };
     try {
       payload = await this.jwtService.verifyAsync(refreshToken, {
-        secret:
-          this.config.get<string>('JWT_REFRESH_SECRET') || 'refresh-secret',
+        secret: this.config.get<string>('JWT_REFRESH_SECRET'),
       });
     } catch {
       throw new UnauthorizedException('Phiên đăng nhập không hợp lệ hoặc đã hết hạn');
@@ -324,8 +323,7 @@ export class AuthService {
 
   private _signRefresh(userId: string, email: string): string {
     const options: JwtSignOptions = {
-      secret:
-        this.config.get<string>('JWT_REFRESH_SECRET') || 'refresh-secret',
+      secret: this.config.get<string>('JWT_REFRESH_SECRET'),
       expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d',
     } as JwtSignOptions;
 

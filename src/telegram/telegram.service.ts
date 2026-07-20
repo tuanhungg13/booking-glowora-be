@@ -1,22 +1,28 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import TelegramBot from 'node-telegram-bot-api';
-import { randomBytes } from 'crypto';
+import { randomBytes, createHash, timingSafeEqual } from 'crypto';
 import { RedisService } from '../redis/redis.service';
 
 const STORE_SETUP_TTL = 600; // 10 phút
+const WEBHOOK_SECRET_KEY = 'telegram:webhook-secret';
 
 @Injectable()
 export class TelegramService implements OnModuleInit {
   private readonly logger = new Logger(TelegramService.name);
   private bot: TelegramBot | null = null;
+  // Secret Telegram gửi kèm header X-Telegram-Bot-Api-Secret-Token trên mọi webhook call —
+  // dùng để xác minh request thực sự đến từ Telegram, không phải bên thứ 3 giả mạo.
+  // Lưu ở Redis (không phải biến môi trường) để mọi worker trong cluster đọc được cùng
+  // 1 giá trị mà không cần cấu hình thêm.
+  private webhookSecret: string | null = null;
 
   constructor(
     private readonly config: ConfigService,
     private readonly redis: RedisService,
   ) {}
 
-  onModuleInit() {
+  async onModuleInit() {
     const token = this.config.get<string>('TELEGRAM_BOT_TOKEN');
     if (!token) {
       this.logger.warn('TELEGRAM_BOT_TOKEN not set — Telegram integration disabled');
@@ -30,6 +36,15 @@ export class TelegramService implements OnModuleInit {
       this.logger.warn('TELEGRAM_WEBHOOK_URL not set — webhook not registered');
       return;
     }
+
+    // Mọi worker đều phải có secret để verify request tới /telegram/webhook (không chỉ
+    // worker gọi setWebHook), nên load/generate secret trước, bất kể có phải singleton hay không.
+    this.webhookSecret = await this.redis.get(WEBHOOK_SECRET_KEY);
+    if (!this.webhookSecret) {
+      this.webhookSecret = randomBytes(32).toString('hex');
+      await this.redis.set(WEBHOOK_SECRET_KEY, this.webhookSecret);
+    }
+
     // Cluster mode fork nhiều worker (xem main.ts), mỗi worker chạy 1 NestJS app riêng
     // nên đều tạo TelegramBot instance để gửi tin nhắn được (giữ nguyên) — nhưng đăng ký
     // webhook với Telegram API chỉ cần gọi 1 lần cho cả cụm, gọi ở mọi worker sẽ bị
@@ -37,9 +52,18 @@ export class TelegramService implements OnModuleInit {
     if (process.env.IS_SINGLETON_WORKER === '0') return;
 
     this.logger.log(`Setting Telegram webhook to: ${webhookUrl}`);
-    this.bot.setWebHook(webhookUrl)
+    this.bot.setWebHook(webhookUrl, { secret_token: this.webhookSecret })
       .then(() => this.logger.log('✅ Telegram webhook set successfully'))
       .catch((err) => this.logger.error('❌ Failed to set Telegram webhook', err));
+  }
+
+  // Dùng hash trước khi so sánh để timingSafeEqual không đòi hỏi 2 chuỗi cùng độ dài
+  // (giống cách verifySepayWebhook làm ở payments/sepay.util.ts).
+  verifyWebhookSecret(token: string | undefined): boolean {
+    if (!this.webhookSecret || !token) return false;
+    const a = createHash('sha256').update(token).digest();
+    const b = createHash('sha256').update(this.webhookSecret).digest();
+    return timingSafeEqual(a, b);
   }
 
   get isEnabled(): boolean {
