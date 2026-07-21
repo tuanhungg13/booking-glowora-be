@@ -67,7 +67,11 @@ jobs:
           timeout 15 bash -c "</dev/tcp/$VPS_HOST/22"
 
           echo "=== Scan host key ==="
-          ssh-keyscan -T 15 -t ed25519 "$VPS_HOST" >> ~/.ssh/known_hosts
+          ssh-keyscan -T 15 "$VPS_HOST" >> ~/.ssh/known_hosts || {
+            echo "!!! ssh-keyscan failed, retrying verbose for diagnostics !!!"
+            ssh-keyscan -T 15 -v "$VPS_HOST"
+            exit 1
+          }
 
           echo "=== Test SSH ==="
           ssh -vvv \
