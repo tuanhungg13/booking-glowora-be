@@ -79,10 +79,8 @@ jobs:
 
       - name: Deploy to VPS
         env:
-          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
-
         run: |
           ssh \
             -i ~/.ssh/vps_key \
