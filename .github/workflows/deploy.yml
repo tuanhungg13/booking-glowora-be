@@ -43,12 +43,33 @@ jobs:
       - name: Build application
         run: pnpm build
 
-  cd:
+    cd:
     name: Deploy to VPS
     runs-on: ubuntu-latest
     needs: ci
 
     steps:
+      - name: Test SSH connection
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+
+        run: |
+          mkdir -p ~/.ssh
+
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/vps_key
+          chmod 600 ~/.ssh/vps_key
+
+          ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts
+
+          ssh -vvv \
+            -i ~/.ssh/vps_key \
+            -o StrictHostKeyChecking=yes \
+            -o ConnectTimeout=15 \
+            "$VPS_USERNAME@$VPS_HOST" \
+            "echo SSH_SUCCESS"
+
       - name: Deploy to VPS
         env:
           VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
