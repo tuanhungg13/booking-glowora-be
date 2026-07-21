@@ -56,16 +56,33 @@ jobs:
           VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
 
         run: |
+          set -x
+
+          echo "=== 1. Check variables ==="
+          echo "HOST: $VPS_HOST"
+          echo "USERNAME: $VPS_USERNAME"
+
+          echo "=== 2. Create SSH directory ==="
           mkdir -p ~/.ssh
 
+          echo "=== 3. Write SSH key ==="
           printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/vps_key
           chmod 600 ~/.ssh/vps_key
 
-          ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts
+          echo "=== 4. Check key format ==="
+          head -n 1 ~/.ssh/vps_key
+          tail -n 1 ~/.ssh/vps_key
 
+          echo "=== 5. Test TCP port 22 ==="
+          timeout 15 bash -c "</dev/tcp/$VPS_HOST/22"
+
+          echo "=== 6. Scan host key ==="
+          ssh-keyscan -T 15 -v "$VPS_HOST"
+
+          echo "=== 7. Test SSH ==="
           ssh -vvv \
             -i ~/.ssh/vps_key \
-            -o StrictHostKeyChecking=yes \
+            -o StrictHostKeyChecking=no \
             -o ConnectTimeout=15 \
             "$VPS_USERNAME@$VPS_HOST" \
             "echo SSH_SUCCESS"
