@@ -49,58 +49,32 @@ jobs:
     needs: ci
 
     steps:
+      - name: Connect Tailscale
+        uses: tailscale/github-action@v3
+        with:
+          authkey: ${{ secrets.TS_AUTHKEY }}
+
       - name: Setup SSH
         env:
           VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
-          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
-
         run: |
           set -e
 
           mkdir -p ~/.ssh
 
           printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/vps_key
-          printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
-
           chmod 600 ~/.ssh/vps_key
-          chmod 644 ~/.ssh/known_hosts
-
-      - name: Debug network
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
-
-        run: |
-          set -e
-
-          echo "=== GitHub Actions public IP ==="
-          curl -4 ifconfig.me
-          echo
-
-          echo "=== SSH Target ==="
-          echo "Username: $VPS_USERNAME"
-          echo "Host length: ${#VPS_HOST}"
-
-          echo "=== DNS Resolution ==="
-          getent hosts "$VPS_HOST" || true
-
-          echo "=== Test TCP port 22 ==="
-          timeout 15 bash -c "</dev/tcp/$VPS_HOST/22"
-
-          echo "TCP port 22 is reachable"
 
       - name: Deploy to VPS
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
-
         run: |
           set -e
 
           ssh \
-            -vvv \
             -i ~/.ssh/vps_key \
-            -o StrictHostKeyChecking=yes \
+            -o StrictHostKeyChecking=no \
             -o ConnectTimeout=15 \
             "$VPS_USERNAME@$VPS_HOST" << 'EOF'
 
