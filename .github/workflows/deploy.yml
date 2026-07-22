@@ -53,11 +53,11 @@ jobs:
         env:
           VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
           VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+
         run: |
-          set -euo pipefail
+          set -e
 
           mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
 
           printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/vps_key
           printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
@@ -65,46 +65,60 @@ jobs:
           chmod 600 ~/.ssh/vps_key
           chmod 644 ~/.ssh/known_hosts
 
+      - name: Debug network
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+
+        run: |
+          set -e
+
+          echo "=== GitHub Actions public IP ==="
+          curl -4 ifconfig.me
+          echo
+
+          echo "=== SSH Target ==="
+          echo "Username: $VPS_USERNAME"
+          echo "Host length: ${#VPS_HOST}"
+
+          echo "=== DNS Resolution ==="
+          getent hosts "$VPS_HOST" || true
+
+          echo "=== Test TCP port 22 ==="
+          timeout 15 bash -c "</dev/tcp/$VPS_HOST/22"
+
+          echo "TCP port 22 is reachable"
+
       - name: Deploy to VPS
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+
         run: |
-          set -euo pipefail
+          set -e
 
           ssh \
+            -vvv \
             -i ~/.ssh/vps_key \
             -o StrictHostKeyChecking=yes \
             -o ConnectTimeout=15 \
-            -o ConnectionAttempts=3 \
-            -o ServerAliveInterval=30 \
-            -o ServerAliveCountMax=3 \
             "$VPS_USERNAME@$VPS_HOST" << 'EOF'
 
-            set -euo pipefail
+            set -e
 
-            echo "=== SSH connection successful ==="
+            echo "SSH connection successful"
 
             cd /var/www/booking-business-be
 
-            echo "=== Fetching latest code ==="
+            echo "Fetching latest code..."
             git fetch origin develop
 
-            echo "=== Resetting to origin/develop ==="
+            echo "Resetting to origin/develop..."
             git reset --hard origin/develop
 
-            echo "=== Building and restarting Docker containers ==="
-            docker compose \
-              -f docker-compose.pro.yml \
-              up -d \
-              --build \
-              --remove-orphans
+            echo "Building and restarting Docker containers..."
+            docker compose -f docker-compose.pro.yml up -d --build
 
-            echo "=== Checking container status ==="
-            docker compose \
-              -f docker-compose.pro.yml \
-              ps
-
-            echo "=== Deploy successful ==="
+            echo "Deploy successful"
 
           EOF
